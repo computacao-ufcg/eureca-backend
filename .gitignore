@@ -1,1 +1,21 @@
 *.pyc
+
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### Mvnw.cmd file ###
+mvnw.cmd
+
+### Configuration files ###
+src/main/resources/private
+
+### Log files ###
+*.log.*
+*.log.
+*.log
