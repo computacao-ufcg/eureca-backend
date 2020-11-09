@@ -30,9 +30,9 @@ public class Statistics {
     @RequestMapping(value = "actives", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.Statistics.GET_ATIVOS)
     public ResponseEntity<Collection<ActiveSummaryResponse>> getActives(
-            @ApiParam(value = ApiDocumentation.Statistics.DE)
+            @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam String from,
-            @ApiParam(value = ApiDocumentation.Statistics.ATE)
+            @ApiParam(value = ApiDocumentation.Statistics.TO)
             @RequestParam String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = false, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
@@ -50,9 +50,9 @@ public class Statistics {
     @RequestMapping(value = "actives/csv", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.Statistics.GET_ATIVOS_CSV)
     public ResponseEntity<Collection<ActiveDataResponse>> getActivesCSV(
-            @ApiParam(value = ApiDocumentation.Statistics.DE)
+            @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam String from,
-            @ApiParam(value = ApiDocumentation.Statistics.ATE)
+            @ApiParam(value = ApiDocumentation.Statistics.TO)
             @RequestParam String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = false, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
@@ -70,9 +70,9 @@ public class Statistics {
     @RequestMapping(value = "alumni", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.Statistics.GET_EGRESSOS)
     public ResponseEntity<AlumniSummaryResponse> getAlumni(
-            @ApiParam(value = ApiDocumentation.Statistics.DE)
+            @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam String from,
-            @ApiParam(value = ApiDocumentation.Statistics.ATE)
+            @ApiParam(value = ApiDocumentation.Statistics.TO)
             @RequestParam String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = false, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
@@ -90,9 +90,9 @@ public class Statistics {
     @RequestMapping(value = "alumni/csv", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.Statistics.GET_EGRESSOS_CSV)
     public ResponseEntity<Collection<AlumniDataResponse>> getAlumniCSV(
-            @ApiParam(value = ApiDocumentation.Statistics.DE)
+            @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam String from,
-            @ApiParam(value = ApiDocumentation.Statistics.ATE)
+            @ApiParam(value = ApiDocumentation.Statistics.TO)
             @RequestParam String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = false, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
@@ -110,9 +110,9 @@ public class Statistics {
     @RequestMapping(value = "dropouts", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.Statistics.GET_EVADIDOS)
     public ResponseEntity<Collection<DropoutSummaryResponse>> getDropouts(
-            @ApiParam(value = ApiDocumentation.Statistics.DE)
+            @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam String from,
-            @ApiParam(value = ApiDocumentation.Statistics.ATE)
+            @ApiParam(value = ApiDocumentation.Statistics.TO)
             @RequestParam String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = false, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
@@ -130,9 +130,9 @@ public class Statistics {
     @RequestMapping(value = "dropouts/csv", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.Statistics.GET_EVADIDOS_CSV)
     public ResponseEntity<Collection<DropoutDataResponse>> getDropoutsCSV(
-            @ApiParam(value = ApiDocumentation.Statistics.DE)
+            @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam String from,
-            @ApiParam(value = ApiDocumentation.Statistics.ATE)
+            @ApiParam(value = ApiDocumentation.Statistics.TO)
             @RequestParam String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = false, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
