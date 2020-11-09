@@ -23,6 +23,11 @@ public class ApiDocumentation {
         public static final String PERCENTAGE = "44.3";
     }
 
+    public static class Alumni {
+        public static final String API = "Egressos.";
+        public static final String GET = "Retorna a lista de egressos.";
+    }
+
     public static class Version {
         public static final String API = "Versão do serviço.";
         public static final String GET_VERSION = "Retorna a versão da API do serviço.";

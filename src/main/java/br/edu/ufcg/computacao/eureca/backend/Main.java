@@ -37,7 +37,7 @@ public class Main implements ApplicationRunner {
             applicationFacade.setAuthorizationPlugin(authorizationPlugin);
 
             // Reading input data
-            MapsHolder.getInstance();
+            MapsHolder.getInstance().addPropertiesFromMaps(PropertiesHolder.getInstance().getProperties());
             LOGGER.info(Messages.ALL_SET);
         } catch (Exception e) {
             LOGGER.error(Messages.ERROR_READING_CONFIGURATION_FILE, e);

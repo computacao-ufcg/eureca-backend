@@ -1,8 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.core.loaders;
 
-import br.edu.ufcg.computacao.eureca.backend.core.models.EurecaMapKey;
-import br.edu.ufcg.computacao.eureca.backend.core.models.EurecaMapValue;
-import br.edu.ufcg.computacao.eureca.backend.core.models.EurecaMultivaluedMapValue;
+import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.EurecaMapKey;
+import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.EurecaMapValue;
+import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.EurecaMultivaluedMapValue;
 
 import java.util.Map;
 

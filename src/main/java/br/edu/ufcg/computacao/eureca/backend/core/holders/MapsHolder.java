@@ -2,8 +2,9 @@ package br.edu.ufcg.computacao.eureca.backend.core.holders;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.ConfigurationPropertyDefaults;
 import br.edu.ufcg.computacao.eureca.backend.constants.ConfigurationPropertyKeys;
+import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.loaders.GenericLoadMapFromScsvFile;
-import br.edu.ufcg.computacao.eureca.backend.core.models.*;
+import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.util.ClassFactory;
 import br.edu.ufcg.computacao.eureca.common.exceptions.FatalErrorException;
 import br.edu.ufcg.computacao.eureca.common.util.HomeDir;
@@ -29,6 +30,38 @@ public class MapsHolder<T extends EurecaMapKey, V extends EurecaMapValue, U exte
         } catch (IOException e) {
             throw new FatalErrorException(e.getMessage());
         }
+    }
+
+    public void addPropertiesFromMaps(Properties properties) {
+        properties.put(SystemConstants.ACTIVE, getIdCodeStr("SituacaoDiscente", SystemConstants.ACTIVE));
+        properties.put(SystemConstants.REGULAR, getIdCodeStr("SituacaoVinculo", SystemConstants.REGULAR));
+        properties.put(SystemConstants.FAILED_3_TIMES, getIdCodeStr("SituacaoVinculo", SystemConstants.FAILED_3_TIMES));
+        properties.put(SystemConstants.FAILED_ALL, getIdCodeStr("SituacaoVinculo", SystemConstants.FAILED_ALL));
+        properties.put(SystemConstants.CANCELLED, getIdCodeStr("SituacaoVinculo", SystemConstants.CANCELLED));
+        properties.put(SystemConstants.CANCELLED_UPON_REQUEST, getIdCodeStr("SituacaoVinculo", SystemConstants.CANCELLED_UPON_REQUEST));
+        properties.put(SystemConstants.CANCELLED_BY_JUSTICE, getIdCodeStr("SituacaoVinculo", SystemConstants.CANCELLED_BY_JUSTICE));
+        properties.put(SystemConstants.CANCELLED_CHANGE_COURSE, getIdCodeStr("SituacaoVinculo", SystemConstants.CANCELLED_CHANGE_COURSE));
+        properties.put(SystemConstants.LEFT_WITHOUT_NOTICE, getIdCodeStr("SituacaoVinculo", SystemConstants.LEFT_WITHOUT_NOTICE));
+        properties.put(SystemConstants.MISSED_GRADUATION, getIdCodeStr("SituacaoVinculo", SystemConstants.MISSED_GRADUATION));
+        properties.put(SystemConstants.TRANSFERED, getIdCodeStr("SituacaoVinculo", SystemConstants.TRANSFERED));
+        properties.put(SystemConstants.REENTER_NEW_COURSE, getIdCodeStr("SituacaoVinculo", SystemConstants.REENTER_NEW_COURSE));
+        properties.put(SystemConstants.REENTER_SAME_COURSE, getIdCodeStr("SituacaoVinculo", SystemConstants.REENTER_SAME_COURSE));
+        properties.put(SystemConstants.GRADUATED, getIdCodeStr("SituacaoVinculo", SystemConstants.GRADUATED));
+    }
+
+    private String getIdCodeStr(String mapName, String description) {
+        Map<IdCode, Description> map = MapsHolder.getInstance().getMap(mapName);
+        IdCode match = null;
+        for (Map.Entry<IdCode, Description> entry : map.entrySet()) {
+            IdCode k = entry.getKey();
+            Description v = entry.getValue();
+            if (v.getDescricao().equals(description)) {
+                match = k;
+                break;
+            }
+        }
+        if (match == null) match = new IdCode(-1);
+        return match.toString();
     }
 
     private Map<String, Map<T,V>> loadAllMaps() throws IOException {
@@ -98,6 +131,14 @@ public class MapsHolder<T extends EurecaMapKey, V extends EurecaMapValue, U exte
         }
     }
 
+    public Map<T, V> getMap(String name) {
+        return maps.get(name);
+    }
+
+    public Map<T, U> getMultivaluedMap(String name) {
+        return multivaluedMaps.get(name);
+    }
+
     public EurecaMultivaluedMapValue getCollection(String mapName, EurecaMapKey key) {
         Map<T,U> map = this.multivaluedMaps.get(mapName);
         return map.get(key);
@@ -105,25 +146,36 @@ public class MapsHolder<T extends EurecaMapKey, V extends EurecaMapValue, U exte
 
     public EurecaMapValue getValue(String mapName, EurecaMapKey key) {
         Map<T,V> map = this.maps.get(mapName);
+        //System.out.println(String.format("getValue(%s, %s): [%s].", mapName, key.toString(), (map.get(key) == null ? "NULL" : map.get(key))));
         return map.get(key);
     }
 
     private void printMaps() {
         this.maps.forEach((name, map) -> {
-            System.out.println("Map: " + name);
-            map.forEach((k, v) -> {
-                System.out.println("key: [" + k.toString() + "]->[" + v.toString() + "]");
-            });
+            printMap(name);
+        });
+    }
+
+    private void printMap(String name) {
+        Map<T,V> map = getMap(name);
+        System.out.println("Map: " + name);
+        map.forEach((k, v) -> {
+            System.out.println("key: [" + k.toString() + "]->[" + v.toString() + "]");
         });
     }
 
     private void printMultivaluedMaps() {
         this.multivaluedMaps.forEach((name, map) -> {
-            System.out.println("Map: " + name);
-            map.forEach((k, v) -> {
-                System.out.println("key: [" + k.toString() + "]->{" + v.toString() + "}");
-                v.forEach(item -> System.out.println("[" + item.toString() + "]"));
-            });
+            printMultivaluedMap(name);
+        });
+    }
+
+    private void printMultivaluedMap(String name) {
+        Map<T,U> map = getMultivaluedMap(name);
+        System.out.println("Map: " + name);
+        map.forEach((k, v) -> {
+            System.out.println("key: [" + k.toString() + "]->{" + v.toString() + "}");
+            v.forEach(item -> System.out.println("[" + item.toString() + "]"));
         });
     }
 }

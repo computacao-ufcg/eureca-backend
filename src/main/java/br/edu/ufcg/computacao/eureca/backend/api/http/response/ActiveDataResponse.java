@@ -1,5 +1,11 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
+import br.edu.ufcg.computacao.eureca.backend.core.holders.MapsHolder;
+import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.Description;
+import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.IdCode;
+import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.StudentCourse;
+import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.StudentPersonalData;
+
 public class ActiveDataResponse {
     String matricula;
     double cra;
@@ -41,6 +47,35 @@ public class ActiveDataResponse {
         this.periodo_ingresso = periodo_ingresso;
         this.trancamentos_totais = trancamentos_totais;
         this.cota = cota;
+    }
+
+    public ActiveDataResponse(String matricula, StudentPersonalData studentPersonalData,
+                              StudentCourse studentAcademicData) {
+        this.matricula = matricula;
+        this.cra = studentAcademicData.getCra();
+        this.periodos_integralizados = studentAcademicData.getPer_int();
+        this.cred_comp_int = studentAcademicData.getCred_comp_int();
+        this.cred_obrig_int = studentAcademicData.getCred_obrig_int();
+        this.cred_opt_int = studentAcademicData.getCred_opt_int();
+        this.curriculo = studentAcademicData.getCurriculo();
+        IdCode idEstadoCivil = new IdCode(studentPersonalData.getId_estado_civil());
+        this.estado_civil = MapsHolder.getInstance().getValue("EstadoCivil", idEstadoCivil).toString();
+        IdCode idGenero = new IdCode(studentPersonalData.getId_genero());
+        Description desc = (Description) MapsHolder.getInstance().getValue("Genero", idGenero);
+        if (desc == null) {
+            this.genero = "NULL";
+        } else {
+            this.genero = MapsHolder.getInstance().getValue("Genero", idGenero).toString();
+        }
+        this.iea = studentAcademicData.getIea();
+        this.matriculas_institucionais = studentAcademicData.getMat_inst();
+        this.mc = studentAcademicData.getMc();
+        this.media_geral_ingresso = studentAcademicData.getMedia_geral_ingresso();
+        this.mobilidade_estudantil = studentAcademicData.getMob_estudantil();
+        this.periodo_ingresso = studentAcademicData.getSemestre_ingresso();
+        this.trancamentos_totais = studentAcademicData.getTranc();
+        IdCode idCota = new IdCode(studentAcademicData.getId_cota());
+        this.cota = MapsHolder.getInstance().getValue("Cota", idCota).toString();
     }
 
     public String getMatricula() {

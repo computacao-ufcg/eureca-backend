@@ -4,9 +4,9 @@ import br.edu.ufcg.computacao.eureca.backend.constants.ConfigurationPropertyDefa
 import br.edu.ufcg.computacao.eureca.backend.constants.ConfigurationPropertyKeys;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.PropertiesHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.models.EurecaMapKey;
-import br.edu.ufcg.computacao.eureca.backend.core.models.EurecaMapValue;
-import br.edu.ufcg.computacao.eureca.backend.core.models.EurecaMultivaluedMapValue;
+import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.EurecaMapKey;
+import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.EurecaMapValue;
+import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.EurecaMultivaluedMapValue;
 import br.edu.ufcg.computacao.eureca.common.exceptions.FatalErrorException;
 import br.edu.ufcg.computacao.eureca.common.util.HomeDir;
 import com.google.gson.Gson;
@@ -61,7 +61,7 @@ public class GenericLoadMapFromScsvFile<T extends EurecaMapKey, V extends Eureca
 
         Map<T, V> loadedMap = new HashMap<>();
         String row;
-        int line = 0;
+        int line = 1;
         BufferedReader csvReader = getReader(mapName);
 
         while ((row = csvReader.readLine()) != null) {

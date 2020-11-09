@@ -23,23 +23,23 @@ import java.util.Collection;
 @Api(description = ApiDocumentation.Statistics.API)
 public class Statistics {
 
-    protected static final String ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "estatisticas";
+    protected static final String ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "statistics";
 
     private static final Logger LOGGER = Logger.getLogger(Statistics.class);
 
-    @RequestMapping(value = "ativos", method = RequestMethod.GET)
+    @RequestMapping(value = "actives", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.Statistics.GET_ATIVOS)
     public ResponseEntity<Collection<ActiveSummaryResponse>> getActives(
             @ApiParam(value = ApiDocumentation.Statistics.DE)
-            @RequestParam String de,
+            @RequestParam String from,
             @ApiParam(value = ApiDocumentation.Statistics.ATE)
-            @RequestParam String ate,
+            @RequestParam String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = false, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
-            Collection<ActiveSummaryResponse> ret = ApplicationFacade.getInstance().getActives(token);
+            Collection<ActiveSummaryResponse> ret = ApplicationFacade.getInstance().getActives(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -47,19 +47,19 @@ public class Statistics {
         }
     }
 
-    @RequestMapping(value = "ativos/csv", method = RequestMethod.GET)
+    @RequestMapping(value = "actives/csv", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.Statistics.GET_ATIVOS_CSV)
     public ResponseEntity<Collection<ActiveDataResponse>> getActivesCSV(
             @ApiParam(value = ApiDocumentation.Statistics.DE)
-            @RequestParam String de,
+            @RequestParam String from,
             @ApiParam(value = ApiDocumentation.Statistics.ATE)
-            @RequestParam String ate,
+            @RequestParam String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = false, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
-            Collection<ActiveDataResponse> ret = ApplicationFacade.getInstance().getActivesCSV(token);
+            Collection<ActiveDataResponse> ret = ApplicationFacade.getInstance().getActivesCSV(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -67,19 +67,19 @@ public class Statistics {
         }
     }
 
-    @RequestMapping(value = "egressos", method = RequestMethod.GET)
+    @RequestMapping(value = "alumni", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.Statistics.GET_EGRESSOS)
-    public ResponseEntity<AlumnusSummaryResponse> getAlumni(
+    public ResponseEntity<AlumniSummaryResponse> getAlumni(
             @ApiParam(value = ApiDocumentation.Statistics.DE)
-            @RequestParam String de,
+            @RequestParam String from,
             @ApiParam(value = ApiDocumentation.Statistics.ATE)
-            @RequestParam String ate,
+            @RequestParam String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = false, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
-            AlumnusSummaryResponse ret = ApplicationFacade.getInstance().getAlumni(token);
+            AlumniSummaryResponse ret = ApplicationFacade.getInstance().getAlumni(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -87,19 +87,19 @@ public class Statistics {
         }
     }
 
-    @RequestMapping(value = "egressos/csv", method = RequestMethod.GET)
+    @RequestMapping(value = "alumni/csv", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.Statistics.GET_EGRESSOS_CSV)
-    public ResponseEntity<Collection<AlumnusDataResponse>> getAlumniCSV(
+    public ResponseEntity<Collection<AlumniDataResponse>> getAlumniCSV(
             @ApiParam(value = ApiDocumentation.Statistics.DE)
-            @RequestParam String de,
+            @RequestParam String from,
             @ApiParam(value = ApiDocumentation.Statistics.ATE)
-            @RequestParam String ate,
+            @RequestParam String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = false, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
-            Collection<AlumnusDataResponse> ret = ApplicationFacade.getInstance().getAlumniCSV(token);
+            Collection<AlumniDataResponse> ret = ApplicationFacade.getInstance().getAlumniCSV(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -107,19 +107,19 @@ public class Statistics {
         }
     }
 
-    @RequestMapping(value = "evadidos", method = RequestMethod.GET)
+    @RequestMapping(value = "dropouts", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.Statistics.GET_EVADIDOS)
     public ResponseEntity<Collection<DropoutSummaryResponse>> getDropouts(
             @ApiParam(value = ApiDocumentation.Statistics.DE)
-            @RequestParam String de,
+            @RequestParam String from,
             @ApiParam(value = ApiDocumentation.Statistics.ATE)
-            @RequestParam String ate,
+            @RequestParam String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = false, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
-            Collection<DropoutSummaryResponse> ret = ApplicationFacade.getInstance().getDropouts(token);
+            Collection<DropoutSummaryResponse> ret = ApplicationFacade.getInstance().getDropouts(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -127,19 +127,19 @@ public class Statistics {
         }
     }
 
-    @RequestMapping(value = "evadidos/csv", method = RequestMethod.GET)
+    @RequestMapping(value = "dropouts/csv", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.Statistics.GET_EVADIDOS_CSV)
     public ResponseEntity<Collection<DropoutDataResponse>> getDropoutsCSV(
             @ApiParam(value = ApiDocumentation.Statistics.DE)
-            @RequestParam String de,
+            @RequestParam String from,
             @ApiParam(value = ApiDocumentation.Statistics.ATE)
-            @RequestParam String ate,
+            @RequestParam String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = false, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
-            Collection<DropoutDataResponse> ret = ApplicationFacade.getInstance().getDropoutsCSV(token);
+            Collection<DropoutDataResponse> ret = ApplicationFacade.getInstance().getDropoutsCSV(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
