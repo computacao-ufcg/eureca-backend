@@ -1,202 +1,202 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries;
 
 public class StudentCourse extends EurecaMapValue {
-    int id_ingresso;
-    String semestre_ingresso;
-    int id_curso;
-    int id_situacao;
-    String semestre_situacao;
-    int id_situacao_vinculo;
-    int id_cota;
-    int id_tipo_escola;
-    String ano_conclusao_ensino_medio;
-    String curriculo;
-    int carga_hor_obrig_int;
-    int cred_obrig_int;
-    int carga_hor_opt_int;
-    int cred_opt_int;
-    int carga_hor_comp_int;
-    int cred_comp_int;
-    double cra;
+    int admission_id;
+    String admission_term;
+    int course_id;
+    int status_id;
+    String term_status;
+    int detailed_status_id;
+    int affirmative_action_id;
+    int secondary_school_id;
+    String year_graduation_secondary_school;
+    String curriculum;
+    int mandatory_hours;
+    int mandatory_credits;
+    int elective_hours;
+    int elective_credits;
+    int complementary_hours;
+    int complementary_credits;
+    double gpa;
     double mc;
     double iea;
-    int per_int;
-    int tranc;
-    int mat_inst;
-    int mob_estudantil;
-    int cred_matriculados;
-    double media_geral_ingresso;
+    int terms_count;
+    int suspended_terms;
+    int institutional_terms;
+    int mobility_terms;
+    int enrolled_credits;
+    double admission_grade;
 
-    public StudentCourse(int id_ingresso, String semestre_ingresso, int id_curso, int id_situacao, String semestre_situacao,
-                         int id_situacao_vinculo, int id_cota, int id_tipo_escola, String ano_conclusao_ensino_medio, String curriculo,
-                         int carga_hor_obrig_int, int cred_obrig_int, int carga_hor_opt_int, int cred_opt_int,
-                         int carga_hor_comp_int, int cred_comp_int, double cra, double mc, double iea,
-                         int per_int, int tranc, int mat_inst, int mob_estudantil, int cred_matriculados,
-                         double media_geral_ingresso) {
-        this.id_ingresso = id_ingresso;
-        this.semestre_ingresso = semestre_ingresso;
-        this.id_curso = id_curso;
-        this.id_situacao = id_situacao;
-        this.semestre_situacao = semestre_situacao;
-        this.id_situacao_vinculo = id_situacao_vinculo;
-        this.id_cota = id_cota;
-        this.id_tipo_escola = id_tipo_escola;
-        this.ano_conclusao_ensino_medio = ano_conclusao_ensino_medio;
-        this.curriculo = curriculo;
-        this.carga_hor_obrig_int = carga_hor_obrig_int;
-        this.cred_obrig_int = cred_obrig_int;
-        this.carga_hor_opt_int = carga_hor_opt_int;
-        this.cred_opt_int = cred_opt_int;
-        this.carga_hor_comp_int = carga_hor_comp_int;
-        this.cred_comp_int = cred_comp_int;
-        this.cra = cra;
+    public StudentCourse(int admission_id, String admission_term, int course_id, int status_id, String term_status,
+                         int detailed_status_id, int affirmative_action_id, int secondary_school_id, String year_graduation_secondary_school, String curriculum,
+                         int mandatory_hours, int mandatory_credits, int elective_hours, int elective_credits,
+                         int complementary_hours, int complementary_credits, double gpa, double mc, double iea,
+                         int terms_count, int suspended_terms, int institutional_terms, int mobility_terms, int enrolled_credits,
+                         double admission_grade) {
+        this.admission_id = admission_id;
+        this.admission_term = admission_term;
+        this.course_id = course_id;
+        this.status_id = status_id;
+        this.term_status = term_status;
+        this.detailed_status_id = detailed_status_id;
+        this.affirmative_action_id = affirmative_action_id;
+        this.secondary_school_id = secondary_school_id;
+        this.year_graduation_secondary_school = year_graduation_secondary_school;
+        this.curriculum = curriculum;
+        this.mandatory_hours = mandatory_hours;
+        this.mandatory_credits = mandatory_credits;
+        this.elective_hours = elective_hours;
+        this.elective_credits = elective_credits;
+        this.complementary_hours = complementary_hours;
+        this.complementary_credits = complementary_credits;
+        this.gpa = gpa;
         this.mc = mc;
         this.iea = iea;
-        this.per_int = per_int;
-        this.tranc = tranc;
-        this.mat_inst = mat_inst;
-        this.mob_estudantil = mob_estudantil;
-        this.cred_matriculados = cred_matriculados;
-        this.media_geral_ingresso = media_geral_ingresso;
+        this.terms_count = terms_count;
+        this.suspended_terms = suspended_terms;
+        this.institutional_terms = institutional_terms;
+        this.mobility_terms = mobility_terms;
+        this.enrolled_credits = enrolled_credits;
+        this.admission_grade = admission_grade;
     }
 
     public StudentCourse() {
     }
 
-    public int getId_ingresso() {
-        return id_ingresso;
+    public int getAdmission_id() {
+        return admission_id;
     }
 
-    public void setId_ingresso(int id_ingresso) {
-        this.id_ingresso = id_ingresso;
+    public void setAdmission_id(int admission_id) {
+        this.admission_id = admission_id;
     }
 
-    public String getSemestre_ingresso() {
-        return semestre_ingresso;
+    public String getAdmission_term() {
+        return admission_term;
     }
 
-    public void setSemestre_ingresso(String semestre_ingresso) {
-        this.semestre_ingresso = semestre_ingresso;
+    public void setAdmission_term(String admission_term) {
+        this.admission_term = admission_term;
     }
 
-    public int getId_curso() {
-        return id_curso;
+    public int getCourse_id() {
+        return course_id;
     }
 
-    public void setId_curso(int id_curso) {
-        this.id_curso = id_curso;
+    public void setCourse_id(int course_id) {
+        this.course_id = course_id;
     }
 
-    public int getId_situacao() {
-        return id_situacao;
+    public int getStatus_id() {
+        return status_id;
     }
 
-    public void setId_situacao(int id_situacao) {
-        this.id_situacao = id_situacao;
+    public void setStatus_id(int status_id) {
+        this.status_id = status_id;
     }
 
-    public String getSemestre_situacao() {
-        return semestre_situacao;
+    public String getTerm_status() {
+        return term_status;
     }
 
-    public void setSemestre_situacao(String semestre_situacao) {
-        this.semestre_situacao = semestre_situacao;
+    public void setTerm_status(String term_status) {
+        this.term_status = term_status;
     }
 
-    public int getId_situacao_vinculo() {
-        return id_situacao_vinculo;
+    public int getDetailed_status_id() {
+        return detailed_status_id;
     }
 
-    public void setId_situacao_vinculo(int id_situacao_vinculo) {
-        this.id_situacao_vinculo = id_situacao_vinculo;
+    public void setDetailed_status_id(int detailed_status_id) {
+        this.detailed_status_id = detailed_status_id;
     }
 
-    public int getId_cota() {
-        return id_cota;
+    public int getAffirmative_action_id() {
+        return affirmative_action_id;
     }
 
-    public void setId_cota(int id_cota) {
-        this.id_cota = id_cota;
+    public void setAffirmative_action_id(int affirmative_action_id) {
+        this.affirmative_action_id = affirmative_action_id;
     }
 
-    public int getId_tipo_escola() {
-        return id_tipo_escola;
+    public int getSecondary_school_id() {
+        return secondary_school_id;
     }
 
-    public void setId_tipo_escola(int id_tipo_escola) {
-        this.id_tipo_escola = id_tipo_escola;
+    public void setSecondary_school_id(int secondary_school_id) {
+        this.secondary_school_id = secondary_school_id;
     }
 
-    public String getAno_conclusao_ensino_medio() {
-        return ano_conclusao_ensino_medio;
+    public String getYear_graduation_secondary_school() {
+        return year_graduation_secondary_school;
     }
 
-    public void setAno_conclusao_ensino_medio(String ano_conclusao_ensino_medio) {
-        this.ano_conclusao_ensino_medio = ano_conclusao_ensino_medio;
+    public void setYear_graduation_secondary_school(String year_graduation_secondary_school) {
+        this.year_graduation_secondary_school = year_graduation_secondary_school;
     }
 
-    public String getCurriculo() {
-        return curriculo;
+    public String getCurriculum() {
+        return curriculum;
     }
 
-    public void setCurriculo(String curriculo) {
-        this.curriculo = curriculo;
+    public void setCurriculum(String curriculum) {
+        this.curriculum = curriculum;
     }
 
-    public int getCarga_hor_obrig_int() {
-        return carga_hor_obrig_int;
+    public int getMandatory_hours() {
+        return mandatory_hours;
     }
 
-    public void setCarga_hor_obrig_int(int carga_hor_obrig_int) {
-        this.carga_hor_obrig_int = carga_hor_obrig_int;
+    public void setMandatory_hours(int mandatory_hours) {
+        this.mandatory_hours = mandatory_hours;
     }
 
-    public int getCred_obrig_int() {
-        return cred_obrig_int;
+    public int getMandatory_credits() {
+        return mandatory_credits;
     }
 
-    public void setCred_obrig_int(int cred_obrig_int) {
-        this.cred_obrig_int = cred_obrig_int;
+    public void setMandatory_credits(int mandatory_credits) {
+        this.mandatory_credits = mandatory_credits;
     }
 
-    public int getCarga_hor_opt_int() {
-        return carga_hor_opt_int;
+    public int getElective_hours() {
+        return elective_hours;
     }
 
-    public void setCarga_hor_opt_int(int carga_hor_opt_int) {
-        this.carga_hor_opt_int = carga_hor_opt_int;
+    public void setElective_hours(int elective_hours) {
+        this.elective_hours = elective_hours;
     }
 
-    public int getCred_opt_int() {
-        return cred_opt_int;
+    public int getElective_credits() {
+        return elective_credits;
     }
 
-    public void setCred_opt_int(int cred_opt_int) {
-        this.cred_opt_int = cred_opt_int;
+    public void setElective_credits(int elective_credits) {
+        this.elective_credits = elective_credits;
     }
 
-    public int getCarga_hor_comp_int() {
-        return carga_hor_comp_int;
+    public int getComplementary_hours() {
+        return complementary_hours;
     }
 
-    public void setCarga_hor_comp_int(int carga_hor_comp_int) {
-        this.carga_hor_comp_int = carga_hor_comp_int;
+    public void setComplementary_hours(int complementary_hours) {
+        this.complementary_hours = complementary_hours;
     }
 
-    public int getCred_comp_int() {
-        return cred_comp_int;
+    public int getComplementary_credits() {
+        return complementary_credits;
     }
 
-    public void setCred_comp_int(int cred_comp_int) {
-        this.cred_comp_int = cred_comp_int;
+    public void setComplementary_credits(int complementary_credits) {
+        this.complementary_credits = complementary_credits;
     }
 
-    public double getCra() {
-        return cra;
+    public double getGpa() {
+        return gpa;
     }
 
-    public void setCra(double cra) {
-        this.cra = cra;
+    public void setGpa(double gpa) {
+        this.gpa = gpa;
     }
 
     public double getMc() {
@@ -215,61 +215,61 @@ public class StudentCourse extends EurecaMapValue {
         this.iea = iea;
     }
 
-    public int getPer_int() {
-        return per_int;
+    public int getTerms_count() {
+        return terms_count;
     }
 
-    public void setPer_int(int per_int) {
-        this.per_int = per_int;
+    public void setTerms_count(int terms_count) {
+        this.terms_count = terms_count;
     }
 
-    public int getTranc() {
-        return tranc;
+    public int getSuspended_terms() {
+        return suspended_terms;
     }
 
-    public void setTranc(int tranc) {
-        this.tranc = tranc;
+    public void setSuspended_terms(int suspended_terms) {
+        this.suspended_terms = suspended_terms;
     }
 
-    public int getMat_inst() {
-        return mat_inst;
+    public int getInstitutional_terms() {
+        return institutional_terms;
     }
 
-    public void setMat_inst(int mat_inst) {
-        this.mat_inst = mat_inst;
+    public void setInstitutional_terms(int institutional_terms) {
+        this.institutional_terms = institutional_terms;
     }
 
-    public int getMob_estudantil() {
-        return mob_estudantil;
+    public int getMobility_terms() {
+        return mobility_terms;
     }
 
-    public void setMob_estudantil(int mob_estudantil) {
-        this.mob_estudantil = mob_estudantil;
+    public void setMobility_terms(int mobility_terms) {
+        this.mobility_terms = mobility_terms;
     }
 
-    public int getCred_matriculados() {
-        return cred_matriculados;
+    public int getEnrolled_credits() {
+        return enrolled_credits;
     }
 
-    public void setCred_matriculados(int cred_matriculados) {
-        this.cred_matriculados = cred_matriculados;
+    public void setEnrolled_credits(int enrolled_credits) {
+        this.enrolled_credits = enrolled_credits;
     }
 
-    public double getMedia_geral_ingresso() {
-        return media_geral_ingresso;
+    public double getAdmission_grade() {
+        return admission_grade;
     }
 
-    public void setMedia_geral_ingresso(double media_geral_ingresso) {
-        this.media_geral_ingresso = media_geral_ingresso;
+    public void setAdmission_grade(double admission_grade) {
+        this.admission_grade = admission_grade;
     }
 
     @Override
     public String toString() {
-        return id_ingresso + ":" + semestre_ingresso + ":" + id_curso + ":" + id_situacao + ":" + semestre_situacao +
-                ":" + id_situacao_vinculo + ":" + id_cota + ":" + id_tipo_escola + ":" + ano_conclusao_ensino_medio +
-                ":" + curriculo + ":" + carga_hor_obrig_int + ":" + cred_obrig_int + ":" + carga_hor_opt_int +
-                ":" + cred_opt_int + ":" + carga_hor_comp_int + ":" + cred_comp_int + ":" + cra + ":" + mc + ":" +
-                ":" + iea + ":" + per_int + ":" +tranc + ":" + mat_inst + ":" + mob_estudantil + ":" +
-                ":" + cred_matriculados + ":" + media_geral_ingresso;
+        return admission_id + ":" + admission_term + ":" + course_id + ":" + status_id + ":" + term_status +
+                ":" + detailed_status_id + ":" + affirmative_action_id + ":" + secondary_school_id + ":" + year_graduation_secondary_school +
+                ":" + curriculum + ":" + mandatory_hours + ":" + mandatory_credits + ":" + elective_hours +
+                ":" + elective_credits + ":" + complementary_hours + ":" + complementary_credits + ":" + gpa + ":" + mc + ":" +
+                ":" + iea + ":" + terms_count + ":" + suspended_terms + ":" + institutional_terms + ":" + mobility_terms + ":" +
+                ":" + enrolled_credits + ":" + admission_grade;
     }
 }

@@ -7,147 +7,143 @@ import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.StudentCours
 import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.StudentPersonalData;
 
 public class ActiveDataResponse {
-    String matricula;
-    double cra;
-    int periodos_integralizados;
-    int cred_comp_int;
-    int cred_obrig_int;
-    int cred_opt_int;
-    String curriculo;
-    String estado_civil;
-    String genero;
+    String registration;
+    double gpa;
+    int terms_done;
+    int complementary_credits;
+    int mandatory_credits;
+    int elective_credits;
+    String curriculum;
+    String marital_status;
+    String gender;
     double iea;
-    int matriculas_institucionais;
+    int institutional_terms;
     double mc;
-    double media_geral_ingresso;
-    int mobilidade_estudantil;
-    String periodo_ingresso;
-    int trancamentos_totais;
-    String cota;
+    double entry_grade;
+    int mobility_terms;
+    String admission_term;
+    int suspended_terms;
+    String affirmative_action;
 
-    public ActiveDataResponse(String matricula, double cra, int periodos_integralizados, int cred_comp_int,
-                              int cred_obrig_int, int cred_opt_int, String curriculo, String estado_civil,
-                              String genero, double iea, int matriculas_institucionais, double mc,
-                              double media_geral_ingresso, int mobilidade_estudantil, String periodo_ingresso,
-                              int trancamentos_totais, String cota) {
-        this.matricula = matricula;
-        this.cra = cra;
-        this.periodos_integralizados = periodos_integralizados;
-        this.cred_comp_int = cred_comp_int;
-        this.cred_obrig_int = cred_obrig_int;
-        this.cred_opt_int = cred_opt_int;
-        this.curriculo = curriculo;
-        this.estado_civil = estado_civil;
-        this.genero = genero;
+    public ActiveDataResponse(String registration, double gpa, int terms_done, int complementary_credits,
+                              int mandatory_credits, int elective_credits, String curriculum, String marital_status,
+                              String gender, double iea, int institutional_terms, double mc,
+                              double entry_grade, int mobility_terms, String admission_term,
+                              int suspended_terms, String affirmative_action) {
+        this.registration = registration;
+        this.gpa = gpa;
+        this.terms_done = terms_done;
+        this.complementary_credits = complementary_credits;
+        this.mandatory_credits = mandatory_credits;
+        this.elective_credits = elective_credits;
+        this.curriculum = curriculum;
+        this.marital_status = marital_status;
+        this.gender = gender;
         this.iea = iea;
-        this.matriculas_institucionais = matriculas_institucionais;
+        this.institutional_terms = institutional_terms;
         this.mc = mc;
-        this.media_geral_ingresso = media_geral_ingresso;
-        this.mobilidade_estudantil = mobilidade_estudantil;
-        this.periodo_ingresso = periodo_ingresso;
-        this.trancamentos_totais = trancamentos_totais;
-        this.cota = cota;
+        this.entry_grade = entry_grade;
+        this.mobility_terms = mobility_terms;
+        this.admission_term = admission_term;
+        this.suspended_terms = suspended_terms;
+        this.affirmative_action = affirmative_action;
     }
 
-    public ActiveDataResponse(String matricula, StudentPersonalData studentPersonalData,
+    public ActiveDataResponse(String registration, StudentPersonalData studentPersonalData,
                               StudentCourse studentAcademicData) {
-        this.matricula = matricula;
-        this.cra = studentAcademicData.getCra();
-        this.periodos_integralizados = studentAcademicData.getPer_int();
-        this.cred_comp_int = studentAcademicData.getCred_comp_int();
-        this.cred_obrig_int = studentAcademicData.getCred_obrig_int();
-        this.cred_opt_int = studentAcademicData.getCred_opt_int();
-        this.curriculo = studentAcademicData.getCurriculo();
-        IdCode idEstadoCivil = new IdCode(studentPersonalData.getId_estado_civil());
-        this.estado_civil = MapsHolder.getInstance().getValue("EstadoCivil", idEstadoCivil).toString();
-        IdCode idGenero = new IdCode(studentPersonalData.getId_genero());
-        Description desc = (Description) MapsHolder.getInstance().getValue("Genero", idGenero);
-        if (desc == null) {
-            this.genero = "NULL";
-        } else {
-            this.genero = MapsHolder.getInstance().getValue("Genero", idGenero).toString();
-        }
+        this.registration = registration;
+        this.gpa = studentAcademicData.getGpa();
+        this.terms_done = studentAcademicData.getTerms_count();
+        this.complementary_credits = studentAcademicData.getComplementary_credits();
+        this.mandatory_credits = studentAcademicData.getMandatory_credits();
+        this.elective_credits = studentAcademicData.getElective_credits();
+        this.curriculum = studentAcademicData.getCurriculum();
+        IdCode idMaritalStatus = new IdCode(studentPersonalData.getMarital_status_id());
+        this.marital_status = MapsHolder.getInstance().getValue("EstadoCivil", idMaritalStatus).toString();
+        IdCode idGender = new IdCode(studentPersonalData.getGender_id());
+        Description desc = (Description) MapsHolder.getInstance().getValue("Genero", idGender);
+        this.gender = MapsHolder.getInstance().getValue("Genero", idGender).toString();
         this.iea = studentAcademicData.getIea();
-        this.matriculas_institucionais = studentAcademicData.getMat_inst();
+        this.institutional_terms = studentAcademicData.getInstitutional_terms();
         this.mc = studentAcademicData.getMc();
-        this.media_geral_ingresso = studentAcademicData.getMedia_geral_ingresso();
-        this.mobilidade_estudantil = studentAcademicData.getMob_estudantil();
-        this.periodo_ingresso = studentAcademicData.getSemestre_ingresso();
-        this.trancamentos_totais = studentAcademicData.getTranc();
-        IdCode idCota = new IdCode(studentAcademicData.getId_cota());
-        this.cota = MapsHolder.getInstance().getValue("Cota", idCota).toString();
+        this.entry_grade = studentAcademicData.getAdmission_grade();
+        this.mobility_terms = studentAcademicData.getMobility_terms();
+        this.admission_term = studentAcademicData.getAdmission_term();
+        this.suspended_terms = studentAcademicData.getSuspended_terms();
+        IdCode idAffirmativeAction = new IdCode(studentAcademicData.getAffirmative_action_id());
+        this.affirmative_action = MapsHolder.getInstance().getValue("Cota", idAffirmativeAction).toString();
     }
 
-    public String getMatricula() {
-        return matricula;
+    public String getRegistration() {
+        return registration;
     }
 
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
+    public void setRegistration(String registration) {
+        this.registration = registration;
     }
 
-    public double getCra() {
-        return cra;
+    public double getGpa() {
+        return gpa;
     }
 
-    public void setCra(double cra) {
-        this.cra = cra;
+    public void setGpa(double gpa) {
+        this.gpa = gpa;
     }
 
-    public int getPeriodos_integralizados() {
-        return periodos_integralizados;
+    public int getTerms_done() {
+        return terms_done;
     }
 
-    public void setPeriodos_integralizados(int periodos_integralizados) {
-        this.periodos_integralizados = periodos_integralizados;
+    public void setTerms_done(int terms_done) {
+        this.terms_done = terms_done;
     }
 
-    public int getCred_comp_int() {
-        return cred_comp_int;
+    public int getComplementary_credits() {
+        return complementary_credits;
     }
 
-    public void setCred_comp_int(int cred_comp_int) {
-        this.cred_comp_int = cred_comp_int;
+    public void setComplementary_credits(int complementary_credits) {
+        this.complementary_credits = complementary_credits;
     }
 
-    public int getCred_obrig_int() {
-        return cred_obrig_int;
+    public int getMandatory_credits() {
+        return mandatory_credits;
     }
 
-    public void setCred_obrig_int(int cred_obrig_int) {
-        this.cred_obrig_int = cred_obrig_int;
+    public void setMandatory_credits(int mandatory_credits) {
+        this.mandatory_credits = mandatory_credits;
     }
 
-    public int getCred_opt_int() {
-        return cred_opt_int;
+    public int getElective_credits() {
+        return elective_credits;
     }
 
-    public void setCred_opt_int(int cred_opt_int) {
-        this.cred_opt_int = cred_opt_int;
+    public void setElective_credits(int elective_credits) {
+        this.elective_credits = elective_credits;
     }
 
-    public String getCurriculo() {
-        return curriculo;
+    public String getCurriculum() {
+        return curriculum;
     }
 
-    public void setCurriculo(String curriculo) {
-        this.curriculo = curriculo;
+    public void setCurriculum(String curriculum) {
+        this.curriculum = curriculum;
     }
 
-    public String getEstado_civil() {
-        return estado_civil;
+    public String getMarital_status() {
+        return marital_status;
     }
 
-    public void setEstado_civil(String estado_civil) {
-        this.estado_civil = estado_civil;
+    public void setMarital_status(String marital_status) {
+        this.marital_status = marital_status;
     }
 
-    public String getGenero() {
-        return genero;
+    public String getGender() {
+        return gender;
     }
 
-    public void setGenero(String genero) {
-        this.genero = genero;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public double getIea() {
@@ -158,12 +154,12 @@ public class ActiveDataResponse {
         this.iea = iea;
     }
 
-    public int getMatriculas_institucionais() {
-        return matriculas_institucionais;
+    public int getInstitutional_terms() {
+        return institutional_terms;
     }
 
-    public void setMatriculas_institucionais(int matriculas_institucionais) {
-        this.matriculas_institucionais = matriculas_institucionais;
+    public void setInstitutional_terms(int institutional_terms) {
+        this.institutional_terms = institutional_terms;
     }
 
     public double getMc() {
@@ -174,43 +170,43 @@ public class ActiveDataResponse {
         this.mc = mc;
     }
 
-    public double getMedia_geral_ingresso() {
-        return media_geral_ingresso;
+    public double getEntry_grade() {
+        return entry_grade;
     }
 
-    public void setMedia_geral_ingresso(double media_geral_ingresso) {
-        this.media_geral_ingresso = media_geral_ingresso;
+    public void setEntry_grade(double entry_grade) {
+        this.entry_grade = entry_grade;
     }
 
-    public int getMobilidade_estudantil() {
-        return mobilidade_estudantil;
+    public int getMobility_terms() {
+        return mobility_terms;
     }
 
-    public void setMobilidade_estudantil(int mobilidade_estudantil) {
-        this.mobilidade_estudantil = mobilidade_estudantil;
+    public void setMobility_terms(int mobility_terms) {
+        this.mobility_terms = mobility_terms;
     }
 
-    public String getPeriodo_ingresso() {
-        return periodo_ingresso;
+    public String getAdmission_term() {
+        return admission_term;
     }
 
-    public void setPeriodo_ingresso(String periodo_ingresso) {
-        this.periodo_ingresso = periodo_ingresso;
+    public void setAdmission_term(String admission_term) {
+        this.admission_term = admission_term;
     }
 
-    public int getTrancamentos_totais() {
-        return trancamentos_totais;
+    public int getSuspended_terms() {
+        return suspended_terms;
     }
 
-    public void setTrancamentos_totais(int trancamentos_totais) {
-        this.trancamentos_totais = trancamentos_totais;
+    public void setSuspended_terms(int suspended_terms) {
+        this.suspended_terms = suspended_terms;
     }
 
-    public String getCota() {
-        return cota;
+    public String getAffirmative_action() {
+        return affirmative_action;
     }
 
-    public void setCota(String cota) {
-        this.cota = cota;
+    public void setAffirmative_action(String affirmative_action) {
+        this.affirmative_action = affirmative_action;
     }
 }

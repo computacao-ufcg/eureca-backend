@@ -12,10 +12,10 @@ public class SystemConstants {
     public static final String REENTER_NEW_COURSE = "CANCELADO NOVO INGRESSO OUTRO CURSO";
     public static final String FAILED_ALL = "CANCELADO REPROVOU TODAS POR FALTAS";
     public static final String CANCELLED = "CANCELAMENTO DE MATRICULA";
-    public static final String CANCELLED_BY_JUSTICE = "CANCELAMENTO P/ DECISAO JUDICIAL";
+    public static final String CANCELLED_BY_DECREE = "CANCELAMENTO P/ DECISAO JUDICIAL";
     public static final String CANCELLED_CHANGE_COURSE = "CANCELAMENTO P/ MUDANCA CURSO";
     public static final String CANCELLED_UPON_REQUEST = "CANCELAMENTO P/ SOLICITACAO ALUNO";
     public static final String LEFT_WITHOUT_NOTICE = "CANCELAMENTO POR ABANDONO";
     public static final String MISSED_GRADUATION = "CONCLUIDO - NAO COLOU GRAU";
-    public static final String TRANSFERED = "TRANSFERIDO PARA OUTRA IES";
+    public static final String TRANSFERRED = "TRANSFERIDO PARA OUTRA IES";
 }

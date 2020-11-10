@@ -1,24 +1,24 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries;
 
 public class Lecture extends EurecaMapValue {
-    int num_aula;
+    int lecture;
 
-    public int getNum_aula() {
-        return num_aula;
+    public int getLecture() {
+        return lecture;
     }
 
-    public void setNum_aula(int num_aula) {
-        this.num_aula = num_aula;
+    public void setLecture(int lecture) {
+        this.lecture = lecture;
     }
 
-    public Lecture(int num_aula) {
-        this.num_aula = num_aula;
+    public Lecture(int lecture) {
+        this.lecture = lecture;
     }
 
     public Lecture() {}
 
     @Override
     public String toString() {
-        return Integer.toString(this.num_aula);
+        return Integer.toString(this.lecture);
     }
 }

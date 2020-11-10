@@ -1,38 +1,38 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries;
 
 public class CpfRegistration extends EurecaMapKey {
-    String cpf;
-    String matricula;
+    String national_id;
+    String registration;
 
-    public CpfRegistration(String cpf, String matricula) {
-        this.cpf = cpf;
-        this.matricula = matricula;
+    public CpfRegistration(String national_id, String registration) {
+        this.national_id = national_id;
+        this.registration = registration;
     }
 
     public CpfRegistration() {}
 
-    public String getCpf() {
-        return cpf;
+    public String getNational_id() {
+        return national_id;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public void setNational_id(String national_id) {
+        this.national_id = national_id;
     }
 
-    public String getMatricula() {
-        return matricula;
+    public String getRegistration() {
+        return registration;
     }
 
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
+    public void setRegistration(String registration) {
+        this.registration = registration;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((this.cpf == null) ? 0 : this.cpf.hashCode())
-                + ((this.matricula == null) ? 0 : this.matricula.hashCode());
+        result = prime * result + ((this.national_id == null) ? 0 : this.national_id.hashCode())
+                + ((this.registration == null) ? 0 : this.registration.hashCode());
         return result;
     }
 
@@ -42,17 +42,17 @@ public class CpfRegistration extends EurecaMapKey {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         CpfRegistration other = (CpfRegistration) obj;
-        if (this.matricula == null) {
-            if (other.getMatricula() != null) return false;
-        } else if (this.cpf == null) {
-            if (other.getCpf() != null) return false;
-        } else if (!this.cpf.equals(other.getCpf()) ||
-                    !this.matricula.equals(other.getMatricula())) return false;
+        if (this.registration == null) {
+            if (other.getRegistration() != null) return false;
+        } else if (this.national_id == null) {
+            if (other.getNational_id() != null) return false;
+        } else if (!this.national_id.equals(other.getNational_id()) ||
+                    !this.registration.equals(other.getRegistration())) return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return this.cpf + ":" + this.matricula;
+        return this.national_id + ":" + this.registration;
     }
 }

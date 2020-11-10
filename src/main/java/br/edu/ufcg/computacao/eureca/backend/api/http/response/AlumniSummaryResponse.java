@@ -4,89 +4,89 @@ import java.util.Collection;
 
 public class AlumniSummaryResponse {
     //@ApiModelProperty(position = 0, example = ApiDocumentation.Model.REGISTRATION)
-    double cra_medio;
-    int max_graduados;
-    double media_graduados;
-    int min_graduados;
-    String periodo_max_graduados;
-    String periodo_min_graduados;
-    Collection<AlumniDataResponse> periodos;
-    int total_graduados;
+    double average_gpa;
+    int max_degree_count;
+    double average_degree_count;
+    int min_degree_count;
+    String max_degree_count_term;
+    String min_degree_count_term;
+    Collection<AlumniDataResponse> terms;
+    int total_degree_count;
 
-    public AlumniSummaryResponse(double cra_medio, int max_graduados, double media_graduados, int min_graduados,
-                                 String periodo_max_graduados, String periodo_min_graduados,
-                                 Collection<AlumniDataResponse> periodos, int total_graduados) {
-        this.cra_medio = cra_medio;
-        this.max_graduados = max_graduados;
-        this.media_graduados = media_graduados;
-        this.min_graduados = min_graduados;
-        this.periodo_max_graduados = periodo_max_graduados;
-        this.periodo_min_graduados = periodo_min_graduados;
-        this.periodos = periodos;
-        this.total_graduados = total_graduados;
+    public AlumniSummaryResponse(double average_gpa, int max_degree_count, double average_degree_count, int min_degree_count,
+                                 String max_degree_count_term, String min_degree_count_term,
+                                 Collection<AlumniDataResponse> terms, int total_degree_count) {
+        this.average_gpa = average_gpa;
+        this.max_degree_count = max_degree_count;
+        this.average_degree_count = average_degree_count;
+        this.min_degree_count = min_degree_count;
+        this.max_degree_count_term = max_degree_count_term;
+        this.min_degree_count_term = min_degree_count_term;
+        this.terms = terms;
+        this.total_degree_count = total_degree_count;
     }
 
-    public double getCra_medio() {
-        return cra_medio;
+    public double getAverage_gpa() {
+        return average_gpa;
     }
 
-    public void setCra_medio(double cra_medio) {
-        this.cra_medio = cra_medio;
+    public void setAverage_gpa(double average_gpa) {
+        this.average_gpa = average_gpa;
     }
 
-    public int getMax_graduados() {
-        return max_graduados;
+    public int getMax_degree_count() {
+        return max_degree_count;
     }
 
-    public void setMax_graduados(int max_graduados) {
-        this.max_graduados = max_graduados;
+    public void setMax_degree_count(int max_degree_count) {
+        this.max_degree_count = max_degree_count;
     }
 
-    public double getMedia_graduados() {
-        return media_graduados;
+    public double getAverage_degree_count() {
+        return average_degree_count;
     }
 
-    public void setMedia_graduados(double media_graduados) {
-        this.media_graduados = media_graduados;
+    public void setAverage_degree_count(double average_degree_count) {
+        this.average_degree_count = average_degree_count;
     }
 
-    public int getMin_graduados() {
-        return min_graduados;
+    public int getMin_degree_count() {
+        return min_degree_count;
     }
 
-    public void setMin_graduados(int min_graduados) {
-        this.min_graduados = min_graduados;
+    public void setMin_degree_count(int min_degree_count) {
+        this.min_degree_count = min_degree_count;
     }
 
-    public String getPeriodo_max_graduados() {
-        return periodo_max_graduados;
+    public String getMax_degree_count_term() {
+        return max_degree_count_term;
     }
 
-    public void setPeriodo_max_graduados(String periodo_max_graduados) {
-        this.periodo_max_graduados = periodo_max_graduados;
+    public void setMax_degree_count_term(String max_degree_count_term) {
+        this.max_degree_count_term = max_degree_count_term;
     }
 
-    public String getPeriodo_min_graduados() {
-        return periodo_min_graduados;
+    public String getMin_degree_count_term() {
+        return min_degree_count_term;
     }
 
-    public void setPeriodo_min_graduados(String periodo_min_graduados) {
-        this.periodo_min_graduados = periodo_min_graduados;
+    public void setMin_degree_count_term(String min_degree_count_term) {
+        this.min_degree_count_term = min_degree_count_term;
     }
 
-    public Collection<AlumniDataResponse> getPeriodos() {
-        return periodos;
+    public Collection<AlumniDataResponse> getTerms() {
+        return terms;
     }
 
-    public void setPeriodos(Collection<AlumniDataResponse> periodos) {
-        this.periodos = periodos;
+    public void setTerms(Collection<AlumniDataResponse> terms) {
+        this.terms = terms;
     }
 
-    public int getTotal_graduados() {
-        return total_graduados;
+    public int getTotal_degree_count() {
+        return total_degree_count;
     }
 
-    public void setTotal_graduados(int total_graduados) {
-        this.total_graduados = total_graduados;
+    public void setTotal_degree_count(int total_degree_count) {
+        this.total_degree_count = total_degree_count;
     }
 }

@@ -1,27 +1,27 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class DropoutSummaryResponse {
-    String periodo;
-    DropoutClassification tags;
+    String term;
+    DropoutClassification reasons;
 
-    public DropoutSummaryResponse(String periodo, DropoutClassification tags) {
-        this.periodo = periodo;
-        this.tags = tags;
+    public DropoutSummaryResponse(String term, DropoutClassification reasons) {
+        this.term = term;
+        this.reasons = reasons;
     }
 
-    public String getPeriodo() {
-        return periodo;
+    public String getTerm() {
+        return term;
     }
 
-    public void setPeriodo(String periodo) {
-        this.periodo = periodo;
+    public void setTerm(String term) {
+        this.term = term;
     }
 
-    public DropoutClassification getTags() {
-        return tags;
+    public DropoutClassification getReasons() {
+        return reasons;
     }
 
-    public void setTags(DropoutClassification tags) {
-        this.tags = tags;
+    public void setReasons(DropoutClassification reasons) {
+        this.reasons = reasons;
     }
 }

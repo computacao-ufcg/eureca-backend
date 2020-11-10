@@ -1,24 +1,24 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries;
 
 public class SiapeValue extends EurecaMapValue {
-    String siape;
+    String institutional_id;
 
-    public String getSiape() {
-        return siape;
+    public String getInstitutional_id() {
+        return institutional_id;
     }
 
-    public void setSiape(String siape) {
-        this.siape = siape;
+    public void setInstitutional_id(String institutional_id) {
+        this.institutional_id = institutional_id;
     }
 
-    public SiapeValue(String siape) {
-        this.siape = siape;
+    public SiapeValue(String institutional_id) {
+        this.institutional_id = institutional_id;
     }
 
     public SiapeValue() {}
 
     @Override
     public String toString() {
-        return this.siape;
+        return this.institutional_id;
     }
 }

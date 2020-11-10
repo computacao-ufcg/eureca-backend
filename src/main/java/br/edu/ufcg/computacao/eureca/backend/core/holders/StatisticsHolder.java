@@ -79,13 +79,13 @@ public class StatisticsHolder {
         Map<CpfRegistration, StudentCourse> mapStudentCourse = MapsHolder.getInstance().getMap("DiscenteVinculo");
         Map<Cpf, StudentPersonalData> mapStudentPersonalData = MapsHolder.getInstance().getMap("Discente");
         mapStudentCourse.forEach((k, v) -> {
-            if (v.getId_situacao() == activeCode) { // active
-                StudentPersonalData personalData = mapStudentPersonalData.get(new Cpf(k.getCpf()));
-                this.actives.put(k.getCpf(), new Student(k, personalData, v));
-                String admissionTerm = v.getSemestre_ingresso();
+            if (v.getStatus_id() == activeCode) { // active
+                StudentPersonalData personalData = mapStudentPersonalData.get(new Cpf(k.getNational_id()));
+                this.actives.put(k.getNational_id(), new Student(k, personalData, v));
+                String admissionTerm = v.getAdmission_term();
                 Collection<String> list = this.activeByAdmissionTerm.get(admissionTerm);
                 if (list == null) list = new ArrayList<>();
-                list.add(k.getCpf());
+                list.add(k.getNational_id());
                 this.activeByAdmissionTerm.put(admissionTerm, list);
             }
         });
@@ -100,18 +100,18 @@ public class StatisticsHolder {
         Map<CpfRegistration, StudentCourse> mapStudentCourse = MapsHolder.getInstance().getMap("DiscenteVinculo");
         Map<Cpf, StudentPersonalData> mapStudentPersonalData = MapsHolder.getInstance().getMap("Discente");
         mapStudentCourse.forEach((k, v) -> {
-            if (v.getId_situacao_vinculo() == graduatedCode) { // graduated
-                StudentPersonalData personalData = mapStudentPersonalData.get(new Cpf(k.getCpf()));
-                this.alumni.put(k.getCpf(), new Student(k, personalData, v));
-                String admissionTerm = v.getSemestre_ingresso();
-                String graduationTerm = v.getSemestre_situacao();
+            if (v.getDetailed_status_id() == graduatedCode) { // graduated
+                StudentPersonalData personalData = mapStudentPersonalData.get(new Cpf(k.getNational_id()));
+                this.alumni.put(k.getNational_id(), new Student(k, personalData, v));
+                String admissionTerm = v.getAdmission_term();
+                String graduationTerm = v.getTerm_status();
                 Collection<String> list = this.alumniByAdmissionTerm.get(admissionTerm);
                 if (list == null) list = new ArrayList<>();
-                list.add(k.getCpf());
+                list.add(k.getNational_id());
                 this.alumniByAdmissionTerm.put(admissionTerm, list);
                 list = this.alumniByGraduationTerm.get(graduationTerm);
                 if (list == null) list = new ArrayList<>();
-                list.add(k.getCpf());
+                list.add(k.getNational_id());
                 this.alumniByGraduationTerm.put(graduationTerm, list);
             }
         });
@@ -130,27 +130,27 @@ public class StatisticsHolder {
         Map<CpfRegistration, StudentCourse> mapStudentCourse = MapsHolder.getInstance().getMap("DiscenteVinculo");
         Map<Cpf, StudentPersonalData> mapStudentPersonalData = MapsHolder.getInstance().getMap("Discente");
         mapStudentCourse.forEach((k, v) -> {
-            if (v.getId_situacao_vinculo() != graduatedCode && v.getId_situacao_vinculo() != regularCode) { // dropout
-                StudentPersonalData personalData = mapStudentPersonalData.get(new Cpf(k.getCpf()));
-                this.dropouts.put(k.getCpf(), new Student(k, personalData, v));
-                String admissionTerm = v.getSemestre_ingresso();
-                String leaveTerm = v.getSemestre_situacao();
-                String reason = Integer.toString(v.getId_situacao());
+            if (v.getDetailed_status_id() != graduatedCode && v.getDetailed_status_id() != regularCode) { // dropout
+                StudentPersonalData personalData = mapStudentPersonalData.get(new Cpf(k.getNational_id()));
+                this.dropouts.put(k.getNational_id(), new Student(k, personalData, v));
+                String admissionTerm = v.getAdmission_term();
+                String leaveTerm = v.getTerm_status();
+                String reason = Integer.toString(v.getStatus_id());
                 Collection<String> list = this.dropoutByAdmissionTerm.get(admissionTerm);
                 if (list == null) list = new ArrayList<>();
-                list.add(k.getCpf());
+                list.add(k.getNational_id());
                 this.dropoutByAdmissionTerm.put(admissionTerm, list);
                 list = this.dropoutByLeaveTerm.get(leaveTerm);
                 if (list == null) list = new ArrayList<>();
-                list.add(k.getCpf());
+                list.add(k.getNational_id());
                 this.dropoutByLeaveTerm.put(leaveTerm, list);
                 list = this.dropoutByReasonAndAdmissionTerm.get((reason+admissionTerm));
                 if (list == null) list = new ArrayList<>();
-                list.add(k.getCpf());
+                list.add(k.getNational_id());
                 this.dropoutByReasonAndAdmissionTerm.put((reason+admissionTerm), list);
                 list = this.dropoutByReasonAndLeaveTerm.get((reason+leaveTerm));
                 if (list == null) list = new ArrayList<>();
-                list.add(k.getCpf());
+                list.add(k.getNational_id());
                 this.dropoutByReasonAndLeaveTerm.put((reason+leaveTerm), list);            }
         });
     }

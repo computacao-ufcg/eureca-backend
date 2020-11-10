@@ -53,12 +53,12 @@ public class ApplicationFacade {
         Collection<ActiveSummaryResponse> activeStudentsSummary = new ArrayList<>();
         Collection<Student> actives = StatisticsHolder.getInstance().getAllActives();
         actives.forEach(item -> {
-            String admission = item.getAcademicData().getSemestre_ingresso();
+            String admission = item.getAcademicData().getAdmission_term();
             if (admission != null && admission.compareTo(from) >= 0 && admission.compareTo(to) <= 0) {
                 ActiveSummaryResponse studentSummary = new ActiveSummaryResponse(
-                        item.getId().getMatricula(),
-                        item.getAcademicData().getSemestre_ingresso(),
-                        item.getAcademicData().getPer_int(),
+                        item.getId().getRegistration(),
+                        item.getAcademicData().getAdmission_term(),
+                        item.getAcademicData().getTerms_count(),
                         computePercentage(item));
                 activeStudentsSummary.add(studentSummary);
             }
@@ -71,11 +71,15 @@ public class ApplicationFacade {
         Collection<ActiveDataResponse> activeStudentsData = new ArrayList<>();
         Collection<Student> actives = StatisticsHolder.getInstance().getAllActives();
         actives.forEach(item -> {
-            String admission = item.getAcademicData().getSemestre_ingresso();
-            if (admission != null && admission.compareTo(from) >= 0 && admission.compareTo(to) <= 0) {
-                ActiveDataResponse studentData = new ActiveDataResponse(item.getId().getMatricula(),
-                        item.getPersonalData(), item.getAcademicData());
-                activeStudentsData.add(studentData);
+            try {
+                String admission = item.getAcademicData().getAdmission_term();
+                if (admission != null && admission.compareTo(from) >= 0 && admission.compareTo(to) <= 0) {
+                    ActiveDataResponse studentData = new ActiveDataResponse(item.getId().getRegistration(),
+                            item.getPersonalData(), item.getAcademicData());
+                    activeStudentsData.add(studentData);
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
             }
         });
         return activeStudentsData;
@@ -83,7 +87,7 @@ public class ApplicationFacade {
 
     private double computePercentage(Student item) {
         StudentCourse data = item.getAcademicData();
-        double totalCreditsFulfilled = data.getCred_obrig_int() + data.getCred_opt_int() + data.getCred_comp_int();
+        double totalCreditsFulfilled = data.getMandatory_credits() + data.getElective_credits() + data.getComplementary_credits();
         return totalCreditsFulfilled/Curriculum.totalCreditsNeeded;
     }
 
@@ -98,9 +102,9 @@ public class ApplicationFacade {
 
         Collection<AlumniDataResponse> terms = getAlumniSummaryPerTerm(from, to);
         for (AlumniDataResponse item : terms) {
-            double averageGPA = item.getCra_medio();
-            int termAlumniCount = item.getQtd_egressos();
-            String term = item.getPeriodo_conclusao();
+            double averageGPA = item.getAverage_gpa();
+            int termAlumniCount = item.getAlumni_count();
+            String term = item.getGraduation_term();
             totalAlumniCount += termAlumniCount;
             if (termAlumniCount >= maxAlumniCount) {
                 maxAlumniCount = termAlumniCount;
@@ -136,7 +140,7 @@ public class ApplicationFacade {
                 double termAccumulatedGPA = 0;
                 for (String cpf : cpfs) {
                     Student alumnus = StatisticsHolder.getInstance().getAlumni().get(cpf);
-                    termAccumulatedGPA += alumnus.getAcademicData().getCra();
+                    termAccumulatedGPA += alumnus.getAcademicData().getGpa();
                 }
                 AlumniDataResponse termData = new AlumniDataResponse(termAccumulatedGPA/termAlumniCount, term,
                         termAlumniCount);
@@ -155,7 +159,7 @@ public class ApplicationFacade {
                 int dropoutsCount[] = new int[13];
                 v.forEach(item -> {
                     Student dropout = StatisticsHolder.getInstance().getDropouts().get(item);
-                    dropoutsCount[dropout.getAcademicData().getId_situacao_vinculo()-1]++;
+                    dropoutsCount[dropout.getAcademicData().getDetailed_status_id()-1]++;
                 });
                 DropoutClassification dropoutClassification = new DropoutClassification(dropoutsCount[0],
                         dropoutsCount[12], dropoutsCount[1], dropoutsCount[2], dropoutsCount[3], dropoutsCount[4],
@@ -171,24 +175,28 @@ public class ApplicationFacade {
         Collection<DropoutDataResponse> dropoutDataResponses = new ArrayList<>();
         Map<String, Student> dropouts = StatisticsHolder.getInstance().getDropouts();
         dropouts.forEach((k, v) -> {
-            String leaveTerm = v.getAcademicData().getSemestre_situacao();
-            if (leaveTerm != null && leaveTerm.compareTo(from) >= 0 && leaveTerm.compareTo(to) <= 0) {
-                IdCode idCota = new IdCode(v.getAcademicData().getId_cota());
-                String cota = MapsHolder.getInstance().getValue("Cota", idCota).toString();
-                IdCode idEstadoCivil = new IdCode(v.getPersonalData().getId_estado_civil());
-                String estadoCivil = MapsHolder.getInstance().getValue("EstadoCivil", idEstadoCivil).toString();
-                IdCode idGenero = new IdCode(v.getPersonalData().getId_genero());
-                String genero = MapsHolder.getInstance().getValue("Genero", idGenero).toString();
-                IdCode idDropoutCause = new IdCode(v.getAcademicData().getId_situacao_vinculo());
-                String dropoutCause = MapsHolder.getInstance().getValue("SituacaoVinculo", idDropoutCause).toString();
-                DropoutDataResponse summary = new DropoutDataResponse(cota, v.getAcademicData().getCra(),
-                        v.getAcademicData().getCred_comp_int(), v.getAcademicData().getCred_obrig_int(),
-                        v.getAcademicData().getCred_opt_int(), v.getAcademicData().getCurriculo(), estadoCivil,
-                        genero, v.getAcademicData().getIea(), v.getId().getMatricula(), v.getAcademicData().getMat_inst(),
-                        v.getAcademicData().getMc(), v.getAcademicData().getMedia_geral_ingresso(),
-                        v.getAcademicData().getMob_estudantil(), dropoutCause, v.getAcademicData().getSemestre_ingresso(),
-                        v.getAcademicData().getPer_int(), v.getAcademicData().getTranc());
-                dropoutDataResponses.add(summary);
+            try {
+                String leaveTerm = v.getAcademicData().getTerm_status();
+                if (leaveTerm != null && leaveTerm.compareTo(from) >= 0 && leaveTerm.compareTo(to) <= 0) {
+                    IdCode affirmativeActionId = new IdCode(v.getAcademicData().getAffirmative_action_id());
+                    String affirmativeAction = MapsHolder.getInstance().getValue("Cota", affirmativeActionId).toString();
+                    IdCode maritalStatusId = new IdCode(v.getPersonalData().getMarital_status_id());
+                    String maritalStatus = MapsHolder.getInstance().getValue("EstadoCivil", maritalStatusId).toString();
+                    IdCode genderId = new IdCode(v.getPersonalData().getGender_id());
+                    String gender = MapsHolder.getInstance().getValue("Genero", genderId).toString();
+                    IdCode idDropoutCause = new IdCode(v.getAcademicData().getDetailed_status_id());
+                    String dropoutCause = MapsHolder.getInstance().getValue("SituacaoVinculo", idDropoutCause).toString();
+                    DropoutDataResponse summary = new DropoutDataResponse(affirmativeAction, v.getAcademicData().getGpa(),
+                            v.getAcademicData().getComplementary_credits(), v.getAcademicData().getMandatory_credits(),
+                            v.getAcademicData().getElective_credits(), v.getAcademicData().getCurriculum(), maritalStatus,
+                            gender, v.getAcademicData().getIea(), v.getId().getRegistration(), v.getAcademicData().getInstitutional_terms(),
+                            v.getAcademicData().getMc(), v.getAcademicData().getAdmission_grade(),
+                            v.getAcademicData().getMobility_terms(), dropoutCause, v.getAcademicData().getAdmission_term(),
+                            v.getAcademicData().getTerms_count(), v.getAcademicData().getSuspended_terms());
+                    dropoutDataResponses.add(summary);
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
             }
         });
         return dropoutDataResponses;
@@ -199,9 +207,9 @@ public class ApplicationFacade {
         Collection<AlumnusBasicData> alumniBasicData = new ArrayList<>();
         Map<String, Student> alumni = StatisticsHolder.getInstance().getAlumni();
         alumni.forEach((k, v) -> {
-            AlumnusBasicData basicData = new AlumnusBasicData(v.getId().getMatricula(), v.getPersonalData().getNome(),
-                    2, 1, v.getAcademicData().getSemestre_ingresso(),
-                    v.getAcademicData().getSemestre_situacao());
+            AlumnusBasicData basicData = new AlumnusBasicData(v.getId().getRegistration(), v.getPersonalData().getName(),
+                    2, 1, v.getAcademicData().getAdmission_term(),
+                    v.getAcademicData().getTerm_status());
             alumniBasicData.add(basicData);
         });
         return alumniBasicData;

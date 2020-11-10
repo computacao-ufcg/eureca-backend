@@ -1,34 +1,34 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries;
 
 public class BirthPlace extends EurecaMapValue {
-    String municipio;
-    String estado;
+    String city;
+    String state;
 
-    public String getMunicipio() {
-        return municipio;
+    public String getCity() {
+        return city;
     }
 
-    public void setMunicipio(String municipio) {
-        this.municipio = municipio;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public String getEstado() {
-        return estado;
+    public String getState() {
+        return state;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setState(String state) {
+        this.state = state;
     }
 
-    public BirthPlace(String municipio, String estado) {
-        this.municipio = municipio;
-        this.estado = estado;
+    public BirthPlace(String city, String state) {
+        this.city = city;
+        this.state = state;
     }
 
     public BirthPlace() {}
 
     @Override
     public String toString() {
-        return this.municipio + ":" + this.estado;
+        return this.city + ":" + this.state;
     }
 }

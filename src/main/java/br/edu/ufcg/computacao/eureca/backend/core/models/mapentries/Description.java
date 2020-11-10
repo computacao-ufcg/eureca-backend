@@ -1,24 +1,24 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries;
 
 public class Description extends EurecaMapValue {
-    String descricao;
+    String description;
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Description(String descricao) {
-        this.descricao = descricao;
+    public Description(String description) {
+        this.description = description;
     }
 
     public Description() {}
 
     @Override
     public String toString() {
-        return this.descricao;
+        return this.description;
     }
 }

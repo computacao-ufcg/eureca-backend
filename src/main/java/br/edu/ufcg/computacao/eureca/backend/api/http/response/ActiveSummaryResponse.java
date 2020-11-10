@@ -5,50 +5,50 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class ActiveSummaryResponse {
     @ApiModelProperty(position = 0, example = ApiDocumentation.Model.REGISTRATION)
-    String matricula;
+    String registration;
     @ApiModelProperty(position = 1, example = ApiDocumentation.Model.PERIOD)
-    String periodo_ingresso;
+    String admission_term;
     @ApiModelProperty(position = 2, example = ApiDocumentation.Model.NUMBER)
-    int periodos_integralizados;
+    int terms_done;
     @ApiModelProperty(position = 3, example = ApiDocumentation.Model.PERCENTAGE)
-    double porcentagem_concluida;
+    double progress;
 
-    public ActiveSummaryResponse(String matricula, String periodo_ingresso, int periodos_integralizados, double concluded) {
-        this.matricula = matricula;
-        this.periodo_ingresso = periodo_ingresso;
-        this.periodos_integralizados = periodos_integralizados;
-        this.porcentagem_concluida = concluded;
+    public ActiveSummaryResponse(String registration, String admission_term, int terms_done, double progress) {
+        this.registration = registration;
+        this.admission_term = admission_term;
+        this.terms_done = terms_done;
+        this.progress = progress;
     }
 
-    public String getMatricula() {
-        return matricula;
+    public String getRegistration() {
+        return registration;
     }
 
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
+    public void setRegistration(String registration) {
+        this.registration = registration;
     }
 
-    public String getPeriodo_ingresso() {
-        return periodo_ingresso;
+    public String getAdmission_term() {
+        return admission_term;
     }
 
-    public void setPeriodo_ingresso(String periodo_ingresso) {
-        this.periodo_ingresso = periodo_ingresso;
+    public void setAdmission_term(String admission_term) {
+        this.admission_term = admission_term;
     }
 
-    public int getPeriodos_integralizados() {
-        return periodos_integralizados;
+    public int getTerms_done() {
+        return terms_done;
     }
 
-    public void setPeriodos_integralizados(int periodos_integralizados) {
-        this.periodos_integralizados = periodos_integralizados;
+    public void setTerms_done(int terms_done) {
+        this.terms_done = terms_done;
     }
 
-    public double getPorcentagem_concluida() {
-        return porcentagem_concluida;
+    public double getProgress() {
+        return progress;
     }
 
-    public void setPorcentagem_concluida(double porcentagem_concluida) {
-        this.porcentagem_concluida = porcentagem_concluida;
+    public void setProgress(double progress) {
+        this.progress = progress;
     }
 }

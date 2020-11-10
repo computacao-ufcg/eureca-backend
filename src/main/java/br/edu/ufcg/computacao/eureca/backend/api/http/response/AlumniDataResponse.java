@@ -1,37 +1,37 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class AlumniDataResponse {
-    double cra_medio;
-    String periodo_conclusao;
-    int qtd_egressos;
+    double average_gpa;
+    String graduation_term;
+    int alumni_count;
 
-    public AlumniDataResponse(double cra_medio, String periodo_conclusao, int qtd_egressos) {
-        this.cra_medio = cra_medio;
-        this.periodo_conclusao = periodo_conclusao;
-        this.qtd_egressos = qtd_egressos;
+    public AlumniDataResponse(double average_gpa, String graduation_term, int alumni_count) {
+        this.average_gpa = average_gpa;
+        this.graduation_term = graduation_term;
+        this.alumni_count = alumni_count;
     }
 
-    public double getCra_medio() {
-        return cra_medio;
+    public double getAverage_gpa() {
+        return average_gpa;
     }
 
-    public void setCra_medio(double cra_medio) {
-        this.cra_medio = cra_medio;
+    public void setAverage_gpa(double average_gpa) {
+        this.average_gpa = average_gpa;
     }
 
-    public String getPeriodo_conclusao() {
-        return periodo_conclusao;
+    public String getGraduation_term() {
+        return graduation_term;
     }
 
-    public void setPeriodo_conclusao(String periodo_conclusao) {
-        this.periodo_conclusao = periodo_conclusao;
+    public void setGraduation_term(String graduation_term) {
+        this.graduation_term = graduation_term;
     }
 
-    public int getQtd_egressos() {
-        return qtd_egressos;
+    public int getAlumni_count() {
+        return alumni_count;
     }
 
-    public void setQtd_egressos(int qtd_egressos) {
-        this.qtd_egressos = qtd_egressos;
+    public void setAlumni_count(int alumni_count) {
+        this.alumni_count = alumni_count;
     }
 }

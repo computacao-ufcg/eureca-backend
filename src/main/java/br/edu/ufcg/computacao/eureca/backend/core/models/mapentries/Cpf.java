@@ -1,27 +1,27 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries;
 
 public class Cpf extends EurecaMapKey {
-    String cpf;
+    String national_id;
 
-    public Cpf(String cpf) {
-        this.cpf = cpf;
+    public Cpf(String national_id) {
+        this.national_id = national_id;
     }
 
     public Cpf() {}
 
-    public String getCpf() {
-        return cpf;
+    public String getNational_id() {
+        return national_id;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public void setNational_id(String national_id) {
+        this.national_id = national_id;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((this.cpf == null) ? 0 : this.cpf.hashCode());
+        result = prime * result + ((this.national_id == null) ? 0 : this.national_id.hashCode());
         return result;
     }
 
@@ -31,14 +31,14 @@ public class Cpf extends EurecaMapKey {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         Cpf other = (Cpf) obj;
-        if (this.cpf == null) {
-            if (other.getCpf() != null) return false;
-        } else if (!this.cpf.equals(other.getCpf())) return false;
+        if (this.national_id == null) {
+            if (other.getNational_id() != null) return false;
+        } else if (!this.national_id.equals(other.getNational_id())) return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return this.cpf;
+        return this.national_id;
     }
 }

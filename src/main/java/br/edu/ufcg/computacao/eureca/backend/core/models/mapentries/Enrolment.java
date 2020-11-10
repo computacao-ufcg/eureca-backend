@@ -1,64 +1,64 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries;
 
 public class Enrolment extends EurecaMapValue {
-    int id_disciplina;
-    int turma;
-    String periodo;
-    int id_horario;
-    int id_sala;
+    int subject_id;
+    int enrollment_id;
+    String term;
+    int timetable_id;
+    int room_id;
 
-    public Enrolment(int id_disciplina, int turma, String periodo, int id_horario, int id_sala) {
-        this.id_disciplina = id_disciplina;
-        this.turma = turma;
-        this.periodo = periodo;
-        this.id_horario = id_horario;
-        this.id_sala = id_sala;
+    public Enrolment(int subject_id, int enrollment_id, String term, int timetable_id, int room_id) {
+        this.subject_id = subject_id;
+        this.enrollment_id = enrollment_id;
+        this.term = term;
+        this.timetable_id = timetable_id;
+        this.room_id = room_id;
     }
 
     public Enrolment() {}
 
-    public int getId_disciplina() {
-        return id_disciplina;
+    public int getSubject_id() {
+        return subject_id;
     }
 
-    public void setId_disciplina(int id_disciplina) {
-        this.id_disciplina = id_disciplina;
+    public void setSubject_id(int subject_id) {
+        this.subject_id = subject_id;
     }
 
-    public int getTurma() {
-        return turma;
+    public int getEnrollment_id() {
+        return enrollment_id;
     }
 
-    public void setTurma(int turma) {
-        this.turma = turma;
+    public void setEnrollment_id(int enrollment_id) {
+        this.enrollment_id = enrollment_id;
     }
 
-    public String getPeriodo() {
-        return periodo;
+    public String getTerm() {
+        return term;
     }
 
-    public void setPeriodo(String periodo) {
-        this.periodo = periodo;
+    public void setTerm(String term) {
+        this.term = term;
     }
 
-    public int getId_horario() {
-        return id_horario;
+    public int getTimetable_id() {
+        return timetable_id;
     }
 
-    public void setId_horario(int id_horario) {
-        this.id_horario = id_horario;
+    public void setTimetable_id(int timetable_id) {
+        this.timetable_id = timetable_id;
     }
 
-    public int getId_sala() {
-        return id_sala;
+    public int getRoom_id() {
+        return room_id;
     }
 
-    public void setId_sala(int id_sala) {
-        this.id_sala = id_sala;
+    public void setRoom_id(int room_id) {
+        this.room_id = room_id;
     }
 
     @Override
     public String toString() {
-        return this.id_disciplina + ":" + this.turma + ":" + this.periodo + ":" + this.id_horario + ":" + this.id_sala;
+        return this.subject_id + ":" + this.enrollment_id + ":" + this.term + ":" + this.timetable_id + ":" + this.room_id;
     }
 }

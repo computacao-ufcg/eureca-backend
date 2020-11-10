@@ -1,37 +1,37 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries;
 
 public class RegistrationEnrolment extends EurecaMapKey {
-    String matricula;
-    int id_turma;
+    String registration;
+    int enrollment_id;
 
-    public RegistrationEnrolment(String matricula, int id_turma) {
-        this.matricula = matricula;
-        this.id_turma = id_turma;
+    public RegistrationEnrolment(String registration, int enrollment_id) {
+        this.registration = registration;
+        this.enrollment_id = enrollment_id;
     }
 
     public RegistrationEnrolment() {}
 
-    public String getMatricula() {
-        return matricula;
+    public String getRegistration() {
+        return registration;
     }
 
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
+    public void setRegistration(String registration) {
+        this.registration = registration;
     }
 
-    public int getId_turma() {
-        return id_turma;
+    public int getEnrollment_id() {
+        return enrollment_id;
     }
 
-    public void setId_turma(int id_turma) {
-        this.id_turma = id_turma;
+    public void setEnrollment_id(int enrollment_id) {
+        this.enrollment_id = enrollment_id;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + this.id_turma + ((this.matricula == null) ? 0 : this.matricula.hashCode());
+        result = prime * result + this.enrollment_id + ((this.registration == null) ? 0 : this.registration.hashCode());
         return result;
     }
 
@@ -41,16 +41,16 @@ public class RegistrationEnrolment extends EurecaMapKey {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         RegistrationEnrolment other = (RegistrationEnrolment) obj;
-        if (this.id_turma != other.getId_turma()) {
+        if (this.enrollment_id != other.getEnrollment_id()) {
             return false;
-        } else if (this.matricula == null) {
-            if (other.getMatricula() != null) return false;
-        } else if (!this.matricula.equals(other.getMatricula())) return false;
+        } else if (this.registration == null) {
+            if (other.getRegistration() != null) return false;
+        } else if (!this.registration.equals(other.getRegistration())) return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return this.matricula + ":" + this.id_turma;
+        return this.registration + ":" + this.enrollment_id;
     }
 }

@@ -1,44 +1,44 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries;
 
 public class StudentPersonalData extends EurecaMapValue {
-    String nome;
-    String ano_nascimento;
+    String name;
+    String birth_year;
     String email;
-    int id_genero;
-    int id_estado_civil;
-    int id_nacionalidade;
-    int id_naturalidade;
-    int id_cor;
+    int gender_id;
+    int marital_status_id;
+    int nationality_id;
+    int place_of_birth_id;
+    int race_id;
 
-    public StudentPersonalData(String nome, String ano_nascimento, String email, int id_genero, int id_estado_civil,
-                               int id_nacionalidade, int id_naturalidade, int id_cor) {
-        this.nome = nome;
-        this.ano_nascimento = ano_nascimento;
+    public StudentPersonalData(String name, String birth_year, String email, int gender_id, int marital_status_id,
+                               int nationality_id, int place_of_birth_id, int race_id) {
+        this.name = name;
+        this.birth_year = birth_year;
         this.email = email;
-        this.id_genero = id_genero;
-        this.id_estado_civil = id_estado_civil;
-        this.id_nacionalidade = id_nacionalidade;
-        this.id_naturalidade = id_naturalidade;
-        this.id_cor = id_cor;
+        this.gender_id = gender_id;
+        this.marital_status_id = marital_status_id;
+        this.nationality_id = nationality_id;
+        this.place_of_birth_id = place_of_birth_id;
+        this.race_id = race_id;
     }
 
     public StudentPersonalData() {
     }
 
-    public String getNome() {
-        return nome;
+    public String getName() {
+        return name;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getAno_nascimento() {
-        return ano_nascimento;
+    public String getBirth_year() {
+        return birth_year;
     }
 
-    public void setAno_nascimento(String ano_nascimento) {
-        this.ano_nascimento = ano_nascimento;
+    public void setBirth_year(String birth_year) {
+        this.birth_year = birth_year;
     }
 
     public String getEmail() {
@@ -49,49 +49,49 @@ public class StudentPersonalData extends EurecaMapValue {
         this.email = email;
     }
 
-    public int getId_genero() {
-        return id_genero;
+    public int getGender_id() {
+        return gender_id;
     }
 
-    public void setId_genero(int id_genero) {
-        this.id_genero = id_genero;
+    public void setGender_id(int gender_id) {
+        this.gender_id = gender_id;
     }
 
-    public int getId_estado_civil() {
-        return id_estado_civil;
+    public int getMarital_status_id() {
+        return marital_status_id;
     }
 
-    public void setId_estado_civil(int id_estado_civil) {
-        this.id_estado_civil = id_estado_civil;
+    public void setMarital_status_id(int marital_status_id) {
+        this.marital_status_id = marital_status_id;
     }
 
-    public int getId_nacionalidade() {
-        return id_nacionalidade;
+    public int getNationality_id() {
+        return nationality_id;
     }
 
-    public void setId_nacionalidade(int id_nacionalidade) {
-        this.id_nacionalidade = id_nacionalidade;
+    public void setNationality_id(int nationality_id) {
+        this.nationality_id = nationality_id;
     }
 
-    public int getId_naturalidade() {
-        return id_naturalidade;
+    public int getPlace_of_birth_id() {
+        return place_of_birth_id;
     }
 
-    public void setId_naturalidade(int id_naturalidade) {
-        this.id_naturalidade = id_naturalidade;
+    public void setPlace_of_birth_id(int place_of_birth_id) {
+        this.place_of_birth_id = place_of_birth_id;
     }
 
-    public int getId_cor() {
-        return id_cor;
+    public int getRace_id() {
+        return race_id;
     }
 
-    public void setId_cor(int id_cor) {
-        this.id_cor = id_cor;
+    public void setRace_id(int race_id) {
+        this.race_id = race_id;
     }
 
     @Override
     public String toString() {
-        return nome + ":" + ano_nascimento + ":" + email + ":" + id_genero + ":" + id_estado_civil + ":" + id_nacionalidade + ":" +
-                id_naturalidade + ":" + id_cor;
+        return name + ":" + birth_year + ":" + email + ":" + gender_id + ":" + marital_status_id + ":" + nationality_id + ":" +
+                place_of_birth_id + ":" + race_id;
     }
 }

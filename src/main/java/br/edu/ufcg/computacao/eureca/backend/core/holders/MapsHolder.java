@@ -39,11 +39,11 @@ public class MapsHolder<T extends EurecaMapKey, V extends EurecaMapValue, U exte
         properties.put(SystemConstants.FAILED_ALL, getIdCodeStr("SituacaoVinculo", SystemConstants.FAILED_ALL));
         properties.put(SystemConstants.CANCELLED, getIdCodeStr("SituacaoVinculo", SystemConstants.CANCELLED));
         properties.put(SystemConstants.CANCELLED_UPON_REQUEST, getIdCodeStr("SituacaoVinculo", SystemConstants.CANCELLED_UPON_REQUEST));
-        properties.put(SystemConstants.CANCELLED_BY_JUSTICE, getIdCodeStr("SituacaoVinculo", SystemConstants.CANCELLED_BY_JUSTICE));
+        properties.put(SystemConstants.CANCELLED_BY_DECREE, getIdCodeStr("SituacaoVinculo", SystemConstants.CANCELLED_BY_DECREE));
         properties.put(SystemConstants.CANCELLED_CHANGE_COURSE, getIdCodeStr("SituacaoVinculo", SystemConstants.CANCELLED_CHANGE_COURSE));
         properties.put(SystemConstants.LEFT_WITHOUT_NOTICE, getIdCodeStr("SituacaoVinculo", SystemConstants.LEFT_WITHOUT_NOTICE));
         properties.put(SystemConstants.MISSED_GRADUATION, getIdCodeStr("SituacaoVinculo", SystemConstants.MISSED_GRADUATION));
-        properties.put(SystemConstants.TRANSFERED, getIdCodeStr("SituacaoVinculo", SystemConstants.TRANSFERED));
+        properties.put(SystemConstants.TRANSFERRED, getIdCodeStr("SituacaoVinculo", SystemConstants.TRANSFERRED));
         properties.put(SystemConstants.REENTER_NEW_COURSE, getIdCodeStr("SituacaoVinculo", SystemConstants.REENTER_NEW_COURSE));
         properties.put(SystemConstants.REENTER_SAME_COURSE, getIdCodeStr("SituacaoVinculo", SystemConstants.REENTER_SAME_COURSE));
         properties.put(SystemConstants.GRADUATED, getIdCodeStr("SituacaoVinculo", SystemConstants.GRADUATED));
@@ -55,7 +55,7 @@ public class MapsHolder<T extends EurecaMapKey, V extends EurecaMapValue, U exte
         for (Map.Entry<IdCode, Description> entry : map.entrySet()) {
             IdCode k = entry.getKey();
             Description v = entry.getValue();
-            if (v.getDescricao().equals(description)) {
+            if (v.getDescription().equals(description)) {
                 match = k;
                 break;
             }
@@ -146,7 +146,6 @@ public class MapsHolder<T extends EurecaMapKey, V extends EurecaMapValue, U exte
 
     public EurecaMapValue getValue(String mapName, EurecaMapKey key) {
         Map<T,V> map = this.maps.get(mapName);
-        //System.out.println(String.format("getValue(%s, %s): [%s].", mapName, key.toString(), (map.get(key) == null ? "NULL" : map.get(key))));
         return map.get(key);
     }
 

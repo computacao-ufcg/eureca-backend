@@ -1,25 +1,25 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries;
 
 public class EnrolmentCode extends EurecaMapKey {
-    int id_turma;
+    int enrollment_id;
 
-    public EnrolmentCode(int id_turma) {
-        this.id_turma = id_turma;
+    public EnrolmentCode(int enrollment_id) {
+        this.enrollment_id = enrollment_id;
     }
 
     public EnrolmentCode() {}
 
-    public int getId_turma() {
-        return id_turma;
+    public int getEnrollment_id() {
+        return enrollment_id;
     }
 
-    public void setId_turma(int id_turma) {
-        this.id_turma = id_turma;
+    public void setEnrollment_id(int enrollment_id) {
+        this.enrollment_id = enrollment_id;
     }
 
     @Override
     public int hashCode() {
-        return (int) this.id_turma;
+        return (int) this.enrollment_id;
     }
 
     @Override
@@ -28,12 +28,12 @@ public class EnrolmentCode extends EurecaMapKey {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         EnrolmentCode other = (EnrolmentCode) obj;
-        if (this.id_turma != other.id_turma) return false;
+        if (this.enrollment_id != other.enrollment_id) return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return Integer.toString(this.id_turma);
+        return Integer.toString(this.enrollment_id);
     }
 }

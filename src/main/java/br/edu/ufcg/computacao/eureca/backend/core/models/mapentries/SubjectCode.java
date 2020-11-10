@@ -1,24 +1,24 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries;
 
 public class SubjectCode extends EurecaMapKey {
-    String codigo;
+    String code;
 
-    public String getCodigo() {
-        return codigo;
+    public String getCode() {
+        return code;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public SubjectCode(String codigo) {
-        this.codigo = codigo;
+    public SubjectCode(String code) {
+        this.code = code;
     }
 
     public SubjectCode() {}
 
     @Override
     public String toString() {
-        return this.codigo;
+        return this.code;
     }
 }

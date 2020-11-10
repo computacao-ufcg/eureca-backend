@@ -1,108 +1,109 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class DropoutClassification {
-    int tag1;
-    int tag13;
-    int tag2;
-    int tag3;
-    int tag4;
-    int tag5;
-    int tag6;
-    int tag7;
-    int tag8;
-    int tag9;
+    int failed_3_times;
+    int transferred;
+    int reenter_same_course;
+    int reenter_other_course;
+    int failed_all;
+    int cancelled;
+    int cancelled_by_decree;
+    int cancelled_change_course;
+    int cancelled_upon_request;
+    int left_without_notice;
 
-    public DropoutClassification(int tag1, int tag13, int tag2, int tag3, int tag4, int tag5, int tag6,
-                                 int tag7, int tag8, int tag9) {
-        this.tag1 = tag1;
-        this.tag13 = tag13;
-        this.tag2 = tag2;
-        this.tag3 = tag3;
-        this.tag4 = tag4;
-        this.tag5 = tag5;
-        this.tag6 = tag6;
-        this.tag7 = tag7;
-        this.tag8 = tag8;
-        this.tag9 = tag9;
+    public DropoutClassification(int failed_3_times, int transferred, int reenter_same_course, int reenter_other_course,
+                                 int failed_all, int cancelled, int cancelled_by_decree,
+                                 int cancelled_change_course, int cancelled_upon_request, int left_without_notice) {
+        this.failed_3_times = failed_3_times;
+        this.transferred = transferred;
+        this.reenter_same_course = reenter_same_course;
+        this.reenter_other_course = reenter_other_course;
+        this.failed_all = failed_all;
+        this.cancelled = cancelled;
+        this.cancelled_by_decree = cancelled_by_decree;
+        this.cancelled_change_course = cancelled_change_course;
+        this.cancelled_upon_request = cancelled_upon_request;
+        this.left_without_notice = left_without_notice;
     }
 
-    public int getTag1() {
-        return tag1;
+    public int getFailed_3_times() {
+        return failed_3_times;
     }
 
-    public void setTag1(int tag1) {
-        this.tag1 = tag1;
+    public void setFailed_3_times(int failed_3_times) {
+        this.failed_3_times = failed_3_times;
     }
 
-    public int getTag13() {
-        return tag13;
+    public int getTransferred() {
+        return transferred;
     }
 
-    public void setTag13(int tag13) {
-        this.tag13 = tag13;
+    public void setTransferred(int transferred) {
+        this.transferred = transferred;
     }
 
-    public int getTag2() {
-        return tag2;
+    public int getReenter_same_course() {
+        return reenter_same_course;
     }
 
-    public void setTag2(int tag2) {
-        this.tag2 = tag2;
+    public void setReenter_same_course(int reenter_same_course) {
+        this.reenter_same_course = reenter_same_course;
     }
 
-    public int getTag3() {
-        return tag3;
+    public int getReenter_other_course() {
+        return reenter_other_course;
     }
 
-    public void setTag3(int tag3) {
-        this.tag3 = tag3;
+    public void setReenter_other_course(int reenter_other_course) {
+        this.reenter_other_course = reenter_other_course;
     }
 
-    public int getTag4() {
-        return tag4;
+    public int getFailed_all() {
+        return failed_all;
     }
 
-    public void setTag4(int tag4) {
-        this.tag4 = tag4;
+    public void setFailed_all(int failed_all) {
+        this.failed_all = failed_all;
     }
 
-    public int getTag5() {
-        return tag5;
+    public int getCancelled() {
+        return cancelled;
     }
 
-    public void setTag5(int tag5) {
-        this.tag5 = tag5;
+    public void setCancelled(int cancelled) {
+        this.cancelled = cancelled;
     }
 
-    public int getTag6() {
-        return tag6;
+    public int getCancelled_by_decree() {
+        return cancelled_by_decree;
     }
 
-    public void setTag6(int tag6) {
-        this.tag6 = tag6;
+    public void setCancelled_by_decree(int cancelled_by_decree) {
+        this.cancelled_by_decree = cancelled_by_decree;
     }
 
-    public int getTag7() {
-        return tag7;
+    public int getCancelled_change_course() {
+        return cancelled_change_course;
     }
 
-    public void setTag7(int tag7) {
-        this.tag7 = tag7;
+    public void setCancelled_change_course(int cancelled_change_course) {
+        this.cancelled_change_course = cancelled_change_course;
     }
 
-    public int getTag8() {
-        return tag8;
+    public int getCancelled_upon_request() {
+        return cancelled_upon_request;
     }
 
-    public void setTag8(int tag8) {
-        this.tag8 = tag8;
+    public void setCancelled_upon_request(int cancelled_upon_request) {
+        this.cancelled_upon_request = cancelled_upon_request;
     }
 
-    public int getTag9() {
-        return tag9;
+    public int getLeft_without_notice() {
+        return left_without_notice;
     }
 
-    public void setTag9(int tag9) {
-        this.tag9 = tag9;
+    public void setLeft_without_notice(int left_without_notice) {
+        this.left_without_notice = left_without_notice;
     }
 }
