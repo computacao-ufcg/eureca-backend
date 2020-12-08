@@ -19,13 +19,13 @@ import java.util.Collection;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = Statistics.ENDPOINT)
+@RequestMapping(value = StudentsStatistics.ENDPOINT)
 @Api(description = ApiDocumentation.Statistics.API)
-public class Statistics {
+public class StudentsStatistics {
 
-    protected static final String ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "statistics";
+    protected static final String ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "studentsStatistics";
 
-    private static final Logger LOGGER = Logger.getLogger(Statistics.class);
+    private static final Logger LOGGER = Logger.getLogger(StudentsStatistics.class);
 
     @RequestMapping(value = "actives", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.Statistics.GET_ATIVOS)
