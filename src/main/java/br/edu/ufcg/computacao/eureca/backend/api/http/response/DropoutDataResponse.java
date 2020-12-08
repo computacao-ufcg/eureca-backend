@@ -17,14 +17,14 @@ public class DropoutDataResponse {
     int mobilityTerms;
     String dropoutReason;
     String admissionTerm;
-    int termsCompleted;
+    int completedTerms;
     int suspendedTerms;
 
     public DropoutDataResponse(String affirmativePolicy, double gpa, int complementaryCredits, int mandatoryCredits, int electiveCredits,
                                String curriculum, String marital_status, String gender, double iea, String registration,
                                int institutionalEnrollments, double mc, double entryGrade,
                                int mobilityTerms, String dropoutReason, String admissionTerm,
-                               int termsCompleted, int suspendedTerms) {
+                               int completedTerms, int suspendedTerms) {
         this.affirmativePolicy = affirmativePolicy;
         this.gpa = gpa;
         this.complementaryCredits = complementaryCredits;
@@ -41,7 +41,7 @@ public class DropoutDataResponse {
         this.mobilityTerms = mobilityTerms;
         this.dropoutReason = dropoutReason;
         this.admissionTerm = admissionTerm;
-        this.termsCompleted = termsCompleted;
+        this.completedTerms = completedTerms;
         this.suspendedTerms = suspendedTerms;
     }
 
@@ -173,12 +173,12 @@ public class DropoutDataResponse {
         this.admissionTerm = admissionTerm;
     }
 
-    public int getTermsCompleted() {
-        return termsCompleted;
+    public int getCompletedTerms() {
+        return completedTerms;
     }
 
-    public void setTermsCompleted(int termsCompleted) {
-        this.termsCompleted = termsCompleted;
+    public void setCompletedTerms(int completedTerms) {
+        this.completedTerms = completedTerms;
     }
 
     public int getSuspendedTerms() {

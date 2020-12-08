@@ -1,8 +1,8 @@
-package br.edu.ufcg.computacao.eureca.backend.core.holders;
+package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
-import br.edu.ufcg.computacao.eureca.backend.core.models.abstractions.Student;
-import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.*;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import org.apache.log4j.Logger;
 
 import java.util.*;
@@ -10,7 +10,7 @@ import java.util.*;
 public class StatisticsHolder {
     private Logger LOGGER = Logger.getLogger(StatisticsHolder.class);
 
-    private static StatisticsHolder instance;
+    private MapsHolder mapsHolder;
     private List<CpfRegistration> actives;
     private Map<String, Collection<CpfRegistration>> activeByAdmissionTerm;
     private List<CpfRegistration> alumni;
@@ -22,7 +22,8 @@ public class StatisticsHolder {
     private Map<String, Collection<CpfRegistration>> dropoutByReasonAndAdmissionTerm;
     private Map<String, Collection<CpfRegistration>> dropoutByReasonAndLeaveTerm;
 
-    private StatisticsHolder() {
+    public StatisticsHolder(MapsHolder mapsHolder) {
+        this.mapsHolder = mapsHolder;
         buildIndexes();
     }
 
@@ -77,7 +78,7 @@ public class StatisticsHolder {
         this.dropoutByLeaveTerm = new HashMap<>();
         this.dropoutByReasonAndAdmissionTerm = new HashMap<>();
         this.dropoutByReasonAndLeaveTerm = new HashMap<>();
-        Map<CpfRegistration, StudentData> mapStudents = MapsHolder.getInstance().getMap("students");
+        Map<CpfRegistration, StudentData> mapStudents = this.mapsHolder.getMap("students");
         mapStudents.forEach((k, v) -> {
             if (v.isActive()) {
                 LOGGER.info(String.format(Messages.INDEX_ACTIVE_S, v.getName()));
@@ -128,16 +129,9 @@ public class StatisticsHolder {
         });
     }
 
-    public static synchronized StatisticsHolder getInstance() {
-        if (instance == null) {
-            instance = new StatisticsHolder();
-        }
-        return instance;
-    }
-
     public Collection<Student> getAllActives() {
         Collection<Student> allActives = new ArrayList<>();
-        Map<CpfRegistration, StudentData> mapStudents = MapsHolder.getInstance().getMap("students");
+        Map<CpfRegistration, StudentData> mapStudents = this.mapsHolder.getMap("students");
         this.actives.forEach(k -> {
             allActives.add(new Student(k, mapStudents.get(k)));
         });

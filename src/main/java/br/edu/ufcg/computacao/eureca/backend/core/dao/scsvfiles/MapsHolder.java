@@ -1,10 +1,8 @@
-package br.edu.ufcg.computacao.eureca.backend.core.holders;
+package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
-import br.edu.ufcg.computacao.eureca.backend.constants.ConfigurationPropertyDefaults;
-import br.edu.ufcg.computacao.eureca.backend.constants.ConfigurationPropertyKeys;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
-import br.edu.ufcg.computacao.eureca.backend.core.loaders.GenericLoadMapFromScsvFile;
-import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.*;
+import br.edu.ufcg.computacao.eureca.backend.core.util.loaders.GenericLoadMapFromScsvFile;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.util.ClassFactory;
 import br.edu.ufcg.computacao.eureca.common.exceptions.FatalErrorException;
 import br.edu.ufcg.computacao.eureca.common.util.HomeDir;
@@ -18,21 +16,17 @@ import java.util.*;
 public class MapsHolder<T extends EurecaMapKey, V extends EurecaMapValue, U extends EurecaMultivaluedMapValue> {
     private Logger LOGGER = Logger.getLogger(MapsHolder.class);
 
-    private static MapsHolder instance;
     private Map<String, Map<T, V>> maps;
 
-    private MapsHolder() {
-
+    public MapsHolder(String mapsListFile) {
         try {
-            this.maps = loadAllMaps();
+            this.maps = loadAllMaps(mapsListFile);
         } catch (IOException e) {
             throw new FatalErrorException(e.getMessage());
         }
     }
 
-    private Map<String, Map<T,V>> loadAllMaps() throws IOException {
-        String mapsListFile = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.MAPS_FILE,
-                ConfigurationPropertyDefaults.DEFAULT_MAPS_FILE);
+    private Map<String, Map<T,V>> loadAllMaps(String mapsListFile) throws IOException {
         String filePath = HomeDir.getPath() + mapsListFile;
         Map<String, Map<T, V>> maps = new HashMap<>();
 
@@ -57,15 +51,6 @@ public class MapsHolder<T extends EurecaMapKey, V extends EurecaMapValue, U exte
         }
         csvReader.close();
         return maps;
-    }
-
-    public static MapsHolder getInstance() {
-        synchronized (MapsHolder.class) {
-            if (instance == null) {
-                instance = new MapsHolder();
-            }
-            return instance;
-        }
     }
 
     public Map<T, V> getMap(String name) {

@@ -1,8 +1,8 @@
-package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries;
+package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
-import br.edu.ufcg.computacao.eureca.backend.core.holders.MapsHolder;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.MapsHolder;
 import org.apache.log4j.Logger;
 
 public class StudentData extends EurecaMapValue {

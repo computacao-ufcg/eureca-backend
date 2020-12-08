@@ -1,11 +1,13 @@
 package br.edu.ufcg.computacao.eureca.backend;
 
+import br.edu.ufcg.computacao.eureca.backend.constants.ConfigurationPropertyDefaults;
 import br.edu.ufcg.computacao.eureca.backend.constants.ConfigurationPropertyKeys;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.core.ApplicationFacade;
-import br.edu.ufcg.computacao.eureca.backend.core.holders.MapsHolder;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.MapsHolder;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.ScsvFilesDataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.PropertiesHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.holders.StatisticsHolder;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.StatisticsHolder;
 import br.edu.ufcg.computacao.eureca.common.util.HomeDir;
 import br.edu.ufcg.computacao.eureca.common.util.ServiceAsymmetricKeysHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.plugins.AuthorizationPlugin;
@@ -36,10 +38,10 @@ public class Main implements ApplicationRunner {
             // Setting up facade
             ApplicationFacade applicationFacade = ApplicationFacade.getInstance();
             applicationFacade.setAuthorizationPlugin(authorizationPlugin);
+            String mapsListFile = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.MAPS_FILE,
+                    ConfigurationPropertyDefaults.DEFAULT_MAPS_FILE);
+            applicationFacade.setDataAccessFacade(new ScsvFilesDataAccessFacade(mapsListFile));
 
-            // Reading input data
-            MapsHolder.getInstance();
-            StatisticsHolder.getInstance();
             LOGGER.info(Messages.ALL_SET);
         } catch (Exception e) {
             LOGGER.error(Messages.ERROR_READING_CONFIGURATION_FILE, e);

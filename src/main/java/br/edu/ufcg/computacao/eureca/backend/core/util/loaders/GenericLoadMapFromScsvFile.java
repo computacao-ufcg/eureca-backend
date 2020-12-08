@@ -1,12 +1,12 @@
-package br.edu.ufcg.computacao.eureca.backend.core.loaders;
+package br.edu.ufcg.computacao.eureca.backend.core.util.loaders;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.ConfigurationPropertyDefaults;
 import br.edu.ufcg.computacao.eureca.backend.constants.ConfigurationPropertyKeys;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.PropertiesHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.EurecaMapKey;
-import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.EurecaMapValue;
-import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.EurecaMultivaluedMapValue;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.EurecaMapKey;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.EurecaMapValue;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.EurecaMultivaluedMapValue;
 import br.edu.ufcg.computacao.eureca.common.exceptions.FatalErrorException;
 import br.edu.ufcg.computacao.eureca.common.util.HomeDir;
 import com.google.gson.Gson;

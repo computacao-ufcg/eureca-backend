@@ -1,4 +1,4 @@
-package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries;
+package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
 
 public enum EurecaOperation {
     GET_ACTIVES("getActives"),

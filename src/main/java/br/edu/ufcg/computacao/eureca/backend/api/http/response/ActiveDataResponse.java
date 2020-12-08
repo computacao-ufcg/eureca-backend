@@ -1,11 +1,11 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.*;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 
 public class ActiveDataResponse {
     String registration;
     double gpa;
-    int termsCompleted;
+    int completedTerms;
     int complementaryCredits;
     int mandatoryCredits;
     int electiveCredits;
@@ -21,14 +21,14 @@ public class ActiveDataResponse {
     int suspendedTerms;
     String affirmativePolicy;
 
-    public ActiveDataResponse(String registration, double gpa, int termsCompleted, int complementaryCredits,
+    public ActiveDataResponse(String registration, double gpa, int completedTerms, int complementaryCredits,
                               int mandatoryCredits, int electiveCredits, String curriculum, String maritalStatus,
                               String gender, double iea, int institutionalEnrollments, double mc,
                               double entryGrade, int mobilityTerms, String admissionTerm,
                               int suspendedTerms, String affirmativePolicy) {
         this.registration = registration;
         this.gpa = gpa;
-        this.termsCompleted = termsCompleted;
+        this.completedTerms = completedTerms;
         this.complementaryCredits = complementaryCredits;
         this.mandatoryCredits = mandatoryCredits;
         this.electiveCredits = electiveCredits;
@@ -48,7 +48,7 @@ public class ActiveDataResponse {
     public ActiveDataResponse(String registration, StudentData studentData) {
         this.registration = registration;
         this.gpa = studentData.getGpa();
-        this.termsCompleted = studentData.getTermsCount();
+        this.completedTerms = studentData.getTermsCount();
         this.complementaryCredits = studentData.getComplementaryCredits();
         this.mandatoryCredits = studentData.getMandatoryCredits();
         this.electiveCredits = studentData.getElectiveCredits();
@@ -81,12 +81,12 @@ public class ActiveDataResponse {
         this.gpa = gpa;
     }
 
-    public int getTermsCompleted() {
-        return termsCompleted;
+    public int getCompletedTerms() {
+        return completedTerms;
     }
 
-    public void setTermsCompleted(int termsCompleted) {
-        this.termsCompleted = termsCompleted;
+    public void setCompletedTerms(int completedTerms) {
+        this.completedTerms = completedTerms;
     }
 
     public int getComplementaryCredits() {

@@ -1,7 +1,7 @@
-package br.edu.ufcg.computacao.eureca.backend.core.models.abstractions;
+package br.edu.ufcg.computacao.eureca.backend.core.models;
 
-import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.CpfRegistration;
-import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.StudentData;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.CpfRegistration;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
 
 public class Student {
     private CpfRegistration id;

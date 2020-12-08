@@ -39,7 +39,7 @@ public class StudentsStatistics {
             throws EurecaException {
 
         try {
-            Collection<ActiveSummaryResponse> ret = ApplicationFacade.getInstance().getActives(token, from, to);
+            Collection<ActiveSummaryResponse> ret = ApplicationFacade.getInstance().getActiveStudentsSummary(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -59,7 +59,7 @@ public class StudentsStatistics {
             throws EurecaException {
 
         try {
-            Collection<ActiveDataResponse> ret = ApplicationFacade.getInstance().getActivesCSV(token, from, to);
+            Collection<ActiveDataResponse> ret = ApplicationFacade.getInstance().getActiveStudentsCSV(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -79,7 +79,7 @@ public class StudentsStatistics {
             throws EurecaException {
 
         try {
-            AlumniSummaryResponse ret = ApplicationFacade.getInstance().getAlumni(token, from, to);
+            AlumniSummaryResponse ret = ApplicationFacade.getInstance().getAlumniSummary(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -119,7 +119,7 @@ public class StudentsStatistics {
             throws EurecaException {
 
         try {
-            Collection<DropoutSummaryResponse> ret = ApplicationFacade.getInstance().getDropouts(token, from, to);
+            Collection<DropoutSummaryResponse> ret = ApplicationFacade.getInstance().getDropoutsSummary(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);

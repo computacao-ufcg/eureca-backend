@@ -9,14 +9,14 @@ public class ActiveSummaryResponse {
     @ApiModelProperty(position = 1, example = ApiDocumentation.Model.PERIOD)
     String admissionTerm;
     @ApiModelProperty(position = 2, example = ApiDocumentation.Model.NUMBER)
-    int termsCompleted;
+    int completedTerms;
     @ApiModelProperty(position = 3, example = ApiDocumentation.Model.PERCENTAGE)
     double progress;
 
-    public ActiveSummaryResponse(String registration, String admissionTerm, int termsCompleted, double progress) {
+    public ActiveSummaryResponse(String registration, String admissionTerm, int completedTerms, double progress) {
         this.registration = registration;
         this.admissionTerm = admissionTerm;
-        this.termsCompleted = termsCompleted;
+        this.completedTerms = completedTerms;
         this.progress = progress;
     }
 
@@ -36,12 +36,12 @@ public class ActiveSummaryResponse {
         this.admissionTerm = admissionTerm;
     }
 
-    public int getTermsCompleted() {
-        return termsCompleted;
+    public int getCompletedTerms() {
+        return completedTerms;
     }
 
-    public void setTermsCompleted(int termsCompleted) {
-        this.termsCompleted = termsCompleted;
+    public void setCompletedTerms(int completedTerms) {
+        this.completedTerms = completedTerms;
     }
 
     public double getProgress() {
