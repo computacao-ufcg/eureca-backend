@@ -5,8 +5,6 @@ import br.edu.ufcg.computacao.eureca.backend.constants.ConfigurationPropertyKeys
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.core.loaders.GenericLoadMapFromScsvFile;
 import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.*;
-import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.deprecated.Description;
-import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.deprecated.IdCode;
 import br.edu.ufcg.computacao.eureca.backend.core.util.ClassFactory;
 import br.edu.ufcg.computacao.eureca.common.exceptions.FatalErrorException;
 import br.edu.ufcg.computacao.eureca.common.util.HomeDir;
@@ -32,21 +30,6 @@ public class MapsHolder<T extends EurecaMapKey, V extends EurecaMapValue, U exte
         } catch (IOException e) {
             throw new FatalErrorException(e.getMessage());
         }
-    }
-
-    private String getIdCodeStr(String mapName, String description) {
-        Map<IdCode, Description> map = MapsHolder.getInstance().getMap(mapName);
-        IdCode match = null;
-        for (Map.Entry<IdCode, Description> entry : map.entrySet()) {
-            IdCode k = entry.getKey();
-            Description v = entry.getValue();
-            if (v.getDescription().equals(description)) {
-                match = k;
-                break;
-            }
-        }
-        if (match == null) match = new IdCode(-1);
-        return match.toString();
     }
 
     private Map<String, Map<T,V>> loadAllMaps() throws IOException {

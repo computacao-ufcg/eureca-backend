@@ -1,4 +1,4 @@
-package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.deprecated;
+package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries;
 
 public enum StudentStatus {
     ACTIVE("Ativo"),

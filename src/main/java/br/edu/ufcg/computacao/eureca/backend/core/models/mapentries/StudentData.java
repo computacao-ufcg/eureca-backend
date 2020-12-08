@@ -3,7 +3,6 @@ package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.MapsHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.deprecated.StudentStatus;
 import org.apache.log4j.Logger;
 
 public class StudentData extends EurecaMapValue {
