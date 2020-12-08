@@ -31,7 +31,7 @@ public class Alumni {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Collection<AlumnusBasicData>> getAlumni(
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
-            @RequestHeader(required = false, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
+            @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
         try {
             Collection<AlumnusBasicData> alumniBasicData = ApplicationFacade.getInstance().getAlumniBasicData(token);

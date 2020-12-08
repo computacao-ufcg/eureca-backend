@@ -10,5 +10,4 @@ public class ConfigurationPropertyKeys {
     public static final String BUILD_NUMBER_KEY = "build_number";
     public static final String TABLES_DIR_KEY = "tables_dir";
     public static final String MAPS_FILE = "maps_file";
-    public static final String MULTIVALUED_MAPS_FILE = "multi_maps_file";
 }

@@ -35,7 +35,7 @@ public class Statistics {
             @ApiParam(value = ApiDocumentation.Statistics.TO)
             @RequestParam String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
-            @RequestHeader(required = false, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
+            @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
@@ -55,7 +55,7 @@ public class Statistics {
             @ApiParam(value = ApiDocumentation.Statistics.TO)
             @RequestParam String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
-            @RequestHeader(required = false, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
+            @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
@@ -75,7 +75,7 @@ public class Statistics {
             @ApiParam(value = ApiDocumentation.Statistics.TO)
             @RequestParam String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
-            @RequestHeader(required = false, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
+            @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
@@ -95,7 +95,7 @@ public class Statistics {
             @ApiParam(value = ApiDocumentation.Statistics.TO)
             @RequestParam String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
-            @RequestHeader(required = false, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
+            @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
@@ -115,7 +115,7 @@ public class Statistics {
             @ApiParam(value = ApiDocumentation.Statistics.TO)
             @RequestParam String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
-            @RequestHeader(required = false, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
+            @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
@@ -135,7 +135,7 @@ public class Statistics {
             @ApiParam(value = ApiDocumentation.Statistics.TO)
             @RequestParam String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
-            @RequestHeader(required = false, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
+            @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {

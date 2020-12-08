@@ -227,8 +227,6 @@ public class ApplicationFacade {
     }
 
     private SystemUser authenticateAndAuthorize(String token, EurecaOperation operation) throws EurecaException {
-        // ToDo: remove this test when the frontend is updated to send the token in the request
-        if (token == null || token.equals("")) return null;
         RSAPublicKey keyRSA = getAsPublicKey();
         SystemUser requester = AuthenticationUtil.authenticate(keyRSA, token);
         this.authorizationPlugin.isAuthorized(requester, operation);
