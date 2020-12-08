@@ -1,157 +1,130 @@
 package br.edu.ufcg.computacao.eureca.backend.core.holders;
 
-import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
+import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.core.models.abstractions.Student;
-import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.Cpf;
-import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.CpfRegistration;
-import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.StudentCourse;
-import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.StudentPersonalData;
+import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.*;
+import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class StatisticsHolder {
+    private Logger LOGGER = Logger.getLogger(StatisticsHolder.class);
+
     private static StatisticsHolder instance;
-    private Map<String, Student> actives;
-    private Map<String, Collection<String>> activeByAdmissionTerm;
-    private Map<String, Student> alumni;
-    private Map<String, Collection<String>> alumniByAdmissionTerm;
-    private Map<String, Collection<String>> alumniByGraduationTerm;
-    private Map<String, Student> dropouts;
-    private Map<String, Collection<String>> dropoutByAdmissionTerm;
-    private Map<String, Collection<String>> dropoutByLeaveTerm;
-    private Map<String, Collection<String>> dropoutByReasonAndAdmissionTerm;
-    private Map<String, Collection<String>> dropoutByReasonAndLeaveTerm;
+    private List<CpfRegistration> actives;
+    private Map<String, Collection<CpfRegistration>> activeByAdmissionTerm;
+    private List<CpfRegistration> alumni;
+    private Map<String, Collection<CpfRegistration>> alumniByAdmissionTerm;
+    private Map<String, Collection<CpfRegistration>> alumniByGraduationTerm;
+    private List<CpfRegistration> dropouts;
+    private Map<String, Collection<CpfRegistration>> dropoutByAdmissionTerm;
+    private Map<String, Collection<CpfRegistration>> dropoutByLeaveTerm;
+    private Map<String, Collection<CpfRegistration>> dropoutByReasonAndAdmissionTerm;
+    private Map<String, Collection<CpfRegistration>> dropoutByReasonAndLeaveTerm;
 
     private StatisticsHolder() {
-        retrieveActive();
-        retrieveAlumni();
-        retrieveDropouts();
+        buildIndexes();
     }
 
-    public Map<String, Student> getActives() {
+    public List getActives() {
         return actives;
     }
 
-    public Map<String, Collection<String>> getActiveByAdmissionTerm() {
+    public Map<String, Collection<CpfRegistration>> getActiveByAdmissionTerm() {
         return activeByAdmissionTerm;
     }
 
-    public Map<String, Student> getAlumni() {
+    public List<CpfRegistration> getAlumni() {
         return alumni;
     }
 
-    public Map<String, Collection<String>> getAlumniByAdmissionTerm() {
+    public Map<String, Collection<CpfRegistration>> getAlumniByAdmissionTerm() {
         return alumniByAdmissionTerm;
     }
 
-    public Map<String, Collection<String>> getAlumniByGraduationTerm() {
+    public Map<String, Collection<CpfRegistration>> getAlumniByGraduationTerm() {
         return alumniByGraduationTerm;
     }
 
-    public Map<String, Student> getDropouts() {
+    public List<CpfRegistration> getDropouts() {
         return dropouts;
     }
 
-    public Map<String, Collection<String>> getDropoutByAdmissionTerm() {
+    public Map<String, Collection<CpfRegistration>> getDropoutByAdmissionTerm() {
         return dropoutByAdmissionTerm;
     }
 
-    public Map<String, Collection<String>> getDropoutByLeaveTerm() {
+    public Map<String, Collection<CpfRegistration>> getDropoutByLeaveTerm() {
         return dropoutByLeaveTerm;
     }
 
-    public Map<String, Collection<String>> getDropoutByReasonAndAdmissionTerm() {
+    public Map<String, Collection<CpfRegistration>> getDropoutByReasonAndAdmissionTerm() {
         return dropoutByReasonAndAdmissionTerm;
     }
 
-    public Map<String, Collection<String>> getDropoutByReasonAndLeaveTerm() {
+    public Map<String, Collection<CpfRegistration>> getDropoutByReasonAndLeaveTerm() {
         return dropoutByReasonAndLeaveTerm;
     }
 
-    private void retrieveActive() {
-        this.actives = new HashMap<>();
+    private void buildIndexes() {
+        this.actives = new ArrayList<>();
         this.activeByAdmissionTerm = new HashMap<>();
-        String codeStr = PropertiesHolder.getInstance().getProperty(SystemConstants.ACTIVE);
-        int activeCode = Integer.parseInt(codeStr);
-        Map<CpfRegistration, StudentCourse> mapStudentCourse = MapsHolder.getInstance().getMap("DiscenteVinculo");
-        Map<Cpf, StudentPersonalData> mapStudentPersonalData = MapsHolder.getInstance().getMap("Discente");
-        mapStudentCourse.forEach((k, v) -> {
-            if (v.getStatus_id() == activeCode) { // active
-                StudentPersonalData personalData = mapStudentPersonalData.get(new Cpf(k.getNational_id()));
-                this.actives.put(k.getNational_id(), new Student(k, personalData, v));
-                String admissionTerm = v.getAdmission_term();
-                Collection<String> list = this.activeByAdmissionTerm.get(admissionTerm);
-                if (list == null) list = new ArrayList<>();
-                list.add(k.getNational_id());
-                this.activeByAdmissionTerm.put(admissionTerm, list);
-            }
-        });
-    }
-
-    private void retrieveAlumni() {
-        this.alumni = new HashMap<>();
+        this.alumni = new ArrayList<>();
         this.alumniByAdmissionTerm = new HashMap<>();
         this.alumniByGraduationTerm = new HashMap<>();
-        String codeStr = PropertiesHolder.getInstance().getProperty(SystemConstants.GRADUATED);
-        int graduatedCode = Integer.parseInt(codeStr);
-        Map<CpfRegistration, StudentCourse> mapStudentCourse = MapsHolder.getInstance().getMap("DiscenteVinculo");
-        Map<Cpf, StudentPersonalData> mapStudentPersonalData = MapsHolder.getInstance().getMap("Discente");
-        mapStudentCourse.forEach((k, v) -> {
-            if (v.getDetailed_status_id() == graduatedCode) { // graduated
-                StudentPersonalData personalData = mapStudentPersonalData.get(new Cpf(k.getNational_id()));
-                this.alumni.put(k.getNational_id(), new Student(k, personalData, v));
-                String admissionTerm = v.getAdmission_term();
-                String graduationTerm = v.getTerm_status();
-                Collection<String> list = this.alumniByAdmissionTerm.get(admissionTerm);
-                if (list == null) list = new ArrayList<>();
-                list.add(k.getNational_id());
-                this.alumniByAdmissionTerm.put(admissionTerm, list);
-                list = this.alumniByGraduationTerm.get(graduationTerm);
-                if (list == null) list = new ArrayList<>();
-                list.add(k.getNational_id());
-                this.alumniByGraduationTerm.put(graduationTerm, list);
-            }
-        });
-    }
-
-    private void retrieveDropouts() {
-        this.dropouts = new HashMap<>();
+        this.dropouts = new ArrayList<>();
         this.dropoutByAdmissionTerm = new HashMap<>();
         this.dropoutByLeaveTerm = new HashMap<>();
         this.dropoutByReasonAndAdmissionTerm = new HashMap<>();
         this.dropoutByReasonAndLeaveTerm = new HashMap<>();
-        String codeStr = PropertiesHolder.getInstance().getProperty(SystemConstants.GRADUATED);
-        int graduatedCode = Integer.parseInt(codeStr);
-        codeStr = PropertiesHolder.getInstance().getProperty(SystemConstants.REGULAR);
-        int regularCode = Integer.parseInt(codeStr);
-        Map<CpfRegistration, StudentCourse> mapStudentCourse = MapsHolder.getInstance().getMap("DiscenteVinculo");
-        Map<Cpf, StudentPersonalData> mapStudentPersonalData = MapsHolder.getInstance().getMap("Discente");
-        mapStudentCourse.forEach((k, v) -> {
-            if (v.getDetailed_status_id() != graduatedCode && v.getDetailed_status_id() != regularCode) { // dropout
-                StudentPersonalData personalData = mapStudentPersonalData.get(new Cpf(k.getNational_id()));
-                this.dropouts.put(k.getNational_id(), new Student(k, personalData, v));
-                String admissionTerm = v.getAdmission_term();
-                String leaveTerm = v.getTerm_status();
-                String reason = Integer.toString(v.getStatus_id());
-                Collection<String> list = this.dropoutByAdmissionTerm.get(admissionTerm);
+        Map<CpfRegistration, StudentData> mapStudents = MapsHolder.getInstance().getMap("students");
+        mapStudents.forEach((k, v) -> {
+            if (v.isActive()) {
+                LOGGER.info(String.format(Messages.INDEX_ACTIVE_S, v.getName()));
+                this.actives.add(k);
+                String admissionTerm = v.getAdmissionTerm();
+                Collection<CpfRegistration> list = this.activeByAdmissionTerm.get(admissionTerm);
                 if (list == null) list = new ArrayList<>();
-                list.add(k.getNational_id());
-                this.dropoutByAdmissionTerm.put(admissionTerm, list);
-                list = this.dropoutByLeaveTerm.get(leaveTerm);
-                if (list == null) list = new ArrayList<>();
-                list.add(k.getNational_id());
-                this.dropoutByLeaveTerm.put(leaveTerm, list);
-                list = this.dropoutByReasonAndAdmissionTerm.get((reason+admissionTerm));
-                if (list == null) list = new ArrayList<>();
-                list.add(k.getNational_id());
-                this.dropoutByReasonAndAdmissionTerm.put((reason+admissionTerm), list);
-                list = this.dropoutByReasonAndLeaveTerm.get((reason+leaveTerm));
-                if (list == null) list = new ArrayList<>();
-                list.add(k.getNational_id());
-                this.dropoutByReasonAndLeaveTerm.put((reason+leaveTerm), list);            }
+                list.add(k);
+                this.activeByAdmissionTerm.put(admissionTerm, list);
+            }
+            if (v.isAlumnus()) { // graduated
+                LOGGER.info(String.format(Messages.INDEX_ALUMNUS_S, v.getName()));
+                this.alumni.add(k);
+                String admissionTerm = v.getAdmissionTerm();
+                String graduationTerm = v.getStatusTerm();
+                Collection<CpfRegistration> listAdmissionTerm = this.alumniByAdmissionTerm.get(admissionTerm);
+                if (listAdmissionTerm == null) listAdmissionTerm = new ArrayList<>();
+                listAdmissionTerm.add(k);
+                this.alumniByAdmissionTerm.put(admissionTerm, listAdmissionTerm);
+                Collection<CpfRegistration> listGraduationTerm = this.alumniByGraduationTerm.get(graduationTerm);
+                if (listGraduationTerm == null) listGraduationTerm = new ArrayList<>();
+                listGraduationTerm.add(k);
+                this.alumniByGraduationTerm.put(graduationTerm, listGraduationTerm);
+            }
+            if (v.isDropout()) { // dropout
+                LOGGER.info(String.format(Messages.INDEX_DROPOUT_S, v.getName()));
+                this.dropouts.add(k);
+                String admissionTerm = v.getAdmissionTerm();
+                String leaveTerm = v.getStatusTerm();
+                String reason = v.getStatusStr();
+                Collection<CpfRegistration> listAdmissionTerm = this.dropoutByAdmissionTerm.get(admissionTerm);
+                if (listAdmissionTerm == null) listAdmissionTerm = new ArrayList<>();
+                listAdmissionTerm.add(k);
+                this.dropoutByAdmissionTerm.put(admissionTerm, listAdmissionTerm);
+                Collection<CpfRegistration> listLeaveTerm = this.dropoutByLeaveTerm.get(leaveTerm);
+                if (listLeaveTerm == null) listLeaveTerm = new ArrayList<>();
+                listLeaveTerm.add(k);
+                this.dropoutByLeaveTerm.put(leaveTerm, listLeaveTerm);
+                Collection <CpfRegistration> listReasonAndAdmissionTerm = this.dropoutByReasonAndAdmissionTerm.get((reason+admissionTerm));
+                if (listReasonAndAdmissionTerm == null) listReasonAndAdmissionTerm = new ArrayList<>();
+                listReasonAndAdmissionTerm.add(k);
+                this.dropoutByReasonAndAdmissionTerm.put((reason+admissionTerm), listReasonAndAdmissionTerm);
+                Collection<CpfRegistration> listReasonAndLeaveTerm = this.dropoutByReasonAndLeaveTerm.get((reason+leaveTerm));
+                if (listReasonAndLeaveTerm == null) listReasonAndLeaveTerm = new ArrayList<>();
+                listReasonAndLeaveTerm.add(k);
+                this.dropoutByReasonAndLeaveTerm.put((reason+leaveTerm), listReasonAndLeaveTerm);
+            }
         });
     }
 
@@ -163,7 +136,11 @@ public class StatisticsHolder {
     }
 
     public Collection<Student> getAllActives() {
-        Collection<Student> allActives = this.actives.values();
+        Collection<Student> allActives = new ArrayList<>();
+        Map<CpfRegistration, StudentData> mapStudents = MapsHolder.getInstance().getMap("students");
+        this.actives.forEach(k -> {
+            allActives.add(new Student(k, mapStudents.get(k)));
+        });
         return allActives;
     }
 }

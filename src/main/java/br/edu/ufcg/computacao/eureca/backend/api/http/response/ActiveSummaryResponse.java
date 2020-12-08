@@ -7,16 +7,16 @@ public class ActiveSummaryResponse {
     @ApiModelProperty(position = 0, example = ApiDocumentation.Model.REGISTRATION)
     String registration;
     @ApiModelProperty(position = 1, example = ApiDocumentation.Model.PERIOD)
-    String admission_term;
+    String admissionTerm;
     @ApiModelProperty(position = 2, example = ApiDocumentation.Model.NUMBER)
-    int terms_done;
+    int termsCompleted;
     @ApiModelProperty(position = 3, example = ApiDocumentation.Model.PERCENTAGE)
     double progress;
 
-    public ActiveSummaryResponse(String registration, String admission_term, int terms_done, double progress) {
+    public ActiveSummaryResponse(String registration, String admissionTerm, int termsCompleted, double progress) {
         this.registration = registration;
-        this.admission_term = admission_term;
-        this.terms_done = terms_done;
+        this.admissionTerm = admissionTerm;
+        this.termsCompleted = termsCompleted;
         this.progress = progress;
     }
 
@@ -28,20 +28,20 @@ public class ActiveSummaryResponse {
         this.registration = registration;
     }
 
-    public String getAdmission_term() {
-        return admission_term;
+    public String getAdmissionTerm() {
+        return admissionTerm;
     }
 
-    public void setAdmission_term(String admission_term) {
-        this.admission_term = admission_term;
+    public void setAdmissionTerm(String admissionTerm) {
+        this.admissionTerm = admissionTerm;
     }
 
-    public int getTerms_done() {
-        return terms_done;
+    public int getTermsCompleted() {
+        return termsCompleted;
     }
 
-    public void setTerms_done(int terms_done) {
-        this.terms_done = terms_done;
+    public void setTermsCompleted(int termsCompleted) {
+        this.termsCompleted = termsCompleted;
     }
 
     public double getProgress() {

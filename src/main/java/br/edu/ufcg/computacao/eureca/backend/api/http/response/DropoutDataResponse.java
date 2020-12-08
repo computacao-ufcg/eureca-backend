@@ -1,56 +1,56 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class DropoutDataResponse {
-    String affirmative_action;
+    String affirmativePolicy;
     double gpa;
-    int complementary_credits;
-    int mandatory_credits;
-    int elective_credits;
+    int complementaryCredits;
+    int mandatoryCredits;
+    int electiveCredits;
     String curriculum;
-    String marital_status;
+    String maritalStatus;
     String gender;
     double iea;
     String registration;
-    int institutional_terms;
+    int institutionalEnrollments;
     double mc;
-    double entry_grade;
-    int mobility_terms;
-    String dropout_reason;
-    String admission_term;
-    int terms_done;
-    int suspended_terms;
+    double entryGrade;
+    int mobilityTerms;
+    String dropoutReason;
+    String admissionTerm;
+    int termsCompleted;
+    int suspendedTerms;
 
-    public DropoutDataResponse(String affirmative_action, double gpa, int complementary_credits, int mandatory_credits, int elective_credits,
+    public DropoutDataResponse(String affirmativePolicy, double gpa, int complementaryCredits, int mandatoryCredits, int electiveCredits,
                                String curriculum, String marital_status, String gender, double iea, String registration,
-                               int institutional_terms, double mc, double entry_grade,
-                               int mobility_terms, String dropout_reason, String admission_term,
-                               int terms_done, int suspended_terms) {
-        this.affirmative_action = affirmative_action;
+                               int institutionalEnrollments, double mc, double entryGrade,
+                               int mobilityTerms, String dropoutReason, String admissionTerm,
+                               int termsCompleted, int suspendedTerms) {
+        this.affirmativePolicy = affirmativePolicy;
         this.gpa = gpa;
-        this.complementary_credits = complementary_credits;
-        this.mandatory_credits = mandatory_credits;
-        this.elective_credits = elective_credits;
+        this.complementaryCredits = complementaryCredits;
+        this.mandatoryCredits = mandatoryCredits;
+        this.electiveCredits = electiveCredits;
         this.curriculum = curriculum;
-        this.marital_status = marital_status;
+        this.maritalStatus = marital_status;
         this.gender = gender;
         this.iea = iea;
         this.registration = registration;
-        this.institutional_terms = institutional_terms;
+        this.institutionalEnrollments = institutionalEnrollments;
         this.mc = mc;
-        this.entry_grade = entry_grade;
-        this.mobility_terms = mobility_terms;
-        this.dropout_reason = dropout_reason;
-        this.admission_term = admission_term;
-        this.terms_done = terms_done;
-        this.suspended_terms = suspended_terms;
+        this.entryGrade = entryGrade;
+        this.mobilityTerms = mobilityTerms;
+        this.dropoutReason = dropoutReason;
+        this.admissionTerm = admissionTerm;
+        this.termsCompleted = termsCompleted;
+        this.suspendedTerms = suspendedTerms;
     }
 
-    public String getAffirmative_action() {
-        return affirmative_action;
+    public String getAffirmativePolicy() {
+        return affirmativePolicy;
     }
 
-    public void setAffirmative_action(String affirmative_action) {
-        this.affirmative_action = affirmative_action;
+    public void setAffirmativePolicy(String affirmativePolicy) {
+        this.affirmativePolicy = affirmativePolicy;
     }
 
     public double getGpa() {
@@ -61,28 +61,28 @@ public class DropoutDataResponse {
         this.gpa = gpa;
     }
 
-    public int getComplementary_credits() {
-        return complementary_credits;
+    public int getComplementaryCredits() {
+        return complementaryCredits;
     }
 
-    public void setComplementary_credits(int complementary_credits) {
-        this.complementary_credits = complementary_credits;
+    public void setComplementaryCredits(int complementaryCredits) {
+        this.complementaryCredits = complementaryCredits;
     }
 
-    public int getMandatory_credits() {
-        return mandatory_credits;
+    public int getMandatoryCredits() {
+        return mandatoryCredits;
     }
 
-    public void setMandatory_credits(int mandatory_credits) {
-        this.mandatory_credits = mandatory_credits;
+    public void setMandatoryCredits(int mandatoryCredits) {
+        this.mandatoryCredits = mandatoryCredits;
     }
 
-    public int getElective_credits() {
-        return elective_credits;
+    public int getElectiveCredits() {
+        return electiveCredits;
     }
 
-    public void setElective_credits(int elective_credits) {
-        this.elective_credits = elective_credits;
+    public void setElectiveCredits(int electiveCredits) {
+        this.electiveCredits = electiveCredits;
     }
 
     public String getCurriculum() {
@@ -93,12 +93,12 @@ public class DropoutDataResponse {
         this.curriculum = curriculum;
     }
 
-    public String getMarital_status() {
-        return marital_status;
+    public String getMaritalStatus() {
+        return maritalStatus;
     }
 
-    public void setMarital_status(String marital_status) {
-        this.marital_status = marital_status;
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
     }
 
     public String getGender() {
@@ -125,12 +125,12 @@ public class DropoutDataResponse {
         this.registration = registration;
     }
 
-    public int getInstitutional_terms() {
-        return institutional_terms;
+    public int getInstitutionalEnrollments() {
+        return institutionalEnrollments;
     }
 
-    public void setInstitutional_terms(int institutional_terms) {
-        this.institutional_terms = institutional_terms;
+    public void setInstitutionalEnrollments(int institutionalEnrollments) {
+        this.institutionalEnrollments = institutionalEnrollments;
     }
 
     public double getMc() {
@@ -141,51 +141,51 @@ public class DropoutDataResponse {
         this.mc = mc;
     }
 
-    public double getEntry_grade() {
-        return entry_grade;
+    public double getEntryGrade() {
+        return entryGrade;
     }
 
-    public void setEntry_grade(double entry_grade) {
-        this.entry_grade = entry_grade;
+    public void setEntryGrade(double entryGrade) {
+        this.entryGrade = entryGrade;
     }
 
-    public int getMobility_terms() {
-        return mobility_terms;
+    public int getMobilityTerms() {
+        return mobilityTerms;
     }
 
-    public void setMobility_terms(int mobility_terms) {
-        this.mobility_terms = mobility_terms;
+    public void setMobilityTerms(int mobilityTerms) {
+        this.mobilityTerms = mobilityTerms;
     }
 
-    public String getDropout_reason() {
-        return dropout_reason;
+    public String getDropoutReason() {
+        return dropoutReason;
     }
 
-    public void setDropout_reason(String dropout_reason) {
-        this.dropout_reason = dropout_reason;
+    public void setDropoutReason(String dropoutReason) {
+        this.dropoutReason = dropoutReason;
     }
 
-    public String getAdmission_term() {
-        return admission_term;
+    public String getAdmissionTerm() {
+        return admissionTerm;
     }
 
-    public void setAdmission_term(String admission_term) {
-        this.admission_term = admission_term;
+    public void setAdmissionTerm(String admissionTerm) {
+        this.admissionTerm = admissionTerm;
     }
 
-    public int getTerms_done() {
-        return terms_done;
+    public int getTermsCompleted() {
+        return termsCompleted;
     }
 
-    public void setTerms_done(int terms_done) {
-        this.terms_done = terms_done;
+    public void setTermsCompleted(int termsCompleted) {
+        this.termsCompleted = termsCompleted;
     }
 
-    public int getSuspended_terms() {
-        return suspended_terms;
+    public int getSuspendedTerms() {
+        return suspendedTerms;
     }
 
-    public void setSuspended_terms(int suspended_terms) {
-        this.suspended_terms = suspended_terms;
+    public void setSuspendedTerms(int suspendedTerms) {
+        this.suspendedTerms = suspendedTerms;
     }
 }

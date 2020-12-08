@@ -46,6 +46,5 @@ public class SwaggerConfiguration {
         apiInfoBuilder.contact(CONTACT);
 
         return apiInfoBuilder;
-
     }
 }

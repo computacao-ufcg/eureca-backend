@@ -1,4 +1,6 @@
-package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries;
+package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.deprecated;
+
+import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.EurecaMapValue;
 
 public class Enrolment extends EurecaMapValue {
     int subject_id;

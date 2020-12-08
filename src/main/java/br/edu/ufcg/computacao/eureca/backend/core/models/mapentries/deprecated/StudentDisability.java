@@ -1,4 +1,7 @@
-package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries;
+package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.deprecated;
+
+import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.EurecaMultivaluedMapValue;
+import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.deprecated.Disability;
 
 import java.util.ArrayList;
 import java.util.Collection;

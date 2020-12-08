@@ -9,9 +9,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.holders.MapsHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.PropertiesHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.StatisticsHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.abstractions.Student;
-import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.EurecaOperation;
-import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.IdCode;
-import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.StudentCourse;
+import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.plugins.AuthorizationPlugin;
 import br.edu.ufcg.computacao.eureca.common.exceptions.ConfigurationErrorException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
@@ -53,12 +51,12 @@ public class ApplicationFacade {
         Collection<ActiveSummaryResponse> activeStudentsSummary = new ArrayList<>();
         Collection<Student> actives = StatisticsHolder.getInstance().getAllActives();
         actives.forEach(item -> {
-            String admission = item.getAcademicData().getAdmission_term();
+            String admission = item.getStudentData().getAdmissionTerm();
             if (admission != null && admission.compareTo(from) >= 0 && admission.compareTo(to) <= 0) {
                 ActiveSummaryResponse studentSummary = new ActiveSummaryResponse(
                         item.getId().getRegistration(),
-                        item.getAcademicData().getAdmission_term(),
-                        item.getAcademicData().getTerms_count(),
+                        item.getStudentData().getAdmissionTerm(),
+                        item.getStudentData().getTermsCount(),
                         computePercentage(item));
                 activeStudentsSummary.add(studentSummary);
             }
@@ -67,15 +65,15 @@ public class ApplicationFacade {
     }
 
     public Collection<ActiveDataResponse> getActivesCSV(String token, String from, String to) throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_ACTIVES);
+        authenticateAndAuthorize(token, EurecaOperation.GET_ACTIVES_CSV);
         Collection<ActiveDataResponse> activeStudentsData = new ArrayList<>();
         Collection<Student> actives = StatisticsHolder.getInstance().getAllActives();
         actives.forEach(item -> {
             try {
-                String admission = item.getAcademicData().getAdmission_term();
+                String admission = item.getStudentData().getAdmissionTerm();
                 if (admission != null && admission.compareTo(from) >= 0 && admission.compareTo(to) <= 0) {
                     ActiveDataResponse studentData = new ActiveDataResponse(item.getId().getRegistration(),
-                            item.getPersonalData(), item.getAcademicData());
+                            item.getStudentData());
                     activeStudentsData.add(studentData);
                 }
             } catch(Exception e) {
@@ -86,8 +84,8 @@ public class ApplicationFacade {
     }
 
     private double computePercentage(Student item) {
-        StudentCourse data = item.getAcademicData();
-        double totalCreditsFulfilled = data.getMandatory_credits() + data.getElective_credits() + data.getComplementary_credits();
+        StudentData data = item.getStudentData();
+        double totalCreditsFulfilled = data.getMandatoryCredits() + data.getElectiveCredits() + data.getComplementaryCredits();
         return totalCreditsFulfilled/Curriculum.totalCreditsNeeded;
     }
 
@@ -102,9 +100,9 @@ public class ApplicationFacade {
 
         Collection<AlumniDataResponse> terms = getAlumniSummaryPerTerm(from, to);
         for (AlumniDataResponse item : terms) {
-            double averageGPA = item.getAverage_gpa();
-            int termAlumniCount = item.getAlumni_count();
-            String term = item.getGraduation_term();
+            double averageGPA = item.getAverageGpa();
+            int termAlumniCount = item.getAlumniCount();
+            String term = item.getGraduationTerm();
             totalAlumniCount += termAlumniCount;
             if (termAlumniCount >= maxAlumniCount) {
                 maxAlumniCount = termAlumniCount;
@@ -131,16 +129,17 @@ public class ApplicationFacade {
 
     private Collection<AlumniDataResponse> getAlumniSummaryPerTerm(String from, String to) {
         Collection<AlumniDataResponse> terms = new ArrayList<>();
-        Map<String, Collection<String>> map = StatisticsHolder.getInstance().getAlumniByGraduationTerm();
-        for (Map.Entry<String, Collection<String>> entry : map.entrySet()) {
+        Map<String, Collection<CpfRegistration>> map = StatisticsHolder.getInstance().getAlumniByGraduationTerm();
+        Map<CpfRegistration, StudentData> studentsMap = MapsHolder.getInstance().getMap("students");
+        for (Map.Entry<String, Collection<CpfRegistration>> entry : map.entrySet()) {
             String term = entry.getKey();
             if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
-                Collection<String> cpfs = entry.getValue();
-                int termAlumniCount = cpfs.size();
+                Collection<CpfRegistration> studentIds = entry.getValue();
+                int termAlumniCount = studentIds.size();
                 double termAccumulatedGPA = 0;
-                for (String cpf : cpfs) {
-                    Student alumnus = StatisticsHolder.getInstance().getAlumni().get(cpf);
-                    termAccumulatedGPA += alumnus.getAcademicData().getGpa();
+                for (CpfRegistration id : studentIds) {
+                    StudentData alumnus = studentsMap.get(id);
+                    termAccumulatedGPA += alumnus.getGpa();
                 }
                 AlumniDataResponse termData = new AlumniDataResponse(termAccumulatedGPA/termAlumniCount, term,
                         termAlumniCount);
@@ -153,17 +152,16 @@ public class ApplicationFacade {
     public Collection<DropoutSummaryResponse> getDropouts(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DROPOUTS);
         Collection<DropoutSummaryResponse> dropoutSummaryResponses = new ArrayList<>();
-        Map<String, Collection<String>> dropouts = StatisticsHolder.getInstance().getDropoutByLeaveTerm();
+        Map<String, Collection<CpfRegistration>> dropouts = StatisticsHolder.getInstance().getDropoutByLeaveTerm();
+        Map<CpfRegistration, StudentData> studentsMap = MapsHolder.getInstance().getMap("students");
         dropouts.forEach((k, v) -> {
             if (k.compareTo(from) >= 0 && k.compareTo(to) <= 0) {
-                int dropoutsCount[] = new int[13];
+                int dropoutsCount[] = new int[SystemConstants.DROPOUT_TYPES_COUNT];
                 v.forEach(item -> {
-                    Student dropout = StatisticsHolder.getInstance().getDropouts().get(item);
-                    dropoutsCount[dropout.getAcademicData().getDetailed_status_id()-1]++;
+                    StudentData dropout = studentsMap.get(item);
+                    dropoutsCount[dropout.getDetailedStatusId()]++;
                 });
-                DropoutClassification dropoutClassification = new DropoutClassification(dropoutsCount[0],
-                        dropoutsCount[12], dropoutsCount[1], dropoutsCount[2], dropoutsCount[3], dropoutsCount[4],
-                        dropoutsCount[5], dropoutsCount[6], dropoutsCount[7], dropoutsCount[8]);
+                DropoutClassification dropoutClassification = new DropoutClassification(dropoutsCount);
                 dropoutSummaryResponses.add(new DropoutSummaryResponse(k, dropoutClassification));
             }
         });
@@ -173,26 +171,23 @@ public class ApplicationFacade {
     public Collection<DropoutDataResponse> getDropoutsCSV(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DROPOUTS_CSV);
         Collection<DropoutDataResponse> dropoutDataResponses = new ArrayList<>();
-        Map<String, Student> dropouts = StatisticsHolder.getInstance().getDropouts();
-        dropouts.forEach((k, v) -> {
+        Collection<CpfRegistration> dropouts = StatisticsHolder.getInstance().getDropouts();
+        Map<CpfRegistration, StudentData> studentsMap = MapsHolder.getInstance().getMap("students");
+        dropouts.forEach(item -> {
             try {
-                String leaveTerm = v.getAcademicData().getTerm_status();
+                StudentData dropout = studentsMap.get(item);
+                String leaveTerm = dropout.getStatusTerm();
                 if (leaveTerm != null && leaveTerm.compareTo(from) >= 0 && leaveTerm.compareTo(to) <= 0) {
-                    IdCode affirmativeActionId = new IdCode(v.getAcademicData().getAffirmative_action_id());
-                    String affirmativeAction = MapsHolder.getInstance().getValue("Cota", affirmativeActionId).toString();
-                    IdCode maritalStatusId = new IdCode(v.getPersonalData().getMarital_status_id());
-                    String maritalStatus = MapsHolder.getInstance().getValue("EstadoCivil", maritalStatusId).toString();
-                    IdCode genderId = new IdCode(v.getPersonalData().getGender_id());
-                    String gender = MapsHolder.getInstance().getValue("Genero", genderId).toString();
-                    IdCode idDropoutCause = new IdCode(v.getAcademicData().getDetailed_status_id());
-                    String dropoutCause = MapsHolder.getInstance().getValue("SituacaoVinculo", idDropoutCause).toString();
-                    DropoutDataResponse summary = new DropoutDataResponse(affirmativeAction, v.getAcademicData().getGpa(),
-                            v.getAcademicData().getComplementary_credits(), v.getAcademicData().getMandatory_credits(),
-                            v.getAcademicData().getElective_credits(), v.getAcademicData().getCurriculum(), maritalStatus,
-                            gender, v.getAcademicData().getIea(), v.getId().getRegistration(), v.getAcademicData().getInstitutional_terms(),
-                            v.getAcademicData().getMc(), v.getAcademicData().getAdmission_grade(),
-                            v.getAcademicData().getMobility_terms(), dropoutCause, v.getAcademicData().getAdmission_term(),
-                            v.getAcademicData().getTerms_count(), v.getAcademicData().getSuspended_terms());
+                    String affirmativeAction = dropout.getAffirmativePolicy();
+                    String maritalStatus = dropout.getMaritalStatus();
+                    String gender = dropout.getGender();
+                    String dropoutCause = dropout.getStatusStr();
+                    DropoutDataResponse summary = new DropoutDataResponse(affirmativeAction, dropout.getGpa(),
+                            dropout.getComplementaryCredits(), dropout.getMandatoryCredits(),
+                            dropout.getElectiveCredits(), dropout.getCurriculum(), maritalStatus,
+                            gender, dropout.getIea(), item.getRegistration(), dropout.getInstitutionalTerms(),
+                            dropout.getMc(), dropout.getAdmissionGrade(), dropout.getMobilityTerms(), dropoutCause,
+                            dropout.getAdmissionTerm(), dropout.getTermsCount(), dropout.getSuspendedTerms());
                     dropoutDataResponses.add(summary);
                 }
             } catch(Exception e) {
@@ -205,11 +200,12 @@ public class ApplicationFacade {
     public Collection<AlumnusBasicData> getAlumniBasicData(String token) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_BASIC_DATA);
         Collection<AlumnusBasicData> alumniBasicData = new ArrayList<>();
-        Map<String, Student> alumni = StatisticsHolder.getInstance().getAlumni();
-        alumni.forEach((k, v) -> {
-            AlumnusBasicData basicData = new AlumnusBasicData(v.getId().getRegistration(), v.getPersonalData().getName(),
-                    2, 1, v.getAcademicData().getAdmission_term(),
-                    v.getAcademicData().getTerm_status());
+        Collection<CpfRegistration> alumni = StatisticsHolder.getInstance().getAlumni();
+        Map<CpfRegistration, StudentData> studentsMap = MapsHolder.getInstance().getMap("students");
+        alumni.forEach(item -> {
+            StudentData alumnus = studentsMap.get(item);
+            AlumnusBasicData basicData = new AlumnusBasicData(item.getRegistration(), alumnus.getName(),
+                    2, 1, alumnus.getAdmissionTerm(), alumnus.getStatusTerm());
             alumniBasicData.add(basicData);
         });
         return alumniBasicData;

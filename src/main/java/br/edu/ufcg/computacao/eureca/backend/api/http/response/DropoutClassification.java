@@ -1,38 +1,40 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
+import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
+
 public class DropoutClassification {
-    int failed_3_times;
-    int transferred;
-    int reenter_same_course;
-    int reenter_other_course;
-    int failed_all;
+    int failed3Times;
+    int reenterSameCourse;
+    int reenterOtherCourse;
+    int failedAll;
     int cancelled;
-    int cancelled_by_decree;
-    int cancelled_change_course;
-    int cancelled_upon_request;
-    int left_without_notice;
+    int cancelledByDecree;
+    int cancelledCourseChange;
+    int cancelledUponRequest;
+    int leftWithoutNotice;
+    int missedGraduation;
+    int transferred;
 
-    public DropoutClassification(int failed_3_times, int transferred, int reenter_same_course, int reenter_other_course,
-                                 int failed_all, int cancelled, int cancelled_by_decree,
-                                 int cancelled_change_course, int cancelled_upon_request, int left_without_notice) {
-        this.failed_3_times = failed_3_times;
-        this.transferred = transferred;
-        this.reenter_same_course = reenter_same_course;
-        this.reenter_other_course = reenter_other_course;
-        this.failed_all = failed_all;
-        this.cancelled = cancelled;
-        this.cancelled_by_decree = cancelled_by_decree;
-        this.cancelled_change_course = cancelled_change_course;
-        this.cancelled_upon_request = cancelled_upon_request;
-        this.left_without_notice = left_without_notice;
+    public DropoutClassification(int[] dropouts) {
+        this.failed3Times = dropouts[SystemConstants.FAILED_3_TIMES_INDEX];
+        this.reenterSameCourse = dropouts[SystemConstants.REENTER_SAME_COURSE_INDEX];
+        this.reenterOtherCourse = dropouts[SystemConstants.REENTER_OTHER_COURSE_INDEX];
+        this.failedAll = dropouts[SystemConstants.FAILED_ALL_INDEX];
+        this.cancelled = dropouts[SystemConstants.CANCELLED_INDEX];
+        this.cancelledByDecree = dropouts[SystemConstants.CANCELLED_BY_DECREE_INDEX];
+        this.cancelledCourseChange = dropouts[SystemConstants.CANCELLED_COURSE_CHANGE_INDEX];
+        this.cancelledUponRequest = dropouts[SystemConstants.CANCELLED_UPON_REQUEST_INDEX];
+        this.leftWithoutNotice = dropouts[SystemConstants.LEFT_WITHOUT_NOTICE_INDEX];
+        this.missedGraduation = dropouts[SystemConstants.MISSED_GRADUATION_INDEX];
+        this.transferred = dropouts[SystemConstants.TRANSFERRED_INDEX];
     }
 
-    public int getFailed_3_times() {
-        return failed_3_times;
+    public int getFailed3Times() {
+        return failed3Times;
     }
 
-    public void setFailed_3_times(int failed_3_times) {
-        this.failed_3_times = failed_3_times;
+    public void setFailed3Times(int failed3Times) {
+        this.failed3Times = failed3Times;
     }
 
     public int getTransferred() {
@@ -43,28 +45,28 @@ public class DropoutClassification {
         this.transferred = transferred;
     }
 
-    public int getReenter_same_course() {
-        return reenter_same_course;
+    public int getReenterSameCourse() {
+        return reenterSameCourse;
     }
 
-    public void setReenter_same_course(int reenter_same_course) {
-        this.reenter_same_course = reenter_same_course;
+    public void setReenterSameCourse(int reenterSameCourse) {
+        this.reenterSameCourse = reenterSameCourse;
     }
 
-    public int getReenter_other_course() {
-        return reenter_other_course;
+    public int getReenterOtherCourse() {
+        return reenterOtherCourse;
     }
 
-    public void setReenter_other_course(int reenter_other_course) {
-        this.reenter_other_course = reenter_other_course;
+    public void setReenterOtherCourse(int reenterOtherCourse) {
+        this.reenterOtherCourse = reenterOtherCourse;
     }
 
-    public int getFailed_all() {
-        return failed_all;
+    public int getFailedAll() {
+        return failedAll;
     }
 
-    public void setFailed_all(int failed_all) {
-        this.failed_all = failed_all;
+    public void setFailedAll(int failedAll) {
+        this.failedAll = failedAll;
     }
 
     public int getCancelled() {
@@ -75,35 +77,43 @@ public class DropoutClassification {
         this.cancelled = cancelled;
     }
 
-    public int getCancelled_by_decree() {
-        return cancelled_by_decree;
+    public int getCancelledByDecree() {
+        return cancelledByDecree;
     }
 
-    public void setCancelled_by_decree(int cancelled_by_decree) {
-        this.cancelled_by_decree = cancelled_by_decree;
+    public void setCancelledByDecree(int cancelledByDecree) {
+        this.cancelledByDecree = cancelledByDecree;
     }
 
-    public int getCancelled_change_course() {
-        return cancelled_change_course;
+    public int getCancelledCourseChange() {
+        return cancelledCourseChange;
     }
 
-    public void setCancelled_change_course(int cancelled_change_course) {
-        this.cancelled_change_course = cancelled_change_course;
+    public void setCancelledCourseChange(int cancelledCourseChange) {
+        this.cancelledCourseChange = cancelledCourseChange;
     }
 
-    public int getCancelled_upon_request() {
-        return cancelled_upon_request;
+    public int getCancelledUponRequest() {
+        return cancelledUponRequest;
     }
 
-    public void setCancelled_upon_request(int cancelled_upon_request) {
-        this.cancelled_upon_request = cancelled_upon_request;
+    public void setCancelledUponRequest(int cancelledUponRequest) {
+        this.cancelledUponRequest = cancelledUponRequest;
     }
 
-    public int getLeft_without_notice() {
-        return left_without_notice;
+    public int getLeftWithoutNotice() {
+        return leftWithoutNotice;
     }
 
-    public void setLeft_without_notice(int left_without_notice) {
-        this.left_without_notice = left_without_notice;
+    public void setLeftWithoutNotice(int leftWithoutNotice) {
+        this.leftWithoutNotice = leftWithoutNotice;
+    }
+
+    public int getMissedGraduation() {
+        return missedGraduation;
+    }
+
+    public void setMissedGraduation(int missedGraduation) {
+        this.missedGraduation = missedGraduation;
     }
 }

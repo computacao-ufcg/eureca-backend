@@ -1,4 +1,6 @@
-package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries;
+package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.deprecated;
+
+import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.EurecaMapValue;
 
 public class SiapeValue extends EurecaMapValue {
     String institutional_id;

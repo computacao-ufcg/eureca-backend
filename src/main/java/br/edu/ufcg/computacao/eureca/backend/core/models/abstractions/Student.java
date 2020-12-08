@@ -1,29 +1,22 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models.abstractions;
 
 import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.CpfRegistration;
-import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.StudentCourse;
-import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.StudentPersonalData;
+import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.StudentData;
 
 public class Student {
     private CpfRegistration id;
-    private StudentPersonalData personalData;
-    private StudentCourse academicData;
+    private StudentData data;
 
-    public Student(CpfRegistration id, StudentPersonalData personalData, StudentCourse academicData) {
+    public Student(CpfRegistration id, StudentData data) {
         this.id = id;
-        this.personalData = personalData;
-        this.academicData = academicData;
+        this.data = data;
     }
 
     public CpfRegistration getId() {
         return id;
     }
 
-    public StudentPersonalData getPersonalData() {
-        return personalData;
-    }
-
-    public StudentCourse getAcademicData() {
-        return academicData;
+    public StudentData getStudentData() {
+        return data;
     }
 }

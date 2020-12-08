@@ -1,22 +1,27 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models.mapentries;
 
 public class CpfRegistration extends EurecaMapKey {
-    String national_id;
+    String nationalId;
     String registration;
 
-    public CpfRegistration(String national_id, String registration) {
-        this.national_id = national_id;
+    public CpfRegistration(String nationalId, String registration) {
+        this.nationalId = nationalId;
         this.registration = registration;
+    }
+
+    public CpfRegistration(CpfRegistration key) {
+        this.nationalId = key.getNationalId();
+        this.registration = key.getRegistration();
     }
 
     public CpfRegistration() {}
 
-    public String getNational_id() {
-        return national_id;
+    public String getNationalId() {
+        return nationalId;
     }
 
-    public void setNational_id(String national_id) {
-        this.national_id = national_id;
+    public void setNationalId(String nationalId) {
+        this.nationalId = nationalId;
     }
 
     public String getRegistration() {
@@ -31,7 +36,7 @@ public class CpfRegistration extends EurecaMapKey {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((this.national_id == null) ? 0 : this.national_id.hashCode())
+        result = prime * result + ((this.nationalId == null) ? 0 : this.nationalId.hashCode())
                 + ((this.registration == null) ? 0 : this.registration.hashCode());
         return result;
     }
@@ -44,15 +49,15 @@ public class CpfRegistration extends EurecaMapKey {
         CpfRegistration other = (CpfRegistration) obj;
         if (this.registration == null) {
             if (other.getRegistration() != null) return false;
-        } else if (this.national_id == null) {
-            if (other.getNational_id() != null) return false;
-        } else if (!this.national_id.equals(other.getNational_id()) ||
+        } else if (this.nationalId == null) {
+            if (other.getNationalId() != null) return false;
+        } else if (!this.nationalId.equals(other.getNationalId()) ||
                     !this.registration.equals(other.getRegistration())) return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return this.national_id + ":" + this.registration;
+        return this.nationalId + ":" + this.registration;
     }
 }

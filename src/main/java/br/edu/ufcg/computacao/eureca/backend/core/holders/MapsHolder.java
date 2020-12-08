@@ -2,9 +2,11 @@ package br.edu.ufcg.computacao.eureca.backend.core.holders;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.ConfigurationPropertyDefaults;
 import br.edu.ufcg.computacao.eureca.backend.constants.ConfigurationPropertyKeys;
-import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
+import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.core.loaders.GenericLoadMapFromScsvFile;
 import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.*;
+import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.deprecated.Description;
+import br.edu.ufcg.computacao.eureca.backend.core.models.mapentries.deprecated.IdCode;
 import br.edu.ufcg.computacao.eureca.backend.core.util.ClassFactory;
 import br.edu.ufcg.computacao.eureca.common.exceptions.FatalErrorException;
 import br.edu.ufcg.computacao.eureca.common.util.HomeDir;
@@ -30,23 +32,6 @@ public class MapsHolder<T extends EurecaMapKey, V extends EurecaMapValue, U exte
         } catch (IOException e) {
             throw new FatalErrorException(e.getMessage());
         }
-    }
-
-    public void addPropertiesFromMaps(Properties properties) {
-        properties.put(SystemConstants.ACTIVE, getIdCodeStr("SituacaoDiscente", SystemConstants.ACTIVE));
-        properties.put(SystemConstants.REGULAR, getIdCodeStr("SituacaoVinculo", SystemConstants.REGULAR));
-        properties.put(SystemConstants.FAILED_3_TIMES, getIdCodeStr("SituacaoVinculo", SystemConstants.FAILED_3_TIMES));
-        properties.put(SystemConstants.FAILED_ALL, getIdCodeStr("SituacaoVinculo", SystemConstants.FAILED_ALL));
-        properties.put(SystemConstants.CANCELLED, getIdCodeStr("SituacaoVinculo", SystemConstants.CANCELLED));
-        properties.put(SystemConstants.CANCELLED_UPON_REQUEST, getIdCodeStr("SituacaoVinculo", SystemConstants.CANCELLED_UPON_REQUEST));
-        properties.put(SystemConstants.CANCELLED_BY_DECREE, getIdCodeStr("SituacaoVinculo", SystemConstants.CANCELLED_BY_DECREE));
-        properties.put(SystemConstants.CANCELLED_CHANGE_COURSE, getIdCodeStr("SituacaoVinculo", SystemConstants.CANCELLED_CHANGE_COURSE));
-        properties.put(SystemConstants.LEFT_WITHOUT_NOTICE, getIdCodeStr("SituacaoVinculo", SystemConstants.LEFT_WITHOUT_NOTICE));
-        properties.put(SystemConstants.MISSED_GRADUATION, getIdCodeStr("SituacaoVinculo", SystemConstants.MISSED_GRADUATION));
-        properties.put(SystemConstants.TRANSFERRED, getIdCodeStr("SituacaoVinculo", SystemConstants.TRANSFERRED));
-        properties.put(SystemConstants.REENTER_NEW_COURSE, getIdCodeStr("SituacaoVinculo", SystemConstants.REENTER_NEW_COURSE));
-        properties.put(SystemConstants.REENTER_SAME_COURSE, getIdCodeStr("SituacaoVinculo", SystemConstants.REENTER_SAME_COURSE));
-        properties.put(SystemConstants.GRADUATED, getIdCodeStr("SituacaoVinculo", SystemConstants.GRADUATED));
     }
 
     private String getIdCodeStr(String mapName, String description) {
@@ -82,6 +67,7 @@ public class MapsHolder<T extends EurecaMapKey, V extends EurecaMapValue, U exte
                 int keySize = Integer.parseInt(data[3]);
                 GenericLoadMapFromScsvFile<T, V, U> loader = new GenericLoadMapFromScsvFile<>();
                 Map<T, V> tvMap = loader.loadMap(tableName, tClass.getClass(), vClass.getClass(), keySize);
+                LOGGER.info(String.format(Messages.ADD_TABLE_S, tableName));
                 maps.put(tableName, tvMap);
             } catch(Exception e) {
                 e.printStackTrace();

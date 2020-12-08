@@ -117,6 +117,7 @@ public class GenericLoadMapFromScsvFile<T extends EurecaMapKey, V extends Eureca
             String jsonKey = generateJsonKey(header, data, keySize, index);
             key = gson.fromJson(jsonKey, tClass);
             String jsonData = generateJsonData(header, data, keySize, false);
+            LOGGER.debug(jsonData);
             try {
                 value = gson.fromJson(jsonData, vClass);
             } catch (NumberFormatException e) {
