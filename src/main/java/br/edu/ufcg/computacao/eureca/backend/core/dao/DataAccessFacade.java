@@ -5,7 +5,7 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import java.util.Collection;
 
 public interface DataAccessFacade {
-    Collection<ActiveDataResponse> getAllActiveStudents(String from, String to);
+    Collection<StudentDataResponse> getAllActiveStudents(String from, String to);
 
     Collection<ActiveSummaryResponse> getActiveStudentsSummary(String from, String to);
 

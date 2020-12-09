@@ -49,7 +49,7 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "actives/csv", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.Statistics.GET_ATIVOS_CSV)
-    public ResponseEntity<Collection<ActiveDataResponse>> getActivesCSV(
+    public ResponseEntity<Collection<StudentDataResponse>> getActivesCSV(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)
@@ -59,7 +59,7 @@ public class StudentsStatistics {
             throws EurecaException {
 
         try {
-            Collection<ActiveDataResponse> ret = ApplicationFacade.getInstance().getActiveStudentsCSV(token, from, to);
+            Collection<StudentDataResponse> ret = ApplicationFacade.getInstance().getActiveStudentsCSV(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);

@@ -52,7 +52,7 @@ public class ApplicationFacade {
         return this.dataAccessFacade.getActiveStudentsSummary(from, to);
     }
 
-    public Collection<ActiveDataResponse> getActiveStudentsCSV(String token, String from, String to) throws EurecaException {
+    public Collection<StudentDataResponse> getActiveStudentsCSV(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ACTIVES_CSV);
         return this.dataAccessFacade.getAllActiveStudents(from, to);
     }

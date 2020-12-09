@@ -22,14 +22,14 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Collection<ActiveDataResponse> getAllActiveStudents(String from, String to) {
-        Collection<ActiveDataResponse> activeStudentsData = new ArrayList<>();
+    public Collection<StudentDataResponse> getAllActiveStudents(String from, String to) {
+        Collection<StudentDataResponse> activeStudentsData = new ArrayList<>();
         Collection<Student> actives = this.statisticsHolder.getAllActives();
         actives.forEach(item -> {
             try {
                 String admission = item.getStudentData().getAdmissionTerm();
                 if (admission != null && admission.compareTo(from) >= 0 && admission.compareTo(to) <= 0) {
-                    ActiveDataResponse studentData = new ActiveDataResponse(item.getId().getRegistration(),
+                    StudentDataResponse studentData = new StudentDataResponse(item.getId().getRegistration(),
                             item.getStudentData());
                     activeStudentsData.add(studentData);
                 }
@@ -124,16 +124,9 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                 StudentData dropout = studentsMap.get(item);
                 String leaveTerm = dropout.getStatusTerm();
                 if (leaveTerm != null && leaveTerm.compareTo(from) >= 0 && leaveTerm.compareTo(to) <= 0) {
-                    String affirmativeAction = dropout.getAffirmativePolicy();
-                    String maritalStatus = dropout.getMaritalStatus();
-                    String gender = dropout.getGender();
-                    String dropoutCause = dropout.getStatusStr();
-                    DropoutDataResponse summary = new DropoutDataResponse(affirmativeAction, dropout.getGpa(),
-                            dropout.getComplementaryCredits(), dropout.getMandatoryCredits(),
-                            dropout.getElectiveCredits(), dropout.getCurriculum(), maritalStatus,
-                            gender, dropout.getIea(), item.getRegistration(), dropout.getInstitutionalTerms(),
-                            dropout.getMc(), dropout.getAdmissionGrade(), dropout.getMobilityTerms(), dropoutCause,
-                            dropout.getAdmissionTerm(), dropout.getTermsCount(), dropout.getSuspendedTerms());
+                    String dropoutReason = dropout.getStatusStr();
+                    StudentDataResponse student = new StudentDataResponse(item.getRegistration(), dropout);
+                    DropoutDataResponse summary = new DropoutDataResponse(student, dropoutReason);
                     dropoutDataResponses.add(summary);
                 }
             } catch(Exception e) {
