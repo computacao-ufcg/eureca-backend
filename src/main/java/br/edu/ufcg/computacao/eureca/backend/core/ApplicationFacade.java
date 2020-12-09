@@ -19,6 +19,7 @@ import java.security.GeneralSecurityException;
 
 import java.security.interfaces.RSAPublicKey;
 import java.util.Collection;
+import java.util.TreeSet;
 
 public class ApplicationFacade {
     private static final Logger LOGGER = Logger.getLogger(ApplicationFacade.class);
@@ -47,9 +48,15 @@ public class ApplicationFacade {
         this.dataAccessFacade = dataAccessFacade;
     }
 
-    public Collection<ActiveSummaryResponse> getActiveStudentsSummary(String token, String from, String to) throws EurecaException {
+    public ActiveSummaryResponse getActiveStudentsSummary(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ACTIVES);
-        return this.dataAccessFacade.getActiveStudentsSummary(from, to);
+        Collection<String> sliderLabel = new TreeSet<>();
+        Collection<ActiveSummary> summary = this.dataAccessFacade.getActiveStudentsSummary(from, to);
+        summary.forEach(item -> {
+            sliderLabel.add(item.getAdmissionTerm());
+        });
+        ActiveSummaryResponse ret = new ActiveSummaryResponse(sliderLabel, summary);
+        return ret;
     }
 
     public Collection<StudentDataResponse> getActiveStudentsCSV(String token, String from, String to) throws EurecaException {

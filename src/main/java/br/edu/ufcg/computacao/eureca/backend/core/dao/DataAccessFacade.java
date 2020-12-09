@@ -7,7 +7,7 @@ import java.util.Collection;
 public interface DataAccessFacade {
     Collection<StudentDataResponse> getAllActiveStudents(String from, String to);
 
-    Collection<ActiveSummaryResponse> getActiveStudentsSummary(String from, String to);
+    Collection<ActiveSummary> getActiveStudentsSummary(String from, String to);
 
     Collection<AlumniDataResponse> getAllAlumni(String from, String to);
 

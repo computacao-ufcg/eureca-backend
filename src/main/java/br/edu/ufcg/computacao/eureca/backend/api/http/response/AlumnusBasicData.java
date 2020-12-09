@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class AlumnusBasicData {
+public class AlumnusBasicData implements Comparable {
     String registration;
     String name;
     int course;
@@ -63,5 +63,11 @@ public class AlumnusBasicData {
         this.level = level;
         this.admissionTerm = admissionTerm;
         this.graduationTerm = graduationTerm;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        AlumnusBasicData other = (AlumnusBasicData) o;
+        return this.getRegistration().compareTo(other.getRegistration());
     }
 }

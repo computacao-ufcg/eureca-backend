@@ -23,13 +23,13 @@ import java.util.Collection;
 @Api(description = ApiDocumentation.Statistics.API)
 public class StudentsStatistics {
 
-    protected static final String ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "studentsStatistics";
+    protected static final String ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "statistics/students";
 
     private static final Logger LOGGER = Logger.getLogger(StudentsStatistics.class);
 
     @RequestMapping(value = "actives", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.Statistics.GET_ATIVOS)
-    public ResponseEntity<Collection<ActiveSummaryResponse>> getActives(
+    public ResponseEntity<ActiveSummaryResponse> getActives(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)
@@ -39,7 +39,7 @@ public class StudentsStatistics {
             throws EurecaException {
 
         try {
-            Collection<ActiveSummaryResponse> ret = ApplicationFacade.getInstance().getActiveStudentsSummary(token, from, to);
+            ActiveSummaryResponse ret = ApplicationFacade.getInstance().getActiveStudentsSummary(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);

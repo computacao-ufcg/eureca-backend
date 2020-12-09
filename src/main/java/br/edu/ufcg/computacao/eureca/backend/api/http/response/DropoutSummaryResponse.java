@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class DropoutSummaryResponse {
+public class DropoutSummaryResponse implements Comparable {
     String term;
     DropoutClassification reasons;
 
@@ -23,5 +23,11 @@ public class DropoutSummaryResponse {
 
     public void setReasons(DropoutClassification reasons) {
         this.reasons = reasons;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        DropoutSummaryResponse other = (DropoutSummaryResponse) o;
+        return this.getTerm().compareTo(other.getTerm());
     }
 }

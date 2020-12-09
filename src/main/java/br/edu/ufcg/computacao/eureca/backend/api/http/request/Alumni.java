@@ -19,11 +19,11 @@ import java.util.Collection;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = Alumni.PUBLIC_KEY_ENDPOINT)
+@RequestMapping(value = Alumni.ENDPOINT)
 @Api(description = ApiDocumentation.Alumni.API)
 
 public class Alumni {
-    public static final String PUBLIC_KEY_ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "alumni";
+    public static final String ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "alumni";
 
     private final Logger LOGGER = Logger.getLogger(Alumni.class);
 

@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class AlumniDataResponse {
+public class AlumniDataResponse implements Comparable {
     double averageGpa;
     String graduationTerm;
     int alumniCount;
@@ -33,5 +33,11 @@ public class AlumniDataResponse {
 
     public void setAlumniCount(int alumniCount) {
         this.alumniCount = alumniCount;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        AlumniDataResponse other = (AlumniDataResponse) o;
+        return this.getGraduationTerm().compareTo(other.getGraduationTerm());
     }
 }

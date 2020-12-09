@@ -2,7 +2,7 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 
-public class StudentDataResponse {
+public class StudentDataResponse implements Comparable {
     String registration;
     String gender;
     String maritalStatus;
@@ -210,5 +210,11 @@ public class StudentDataResponse {
 
     public void setSuspendedTerms(int suspendedTerms) {
         this.suspendedTerms = suspendedTerms;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        StudentDataResponse other = (StudentDataResponse) o;
+        return this.getRegistration().compareTo(other.getRegistration());
     }
 }
