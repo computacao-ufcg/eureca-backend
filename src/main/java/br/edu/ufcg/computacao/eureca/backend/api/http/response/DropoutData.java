@@ -1,10 +1,10 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class DropoutDataResponse implements Comparable {
+public class DropoutData implements Comparable {
     StudentDataResponse student;
     String dropoutReason;
 
-    public DropoutDataResponse(StudentDataResponse student, String dropoutReason) {
+    public DropoutData(StudentDataResponse student, String dropoutReason) {
         this.student = student;
         this.dropoutReason = dropoutReason;
     }
@@ -27,7 +27,7 @@ public class DropoutDataResponse implements Comparable {
 
     @Override
     public int compareTo(Object o) {
-        DropoutDataResponse other = (DropoutDataResponse) o;
+        DropoutData other = (DropoutData) o;
         return this.getStudent().getRegistration().compareTo(other.getStudent().getRegistration());
     }
 }

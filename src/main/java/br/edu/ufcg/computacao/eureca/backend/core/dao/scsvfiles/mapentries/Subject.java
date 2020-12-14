@@ -7,16 +7,18 @@ public class Subject extends EurecaMapValue {
     int hours;
     String subjectName;
     String subjectType;
+    double finalGrade;
     String status;
 
     public Subject(long subjectCode, String term, int credits, int hours, String subjectName,
-                   String subjectType, String status) {
+                   String subjectType, double finalGrade, String status) {
         this.subjectCode = subjectCode;
         this.term = term;
         this.credits = credits;
         this.hours = hours;
         this.subjectName = subjectName;
         this.subjectType = subjectType;
+        this.finalGrade = finalGrade;
         this.status = status;
     }
 
@@ -71,6 +73,14 @@ public class Subject extends EurecaMapValue {
         this.subjectType = subjectType;
     }
 
+    public double getFinalGrade() {
+        return finalGrade;
+    }
+
+    public void setFinalGrade(double finalGrade) {
+        this.finalGrade = finalGrade;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -88,6 +98,7 @@ public class Subject extends EurecaMapValue {
                 ", hours=" + hours +
                 ", subjectName='" + subjectName + '\'' +
                 ", subjectType='" + subjectType + '\'' +
+                ", finalGrade='" + finalGrade + '\'' +
                 ", status='" + status + '\'' +
                 '}';
     }

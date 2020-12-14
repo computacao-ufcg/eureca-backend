@@ -1,6 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Registration;
 
 public class StudentDataResponse implements Comparable {
     String registration;
@@ -180,6 +181,11 @@ public class StudentDataResponse implements Comparable {
         this.electiveCredits = electiveCredits;
     }
 
+    public int getCompletedCredits() {
+        int complementary = (this.getComplementaryCredits() > 8 ? 8 : this.getComplementaryCredits());
+        return this.getMandatoryCredits() + this.getElectiveCredits() + complementary;
+    }
+
     public int getCompletedTerms() {
         return completedTerms;
     }
@@ -215,6 +221,6 @@ public class StudentDataResponse implements Comparable {
     @Override
     public int compareTo(Object o) {
         StudentDataResponse other = (StudentDataResponse) o;
-        return this.getRegistration().compareTo(other.getRegistration());
+        return (new Registration(this.getRegistration())).compareTo((new Registration(other.getRegistration())));
     }
 }

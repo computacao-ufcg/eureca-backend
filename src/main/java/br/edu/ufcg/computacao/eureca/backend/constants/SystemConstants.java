@@ -28,4 +28,6 @@ public class SystemConstants {
     public static final int MISSED_GRADUATION_INDEX = 9;
     public static final int TRANSFERRED_INDEX = 10;
     public static final int UNKNOWN = 11;
+    public static final String FIRST_POSSIBLE_TERM = "1950.0";
+    public static final String LAST_POSSIBLE_TERM = "2049.9";
 }

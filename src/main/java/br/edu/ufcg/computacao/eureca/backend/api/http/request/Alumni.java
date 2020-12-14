@@ -30,11 +30,15 @@ public class Alumni {
     @ApiOperation(value = ApiDocumentation.Alumni.GET)
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Collection<AlumnusBasicData>> getAlumni(
+            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+            @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
+            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
         try {
-            Collection<AlumnusBasicData> alumniBasicData = ApplicationFacade.getInstance().getAlumniBasicData(token);
+            Collection<AlumnusBasicData> alumniBasicData = ApplicationFacade.getInstance().getAlumniBasicData(token, from, to);
             return new ResponseEntity<>(alumniBasicData, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);

@@ -13,7 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-public class MapsHolder<T extends EurecaMapKey, V extends EurecaMapValue, U extends EurecaMultivaluedMapValue> {
+public class MapsHolder<T extends EurecaMapKey, V extends EurecaMapValue> {
     private Logger LOGGER = Logger.getLogger(MapsHolder.class);
 
     private Map<String, Map<T, V>> maps;
@@ -40,7 +40,7 @@ public class MapsHolder<T extends EurecaMapKey, V extends EurecaMapValue, U exte
                 T tClass = (T) factory.createClass(data[1]);
                 V vClass = (V) factory.createClass(data[2]);
                 int keySize = Integer.parseInt(data[3]);
-                GenericLoadMapFromScsvFile<T, V, U> loader = new GenericLoadMapFromScsvFile<>();
+                GenericLoadMapFromScsvFile<T, V> loader = new GenericLoadMapFromScsvFile<>();
                 Map<T, V> tvMap = loader.loadMap(tableName, tClass.getClass(), vClass.getClass(), keySize);
                 LOGGER.info(String.format(Messages.ADD_TABLE_S, tableName));
                 maps.put(tableName, tvMap);

@@ -22,6 +22,7 @@ public class ApiDocumentation {
         public static final String NUMBER = "5";
         public static final String PERCENTAGE = "44.3";
         public static final String SLIDER_LABEL = "[\"2013.2\", \"2014.1\", \"2014.2\"]";
+        public static final String RISK = "NORMAL";
     }
 
     public static class Alumni {

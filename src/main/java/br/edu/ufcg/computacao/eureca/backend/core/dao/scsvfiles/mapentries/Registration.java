@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
 
-public class Registration extends EurecaMapKey {
+public class Registration extends EurecaMapKey implements Comparable {
     String registration;
 
     public Registration(String registration) {
@@ -13,7 +13,7 @@ public class Registration extends EurecaMapKey {
         return registration;
     }
 
-    public void setRegistration(String registration) {
+    public void setValue(String registration) {
         this.registration = registration;
     }
 
@@ -40,5 +40,22 @@ public class Registration extends EurecaMapKey {
     @Override
     public String toString() {
         return this.registration;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Registration other = (Registration) o;
+        String parsedRegistration = getParsedRegistration(this.getRegistration());
+        String otherParsedRegistration = getParsedRegistration(other.getRegistration());
+        return parsedRegistration.compareTo(otherParsedRegistration);
+    }
+
+    private String getParsedRegistration(String registration) {
+        String year = registration.substring(1,3);
+        if (year.compareTo("50") >= 0) {
+            return registration.substring(0,1) + "19" + registration.substring(1,9);
+        } else {
+            return registration.substring(0,1) + "20" + registration.substring(1,9);
+        }
     }
 }
