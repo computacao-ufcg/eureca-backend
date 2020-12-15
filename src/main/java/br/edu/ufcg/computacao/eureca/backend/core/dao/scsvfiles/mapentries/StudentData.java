@@ -34,7 +34,7 @@ public class StudentData extends EurecaMapValue {
     double gpa;
     double mc;
     double iea;
-    int termsCount;
+    int completedTerms;
     int suspendedTerms;
     int institutionalTerms;
     int mobilityTerms;
@@ -49,7 +49,7 @@ public class StudentData extends EurecaMapValue {
                        String admissionStr, String affirmativePolicy, String secondarySchool,
                        String secondarySchoolGraduationYear, String curriculum, int mandatoryHours,
                        int mandatoryCredits, int electiveHours, int electiveCredits, int complementaryHours,
-                       int complementaryCredits, double gpa, double mc, double iea, int termsCount, int suspendedTerms,
+                       int complementaryCredits, double gpa, double mc, double iea, int completedTerms, int suspendedTerms,
                        int institutionalTerms, int mobilityTerms, int enrolledCredits, double admissionGrade) {
         this.name = name;
         this.birthDate = birthDate;
@@ -74,7 +74,7 @@ public class StudentData extends EurecaMapValue {
         this.gpa = gpa;
         this.mc = mc;
         this.iea = iea;
-        this.termsCount = termsCount;
+        this.completedTerms = completedTerms;
         this.suspendedTerms = suspendedTerms;
         this.institutionalTerms = institutionalTerms;
         this.mobilityTerms = mobilityTerms;
@@ -98,6 +98,11 @@ public class StudentData extends EurecaMapValue {
     public boolean isDropout() {
         if (this.status == null) parseStatusStr(this.statusStr);
         return this.status.equals(StudentStatus.DROPOUT);
+    }
+
+    public int getCompletedCredits() {
+        int complementary = (this.getComplementaryCredits() > 8 ? 8 : this.getComplementaryCredits());
+        return this.getMandatoryCredits() + this.getElectiveCredits() + complementary;
     }
 
     public String getName() {
@@ -309,12 +314,12 @@ public class StudentData extends EurecaMapValue {
         this.iea = iea;
     }
 
-    public int getTermsCount() {
-        return termsCount;
+    public int getCompletedTerms() {
+        return completedTerms;
     }
 
-    public void setTermsCount(int termsCount) {
-        this.termsCount = termsCount;
+    public void setCompletedTerms(int completedTerms) {
+        this.completedTerms = completedTerms;
     }
 
     public int getSuspendedTerms() {
@@ -454,7 +459,7 @@ public class StudentData extends EurecaMapValue {
                 ", gpa=" + gpa +
                 ", mc=" + mc +
                 ", iea=" + iea +
-                ", termsCount=" + termsCount +
+                ", termsCount=" + completedTerms +
                 ", suspendedTerms=" + suspendedTerms +
                 ", institutionalTerms=" + institutionalTerms +
                 ", mobilityTerms=" + mobilityTerms +

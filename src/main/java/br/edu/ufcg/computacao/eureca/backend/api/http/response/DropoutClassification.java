@@ -116,4 +116,10 @@ public class DropoutClassification {
     public void setMissedGraduation(int missedGraduation) {
         this.missedGraduation = missedGraduation;
     }
+
+    public int getTotalDropouts() {
+        return this.cancelled + this.cancelledByDecree + this.cancelledCourseChange + this.cancelledUponRequest +
+                this.failed3Times + this.failedAll + this.leftWithoutNotice + this.missedGraduation +
+                this.reenterOtherCourse + this.reenterSameCourse + this.transferred;
+    }
 }

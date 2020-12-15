@@ -2,53 +2,39 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Registration;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Metrics;
 
 public class StudentDataResponse implements Comparable {
-    String registration;
-    String gender;
-    String maritalStatus;
-    String curriculum;
-    String affirmativePolicy;
-    String admissionType;
-    String admissionTerm;
-    double entryGrade;
-    double gpa;
-    double iea;
-    double mc;
-    int mandatoryCredits;
-    int complementaryCredits;
-    int electiveCredits;
-    int completedTerms;
-    int institutionalEnrollments;
-    int mobilityTerms;
-    int suspendedTerms;
+    private String registration;
+    private String gender;
+    private String maritalStatus;
+    private String curriculum;
+    private String affirmativePolicy;
+    private String admissionType;
+    private String admissionTerm;
+    private String statusStr;
+    private String statusTerm;
+    private double entryGrade;
+    private double gpa;
+    private double iea;
+    private double mc;
+    private int mandatoryCredits;
+    private int complementaryCredits;
+    private int electiveCredits;
+    private int completedTerms;
+    private int attemptedCredits;
+    private int institutionalEnrollments;
+    private int mobilityTerms;
+    private int suspendedTerms;
+    private double feasibility;
+    private double successRate;
+    private double averageLoad;
+    private double cost;
+    private double pace;
+    private int courseDurationPrediction;
+    private double risk;
 
-    public StudentDataResponse(String registration, String gender, String maritalStatus, String curriculum,
-                               String affirmativePolicy, String admissionType, String admissionTerm,
-                               double entryGrade, double gpa, double iea, double mc, int mandatoryCredits,
-                               int complementaryCredits, int electiveCredits, int completedTerms,
-                               int institutionalEnrollments, int mobilityTerms, int suspendedTerms) {
-        this.registration = registration;
-        this.gender = gender;
-        this.maritalStatus = maritalStatus;
-        this.curriculum = curriculum;
-        this.affirmativePolicy = affirmativePolicy;
-        this.admissionType = admissionType;
-        this.admissionTerm = admissionTerm;
-        this.entryGrade = entryGrade;
-        this.gpa = gpa;
-        this.iea = iea;
-        this.mc = mc;
-        this.mandatoryCredits = mandatoryCredits;
-        this.complementaryCredits = complementaryCredits;
-        this.electiveCredits = electiveCredits;
-        this.completedTerms = completedTerms;
-        this.institutionalEnrollments = institutionalEnrollments;
-        this.mobilityTerms = mobilityTerms;
-        this.suspendedTerms = suspendedTerms;
-    }
-
-    public StudentDataResponse(String registration, StudentData studentData) {
+    public StudentDataResponse(String registration, StudentData studentData, Metrics metrics) {
         this.registration = registration;
         this.gender = studentData.getGender();
         this.maritalStatus = studentData.getMaritalStatus();
@@ -56,6 +42,8 @@ public class StudentDataResponse implements Comparable {
         this.affirmativePolicy = studentData.getAffirmativePolicy();
         this.admissionType = studentData.getAdmissionStr();
         this.admissionTerm = studentData.getAdmissionTerm();
+        this.statusStr = studentData.getStatusStr();
+        this.statusTerm = studentData.getStatusTerm();
         this.entryGrade = studentData.getAdmissionGrade();
         this.gpa = studentData.getGpa();
         this.iea = studentData.getIea();
@@ -63,10 +51,18 @@ public class StudentDataResponse implements Comparable {
         this.mandatoryCredits = studentData.getMandatoryCredits();
         this.complementaryCredits = studentData.getComplementaryCredits();
         this.electiveCredits = studentData.getElectiveCredits();
-        this.completedTerms = studentData.getTermsCount();
+        this.completedTerms = studentData.getCompletedTerms();
+        this.attemptedCredits = metrics.getAttemptedCredits();
         this.institutionalEnrollments = studentData.getInstitutionalTerms();
         this.mobilityTerms = studentData.getMobilityTerms();
         this.suspendedTerms = studentData.getSuspendedTerms();
+        this.feasibility = metrics.getFeasibility();
+        this.successRate = metrics.getSuccessRate();
+        this.averageLoad = metrics.getAverageLoad();
+        this.cost = metrics.getCost();
+        this.pace = metrics.getPace();
+        this.courseDurationPrediction = metrics.getCourseDurationPrediction();
+        this.risk = metrics.getRisk();
     }
 
     public String getRegistration() {
@@ -123,6 +119,22 @@ public class StudentDataResponse implements Comparable {
 
     public void setAdmissionTerm(String admissionTerm) {
         this.admissionTerm = admissionTerm;
+    }
+
+    public String getStatusStr() {
+        return statusStr;
+    }
+
+    public void setStatusStr(String statusStr) {
+        this.statusStr = statusStr;
+    }
+
+    public String getStatusTerm() {
+        return statusTerm;
+    }
+
+    public void setStatusTerm(String statusTerm) {
+        this.statusTerm = statusTerm;
     }
 
     public double getEntryGrade() {
@@ -194,6 +206,14 @@ public class StudentDataResponse implements Comparable {
         this.completedTerms = completedTerms;
     }
 
+    public int getAttemptedCredits() {
+        return attemptedCredits;
+    }
+
+    public void setAttemptedCredits(int attemptedCredits) {
+        this.attemptedCredits = attemptedCredits;
+    }
+
     public int getInstitutionalEnrollments() {
         return institutionalEnrollments;
     }
@@ -216,6 +236,62 @@ public class StudentDataResponse implements Comparable {
 
     public void setSuspendedTerms(int suspendedTerms) {
         this.suspendedTerms = suspendedTerms;
+    }
+
+    public double getFeasibility() {
+        return feasibility;
+    }
+
+    public void setFeasibility(double feasibility) {
+        this.feasibility = feasibility;
+    }
+
+    public double getSuccessRate() {
+        return successRate;
+    }
+
+    public void setSuccessRate(double successRate) {
+        this.successRate = successRate;
+    }
+
+    public double getAverageLoad() {
+        return averageLoad;
+    }
+
+    public void setAverageLoad(double averageLoad) {
+        this.averageLoad = averageLoad;
+    }
+
+    public double getCost() {
+        return cost;
+    }
+
+    public void setCost(double cost) {
+        this.cost = cost;
+    }
+
+    public double getPace() {
+        return pace;
+    }
+
+    public void setPace(double pace) {
+        this.pace = pace;
+    }
+
+    public int getCourseDurationPrediction() {
+        return courseDurationPrediction;
+    }
+
+    public void setCourseDurationPrediction(int courseDurationPrediction) {
+        this.courseDurationPrediction = courseDurationPrediction;
+    }
+
+    public double getRisk() {
+        return risk;
+    }
+
+    public void setRisk(double risk) {
+        this.risk = risk;
     }
 
     @Override

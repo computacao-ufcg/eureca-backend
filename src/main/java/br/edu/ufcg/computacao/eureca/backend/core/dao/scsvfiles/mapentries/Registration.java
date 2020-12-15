@@ -1,5 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
 
+import java.util.Objects;
+
 public class Registration extends EurecaMapKey implements Comparable {
     String registration;
 
@@ -18,23 +20,16 @@ public class Registration extends EurecaMapKey implements Comparable {
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((this.registration == null) ? 0 : this.registration.hashCode());
-        return result;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Registration that = (Registration) o;
+        return Objects.equals(getRegistration(), that.getRegistration());
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
-        Registration other = (Registration) obj;
-        if (this.registration == null) {
-            if (other.getRegistration() != null) return false;
-        } else if (!this.registration.equals(other.getRegistration())) return false;
-        return true;
+    public int hashCode() {
+        return Objects.hash(getRegistration());
     }
 
     @Override

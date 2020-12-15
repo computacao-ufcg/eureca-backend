@@ -1,6 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
 public class Metrics {
+    private int attemptedCredits;
     private double feasibility;
     private double successRate;
     private double averageLoad;
@@ -9,8 +10,9 @@ public class Metrics {
     private int courseDurationPrediction;
     private double risk;
 
-    public Metrics(double feasibility, double successRate, double averageLoad, double cost, double pace,
-                   int courseDurationPrediction, double risk) {
+    public Metrics(Integer attemptedCredits, double feasibility, double successRate, double averageLoad, double cost,
+                   double pace, int courseDurationPrediction, double risk) {
+        this.attemptedCredits = (attemptedCredits == null ? 0 : attemptedCredits);
         this.feasibility = feasibility;
         this.successRate = successRate;
         this.averageLoad = averageLoad;
@@ -18,6 +20,14 @@ public class Metrics {
         this.pace = pace;
         this.courseDurationPrediction = courseDurationPrediction;
         this.risk = risk;
+    }
+
+    public int getAttemptedCredits() {
+        return attemptedCredits;
+    }
+
+    public void setAttemptedCredits(int attemptedCredits) {
+        this.attemptedCredits = attemptedCredits;
     }
 
     public double getFeasibility() {

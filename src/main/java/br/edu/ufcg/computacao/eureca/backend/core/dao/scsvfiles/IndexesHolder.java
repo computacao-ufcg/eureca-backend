@@ -7,10 +7,11 @@ import org.apache.log4j.Logger;
 
 import java.util.*;
 
-public class StatisticsHolder {
-    private Logger LOGGER = Logger.getLogger(StatisticsHolder.class);
+public class IndexesHolder {
+    private Logger LOGGER = Logger.getLogger(IndexesHolder.class);
 
     private MapsHolder mapsHolder;
+    private Map<String, CpfRegistration> registrationMap;
     private List<CpfRegistration> actives;
     private Map<String, Collection<CpfRegistration>> activeByAdmissionTerm;
     private List<CpfRegistration> alumni;
@@ -22,13 +23,13 @@ public class StatisticsHolder {
     private Map<String, Collection<CpfRegistration>> dropoutByReasonAndAdmissionTerm;
     private Map<String, Collection<CpfRegistration>> dropoutByReasonAndLeaveTerm;
 
-    public StatisticsHolder(MapsHolder mapsHolder) {
+    public IndexesHolder(MapsHolder mapsHolder) {
         this.mapsHolder = mapsHolder;
         buildIndexes();
     }
 
-    public List getActives() {
-        return actives;
+    public Map<String, CpfRegistration> getRegistrationMap() {
+        return registrationMap;
     }
 
     public Map<String, Collection<CpfRegistration>> getActiveByAdmissionTerm() {
@@ -68,6 +69,7 @@ public class StatisticsHolder {
     }
 
     private void buildIndexes() {
+        this.registrationMap = new HashMap<>();
         this.actives = new ArrayList<>();
         this.activeByAdmissionTerm = new HashMap<>();
         this.alumni = new ArrayList<>();
@@ -80,6 +82,7 @@ public class StatisticsHolder {
         this.dropoutByReasonAndLeaveTerm = new HashMap<>();
         Map<CpfRegistration, StudentData> mapStudents = this.mapsHolder.getMap("students");
         mapStudents.forEach((k, v) -> {
+            this.registrationMap.put(k.getRegistration(), k);
             if (v.isActive()) {
                 LOGGER.info(String.format(Messages.INDEX_ACTIVE_S, v.getName()));
                 this.actives.add(k);
@@ -136,5 +139,23 @@ public class StatisticsHolder {
             allActives.add(new Student(k, mapStudents.get(k)));
         });
         return allActives;
+    }
+
+    public Collection<Student> getAllAlumni() {
+        Collection<Student> allAlumni = new ArrayList<>();
+        Map<CpfRegistration, StudentData> mapStudents = this.mapsHolder.getMap("students");
+        this.alumni.forEach(k -> {
+            allAlumni.add(new Student(k, mapStudents.get(k)));
+        });
+        return allAlumni;
+    }
+
+    public Collection<Student> getAllDropouts() {
+        Collection<Student> allDropouts = new ArrayList<>();
+        Map<CpfRegistration, StudentData> mapStudents = this.mapsHolder.getMap("students");
+        this.dropouts.forEach(k -> {
+            allDropouts.add(new Student(k, mapStudents.get(k)));
+        });
+        return allDropouts;
     }
 }

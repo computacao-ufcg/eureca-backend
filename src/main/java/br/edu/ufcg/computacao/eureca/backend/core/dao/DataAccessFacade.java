@@ -1,24 +1,27 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
+import br.edu.ufcg.computacao.eureca.backend.core.models.AttemptsSummary;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 
 import java.util.Collection;
-import java.util.Map;
 
 public interface DataAccessFacade {
-    Collection<StudentDataResponse> getActiveStudents(String from, String to);
+    Collection<Student> getActives(String from, String to);
 
-    Collection<ActiveData> getActiveStudentsSummary(String from, String to);
+    Collection<Student> getAlumni(String from, String to);
 
-    Collection<AlumniData> getAllAlumni(String from, String to);
+    Collection<Student> getDropouts(String from, String to);
 
-    AlumniDataResponse getAlumniSummary(String from, String to);
+    Collection<ActiveSummary> getActiveSummary(String from, String to);
 
-    Collection<DropoutData> getAllDropouts(String from, String to);
+    Collection<AlumniPerTermSummary> getAlumniPerTermSummary(String from, String to);
 
-    Collection<DropoutSummaryResponse> getDropoutsSummary(String from, String to);
+    Collection<DropoutPerTermSummary> getDropoutsSummary(String from, String to);
 
-    Collection<AlumnusBasicData> getAlumniBasicData(String from, String to);
+    Collection<AlumniPerStudentSummary> getAlumniPerStudentSummary(String from, String to);
 
-    Map<String, Integer> getEnrollments();
+    Collection<AttemptsSummary> getAttemptsSummary();
+
+    Student getStudent(String registration);
 }

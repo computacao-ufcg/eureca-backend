@@ -1,8 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
 
 public class Subject extends EurecaMapValue {
-    long subjectCode;
-    String term;
     int credits;
     int hours;
     String subjectName;
@@ -10,10 +8,8 @@ public class Subject extends EurecaMapValue {
     double finalGrade;
     String status;
 
-    public Subject(long subjectCode, String term, int credits, int hours, String subjectName,
+    public Subject(int credits, int hours, String subjectName,
                    String subjectType, double finalGrade, String status) {
-        this.subjectCode = subjectCode;
-        this.term = term;
         this.credits = credits;
         this.hours = hours;
         this.subjectName = subjectName;
@@ -23,22 +19,6 @@ public class Subject extends EurecaMapValue {
     }
 
     public Subject() {
-    }
-
-    public long getSubjectCode() {
-        return subjectCode;
-    }
-
-    public void setSubjectCode(long subjectCode) {
-        this.subjectCode = subjectCode;
-    }
-
-    public String getTerm() {
-        return term;
-    }
-
-    public void setTerm(String term) {
-        this.term = term;
     }
 
     public int getCredits() {
@@ -92,8 +72,6 @@ public class Subject extends EurecaMapValue {
     @Override
     public String toString() {
         return "Subject{" +
-                "subjectCode=" + subjectCode +
-                ", term='" + term + '\'' +
                 ", credits=" + credits +
                 ", hours=" + hours +
                 ", subjectName='" + subjectName + '\'' +

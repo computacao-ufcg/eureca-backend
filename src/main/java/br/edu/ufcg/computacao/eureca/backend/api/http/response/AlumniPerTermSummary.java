@@ -1,11 +1,11 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class AlumniData implements Comparable {
+public class AlumniPerTermSummary implements Comparable {
     double averageGpa;
     String graduationTerm;
     int alumniCount;
 
-    public AlumniData(double averageGpa, String graduationTerm, int alumniCount) {
+    public AlumniPerTermSummary(double averageGpa, String graduationTerm, int alumniCount) {
         this.averageGpa = averageGpa;
         this.graduationTerm = graduationTerm;
         this.alumniCount = alumniCount;
@@ -37,7 +37,7 @@ public class AlumniData implements Comparable {
 
     @Override
     public int compareTo(Object o) {
-        AlumniData other = (AlumniData) o;
+        AlumniPerTermSummary other = (AlumniPerTermSummary) o;
         return this.getGraduationTerm().compareTo(other.getGraduationTerm());
     }
 }

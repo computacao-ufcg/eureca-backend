@@ -1,33 +1,44 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class DropoutSummaryResponse implements Comparable {
-    String term;
-    DropoutClassification reasons;
+import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
+import io.swagger.annotations.ApiModelProperty;
 
-    public DropoutSummaryResponse(String term, DropoutClassification reasons) {
-        this.term = term;
-        this.reasons = reasons;
+import java.util.Collection;
+
+public class DropoutSummaryResponse {
+    @ApiModelProperty(position = 0, example = ApiDocumentation.Model.SLIDER_LABEL)
+    Collection<String> sliderLabel;
+    Collection<DropoutPerTermSummary> terms;
+    DropoutSummary summary;
+
+    public DropoutSummaryResponse(Collection<String> sliderLabel, Collection<DropoutPerTermSummary> terms,
+                                  DropoutSummary summary) {
+        this.sliderLabel = sliderLabel;
+        this.terms = terms;
+        this.summary = summary;
     }
 
-    public String getTerm() {
-        return term;
+    public Collection<String> getSliderLabel() {
+        return sliderLabel;
     }
 
-    public void setTerm(String term) {
-        this.term = term;
+    public void setSliderLabel(Collection<String> sliderLabel) {
+        this.sliderLabel = sliderLabel;
     }
 
-    public DropoutClassification getReasons() {
-        return reasons;
+    public Collection<DropoutPerTermSummary> getTerms() {
+        return terms;
     }
 
-    public void setReasons(DropoutClassification reasons) {
-        this.reasons = reasons;
+    public void setTerms(Collection<DropoutPerTermSummary> terms) {
+        this.terms = terms;
     }
 
-    @Override
-    public int compareTo(Object o) {
-        DropoutSummaryResponse other = (DropoutSummaryResponse) o;
-        return this.getTerm().compareTo(other.getTerm());
+    public DropoutSummary getSummary() {
+        return summary;
+    }
+
+    public void setSummary(DropoutSummary summary) {
+        this.summary = summary;
     }
 }

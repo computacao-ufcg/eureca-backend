@@ -4,12 +4,11 @@ import br.edu.ufcg.computacao.eureca.backend.constants.ConfigurationPropertyDefa
 import br.edu.ufcg.computacao.eureca.backend.constants.ConfigurationPropertyKeys;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.core.ApplicationFacade;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.MapsHolder;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.ScsvFilesDataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.holders.MetricsHolder;
+import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.PropertiesHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.StatisticsHolder;
 import br.edu.ufcg.computacao.eureca.common.util.HomeDir;
 import br.edu.ufcg.computacao.eureca.common.util.ServiceAsymmetricKeysHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.plugins.AuthorizationPlugin;
@@ -40,15 +39,15 @@ public class Main implements ApplicationRunner {
             // Setting up Data Access facade
             String mapsListFile = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.MAPS_FILE,
                     ConfigurationPropertyDefaults.DEFAULT_MAPS_FILE);
-            ScsvFilesDataAccessFacade dataAccessFacade = new ScsvFilesDataAccessFacade(mapsListFile);
+            DataAccessFacade dataAccessFacade = new ScsvFilesDataAccessFacade(mapsListFile);
             DataAccessFacadeHolder.getInstance().setDataAccessFacade(dataAccessFacade);
+
+            // Computing metrics
+            MetricsCalculator.create();
 
             // Setting up Application facade
             ApplicationFacade applicationFacade = ApplicationFacade.getInstance();
             applicationFacade.setAuthorizationPlugin(authorizationPlugin);
-
-            // Computing metrics
-            MetricsHolder.getInstance();
 
             LOGGER.info(Messages.ALL_SET);
         } catch (Exception e) {

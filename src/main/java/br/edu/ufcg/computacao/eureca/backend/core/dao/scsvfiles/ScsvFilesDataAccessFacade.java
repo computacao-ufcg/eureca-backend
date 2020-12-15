@@ -4,11 +4,9 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.constants.Curriculum;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Registration;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Subject;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
+import br.edu.ufcg.computacao.eureca.backend.core.models.AttemptsSummary;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.CpfRegistration;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,43 +15,37 @@ import java.util.TreeSet;
 
 public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     private MapsHolder mapsHolder;
-    private StatisticsHolder statisticsHolder;
+    private IndexesHolder indexesHolder;
 
     public ScsvFilesDataAccessFacade(String mapsListFile) {
         this.mapsHolder = new MapsHolder(mapsListFile);
-        this.statisticsHolder = new StatisticsHolder(this.mapsHolder);
+        this.indexesHolder = new IndexesHolder(this.mapsHolder);
     }
 
     @Override
-    public Collection<StudentDataResponse> getActiveStudents(String from, String to) {
-        Collection<StudentDataResponse> activeStudentsData = new TreeSet<>();
-        Collection<Student> actives = this.statisticsHolder.getAllActives();
-        actives.forEach(item -> {
-            try {
-                String admission = item.getStudentData().getAdmissionTerm();
-                if (admission != null && admission.compareTo(from) >= 0 && admission.compareTo(to) <= 0) {
-                    StudentDataResponse studentData = new StudentDataResponse(item.getId().getRegistration(),
-                            item.getStudentData());
-                    activeStudentsData.add(studentData);
-                }
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
-        });
-        return activeStudentsData;
-    }
-
-    @Override
-    public Collection<ActiveData> getActiveStudentsSummary(String from, String to) {
-        Collection<ActiveData> activeStudentsSummary = new TreeSet<>();
-        Collection<Student> actives = this.statisticsHolder.getAllActives();
+    public Collection<Student> getActives(String from, String to) {
+        Collection<Student> filteredActives = new TreeSet<>();
+        Collection<Student> actives = this.indexesHolder.getAllActives();
         actives.forEach(item -> {
             String admission = item.getStudentData().getAdmissionTerm();
             if (admission != null && admission.compareTo(from) >= 0 && admission.compareTo(to) <= 0) {
-                ActiveData studentSummary = new ActiveData(
+                filteredActives.add(item);
+            }
+        });
+        return filteredActives;
+    }
+
+    @Override
+    public Collection<ActiveSummary> getActiveSummary(String from, String to) {
+        Collection<ActiveSummary> activeStudentsSummary = new TreeSet<>();
+        Collection<Student> actives = this.indexesHolder.getAllActives();
+        actives.forEach(item -> {
+            String admission = item.getStudentData().getAdmissionTerm();
+            if (admission != null && admission.compareTo(from) >= 0 && admission.compareTo(to) <= 0) {
+                ActiveSummary studentSummary = new ActiveSummary(
                         item.getId().getRegistration(),
                         item.getStudentData().getAdmissionTerm(),
-                        item.getStudentData().getTermsCount(),
+                        item.getStudentData().getCompletedTerms(),
                         computePercentage(item));
                 activeStudentsSummary.add(studentSummary);
             }
@@ -61,10 +53,29 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return activeStudentsSummary;
     }
 
+    private double computePercentage(Student item) {
+        StudentData data = item.getStudentData();
+        double totalCreditsFulfilled = data.getMandatoryCredits() + data.getElectiveCredits() + data.getComplementaryCredits();
+        return totalCreditsFulfilled/ Curriculum.TOTAL_CREDITS_NEEDED;
+    }
+
     @Override
-    public Collection<AlumniData> getAllAlumni(String from, String to) {
-        Collection<AlumniData> terms = new TreeSet<>();
-        Map<String, Collection<CpfRegistration>> map = statisticsHolder.getAlumniByGraduationTerm();
+    public Collection<Student> getAlumni(String from, String to) {
+        Collection<Student> filteredAlumni = new TreeSet<>();
+        Collection<Student> alumni = this.indexesHolder.getAllAlumni();
+        alumni.forEach(item -> {
+            String graduationTerm = item.getStudentData().getStatusTerm();
+            if (graduationTerm != null && graduationTerm.compareTo(from) >= 0 && graduationTerm.compareTo(to) <= 0) {
+                filteredAlumni.add(item);
+            }
+        });
+        return filteredAlumni;
+    }
+
+    @Override
+    public Collection<AlumniPerTermSummary> getAlumniPerTermSummary(String from, String to) {
+        Collection<AlumniPerTermSummary> terms = new TreeSet<>();
+        Map<String, Collection<CpfRegistration>> map = indexesHolder.getAlumniByGraduationTerm();
         Map<CpfRegistration, StudentData> studentsMap = mapsHolder.getMap("students");
         for (Map.Entry<String, Collection<CpfRegistration>> entry : map.entrySet()) {
             String term = entry.getKey();
@@ -76,7 +87,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                     StudentData alumnus = studentsMap.get(id);
                     termAccumulatedGPA += alumnus.getGpa();
                 }
-                AlumniData termData = new AlumniData(termAccumulatedGPA/termAlumniCount, term,
+                AlumniPerTermSummary termData = new AlumniPerTermSummary(termAccumulatedGPA/termAlumniCount, term,
                         termAlumniCount);
                 terms.add(termData);
             }
@@ -85,66 +96,22 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public AlumniDataResponse getAlumniSummary(String from, String to) {
-        Collection<String> sliderLabel = new TreeSet<>();
-        double accumulatedGPA = 0;
-        int maxAlumniCount = 0;
-        String maxAlumniCountTerm = "";
-        int minAlumniCount = Integer.MAX_VALUE;
-        String minAlumniCountTerm = "";
-        int totalAlumniCount = 0;
-
-        Collection<AlumniData> terms = this.getAllAlumni(from, to);
-        for (AlumniData item : terms) {
-            sliderLabel.add(item.getGraduationTerm());
-            double averageGPA = item.getAverageGpa();
-            int termAlumniCount = item.getAlumniCount();
-            String term = item.getGraduationTerm();
-            totalAlumniCount += termAlumniCount;
-            if (termAlumniCount >= maxAlumniCount) {
-                maxAlumniCount = termAlumniCount;
-                maxAlumniCountTerm = term;
-            }
-            if (termAlumniCount <= minAlumniCount) {
-                minAlumniCount = termAlumniCount;
-                minAlumniCountTerm = term;
-            }
-            accumulatedGPA += averageGPA * termAlumniCount;
-        }
-
-        AlumniDataResponse alumniSummaryResponse = new AlumniDataResponse(sliderLabel,
-                (totalAlumniCount == 0 ? -1.0 : accumulatedGPA/totalAlumniCount), maxAlumniCount,
-                (terms.size() == 0 ? -1.0 : (1.0*totalAlumniCount)/terms.size()), minAlumniCount, maxAlumniCountTerm,
-                minAlumniCountTerm, terms, totalAlumniCount);
-        return alumniSummaryResponse;
-    }
-
-    @Override
-    public Collection<DropoutData> getAllDropouts(String from, String to) {
-        Collection<DropoutData> dropoutDataResponses = new TreeSet<>();
-        Collection<CpfRegistration> dropouts = this.statisticsHolder.getDropouts();
-        Map<CpfRegistration, StudentData> studentsMap = this.mapsHolder.getMap("students");
+    public Collection<Student> getDropouts(String from, String to) {
+        Collection<Student> filteredDropouts = new TreeSet<>();
+        Collection<Student> dropouts = this.indexesHolder.getAllDropouts();
         dropouts.forEach(item -> {
-            try {
-                StudentData dropout = studentsMap.get(item);
-                String leaveTerm = dropout.getStatusTerm();
-                if (leaveTerm != null && leaveTerm.compareTo(from) >= 0 && leaveTerm.compareTo(to) <= 0) {
-                    String dropoutReason = dropout.getStatusStr();
-                    StudentDataResponse student = new StudentDataResponse(item.getRegistration(), dropout);
-                    DropoutData summary = new DropoutData(student, dropoutReason);
-                    dropoutDataResponses.add(summary);
-                }
-            } catch(Exception e) {
-                e.printStackTrace();
+            String dropoutTerm = item.getStudentData().getStatusTerm();
+            if (dropoutTerm != null && dropoutTerm.compareTo(from) >= 0 && dropoutTerm.compareTo(to) <= 0) {
+                filteredDropouts.add(item);
             }
         });
-        return dropoutDataResponses;
+        return filteredDropouts;
     }
 
     @Override
-    public Collection<DropoutSummaryResponse> getDropoutsSummary(String from, String to) {
-        Collection<DropoutSummaryResponse> dropoutSummaryResponses = new TreeSet<>();
-        Map<String, Collection<CpfRegistration>> dropouts = this.statisticsHolder.getDropoutByLeaveTerm();
+    public Collection<DropoutPerTermSummary> getDropoutsSummary(String from, String to) {
+        Collection<DropoutPerTermSummary> dropoutSummaryResponses = new TreeSet<>();
+        Map<String, Collection<CpfRegistration>> dropouts = this.indexesHolder.getDropoutByLeaveTerm();
         Map<CpfRegistration, StudentData> studentsMap = this.mapsHolder.getMap("students");
         dropouts.forEach((k, v) -> {
             if (k.compareTo(from) >= 0 && k.compareTo(to) <= 0) {
@@ -154,24 +121,24 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                     dropoutsCount[dropout.getDetailedStatusId()]++;
                 });
                 DropoutClassification dropoutClassification = new DropoutClassification(dropoutsCount);
-                dropoutSummaryResponses.add(new DropoutSummaryResponse(k, dropoutClassification));
+                dropoutSummaryResponses.add(new DropoutPerTermSummary(k, dropoutClassification));
             }
         });
         return dropoutSummaryResponses;
     }
 
     @Override
-    public Collection<AlumnusBasicData> getAlumniBasicData(String from, String to) {
+    public Collection<AlumniPerStudentSummary> getAlumniPerStudentSummary(String from, String to) {
         String parsedFrom = "1" + from.substring(2,4) + from.substring(5,6) + "00000";
         String parsedTo = "1" + to.substring(2,4) + to.substring(5,6) + "99999";
-        Collection<AlumnusBasicData> alumniBasicData = new TreeSet<>();
-        Collection<CpfRegistration> alumni = this.statisticsHolder.getAlumni();
+        Collection<AlumniPerStudentSummary> alumniBasicData = new TreeSet<>();
+        Collection<CpfRegistration> alumni = this.indexesHolder.getAlumni();
         Map<CpfRegistration, StudentData> studentsMap = this.mapsHolder.getMap("students");
         for (CpfRegistration item : alumni) {
             if (new Registration(item.getRegistration()).compareTo(new Registration(parsedFrom)) >= 0 &&
                     new Registration(item.getRegistration()).compareTo(new Registration(parsedTo)) <= 0) {
                 StudentData alumnus = studentsMap.get(item);
-                AlumnusBasicData basicData = new AlumnusBasicData(item.getRegistration(), alumnus.getName(),
+                AlumniPerStudentSummary basicData = new AlumniPerStudentSummary(item.getRegistration(), alumnus.getName(),
                         2, 1, alumnus.getAdmissionTerm(), alumnus.getStatusTerm());
                 alumniBasicData.add(basicData);
             }
@@ -180,24 +147,34 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Map<String, Integer> getEnrollments() {
-        Map<String, Integer> enrollmentsSummary = new HashMap<>();
-        Map<Registration, Subject> enrollments = this.mapsHolder.getMap("enrollments");
+    public Collection<AttemptsSummary> getAttemptsSummary() {
+        Collection<AttemptsSummary> summary = new TreeSet<>();
+        Map<Registration, Integer> attemptsSummary = new HashMap<>();
+        Map<RegistrationCodeTerm, Subject> enrollments = this.mapsHolder.getMap("enrollments");
         enrollments.forEach((k, v) -> {
-            Integer currentCount = enrollmentsSummary.get(k.getRegistration());
-            if (currentCount == null) {
-                currentCount = new Integer(v.getCredits());
-            } else {
-                currentCount += v.getCredits();
+            if (!v.getStatus().equals(SystemConstants.EM_CURSO)) {
+                Integer currentCount = attemptsSummary.get(new Registration(k.getRegistration()));
+                if (currentCount == null) {
+                    currentCount = v.getCredits();
+                } else {
+                    currentCount += v.getCredits();
+                }
+                attemptsSummary.put(new Registration(k.getRegistration()), currentCount);
             }
-            enrollmentsSummary.put(k.getRegistration(), currentCount);
         });
-        return enrollmentsSummary;
+        attemptsSummary.forEach((k, v) -> {
+            AttemptsSummary item = new AttemptsSummary(k, v);
+            summary.add(item);
+        });
+        return summary;
     }
 
-    private double computePercentage(Student item) {
-        StudentData data = item.getStudentData();
-        double totalCreditsFulfilled = data.getMandatoryCredits() + data.getElectiveCredits() + data.getComplementaryCredits();
-        return totalCreditsFulfilled/ Curriculum.TOTAL_CREDITS_NEEDED;
+    @Override
+    public Student getStudent(String registration) {
+        Map<String, CpfRegistration> registrationMap = this.indexesHolder.getRegistrationMap();
+        Map<CpfRegistration, StudentData> studentsMap = this.mapsHolder.getMap("students");
+        CpfRegistration key = registrationMap.get(registration);
+        StudentData studentData = studentsMap.get(key);
+        return new Student(key, studentData);
     }
 }

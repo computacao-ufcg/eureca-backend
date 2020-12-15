@@ -1,8 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-import java.util.Collection;
-
-public class AlumniDataResponse {
+public class AlumniSummary {
     double averageGpa;
     int maxDegreeCount;
     double averageDegreeCount;
@@ -10,14 +8,9 @@ public class AlumniDataResponse {
     String maxDegreeCountTerm;
     String minDegreeCountTerm;
     int totalDegreeCount;
-    Collection<String> sliderLabel;
-    Collection<AlumniData> terms;
 
-    public AlumniDataResponse(Collection<String> sliderLabel, double averageGpa, int maxDegreeCount,
-                              double averageDegreeCount, int minDegreeCount,
-                              String maxDegreeCountTerm, String minDegreeCountTerm,
-                              Collection<AlumniData> terms, int totalDegreeCount) {
-        this.sliderLabel = sliderLabel;
+    public AlumniSummary(double averageGpa, int maxDegreeCount, double averageDegreeCount, int minDegreeCount,
+                         String maxDegreeCountTerm, String minDegreeCountTerm, int totalDegreeCount) {
         this.averageGpa = averageGpa;
         this.maxDegreeCount = maxDegreeCount;
         this.averageDegreeCount = averageDegreeCount;
@@ -25,15 +18,6 @@ public class AlumniDataResponse {
         this.maxDegreeCountTerm = maxDegreeCountTerm;
         this.minDegreeCountTerm = minDegreeCountTerm;
         this.totalDegreeCount = totalDegreeCount;
-        this.terms = terms;
-    }
-
-    public Collection<String> getSliderLabel() {
-        return sliderLabel;
-    }
-
-    public void setSliderLabel(Collection<String> sliderLabel) {
-        this.sliderLabel = sliderLabel;
     }
 
     public double getAverageGpa() {
@@ -82,14 +66,6 @@ public class AlumniDataResponse {
 
     public void setMinDegreeCountTerm(String minDegreeCountTerm) {
         this.minDegreeCountTerm = minDegreeCountTerm;
-    }
-
-    public Collection<AlumniData> getTerms() {
-        return terms;
-    }
-
-    public void setTerms(Collection<AlumniData> terms) {
-        this.terms = terms;
     }
 
     public int getTotalDegreeCount() {
