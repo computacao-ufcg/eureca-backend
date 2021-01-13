@@ -5,7 +5,9 @@ import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 
+@PrepareForTest(DataAccessFacadeHolder.class)
 public class DataAccessFacadeHolderTest {
 
     private DataAccessFacadeHolder instance;
