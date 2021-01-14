@@ -7,7 +7,9 @@ public class MetricsSummaryTest {
     private MetricsSummary metricsSummary;
 
     public void setUp() {
-
+        int activeStudentsCount = 100;
+        double averageCost = 26.1;
+        double averageCourseDurationPrediction = 0.4;
     }
 
 }
