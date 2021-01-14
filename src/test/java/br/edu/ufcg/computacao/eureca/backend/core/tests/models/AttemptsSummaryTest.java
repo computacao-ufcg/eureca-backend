@@ -25,7 +25,7 @@ public class AttemptsSummaryTest {
         Assert.assertEquals(attemptsSummary.getRegistration().getRegistration(), "117219999");
     }
 
-    // test case: changes the registration fee of an instance.
+    // test case: changes the registration fee of the instance.
     @Test
     public void setRegistrationTest() {
         Registration newRegistration = new Registration("11728999");
@@ -39,7 +39,7 @@ public class AttemptsSummaryTest {
         Assert.assertEquals(attemptsSummary.getAttemptedCredits(), 24);
     }
 
-    // test case: changes the attempted credits value of an instance.
+    // test case: changes the attempted credits value of the instance.
     @Test
     public void setAttemptedCreditsTest() {
         int newAttemptedCredits = 20;
