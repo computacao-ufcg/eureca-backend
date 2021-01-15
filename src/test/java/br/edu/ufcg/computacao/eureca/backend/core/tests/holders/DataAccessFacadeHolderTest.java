@@ -10,21 +10,19 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 @PrepareForTest(DataAccessFacadeHolder.class)
 public class DataAccessFacadeHolderTest {
 
+    // instance of the DataAccessFacadeHolder object.
     private DataAccessFacadeHolder instance;
 
+    // set up: creation of a base object of the DataAccessFacadeHolder type that will be used in the tests.
     @Before
     public void setUp() throws EurecaException {
         instance = DataAccessFacadeHolder.getInstance();
     }
 
+    // test case 1: check if the DataAccessFacadeHolder instance was actually created.
     @Test
     public void getInstanceTest() {
         Assert.assertNotEquals(instance, null);
-    }
-
-    @Test
-    public void getDataAccessFacadeBeforeExecutionTest() {
-        Assert.assertEquals(instance.getDataAccessFacade(), null);
     }
 
 }
