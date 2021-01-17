@@ -84,7 +84,7 @@ public class IndexesHolder {
         mapStudents.forEach((k, v) -> {
             this.registrationMap.put(k.getRegistration(), k);
             if (v.isActive()) {
-                LOGGER.info(String.format(Messages.INDEX_ACTIVE_S, v.getName()));
+                LOGGER.debug(String.format(Messages.INDEX_ACTIVE_S, v.getName()));
                 this.actives.add(k);
                 String admissionTerm = v.getAdmissionTerm();
                 Collection<CpfRegistration> list = this.activeByAdmissionTerm.get(admissionTerm);
@@ -93,7 +93,7 @@ public class IndexesHolder {
                 this.activeByAdmissionTerm.put(admissionTerm, list);
             }
             if (v.isAlumnus()) { // graduated
-                LOGGER.info(String.format(Messages.INDEX_ALUMNUS_S, v.getName()));
+                LOGGER.debug(String.format(Messages.INDEX_ALUMNUS_S, v.getName()));
                 this.alumni.add(k);
                 String admissionTerm = v.getAdmissionTerm();
                 String graduationTerm = v.getStatusTerm();
@@ -107,7 +107,7 @@ public class IndexesHolder {
                 this.alumniByGraduationTerm.put(graduationTerm, listGraduationTerm);
             }
             if (v.isDropout()) { // dropout
-                LOGGER.info(String.format(Messages.INDEX_DROPOUT_S, v.getName()));
+                LOGGER.debug(String.format(Messages.INDEX_DROPOUT_S, v.getName()));
                 this.dropouts.add(k);
                 String admissionTerm = v.getAdmissionTerm();
                 String leaveTerm = v.getStatusTerm();
