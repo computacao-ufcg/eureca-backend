@@ -14,6 +14,7 @@ mvnw.cmd
 
 ### Configuration files ###
 src/main/resources/private
+src/test/resources/private
 
 ### Log files ###
 *.log.*

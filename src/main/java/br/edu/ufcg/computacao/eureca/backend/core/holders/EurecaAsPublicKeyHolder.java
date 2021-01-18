@@ -1,3 +1,4 @@
+
 package br.edu.ufcg.computacao.eureca.backend.core.holders;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.ConfigurationPropertyKeys;
