@@ -32,6 +32,22 @@ public class MetricsTest {
         assertEquals(expected, attemptedCredits);
     }
 
+    // test case: Call the getAttemptedCredits method with null attempted credits and tests a successfully return.
+    @Test
+    public void getNullAttemptedCreditsTest() {
+        // set up
+        Metrics metrics = new Metrics(null,1,1,1,
+                1,1,1,1);
+        int expected = 0;
+
+        // exercise
+        int attemptedCredits = metrics.getAttemptedCredits();
+
+        // verify
+        assertEquals(expected, attemptedCredits);
+
+    }
+
     // test case: Call the setAttemptedCredits method and tests a successfully return.
     @Test
     public void setAttemptedCreditsTest() {
