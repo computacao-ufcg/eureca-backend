@@ -15,24 +15,19 @@ import java.security.interfaces.RSAPublicKey;
 @AutoConfigureMockMvc
 public class EurecaAsPublicKeyHolderTest {
 
+    // instance of the RSAPublicKey object.
     @Autowired
     private RSAPublicKey asPublicKey;
 
+    // instance of the EurecaAsPublicKeyHolder object.
     @Autowired
     private EurecaAsPublicKeyHolder instance;
 
+    // set up: creation of the objects that will be used in the tests.
     @Before
     public void setUp() throws EurecaException {
         instance = EurecaAsPublicKeyHolder.getInstance();
         asPublicKey = instance.getAsPublicKey();
     }
-
-    @Test
-    public void getInstanceTest() {
-        Assert.assertNotEquals(instance, null);
-    }
-
-    @Test
-    public void getAsPublicKeyTest() throws EurecaException { }
 
 }

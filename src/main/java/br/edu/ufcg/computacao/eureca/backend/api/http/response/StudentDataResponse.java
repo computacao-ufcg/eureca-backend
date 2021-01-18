@@ -6,6 +6,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.models.Metrics;
 
 public class StudentDataResponse implements Comparable {
     private String registration;
+    private String name;
     private String gender;
     private String maritalStatus;
     private String curriculum;
@@ -36,6 +37,7 @@ public class StudentDataResponse implements Comparable {
 
     public StudentDataResponse(String registration, StudentData studentData, Metrics metrics) {
         this.registration = registration;
+        this.name = studentData.getName();
         this.gender = studentData.getGender();
         this.maritalStatus = studentData.getMaritalStatus();
         this.curriculum = studentData.getCurriculum();
@@ -71,6 +73,14 @@ public class StudentDataResponse implements Comparable {
 
     public void setRegistration(String registration) {
         this.registration = registration;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getGender() {

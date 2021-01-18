@@ -5,15 +5,8 @@ import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Stude
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.modules.junit4.PowerMockRunnerDelegate;
-import org.springframework.test.context.junit4.SpringRunner;
-
 import static org.junit.Assert.assertEquals;
 
-@RunWith(PowerMockRunner.class)
-@PowerMockRunnerDelegate(SpringRunner.class)
 public class StudentTest {
 
     private Student student;
@@ -58,12 +51,6 @@ public class StudentTest {
 
         // verify
         assertEquals(expected, studentData);
-    }
-
-    // test case: Call the getRiskClass method and tests a successfully return.
-    @Test
-    public void getRiskClass() {
-
     }
 
 }

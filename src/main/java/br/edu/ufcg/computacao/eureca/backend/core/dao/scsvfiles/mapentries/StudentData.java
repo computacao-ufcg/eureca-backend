@@ -6,7 +6,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.MapsHolder;
 import org.apache.log4j.Logger;
 
 public class StudentData extends EurecaMapValue {
-    private Logger LOGGER = Logger.getLogger(MapsHolder.class);
+    private Logger LOGGER = Logger.getLogger(StudentData.class);
 
     String name;
     String birthDate;
@@ -398,7 +398,7 @@ public class StudentData extends EurecaMapValue {
     }
 
     private void parseStatusStr(String statusStr) {
-        LOGGER.info(String.format(Messages.PARSE_STATUS_STR, statusStr));
+        LOGGER.debug(String.format(Messages.PARSE_STATUS_STR, statusStr));
         String activeStatus = StudentStatus.ACTIVE.getValue();
         if (statusStr.equals(activeStatus)) {
             this.status = StudentStatus.ACTIVE;

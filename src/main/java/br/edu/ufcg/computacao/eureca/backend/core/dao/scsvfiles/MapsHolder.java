@@ -42,7 +42,7 @@ public class MapsHolder<T extends EurecaMapKey, V extends EurecaMapValue> {
                 int keySize = Integer.parseInt(data[3]);
                 GenericLoadMapFromScsvFile<T, V> loader = new GenericLoadMapFromScsvFile<>();
                 Map<T, V> tvMap = loader.loadMap(tableName, tClass.getClass(), vClass.getClass(), keySize);
-                LOGGER.info(String.format(Messages.ADD_TABLE_S, tableName));
+                LOGGER.debug(String.format(Messages.ADD_TABLE_S, tableName));
                 maps.put(tableName, tvMap);
             } catch(Exception e) {
                 e.printStackTrace();

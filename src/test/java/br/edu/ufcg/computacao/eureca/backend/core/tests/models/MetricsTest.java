@@ -3,20 +3,16 @@ package br.edu.ufcg.computacao.eureca.backend.core.tests.models;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Metrics;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-
 import static org.junit.Assert.assertEquals;
 
-@PrepareForTest(Metrics.class)
 public class MetricsTest {
 
     private Metrics metrics;
 
     @Before
     public void setUp() {
-        this.metrics = Mockito.spy(new Metrics(1,1,1,1,
-                1,1,1,1));
+        this.metrics = new Metrics(1,1,1,1,
+                1,1,1,1);
     }
 
     // test case: Call the getAttemptedCredits method and tests a successfully return.
