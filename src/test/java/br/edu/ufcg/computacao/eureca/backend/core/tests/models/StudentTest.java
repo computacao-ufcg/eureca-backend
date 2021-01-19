@@ -27,6 +27,32 @@ public class StudentTest {
 
     }
 
+    @Test
+    public void getNationalIdTest() {
+        String expectedNationalId = "nationalId";
+        assertEquals(fakeCpfRegistration.getNationalId(), expectedNationalId);
+    }
+
+    @Test
+    public void setNationalIdTest() {
+        String expectedNationalId = "newNationalId";
+        fakeCpfRegistration.setNationalId("newNationalId");
+        assertEquals(fakeCpfRegistration.getNationalId(), expectedNationalId);
+    }
+
+    @Test
+    public void getRegistrationTest() {
+        String expectedRegistration = "registration";
+        assertEquals(fakeCpfRegistration.getRegistration(), expectedRegistration);
+    }
+
+    @Test
+    public void setRegistrationTest() {
+        String expectedRegistration = "newRegistration";
+        fakeCpfRegistration.setRegistration("newRegistration");
+        assertEquals(fakeCpfRegistration.getRegistration(), expectedRegistration);
+    }
+
     // test case: Call the getId method and tests a successfully return.
     @Test
     public void getIdTest() {
