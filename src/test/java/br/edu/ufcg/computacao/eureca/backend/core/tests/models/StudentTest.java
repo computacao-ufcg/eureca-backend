@@ -2,10 +2,16 @@ package br.edu.ufcg.computacao.eureca.backend.core.tests.models;
 
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.CpfRegistration;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
+import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
+import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+
+import static br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass.UNFEASIBLE;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 public class StudentTest {
 
@@ -51,6 +57,22 @@ public class StudentTest {
 
         // verify
         assertEquals(expected, studentData);
+    }
+
+    // test case: Call the getRiskClass method and tests a successfully return.
+    @Test
+    public void getRiskClassTest() {
+        // set up
+        Student student = mock(Student.class);
+
+        when(student.getRiskClass()).thenReturn(UNFEASIBLE);
+
+        // exercise
+        RiskClass riskClass = student.getRiskClass();
+
+        // verify
+        assertEquals(UNFEASIBLE, riskClass);
+        verify(student, times(1)).getRiskClass();
     }
 
 }
