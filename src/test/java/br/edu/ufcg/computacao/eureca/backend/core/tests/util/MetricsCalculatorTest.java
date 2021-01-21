@@ -35,8 +35,29 @@ public class MetricsCalculatorTest {
     @Mock
     private Map<Registration, Integer> attemptsMap;
 
+    // Auxiliary object for testing.
+    private Student student;
+
     @Before
     public void setUp() {
+        // Student object creation.
+        String registrationNumber = "12346533354";
+        CpfRegistration cpfRegistrationFake = new CpfRegistration("+55", registrationNumber);
+        StudentData studentDataFake = new StudentData("x", "x", "x", "x", "x",
+                "x", "x", "x", "Inativo (GRADUADO 2011.2)",
+                "VESTIBULAR 2007.2", "x", "x", "x",
+                "x", 0,0,0,
+                0,0,0,0,
+                0,0,0,0,0,
+                0,0,0);
+
+        Student student = new Student(cpfRegistrationFake, studentDataFake);
+
+        // adding registration and attemptedCredits in the attemptsMap.
+        Registration registrationFake = new Registration("12346533354");
+        attemptsMap.put(registrationFake, 24);
+
+        // attemptsMap structure creation and populate.
         attemptsMap = new HashMap<>();
         Registration reg1 = new Registration("123456789");
         Registration reg2 = new Registration("323131331");
@@ -61,22 +82,12 @@ public class MetricsCalculatorTest {
 
     @Test
     public void computeMetricsWithAllDataCorrectTest() {
-        String registrationNumber = "12346533354";
-        CpfRegistration cpfRegistrationFake = new CpfRegistration("+55", registrationNumber);
-        StudentData studentDataFake = new StudentData("x", "x", "x", "x", "x",
-                "x", "x", "x", "Inativo (GRADUADO 2011.2)",
-                "VESTIBULAR 2007.2", "x", "x", "x",
-                "x", 0,0,0,
-                0,0,0,0,
-                0,0,0,0,0,
-                0,0,0);
-
-        Student student = new Student(cpfRegistrationFake, studentDataFake);
-
-        Registration registrationFake = new Registration(registrationNumber);
-        attemptsMap.put(registrationFake, 24);
-
         Assert.assertEquals(MetricsCalculator.getInstance().computeMetrics(student) instanceof Metrics, false);
+    }
+
+    @Test
+    public void computeFeasibilityTest() {
+        System.out.println(MetricsCalculator.getInstance().computeMetrics(student));
     }
 
 }
