@@ -1,12 +1,19 @@
 package br.edu.ufcg.computacao.eureca.backend.core.tests.util;
 
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.CpfRegistration;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Registration;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
+import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.AttemptsSummary;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Metrics;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -19,7 +26,7 @@ import java.util.*;
 import static org.mockito.Mockito.mock;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(DataAccessFacade.class)
+@PrepareForTest(MetricsCalculator.class)
 public class MetricsCalculatorTest {
 
     @InjectMocks
@@ -49,7 +56,27 @@ public class MetricsCalculatorTest {
         DataAccessFacade dataAccessFacade = mock(DataAccessFacade.class);
         Mockito.when(dataAccessFacade.getAttemptsSummary()).thenReturn((Collection<AttemptsSummary>) attemptsMap);
         PowerMockito.mockStatic(DataAccessFacade.class);
-//        BDDMockito.given(DataAccessFacade.getInstance()).willReturn(dataAccessFacadeHolder);
+        BDDMockito.given(MetricsCalculator.getInstance()).willReturn((MetricsCalculator) dataAccessFacade);
+    }
+
+    @Test
+    public void computeMetricsWithAllDataCorrectTest() {
+        String registrationNumber = "12346533354";
+        CpfRegistration cpfRegistrationFake = new CpfRegistration("+55", registrationNumber);
+        StudentData studentDataFake = new StudentData("x", "x", "x", "x", "x",
+                "x", "x", "x", "Inativo (GRADUADO 2011.2)",
+                "VESTIBULAR 2007.2", "x", "x", "x",
+                "x", 0,0,0,
+                0,0,0,0,
+                0,0,0,0,0,
+                0,0,0);
+
+        Student student = new Student(cpfRegistrationFake, studentDataFake);
+
+        Registration registrationFake = new Registration(registrationNumber);
+        attemptsMap.put(registrationFake, 24);
+
+        Assert.assertEquals(MetricsCalculator.getInstance().computeMetrics(student) instanceof Metrics, false);
     }
 
 }
