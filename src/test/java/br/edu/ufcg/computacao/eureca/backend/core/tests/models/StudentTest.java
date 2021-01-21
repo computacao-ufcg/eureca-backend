@@ -1,6 +1,5 @@
 package br.edu.ufcg.computacao.eureca.backend.core.tests.models;
 
-import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.CpfRegistration;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Metrics;
@@ -11,15 +10,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-
 import static br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass.LATE;
-import static br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass.UNFEASIBLE;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
