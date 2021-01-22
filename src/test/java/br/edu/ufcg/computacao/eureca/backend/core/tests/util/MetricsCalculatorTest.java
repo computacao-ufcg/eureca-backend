@@ -1,6 +1,5 @@
 package br.edu.ufcg.computacao.eureca.backend.core.tests.util;
 
-import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.CpfRegistration;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Registration;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
@@ -21,6 +20,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import javax.validation.constraints.Null;
 import java.util.*;
 
 import static org.mockito.Mockito.mock;
@@ -38,6 +38,7 @@ public class MetricsCalculatorTest {
     // Auxiliary object for testing.
     private Student student;
 
+    // setup: creation of a base objects that will be used in the tests.
     @Before
     public void setUp() {
         // Student object creation.
@@ -51,7 +52,7 @@ public class MetricsCalculatorTest {
                 0,0,0,0,0,
                 0,0,0);
 
-        Student student = new Student(cpfRegistrationFake, studentDataFake);
+        student = new Student(cpfRegistrationFake, studentDataFake);
 
         // adding registration and attemptedCredits in the attemptsMap.
         Registration registrationFake = new Registration("12346533354");
@@ -67,6 +68,7 @@ public class MetricsCalculatorTest {
         attemptsMap.put(reg3, 18);
     }
 
+    // ckecks if the instance is actually created.
     @Test
     public void getInstanceTest() {
         mockInstance();
@@ -74,20 +76,36 @@ public class MetricsCalculatorTest {
     }
 
     public void mockInstance() {
-        DataAccessFacade dataAccessFacade = mock(DataAccessFacade.class);
-        Mockito.when(dataAccessFacade.getAttemptsSummary()).thenReturn((Collection<AttemptsSummary>) attemptsMap);
-        PowerMockito.mockStatic(DataAccessFacade.class);
-        BDDMockito.given(MetricsCalculator.getInstance()).willReturn((MetricsCalculator) dataAccessFacade);
+        DataAccessFacadeHolder dataAccessFacadeHolder = mock(DataAccessFacadeHolder.class);
+        Mockito.when(dataAccessFacadeHolder.getDataAccessFacade().getAttemptsSummary()).thenReturn((Collection<AttemptsSummary>) attemptsMap);
+        PowerMockito.mockStatic(DataAccessFacadeHolder.class);
+        BDDMockito.given(DataAccessFacadeHolder.getInstance()).willReturn(dataAccessFacadeHolder);
     }
 
+    // checks the behavior of computeMetrics method, and whether it returns an object of type Metrics.
     @Test
     public void computeMetricsWithAllDataCorrectTest() {
-        Assert.assertEquals(MetricsCalculator.getInstance().computeMetrics(student) instanceof Metrics, false);
+        Assert.assertEquals(MetricsCalculator.getInstance().computeMetrics(student) instanceof Metrics, true);
     }
 
+    // checks the behavior of computeMetrics method when the registration of the student not in attemptsMap.
     @Test
-    public void computeFeasibilityTest() {
-        System.out.println(MetricsCalculator.getInstance().computeMetrics(student));
+    public void computeMetricsWithStudentDataInvalidTest() throws NullPointerException {
+        // Student object creation with registration invalid.
+        String registrationNumber = "34342243412";
+        CpfRegistration cpfRegistrationFake = new CpfRegistration("+55", registrationNumber);
+        StudentData studentDataFake = new StudentData("x", "x", "x", "x", "x",
+                "x", "x", "x", "Inativo (GRADUADO 2011.2)",
+                "VESTIBULAR 2007.2", "x", "x", "x",
+                "x", 0,0,0,
+                0,0,0,0,
+                0,0,0,0,0,
+                0,0,0);
+
+        student = new Student(cpfRegistrationFake, studentDataFake);
+
+        Assert.assertEquals(MetricsCalculator.getInstance().computeMetrics(student), null);
     }
+
 
 }
