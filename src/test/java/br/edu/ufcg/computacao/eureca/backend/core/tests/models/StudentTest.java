@@ -22,10 +22,16 @@ import static org.mockito.Mockito.*;
 @PrepareForTest(MetricsCalculator.class)
 public class StudentTest {
 
+    // instance of a student.
     private Student student;
+
+    // instance of a StudentData object.
     private StudentData fakeStudentData;
+
+    // instance of a CpfRegistration.
     private CpfRegistration fakeCpfRegistration;
 
+    // setup: creation of a base object of the type Student that will be used in the tests.
     @Before
     public void setUp() {
         this.fakeStudentData = new StudentData("x", "x", "x", "x", "x",
@@ -38,6 +44,36 @@ public class StudentTest {
         this.fakeCpfRegistration = new CpfRegistration("nationalId", "registration");
         this.student = new Student(fakeCpfRegistration, fakeStudentData);
 
+    }
+
+    // test case: check if the National Id is correct.
+    @Test
+    public void getNationalIdTest() {
+        String expectedNationalId = "nationalId";
+        assertEquals(fakeCpfRegistration.getNationalId(), expectedNationalId);
+    }
+
+    // test case: changes the National Id of the Student instance.
+    @Test
+    public void setNationalIdTest() {
+        String expectedNationalId = "newNationalId";
+        fakeCpfRegistration.setNationalId("newNationalId");
+        assertEquals(fakeCpfRegistration.getNationalId(), expectedNationalId);
+    }
+
+    // test case: check if the Registration is correct.
+    @Test
+    public void getRegistrationTest() {
+        String expectedRegistration = "registration";
+        assertEquals(fakeCpfRegistration.getRegistration(), expectedRegistration);
+    }
+
+    // test case: changes the Registration of the Student instance.
+    @Test
+    public void setRegistrationTest() {
+        String expectedRegistration = "newRegistration";
+        fakeCpfRegistration.setRegistration("newRegistration");
+        assertEquals(fakeCpfRegistration.getRegistration(), expectedRegistration);
     }
 
     // test case: Call the getId method and tests a successfully return.
