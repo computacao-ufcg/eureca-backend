@@ -46,36 +46,6 @@ public class StudentTest {
 
     }
 
-    // test case: check if the National Id is correct.
-    @Test
-    public void getNationalIdTest() {
-        String expectedNationalId = "nationalId";
-        assertEquals(fakeCpfRegistration.getNationalId(), expectedNationalId);
-    }
-
-    // test case: changes the National Id of the Student instance.
-    @Test
-    public void setNationalIdTest() {
-        String expectedNationalId = "newNationalId";
-        fakeCpfRegistration.setNationalId("newNationalId");
-        assertEquals(fakeCpfRegistration.getNationalId(), expectedNationalId);
-    }
-
-    // test case: check if the Registration is correct.
-    @Test
-    public void getRegistrationTest() {
-        String expectedRegistration = "registration";
-        assertEquals(fakeCpfRegistration.getRegistration(), expectedRegistration);
-    }
-
-    // test case: changes the Registration of the Student instance.
-    @Test
-    public void setRegistrationTest() {
-        String expectedRegistration = "newRegistration";
-        fakeCpfRegistration.setRegistration("newRegistration");
-        assertEquals(fakeCpfRegistration.getRegistration(), expectedRegistration);
-    }
-
     // test case: Call the getId method and tests a successfully return.
     @Test
     public void getIdTest() {
