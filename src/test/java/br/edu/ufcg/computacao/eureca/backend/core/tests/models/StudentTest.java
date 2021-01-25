@@ -87,7 +87,7 @@ public class StudentTest {
 
     }
 
-    public void mockMetricsCalculator() {
+    private void mockMetricsCalculator() {
         Metrics metrics = new Metrics(0,0,0,0,0,0,0,0);
         MetricsCalculator metricsCalculator = mock(MetricsCalculator.class);
         Mockito.when(metricsCalculator.computeMetrics(this.student)).thenReturn(metrics);

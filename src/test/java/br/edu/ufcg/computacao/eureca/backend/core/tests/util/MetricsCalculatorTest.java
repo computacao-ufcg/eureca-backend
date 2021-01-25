@@ -31,7 +31,7 @@ public class MetricsCalculatorTest {
         assertNotEquals(null,this.metricsCalculator);
     }
 
-    public void mockDataAccessFacadeHolder() {
+    private void mockDataAccessFacadeHolder() {
         DataAccessFacadeHolder dataAccessFacadeHolder = DataAccessFacadeHolder.getInstance();
         DataAccessFacade dataAccessFacade = mock(DataAccessFacade.class);
         dataAccessFacadeHolder.setDataAccessFacade(dataAccessFacade);
