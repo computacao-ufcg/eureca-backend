@@ -28,4 +28,16 @@ public class PropertiesHolderTest {
         Assert.assertNotEquals(instance, null);
     }
 
+    // test case: verify if the properties are returned.
+    @Test
+    public void getPropertiesTest() {
+        Assert.assertNotEquals(instance.getProperties(), null);
+    }
+
+    // test case: verify if a specific property is returned.
+    @Test
+    public void getPropertyByKey() {
+        Assert.assertEquals(instance.getProperty("tables_dir"), "tables");
+    }
+
 }
