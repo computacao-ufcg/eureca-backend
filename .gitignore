@@ -14,9 +14,12 @@ mvnw.cmd
 
 ### Configuration files ###
 src/main/resources/private
-src/test/resources/private
+
+### Configuration files for tests execution ###
+target/test-classes/private
 
 ### Log files ###
 *.log.*
 *.log.
 *.log
+
