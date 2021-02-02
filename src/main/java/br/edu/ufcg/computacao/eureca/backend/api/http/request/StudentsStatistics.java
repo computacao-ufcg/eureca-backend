@@ -146,4 +146,24 @@ public class StudentsStatistics {
             throw e;
         }
     }
+
+    @RequestMapping(value = "withheld/csv", method = RequestMethod.GET)
+    @ApiOperation(value = ApiDocumentation.Statistics.GET_RETIDOS_CSV)
+    public ResponseEntity<Collection<WithheldDataResponse>> getWithheldCSV(
+            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+            @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
+            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
+            @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
+            @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
+            throws EurecaException {
+
+        try {
+            Collection<WithheldDataResponse> withheld = ApplicationFacade.getInstance().getWithheldCSV(token, from, to);
+            return new ResponseEntity<>(withheld, HttpStatus.OK);
+        } catch (EurecaException e) {
+            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
+            throw e;
+        }
+    }
 }

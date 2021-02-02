@@ -52,6 +52,7 @@ public class ApiDocumentation {
         public static final String GET_EGRESSOS_CSV = "Retorna os dados completos dos egressos.";
         public static final String GET_EVADIDOS = "Retorna um sumário dos dados dos discentes evadidos.";
         public static final String GET_EVADIDOS_CSV = "Retorna os dados completos dos discentes evadidos.";
+        public static final String GET_RETIDOS_CSV = "Retorna os dados completos dos discentes retidos.";
         public static final String FROM = "Período inicial";
         public static final String TO = "Período final";
     }

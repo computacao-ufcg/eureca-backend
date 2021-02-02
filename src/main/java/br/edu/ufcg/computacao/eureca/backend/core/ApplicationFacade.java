@@ -25,6 +25,7 @@ import java.security.GeneralSecurityException;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Collection;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public class ApplicationFacade {
     private static final Logger LOGGER = Logger.getLogger(ApplicationFacade.class);
@@ -195,6 +196,14 @@ public class ApplicationFacade {
     public Collection<AlumniPerStudentSummary> getAlumniBasicData(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_BASIC_DATA);
         return this.dataAccessFacade.getAlumniPerStudentSummary(from, to);
+    }
+
+    public Collection<WithheldDataResponse> getWithheldCSV(String token, String from, String to) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_WITHHELD_CSV);
+        return this.dataAccessFacade.getWithheld(from, to)
+                .stream()
+                .map(WithheldDataResponse::new)
+                .collect(Collectors.toSet());
     }
 
     public String getPublicKey() throws EurecaException {
