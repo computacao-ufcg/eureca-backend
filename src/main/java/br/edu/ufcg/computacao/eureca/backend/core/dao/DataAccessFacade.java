@@ -13,7 +13,7 @@ public interface DataAccessFacade {
 
     Collection<Student> getDropouts(String from, String to);
 
-    Collection<Student> getWithheld(String from, String to);
+    Collection<Student> getDelayed(String from, String to);
 
     Collection<ActiveSummary> getActiveSummary(String from, String to);
 

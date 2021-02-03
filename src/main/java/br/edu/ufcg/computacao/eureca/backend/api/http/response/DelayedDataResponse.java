@@ -5,7 +5,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 
-public class WithheldDataResponse {
+public class DelayedDataResponse {
 
     private String registration;
     private RiskClass riskClass;
@@ -16,8 +16,9 @@ public class WithheldDataResponse {
     private double pace;
     private int courseDurationPrediction;
     private double risk;
+    private int attemptedCredits;
 
-    public WithheldDataResponse(String registration, RiskClass riskClass, double successRate, double averageLoad, double cost, double pace, int courseDurationPrediction, double risk) {
+    public DelayedDataResponse(String registration, RiskClass riskClass, double successRate, double averageLoad, double cost, double pace, int courseDurationPrediction, double risk, int attemptedCredits) {
         this.registration = registration;
         this.riskClass = riskClass;
         this.successRate = successRate;
@@ -26,9 +27,10 @@ public class WithheldDataResponse {
         this.pace = pace;
         this.courseDurationPrediction = courseDurationPrediction;
         this.risk = risk;
+        this.attemptedCredits = attemptedCredits;
     }
 
-    public WithheldDataResponse(Student student) {
+    public DelayedDataResponse(Student student) {
         Metrics metrics = MetricsCalculator.getInstance().computeMetrics(student);
 
         this.registration = student.getId().getRegistration();
@@ -39,6 +41,7 @@ public class WithheldDataResponse {
         this.pace = metrics.getPace();
         this.courseDurationPrediction = metrics.getCourseDurationPrediction();
         this.risk = metrics.getRisk();
+        this.attemptedCredits = metrics.getAttemptedCredits();
     }
 
     public String getRegistration() {
@@ -111,5 +114,13 @@ public class WithheldDataResponse {
 
     public void setRisk(double risk) {
         this.risk = risk;
+    }
+
+    public int getAttemptedCredits() {
+        return attemptedCredits;
+    }
+
+    public void setAttemptedCredits(int attemptedCredits) {
+        this.attemptedCredits = attemptedCredits;
     }
 }

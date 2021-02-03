@@ -8,7 +8,7 @@ public enum EurecaOperation {
     GET_ALUMNI_BASIC_DATA("getAlumniBasicData"),
     GET_DROPOUTS("getDropouts"),
     GET_DROPOUTS_CSV("getDropoutsCSV"),
-    GET_WITHHELD_CSV("getWithheldCSV");
+    GET_DELAYED_CSV("getDelayedCSV");
 
     private String value;
 

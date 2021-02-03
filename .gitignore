@@ -23,3 +23,5 @@ target/test-classes/private
 *.log.
 *.log
 
+table/*
+private/*

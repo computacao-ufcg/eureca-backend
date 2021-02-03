@@ -28,7 +28,7 @@ public class StudentsStatistics {
     private static final Logger LOGGER = Logger.getLogger(StudentsStatistics.class);
 
     @RequestMapping(value = "actives", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.Statistics.GET_ATIVOS)
+    @ApiOperation(value = ApiDocumentation.Statistics.GET_ACTIVES)
     public ResponseEntity<ActiveSummaryResponse> getActives(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
@@ -48,7 +48,7 @@ public class StudentsStatistics {
     }
 
     @RequestMapping(value = "actives/csv", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.Statistics.GET_ATIVOS_CSV)
+    @ApiOperation(value = ApiDocumentation.Statistics.GET_ACTIVES_CSV)
     public ResponseEntity<Collection<StudentDataResponse>> getActivesCSV(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
@@ -68,7 +68,7 @@ public class StudentsStatistics {
     }
 
     @RequestMapping(value = "alumni", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.Statistics.GET_EGRESSOS)
+    @ApiOperation(value = ApiDocumentation.Statistics.GET_ALUMNI)
     public ResponseEntity<AlumniSummaryResponse> getAlumni(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
@@ -88,7 +88,7 @@ public class StudentsStatistics {
     }
 
     @RequestMapping(value = "alumni/csv", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.Statistics.GET_EGRESSOS_CSV)
+    @ApiOperation(value = ApiDocumentation.Statistics.GET_ALUMNI_CSV)
     public ResponseEntity<Collection<StudentDataResponse>> getAlumniCSV(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
@@ -108,7 +108,7 @@ public class StudentsStatistics {
     }
 
     @RequestMapping(value = "dropouts", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.Statistics.GET_EVADIDOS)
+    @ApiOperation(value = ApiDocumentation.Statistics.GET_DROPOUT)
     public ResponseEntity<DropoutSummaryResponse> getDropouts(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
@@ -128,7 +128,7 @@ public class StudentsStatistics {
     }
 
     @RequestMapping(value = "dropouts/csv", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.Statistics.GET_EVADIDOS_CSV)
+    @ApiOperation(value = ApiDocumentation.Statistics.GET_DROPOUT_CSV)
     public ResponseEntity<Collection<StudentDataResponse>> getDropoutsCSV(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
@@ -147,9 +147,9 @@ public class StudentsStatistics {
         }
     }
 
-    @RequestMapping(value = "withheld/csv", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.Statistics.GET_RETIDOS_CSV)
-    public ResponseEntity<Collection<WithheldDataResponse>> getWithheldCSV(
+    @RequestMapping(value = "delayed/csv", method = RequestMethod.GET)
+    @ApiOperation(value = ApiDocumentation.Statistics.GET_DELAYED_CSV)
+    public ResponseEntity<Collection<DelayedDataResponse>> getDelayedCSV(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)
@@ -159,8 +159,8 @@ public class StudentsStatistics {
             throws EurecaException {
 
         try {
-            Collection<WithheldDataResponse> withheld = ApplicationFacade.getInstance().getWithheldCSV(token, from, to);
-            return new ResponseEntity<>(withheld, HttpStatus.OK);
+            Collection<DelayedDataResponse> delayed = ApplicationFacade.getInstance().getDelayedCSV(token, from, to);
+            return new ResponseEntity<>(delayed, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
             throw e;

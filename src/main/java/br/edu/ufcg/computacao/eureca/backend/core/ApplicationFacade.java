@@ -198,11 +198,11 @@ public class ApplicationFacade {
         return this.dataAccessFacade.getAlumniPerStudentSummary(from, to);
     }
 
-    public Collection<WithheldDataResponse> getWithheldCSV(String token, String from, String to) throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_WITHHELD_CSV);
-        return this.dataAccessFacade.getWithheld(from, to)
+    public Collection<DelayedDataResponse> getDelayedCSV(String token, String from, String to) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_DELAYED_CSV);
+        return this.dataAccessFacade.getDelayed(from, to)
                 .stream()
-                .map(WithheldDataResponse::new)
+                .map(DelayedDataResponse::new)
                 .collect(Collectors.toSet());
     }
 
