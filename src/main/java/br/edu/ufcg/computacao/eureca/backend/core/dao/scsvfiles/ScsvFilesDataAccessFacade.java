@@ -6,12 +6,14 @@ import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.models.AttemptsSummary;
+import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     private MapsHolder mapsHolder;
@@ -106,6 +108,14 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             }
         });
         return filteredDropouts;
+    }
+
+    @Override
+    public Collection<Student> getDelayed(String from, String to) {
+        return this.getActives(from, to)
+                .stream()
+                .filter(item -> item.getRiskClass().equals(RiskClass.CRITICAL) || item.getRiskClass().equals(RiskClass.LATE) || item.getRiskClass().equals(RiskClass.UNFEASIBLE))
+                .collect(Collectors.toSet());
     }
 
     @Override

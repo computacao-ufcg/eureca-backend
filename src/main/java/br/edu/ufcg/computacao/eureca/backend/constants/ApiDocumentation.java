@@ -46,12 +46,13 @@ public class ApiDocumentation {
 
     public class Statistics {
         public static final String API = "Estatísticas.";
-        public static final String GET_ATIVOS = "Retorna um sumário dos dados dos discentes ativos.";
-        public static final String GET_ATIVOS_CSV = "Retorna os dados completos dos discentes ativos.";
-        public static final String GET_EGRESSOS = "Retorna um sumário dos dados dos egressos.";
-        public static final String GET_EGRESSOS_CSV = "Retorna os dados completos dos egressos.";
-        public static final String GET_EVADIDOS = "Retorna um sumário dos dados dos discentes evadidos.";
-        public static final String GET_EVADIDOS_CSV = "Retorna os dados completos dos discentes evadidos.";
+        public static final String GET_ACTIVES = "Retorna um sumário dos dados dos discentes ativos.";
+        public static final String GET_ACTIVES_CSV = "Retorna os dados completos dos discentes ativos.";
+        public static final String GET_ALUMNI = "Retorna um sumário dos dados dos egressos.";
+        public static final String GET_ALUMNI_CSV = "Retorna os dados completos dos egressos.";
+        public static final String GET_DROPOUT = "Retorna um sumário dos dados dos discentes evadidos.";
+        public static final String GET_DROPOUT_CSV = "Retorna os dados completos dos discentes evadidos.";
+        public static final String GET_DELAYED_CSV = "Retorna os dados completos dos discentes retidos.";
         public static final String FROM = "Período inicial";
         public static final String TO = "Período final";
     }
