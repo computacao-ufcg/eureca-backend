@@ -1,5 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
+import java.util.Collection;
+import java.util.TreeSet;
+
 public class AlumniSummary {
     double averageGpa;
     int maxDegreeCount;
@@ -18,6 +21,38 @@ public class AlumniSummary {
         this.maxDegreeCountTerm = maxDegreeCountTerm;
         this.minDegreeCountTerm = minDegreeCountTerm;
         this.totalDegreeCount = totalDegreeCount;
+    }
+
+    public AlumniSummary(Collection<AlumniPerTermSummary> terms) {
+        double accumulatedGPA = 0;
+        int maxAlumniCount = 0;
+        String maxAlumniCountTerm = "";
+        int minAlumniCount = Integer.MAX_VALUE;
+        String minAlumniCountTerm = "";
+        int totalAlumniCount = 0;
+
+        for (AlumniPerTermSummary item : terms) {
+            double averageGPA = item.getAverageGpa();
+            int termAlumniCount = item.getAlumniCount();
+            String term = item.getGraduationTerm();
+            totalAlumniCount += termAlumniCount;
+            if (termAlumniCount >= maxAlumniCount) {
+                maxAlumniCount = termAlumniCount;
+                maxAlumniCountTerm = term;
+            }
+            if (termAlumniCount <= minAlumniCount) {
+                minAlumniCount = termAlumniCount;
+                minAlumniCountTerm = term;
+            }
+            accumulatedGPA += averageGPA * termAlumniCount;
+        }
+        this.averageGpa = (totalAlumniCount == 0 ? -1.0 : accumulatedGPA/totalAlumniCount);
+        this.maxDegreeCount = maxAlumniCount;
+        this.averageDegreeCount = (terms.size() == 0 ? -1.0 : (1.0*totalAlumniCount)/terms.size());
+        this.minDegreeCount = minAlumniCount;
+        this.maxDegreeCountTerm = maxAlumniCountTerm;
+        this.minDegreeCountTerm = minAlumniCountTerm;
+        this.totalDegreeCount = totalAlumniCount;
     }
 
     public double getAverageGpa() {

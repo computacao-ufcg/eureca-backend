@@ -25,6 +25,7 @@ import java.security.GeneralSecurityException;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Collection;
 import java.util.TreeSet;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ApplicationFacade {
@@ -113,37 +114,19 @@ public class ApplicationFacade {
 
     public AlumniSummaryResponse getAlumniSummary(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI);
-        Collection<String> sliderLabel = new TreeSet<>();
-        double accumulatedGPA = 0;
-        int maxAlumniCount = 0;
-        String maxAlumniCountTerm = "";
-        int minAlumniCount = Integer.MAX_VALUE;
-        String minAlumniCountTerm = "";
-        int totalAlumniCount = 0;
 
         Collection<AlumniPerTermSummary> terms = this.dataAccessFacade.getAlumniPerTermSummary(from, to);
-        for (AlumniPerTermSummary item : terms) {
-            sliderLabel.add(item.getGraduationTerm());
-            double averageGPA = item.getAverageGpa();
-            int termAlumniCount = item.getAlumniCount();
-            String term = item.getGraduationTerm();
-            totalAlumniCount += termAlumniCount;
-            if (termAlumniCount >= maxAlumniCount) {
-                maxAlumniCount = termAlumniCount;
-                maxAlumniCountTerm = term;
-            }
-            if (termAlumniCount <= minAlumniCount) {
-                minAlumniCount = termAlumniCount;
-                minAlumniCountTerm = term;
-            }
-            accumulatedGPA += averageGPA * termAlumniCount;
-        }
+        AlumniSummary alumniSummary = new AlumniSummary(terms);
+        Collection<String> sliderLabel = getSliderLabel(terms, AlumniPerTermSummary::getGraduationTerm);
 
-        AlumniSummary alumniSummary = new AlumniSummary((totalAlumniCount == 0 ? -1.0 : accumulatedGPA/totalAlumniCount),
-                maxAlumniCount, (terms.size() == 0 ? -1.0 : (1.0*totalAlumniCount)/terms.size()), minAlumniCount,
-                maxAlumniCountTerm, minAlumniCountTerm, totalAlumniCount);
-        AlumniSummaryResponse alumniSummaryResponse = new AlumniSummaryResponse(sliderLabel, alumniSummary, terms);
-        return alumniSummaryResponse;
+        return new AlumniSummaryResponse(sliderLabel, alumniSummary, terms);
+    }
+
+    private <T> Collection<String> getSliderLabel(Collection<T> terms, Function<T, String> function) {
+        return terms
+                .stream()
+                .map(function)
+                .collect(Collectors.toCollection(TreeSet::new));
     }
 
     public Collection<StudentDataResponse> getAlumniCSV(String token, String from, String to) throws EurecaException {
@@ -161,22 +144,14 @@ public class ApplicationFacade {
 
     public DropoutSummaryResponse getDropoutsSummary(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DROPOUTS);
+
         Collection<DropoutPerTermSummary> dropouts = this.dataAccessFacade.getDropoutsSummary(from, to);
-        Collection<String> sliderLabel = new TreeSet<>();
-        int grossDropoutCount = 0;
-        int dropoutReenterSameCourse = 0;
-        for (DropoutPerTermSummary item : dropouts) {
-            sliderLabel.add(item.getTerm());
-            dropoutReenterSameCourse += item.getReasons().getReenterSameCourse();
-            grossDropoutCount += item.getReasons().getTotalDropouts();
-        }
+        Collection<String> sliderLabel = this.getSliderLabel(dropouts, DropoutPerTermSummary::getTerm);
+
         int activeCount = this.dataAccessFacade.getActives(from, to).size();
         int alumniCount = this.dataAccessFacade.getAlumni(from, to).size();
-        int enrolled = grossDropoutCount + activeCount + alumniCount;
-        int netDropoutCount = grossDropoutCount - dropoutReenterSameCourse;
-        DropoutSummary summary = new DropoutSummary((1.0 * grossDropoutCount / alumniCount),
-                (1.0 * grossDropoutCount / enrolled), (1.0 * netDropoutCount / alumniCount),
-                (1.0 * netDropoutCount / enrolled), grossDropoutCount, netDropoutCount);
+        DropoutSummary summary = new DropoutSummary(dropouts, activeCount, alumniCount);
+
         return new DropoutSummaryResponse(sliderLabel, dropouts, summary);
     }
 
@@ -204,6 +179,29 @@ public class ApplicationFacade {
                 .stream()
                 .map(DelayedDataResponse::new)
                 .collect(Collectors.toSet());
+    }
+
+    public StudentsSummaryResume getStudentsStatistics(String token, String from, String to) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_STATISTICS);
+        Collection<Student> actives = this.dataAccessFacade.getActives(from, to);
+        Collection<AlumniPerTermSummary> alumni = this.dataAccessFacade.getAlumniPerTermSummary(from, to);
+        Collection<DropoutPerTermSummary> dropouts = this.dataAccessFacade.getDropoutsSummary(from, to);
+        Collection<Student> delayed = this.dataAccessFacade.getDelayed(from, to);
+
+        Collection<DelayedDataResponse> delayedData = delayed
+                .stream()
+                .map(DelayedDataResponse::new)
+                .collect(Collectors.toList());
+
+        int alumniCount = this.dataAccessFacade.getAlumni(from, to).size();
+        int activesCount = actives.size();
+
+        AlumniSummary alumniSummary = new AlumniSummary(alumni);
+        ActiveSummaryResume activeSummary = new ActiveSummaryResume(actives);
+        DelayedSummary delayedSummary = new DelayedSummary(delayedData);
+        DropoutSummaryResume dropoutSummary = new DropoutSummaryResume(dropouts, activesCount, alumniCount);
+
+        return new StudentsSummaryResume(activeSummary, alumniSummary, delayedSummary, dropoutSummary);
     }
 
     public String getPublicKey() throws EurecaException {
