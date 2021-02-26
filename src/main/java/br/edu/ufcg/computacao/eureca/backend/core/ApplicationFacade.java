@@ -7,7 +7,6 @@ import br.edu.ufcg.computacao.eureca.backend.constants.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EurecaAsPublicKeyHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.holders.StudentDataHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.PropertiesHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
@@ -98,7 +97,7 @@ public class ApplicationFacade {
 
     public Collection<StudentDataResponse> getActiveCSV(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ACTIVES_CSV);
-        return StudentDataHolder.getInstance().getActiveCSV(from, to);
+        return StudentDataFetcher.getInstance().getActiveCSV(from, to);
     }
 
     public AlumniSummaryResponse getAlumniSummary(String token, String from, String to) throws EurecaException {
@@ -138,7 +137,7 @@ public class ApplicationFacade {
 
     public Collection<StudentDataResponse> getAlumniCSV(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_CSV);
-        return StudentDataHolder.getInstance().getAlumniCSV(from, to);
+        return StudentDataFetcher.getInstance().getAlumniCSV(from, to);
     }
 
     public DropoutSummaryResponse getDropoutsSummary(String token, String from, String to) throws EurecaException {
@@ -164,7 +163,7 @@ public class ApplicationFacade {
 
     public Collection<StudentDataResponse> getDropoutsCSV(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DROPOUTS_CSV);
-        return StudentDataHolder.getInstance().getDropoutsCSV(from, to);
+        return StudentDataFetcher.getInstance().getDropoutsCSV(from, to);
     }
 
     public Collection<AlumniPerStudentSummary> getAlumniBasicData(String token, String from, String to) throws EurecaException {
@@ -174,7 +173,7 @@ public class ApplicationFacade {
 
     public Collection<DelayedDataResponse> getDelayedCSV(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DELAYED_CSV);
-        return StudentDataHolder.getInstance().getDelayedCSV(from, to);
+        return StudentDataFetcher.getInstance().getDelayedCSV(from, to);
     }
 
     public String getPublicKey() throws EurecaException {
@@ -205,4 +204,5 @@ public class ApplicationFacade {
                     ConfigurationPropertyDefaults.BUILD_NUMBER);
         return SystemConstants.API_VERSION_NUMBER + "-" + buildNumber;
     }
+
 }

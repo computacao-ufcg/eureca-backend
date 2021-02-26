@@ -1,8 +1,9 @@
-package br.edu.ufcg.computacao.eureca.backend.core.holders;
+package br.edu.ufcg.computacao.eureca.backend.core;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.DelayedDataResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.StudentDataResponse;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
+import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Metrics;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
@@ -12,19 +13,19 @@ import java.util.Collection;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-public class StudentDataHolder {
-    private Logger LOGGER = Logger.getLogger(StudentDataHolder.class);
+public class StudentDataFetcher {
+    private Logger LOGGER = Logger.getLogger(StudentDataFetcher.class);
 
-    private static StudentDataHolder instance;
+    private static StudentDataFetcher instance;
     private DataAccessFacade dataAccessFacade;
 
-    private StudentDataHolder() {
+    private StudentDataFetcher() {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
-    public static synchronized StudentDataHolder getInstance() {
+    public static synchronized StudentDataFetcher getInstance() {
         if (instance == null) {
-            instance = new StudentDataHolder();
+            instance = new StudentDataFetcher();
         }
         return instance;
     }
