@@ -7,6 +7,7 @@ import br.edu.ufcg.computacao.eureca.backend.constants.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EurecaAsPublicKeyHolder;
+import br.edu.ufcg.computacao.eureca.backend.core.holders.SummaryDataHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.PropertiesHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
@@ -54,49 +55,7 @@ public class ApplicationFacade {
 
     public ActiveSummaryResponse getActiveSummary(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ACTIVES);
-        Collection<ActiveStatusSummary> activeStatusSummaries = new TreeSet<>();
-        Collection<String> sliderLabel = new TreeSet<>();
-        Collection<ActiveSummary> summary = this.dataAccessFacade.getActiveSummary(from, to);
-        int activesCount = 0;
-        int unfeasible = 0, critical = 0, late = 0, normal = 0, advanced = 0, notApplicable = 0;
-        for (ActiveSummary item : summary) {
-            sliderLabel.add(item.getAdmissionTerm());
-            activesCount++;
-            Student active = this.dataAccessFacade.getStudent(item.getRegistration());
-            RiskClass riskClass = active.getRiskClass();
-            switch(riskClass) {
-                case UNFEASIBLE:
-                    unfeasible++;
-                    break;
-                case CRITICAL:
-                    critical++;
-                    break;
-                case LATE:
-                    late++;
-                    break;
-                case NORMAL:
-                    normal++;
-                    break;
-                case ADVANCED:
-                    advanced++;
-                    break;
-                default:
-                    notApplicable++;
-                    break;
-            }
-            ActiveStatusSummary statusSummary = new ActiveStatusSummary(item, riskClass);
-            activeStatusSummaries.add(statusSummary);
-        }
-        RiskClassCountSummary countSummary = new RiskClassCountSummary(unfeasible, critical, late, normal, advanced,
-                notApplicable);
-        RiskClassPercentageSummary percentageSummary =
-                new RiskClassPercentageSummary((1.0 * unfeasible)/activesCount,
-                        (1.0 * critical)/activesCount, (1.0 * late)/activesCount,
-                        (1.0 * normal)/activesCount, (1.0 * advanced)/activesCount,
-                        (1.0 * notApplicable)/activesCount);
-        RiskSummary riskSummary = new RiskSummary(activesCount, countSummary, percentageSummary);
-        ActiveSummaryResponse ret = new ActiveSummaryResponse(sliderLabel, activeStatusSummaries, riskSummary);
-        return ret;
+        return SummaryDataHolder.getInstance().getActiveSummaryResponse(from, to);
     }
 
     public Collection<StudentDataResponse> getActiveCSV(String token, String from, String to) throws EurecaException {
@@ -114,19 +73,7 @@ public class ApplicationFacade {
 
     public AlumniSummaryResponse getAlumniSummary(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI);
-
-        Collection<AlumniPerTermSummary> terms = this.dataAccessFacade.getAlumniPerTermSummary(from, to);
-        AlumniSummary alumniSummary = new AlumniSummary(terms);
-        Collection<String> sliderLabel = getSliderLabel(terms, AlumniPerTermSummary::getGraduationTerm);
-
-        return new AlumniSummaryResponse(sliderLabel, alumniSummary, terms);
-    }
-
-    private <T> Collection<String> getSliderLabel(Collection<T> terms, Function<T, String> function) {
-        return terms
-                .stream()
-                .map(function)
-                .collect(Collectors.toCollection(TreeSet::new));
+        return SummaryDataHolder.getInstance().getAlumniSummaryResponse(from, to);
     }
 
     public Collection<StudentDataResponse> getAlumniCSV(String token, String from, String to) throws EurecaException {
@@ -144,15 +91,7 @@ public class ApplicationFacade {
 
     public DropoutSummaryResponse getDropoutsSummary(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DROPOUTS);
-
-        Collection<DropoutPerTermSummary> dropouts = this.dataAccessFacade.getDropoutsSummary(from, to);
-        Collection<String> sliderLabel = this.getSliderLabel(dropouts, DropoutPerTermSummary::getTerm);
-
-        int activeCount = this.dataAccessFacade.getActives(from, to).size();
-        int alumniCount = this.dataAccessFacade.getAlumni(from, to).size();
-        DropoutSummary summary = new DropoutSummary(dropouts, activeCount, alumniCount);
-
-        return new DropoutSummaryResponse(sliderLabel, dropouts, summary);
+        return SummaryDataHolder.getInstance().getDropoutsSummaryResponse(from, to);
     }
 
     public Collection<StudentDataResponse> getDropoutsCSV(String token, String from, String to) throws EurecaException {
@@ -183,25 +122,7 @@ public class ApplicationFacade {
 
     public StudentsSummaryResume getStudentsStatistics(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_STATISTICS);
-        Collection<Student> actives = this.dataAccessFacade.getActives(from, to);
-        Collection<AlumniPerTermSummary> alumni = this.dataAccessFacade.getAlumniPerTermSummary(from, to);
-        Collection<DropoutPerTermSummary> dropouts = this.dataAccessFacade.getDropoutsSummary(from, to);
-        Collection<Student> delayed = this.dataAccessFacade.getDelayed(from, to);
-
-        Collection<DelayedDataResponse> delayedData = delayed
-                .stream()
-                .map(DelayedDataResponse::new)
-                .collect(Collectors.toList());
-
-        int alumniCount = this.dataAccessFacade.getAlumni(from, to).size();
-        int activesCount = actives.size();
-
-        AlumniSummary alumniSummary = new AlumniSummary(alumni);
-        ActiveSummaryResume activeSummary = new ActiveSummaryResume(actives);
-        DelayedSummary delayedSummary = new DelayedSummary(delayedData);
-        DropoutSummaryResume dropoutSummary = new DropoutSummaryResume(dropouts, activesCount, alumniCount);
-
-        return new StudentsSummaryResume(activeSummary, alumniSummary, delayedSummary, dropoutSummary);
+        return SummaryDataHolder.getInstance().getStudentsSummaryResume(from, to);
     }
 
     public String getPublicKey() throws EurecaException {

@@ -1,9 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-import java.util.Collection;
-
 public class DelayedSummary  {
 
+    private int delayedCount;
     private double averageAttemptedCredits;
     private double averageLoad;
     private double averageCost;
@@ -13,9 +12,10 @@ public class DelayedSummary  {
     private double averageRisk;
     private double averageSuccessRate;
 
-    public DelayedSummary(double averageAttemptedCredits, double averageLoad, double averageCost,
+    public DelayedSummary(int delayedCount, double averageAttemptedCredits, double averageLoad, double averageCost,
                           double averageCourseDurationPrediction, double averageFeasibility,
                           double averagePace, double averageRisk, double averageSuccessRate) {
+        this.delayedCount = delayedCount;
         this.averageAttemptedCredits = averageAttemptedCredits;
         this.averageLoad = averageLoad;
         this.averageCost = averageCost;
@@ -26,36 +26,12 @@ public class DelayedSummary  {
         this.averageSuccessRate = averageSuccessRate;
     }
 
-    public DelayedSummary(Collection<DelayedDataResponse> delayedStudents) {
-        double totalAttemptedCredits = 0;
-        double totalLoad = 0;
-        double totalCost = 0;
-        double totalCourseDurationPrediction = 0;
-        double totalFeasibility = 0;
-        double totalPace = 0;
-        double totalRisk = 0;
-        double totalSuccessRate = 0;
-        int totalDelayed = delayedStudents.size();
+    public int getDelayedCount() {
+        return delayedCount;
+    }
 
-        for (DelayedDataResponse delayed : delayedStudents) {
-            totalAttemptedCredits += delayed.getAttemptedCredits();
-            totalLoad += delayed.getAverageLoad();
-            totalCost += delayed.getCost();
-            totalCourseDurationPrediction += delayed.getCourseDurationPrediction();
-            totalFeasibility += delayed.getFeasibility();
-            totalPace += delayed.getPace();
-            totalRisk += delayed.getRisk();
-            totalSuccessRate += delayed.getSuccessRate();
-        }
-
-        this.averageAttemptedCredits = totalAttemptedCredits / totalDelayed;
-        this.averageLoad = totalLoad / totalDelayed;
-        this.averageCost = totalCost / totalDelayed;
-        this.averageCourseDurationPrediction = totalCourseDurationPrediction / totalDelayed;
-        this.averageFeasibility = totalFeasibility / totalDelayed;
-        this.averagePace = totalPace / totalDelayed;
-        this.averageRisk = totalRisk / totalDelayed;
-        this.averageSuccessRate = totalSuccessRate / totalDelayed;
+    public void setDelayedCount(int delayedCount) {
+        this.delayedCount = delayedCount;
     }
 
     public double getAverageAttemptedCredits() {

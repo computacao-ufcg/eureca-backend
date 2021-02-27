@@ -20,25 +20,6 @@ public class DropoutSummary {
         this.netDropoutCount = netDropoutCount;
     }
 
-    public DropoutSummary(Collection<DropoutPerTermSummary> dropouts, int activeCount, int alumniCount) {
-        int grossDropoutCount = 0;
-        int dropoutReenterSameCourse = 0;
-
-        for (DropoutPerTermSummary item : dropouts) {
-            dropoutReenterSameCourse += item.getReasons().getReenterSameCourse();
-            grossDropoutCount += item.getReasons().getTotalDropouts();
-        }
-        int enrolled = grossDropoutCount + activeCount + alumniCount;
-        int netDropoutCount = grossDropoutCount - dropoutReenterSameCourse;
-
-        this.grossDropoutAlumnusRate = 1.0 * grossDropoutCount / alumniCount;
-        this.grossDropoutEnrolledRate = 1.0 * grossDropoutCount / enrolled;
-        this.netDropoutAlumnusRate = 1.0 * netDropoutCount / alumniCount;
-        this.netDropoutEnrolledRate = 1.0 * netDropoutCount / enrolled;
-        this.grossDropoutCount = grossDropoutCount;
-        this.netDropoutCount = netDropoutCount;
-    }
-
     public double getGrossDropoutAlumnusRate() {
         return grossDropoutAlumnusRate;
     }

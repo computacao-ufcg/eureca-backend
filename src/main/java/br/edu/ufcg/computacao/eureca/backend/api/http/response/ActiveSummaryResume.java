@@ -16,44 +16,6 @@ public class ActiveSummaryResume {
         this.riskClassPercentage = riskClassPercentage;
     }
 
-    public ActiveSummaryResume(Collection<Student> actives) {
-        this.activesCount = actives.size();
-        int advanced = 0, critical = 0, late = 0, normal = 0, notApplicable = 0, unfeasible = 0;
-        for (Student active : actives) {
-            switch (active.getRiskClass()) {
-                case ADVANCED:
-                    advanced++;
-                    break;
-                case CRITICAL:
-                    critical++;
-                    break;
-                case LATE:
-                    late++;
-                    break;
-                case NORMAL:
-                    normal++;
-                    break;
-                case NOT_APPLICABLE:
-                    notApplicable++;
-                    break;
-                case UNFEASIBLE:
-                    unfeasible++;
-                    break;
-                default:
-                    break;
-            }
-        }
-        double advancedPercentage = advanced / (double) activesCount;
-        double criticalPercentage = critical / (double) activesCount;
-        double latePercentage = late / (double) activesCount;
-        double normalPercentage = normal / (double) activesCount;
-        double notApplicablePercentage = notApplicable / (double) activesCount;
-        double unfeasiblePercentage = unfeasible/ (double) activesCount;
-
-        this.riskClassCount = new RiskClassCountSummary(unfeasible, critical, late, normal, advanced, notApplicable);
-        this.riskClassPercentage = new RiskClassPercentageSummary(unfeasiblePercentage, criticalPercentage, latePercentage, normalPercentage, advancedPercentage, notApplicablePercentage);
-    }
-
     public int getActivesCount() {
         return activesCount;
     }
