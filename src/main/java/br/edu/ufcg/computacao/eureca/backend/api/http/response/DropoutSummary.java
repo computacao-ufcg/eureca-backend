@@ -1,5 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
+import java.util.Collection;
+
 public class DropoutSummary {
     private double grossDropoutAlumnusRate;
     private double grossDropoutEnrolledRate;
@@ -8,7 +10,7 @@ public class DropoutSummary {
     private int grossDropoutCount;
     private int netDropoutCount;
 
-    public DropoutSummary(double grossDropoutAlumnusRate, double grossDropoutEnrolledRate, double naeDropoutAlumnusRate,
+    public DropoutSummary(double grossDropoutAlumnusRate, double grossDropoutEnrolledRate, double netDropoutAlumnusRate,
                           double netDropoutEnrolledRate, int grossDropoutCount, int netDropoutCount) {
         this.grossDropoutAlumnusRate = grossDropoutAlumnusRate;
         this.grossDropoutEnrolledRate = grossDropoutEnrolledRate;
@@ -32,6 +34,22 @@ public class DropoutSummary {
 
     public void setGrossDropoutEnrolledRate(double grossDropoutEnrolledRate) {
         this.grossDropoutEnrolledRate = grossDropoutEnrolledRate;
+    }
+
+    public double getNetDropoutAlumnusRate() {
+        return netDropoutAlumnusRate;
+    }
+
+    public void setNetDropoutAlumnusRate(double netDropoutAlumnusRate) {
+        this.netDropoutAlumnusRate = netDropoutAlumnusRate;
+    }
+
+    public double getNetDropoutEnrolledRate() {
+        return netDropoutEnrolledRate;
+    }
+
+    public void setNetDropoutEnrolledRate(double netDropoutEnrolledRate) {
+        this.netDropoutEnrolledRate = netDropoutEnrolledRate;
     }
 
     public int getGrossDropoutCount() {

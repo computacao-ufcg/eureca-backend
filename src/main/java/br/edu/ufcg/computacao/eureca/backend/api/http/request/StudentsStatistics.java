@@ -166,4 +166,20 @@ public class StudentsStatistics {
             throw e;
         }
     }
+
+    @RequestMapping(value = "students/summary", method = RequestMethod.GET)
+    public ResponseEntity<StudentsSummaryResume> getStudentsSummary(
+            @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
+            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
+            @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
+    ) throws EurecaException {
+        try {
+            StudentsSummaryResume summary = ApplicationFacade.getInstance().getStudentsStatistics(token, from, to);
+            return new ResponseEntity<>(summary, HttpStatus.OK);
+        } catch (EurecaException e) {
+            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
+            throw e;
+        }
+    }
 }

@@ -1,5 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
+import java.util.Collection;
+import java.util.TreeSet;
+
 public class AlumniSummary {
     double averageGpa;
     int maxDegreeCount;
