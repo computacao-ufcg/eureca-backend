@@ -149,7 +149,7 @@ public class SummaryDataHolder {
         return new DropoutSummaryResponse(sliderLabel, dropouts, summary);
     }
 
-    private synchronized DelayedSummary getDelayedSummary(Collection<DelayedDataResponse> terms) {
+    private synchronized DelayedSummary getDelayedSummary(Collection<DelayedDataResponse> delayedStudents) {
         double totalAttemptedCredits = 0;
         double totalLoad = 0;
         double totalCost = 0;
@@ -158,17 +158,18 @@ public class SummaryDataHolder {
         double totalPace = 0;
         double totalRisk = 0;
         double totalSuccessRate = 0;
-        int totalDelayed = terms.size();
+        int totalDelayed = delayedStudents.size();
+        double v;
 
-        for (DelayedDataResponse delayed : terms) {
+        for (DelayedDataResponse delayed : delayedStudents) {
             totalAttemptedCredits += delayed.getAttemptedCredits();
-            totalLoad += delayed.getAverageLoad();
-            totalCost += delayed.getCost();
-            totalCourseDurationPrediction += delayed.getCourseDurationPrediction();
-            totalFeasibility += delayed.getFeasibility();
-            totalPace += delayed.getPace();
-            totalRisk += delayed.getRisk();
-            totalSuccessRate += delayed.getSuccessRate();
+            totalLoad += ((v = delayed.getAverageLoad()) == -1.0 ? 0 : v);
+            totalCost += ((v = delayed.getCost()) == -1.0 ? 0 : v);
+            totalCourseDurationPrediction += ((v = delayed.getCourseDurationPrediction()) == -1.0 ? 0 : v);
+            totalFeasibility += ((v = delayed.getFeasibility()) == -1.0 ? 0 : v);
+            totalPace += ((v = delayed.getPace()) == -1.0 ? 0 : v);
+            totalRisk += ((v = delayed.getRisk()) == -1.0 ? 0 : v);
+            totalSuccessRate += ((v = delayed.getSuccessRate()) == -1.0 ? 0 : v);
         }
 
         double averageAttemptedCredits = totalAttemptedCredits / totalDelayed;
