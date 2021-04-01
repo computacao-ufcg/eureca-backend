@@ -1,18 +1,15 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-import java.util.Collection;
-import java.util.TreeSet;
-
 public class AlumniSummary {
     double averageGpa;
-    int maxDegreeCount;
     double averageDegreeCount;
+    int maxDegreeCount;
     int minDegreeCount;
     String maxDegreeCountTerm;
     String minDegreeCountTerm;
     int totalDegreeCount;
 
-    public AlumniSummary(double averageGpa, int maxDegreeCount, double averageDegreeCount, int minDegreeCount,
+    public AlumniSummary(double averageGpa, double averageDegreeCount, int maxDegreeCount, int minDegreeCount,
                          String maxDegreeCountTerm, String minDegreeCountTerm, int totalDegreeCount) {
         this.averageGpa = averageGpa;
         this.maxDegreeCount = maxDegreeCount;

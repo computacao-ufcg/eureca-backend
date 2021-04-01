@@ -9,10 +9,10 @@ public class ActiveSummaryResponse {
     @ApiModelProperty(position = 0, example = ApiDocumentation.Model.SLIDER_LABEL)
     Collection<String> sliderLabel;
     Collection<ActiveStatusSummary> actives;
-    RiskSummary summary;
+    ActiveSummaryResume summary;
 
     public ActiveSummaryResponse(Collection<String> sliderLabel, Collection<ActiveStatusSummary> actives,
-                                 RiskSummary summary) {
+                                 ActiveSummaryResume summary) {
         this.sliderLabel = sliderLabel;
         this.actives = actives;
         this.summary = summary;
@@ -34,11 +34,11 @@ public class ActiveSummaryResponse {
         this.actives = actives;
     }
 
-    public RiskSummary getSummary() {
+    public ActiveSummaryResume getSummary() {
         return summary;
     }
 
-    public void setSummary(RiskSummary summary) {
+    public void setSummary(ActiveSummaryResume summary) {
         this.summary = summary;
     }
 }

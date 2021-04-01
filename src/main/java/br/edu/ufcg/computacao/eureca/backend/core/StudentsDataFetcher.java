@@ -1,5 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core;
 
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.AlumniPerStudentSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.DelayedDataResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.StudentDataResponse;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
@@ -13,21 +14,13 @@ import java.util.Collection;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-public class StudentDataFetcher {
-    private Logger LOGGER = Logger.getLogger(StudentDataFetcher.class);
+public class StudentsDataFetcher {
+    private Logger LOGGER = Logger.getLogger(StudentsDataFetcher.class);
 
-    private static StudentDataFetcher instance;
     private DataAccessFacade dataAccessFacade;
 
-    private StudentDataFetcher() {
+    public StudentsDataFetcher() {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
-    }
-
-    public static synchronized StudentDataFetcher getInstance() {
-        if (instance == null) {
-            instance = new StudentDataFetcher();
-        }
-        return instance;
     }
 
     public Collection<StudentDataResponse> getActiveCSV(String from, String to) {
@@ -72,4 +65,9 @@ public class StudentDataFetcher {
                 .map(DelayedDataResponse::new)
                 .collect(Collectors.toSet());
     }
+
+    public Collection<AlumniPerStudentSummary> getAlumniPerStudentSummary(String from, String to) {
+        return this.dataAccessFacade.getAlumniPerStudentSummary(from, to);
+    }
+
 }

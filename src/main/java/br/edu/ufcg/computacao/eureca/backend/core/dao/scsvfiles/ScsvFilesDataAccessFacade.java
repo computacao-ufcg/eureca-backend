@@ -58,7 +58,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     private double computePercentage(Student item) {
         StudentData data = item.getStudentData();
         double totalCreditsFulfilled = data.getMandatoryCredits() + data.getElectiveCredits() + data.getComplementaryCredits();
-        return totalCreditsFulfilled/ Curriculum.TOTAL_CREDITS_NEEDED;
+        return totalCreditsFulfilled / Curriculum.TOTAL_CREDITS_NEEDED;
     }
 
     @Override

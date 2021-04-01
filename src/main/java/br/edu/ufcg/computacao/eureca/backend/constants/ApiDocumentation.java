@@ -53,6 +53,7 @@ public class ApiDocumentation {
         public static final String GET_DROPOUT = "Retorna um sumário dos dados dos discentes evadidos.";
         public static final String GET_DROPOUT_CSV = "Retorna os dados completos dos discentes evadidos.";
         public static final String GET_DELAYED_CSV = "Retorna os dados completos dos discentes retidos.";
+        public static final String GET_SUBJECTS = "Retorna um sumário dos dados das disciplinas.";
         public static final String FROM = "Período inicial";
         public static final String TO = "Período final";
     }

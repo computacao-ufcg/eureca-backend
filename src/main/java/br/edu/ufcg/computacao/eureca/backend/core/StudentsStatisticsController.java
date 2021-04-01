@@ -1,7 +1,8 @@
-package br.edu.ufcg.computacao.eureca.backend.core.holders;
+package br.edu.ufcg.computacao.eureca.backend.core;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
+import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import org.apache.log4j.Logger;
@@ -11,22 +12,13 @@ import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class SummaryDataHolder {
-    private Logger LOGGER = Logger.getLogger(SummaryDataHolder.class);
+public class StudentsStatisticsController {
+    private Logger LOGGER = Logger.getLogger(StudentsStatisticsController.class);
 
-    private static SummaryDataHolder instance;
     private DataAccessFacade dataAccessFacade;
 
-    private SummaryDataHolder() {
+    public StudentsStatisticsController() {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
-    }
-
-    public static SummaryDataHolder getInstance() {
-        synchronized (SummaryDataHolder.class) {
-            if (instance == null)
-                instance = new SummaryDataHolder();
-            return instance;
-        }
     }
 
     private <T> Collection<String> getSliderLabel(Collection<T> terms, Function<T, String> function) {
@@ -61,7 +53,7 @@ public class SummaryDataHolder {
         }
 
         return new AlumniSummary((totalAlumniCount == 0 ? -1.0 : accumulatedGPA/totalAlumniCount),
-                maxAlumniCount, (terms.size() == 0 ? -1.0 : (1.0*totalAlumniCount)/terms.size()), minAlumniCount,
+                (terms.size() == 0 ? -1.0 : (1.0*totalAlumniCount)/terms.size()), maxAlumniCount, minAlumniCount,
                 maxAlumniCountTerm, minAlumniCountTerm, totalAlumniCount);
     }
 
@@ -115,7 +107,7 @@ public class SummaryDataHolder {
                         (1.0 * critical)/activesCount, (1.0 * late)/activesCount,
                         (1.0 * normal)/activesCount, (1.0 * advanced)/activesCount,
                         (1.0 * notApplicable)/activesCount);
-        RiskSummary riskSummary = new RiskSummary(activesCount, countSummary, percentageSummary);
+        ActiveSummaryResume riskSummary = new ActiveSummaryResume(activesCount, countSummary, percentageSummary);
         return new ActiveSummaryResponse(sliderLabel, activeStatusSummaries, riskSummary);
     }
 
@@ -279,7 +271,7 @@ public class SummaryDataHolder {
         return new DropoutSummaryResume(dropoutSummary, dropoutClassification);
     }
 
-    public synchronized StudentsSummaryResume getStudentsSummaryResume(String from, String to) {
+    public synchronized StudentsSummaryResponse getStudentsSummaryResume(String from, String to) {
         Collection<Student> actives = this.dataAccessFacade.getActives(from, to);
         Collection<AlumniPerTermSummary> alumni = this.dataAccessFacade.getAlumniPerTermSummary(from, to);
         Collection<DropoutPerTermSummary> dropouts = this.dataAccessFacade.getDropoutsSummary(from, to);
@@ -298,6 +290,6 @@ public class SummaryDataHolder {
         DelayedSummary delayedSummary = this.getDelayedSummary(delayedData);
         DropoutSummaryResume dropoutSummary = this.getDropoutSummaryResume(dropouts, activesCount, alumniCount);
 
-        return new StudentsSummaryResume(activeSummary, alumniSummary, delayedSummary, dropoutSummary);
+        return new StudentsSummaryResponse(activeSummary, alumniSummary, delayedSummary, dropoutSummary);
     }
 }

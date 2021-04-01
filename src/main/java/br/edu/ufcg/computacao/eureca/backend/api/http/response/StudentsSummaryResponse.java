@@ -1,13 +1,13 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class StudentsSummaryResume {
+public class StudentsSummaryResponse {
 
     private ActiveSummaryResume activesSummary;
     private AlumniSummary alumniSummary;
     private DelayedSummary delayedSummary;
     private DropoutSummaryResume dropoutsSummary;
 
-    public StudentsSummaryResume(ActiveSummaryResume activesSummary, AlumniSummary alumniSummary, DelayedSummary delayedSummary, DropoutSummaryResume dropoutsSummary) {
+    public StudentsSummaryResponse(ActiveSummaryResume activesSummary, AlumniSummary alumniSummary, DelayedSummary delayedSummary, DropoutSummaryResume dropoutsSummary) {
         this.activesSummary = activesSummary;
         this.alumniSummary = alumniSummary;
         this.delayedSummary = delayedSummary;

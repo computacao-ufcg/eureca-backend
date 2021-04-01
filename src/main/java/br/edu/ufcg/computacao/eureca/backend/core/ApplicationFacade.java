@@ -4,15 +4,9 @@ import br.edu.ufcg.computacao.eureca.as.core.AuthenticationUtil;
 import br.edu.ufcg.computacao.eureca.as.core.models.SystemUser;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.constants.*;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
-import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EurecaAsPublicKeyHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.holders.SummaryDataHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.PropertiesHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
-import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.backend.core.plugins.AuthorizationPlugin;
 import br.edu.ufcg.computacao.eureca.common.exceptions.ConfigurationErrorException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
@@ -24,19 +18,21 @@ import java.security.GeneralSecurityException;
 
 import java.security.interfaces.RSAPublicKey;
 import java.util.Collection;
-import java.util.TreeSet;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 public class ApplicationFacade {
     private static final Logger LOGGER = Logger.getLogger(ApplicationFacade.class);
     private RSAPublicKey asPublicKey;
     private AuthorizationPlugin authorizationPlugin;
-    private DataAccessFacade dataAccessFacade;
+    private StudentsStatisticsController studentsStatisticsController;
+    private StudentsDataFetcher studentsDataFetcher;
+    private SubjectsStatisticsController subjectsStatisticsController;
     private static ApplicationFacade instance;
 
     private ApplicationFacade() {
-        this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
+        this.studentsStatisticsController = new StudentsStatisticsController();
+        this.studentsDataFetcher = new StudentsDataFetcher();
+        this.subjectsStatisticsController = new SubjectsStatisticsController();
     }
 
     public static ApplicationFacade getInstance() {
@@ -54,47 +50,52 @@ public class ApplicationFacade {
 
     public ActiveSummaryResponse getActiveSummary(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ACTIVES);
-        return SummaryDataHolder.getInstance().getActiveSummaryResponse(from, to);
+        return this.studentsStatisticsController.getActiveSummaryResponse(from, to);
     }
 
     public Collection<StudentDataResponse> getActiveCSV(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ACTIVES_CSV);
-        return StudentDataFetcher.getInstance().getActiveCSV(from, to);
+        return this.studentsDataFetcher.getActiveCSV(from, to);
     }
 
     public AlumniSummaryResponse getAlumniSummary(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI);
-        return SummaryDataHolder.getInstance().getAlumniSummaryResponse(from, to);
+        return this.studentsStatisticsController.getAlumniSummaryResponse(from, to);
     }
 
     public Collection<StudentDataResponse> getAlumniCSV(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_CSV);
-        return StudentDataFetcher.getInstance().getAlumniCSV(from, to);
+        return this.studentsDataFetcher.getAlumniCSV(from, to);
     }
 
     public DropoutSummaryResponse getDropoutsSummary(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DROPOUTS);
-        return SummaryDataHolder.getInstance().getDropoutsSummaryResponse(from, to);
+        return this.studentsStatisticsController.getDropoutsSummaryResponse(from, to);
     }
 
     public Collection<StudentDataResponse> getDropoutsCSV(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DROPOUTS_CSV);
-        return StudentDataFetcher.getInstance().getDropoutsCSV(from, to);
+        return this.studentsDataFetcher.getDropoutsCSV(from, to);
     }
 
     public Collection<AlumniPerStudentSummary> getAlumniBasicData(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_BASIC_DATA);
-        return this.dataAccessFacade.getAlumniPerStudentSummary(from, to);
+        return this.studentsDataFetcher.getAlumniPerStudentSummary(from, to);
     }
 
     public Collection<DelayedDataResponse> getDelayedCSV(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DELAYED_CSV);
-        return StudentDataFetcher.getInstance().getDelayedCSV(from, to);
+        return this.studentsDataFetcher.getDelayedCSV(from, to);
     }
 
-    public StudentsSummaryResume getStudentsStatistics(String token, String from, String to) throws EurecaException {
+    public StudentsSummaryResponse getStudentsStatistics(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_STATISTICS);
-        return SummaryDataHolder.getInstance().getStudentsSummaryResume(from, to);
+        return this.studentsStatisticsController.getStudentsSummaryResume(from, to);
+    }
+
+    public Map<String, Collection<SubjectSummaryResponse>> getSubjectsStatistics(String token, String from, String to) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_STATISTICS);
+        return this.subjectsStatisticsController.getSubjectsStatistics(from, to);
     }
 
     public String getPublicKey() throws EurecaException {
@@ -125,5 +126,4 @@ public class ApplicationFacade {
                     ConfigurationPropertyDefaults.BUILD_NUMBER);
         return SystemConstants.API_VERSION_NUMBER + "-" + buildNumber;
     }
-
 }

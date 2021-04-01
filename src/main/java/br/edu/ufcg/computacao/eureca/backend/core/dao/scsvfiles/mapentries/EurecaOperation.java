@@ -9,7 +9,8 @@ public enum EurecaOperation {
     GET_DROPOUTS("getDropouts"),
     GET_DROPOUTS_CSV("getDropoutsCSV"),
     GET_DELAYED_CSV("getDelayedCSV"),
-    GET_STUDENTS_STATISTICS("getStudentsStatistics");
+    GET_STUDENTS_STATISTICS("getStudentsStatistics"),
+    GET_SUBJECTS_STATISTICS("getSubjectsStatistics");
 
     private String value;
 
