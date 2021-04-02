@@ -3,17 +3,17 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 
 public class DropoutReasonSummary {
-    int failed3Times;
-    int reenterSameCourse;
-    int reenterOtherCourse;
-    int failedAll;
-    int cancelled;
-    int cancelledByDecree;
-    int cancelledCourseChange;
-    int cancelledUponRequest;
-    int leftWithoutNotice;
-    int missedGraduation;
-    int transferred;
+    private int failed3Times;
+    private int reenterSameCourse;
+    private int reenterOtherCourse;
+    private int failedAll;
+    private int cancelled;
+    private int cancelledByDecree;
+    private int cancelledCourseChange;
+    private int cancelledUponRequest;
+    private int leftWithoutNotice;
+    private int missedGraduation;
+    private int transferred;
 
     public DropoutReasonSummary(int[] dropouts) {
         this.failed3Times = dropouts[SystemConstants.FAILED_3_TIMES_INDEX];

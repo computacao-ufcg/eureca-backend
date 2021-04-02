@@ -1,6 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.RiskClassCountSummary;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
+import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import org.apache.log4j.Logger;
@@ -14,6 +16,7 @@ public class IndexesHolder {
     private Map<String, CpfRegistration> registrationMap;
     private List<CpfRegistration> actives;
     private Map<String, Collection<CpfRegistration>> activeByAdmissionTerm;
+    private Map<String, Collection<CpfRegistration>> delayedByAdmissionTerm;
     private List<CpfRegistration> alumni;
     private Map<String, Collection<CpfRegistration>> alumniByAdmissionTerm;
     private Map<String, Collection<CpfRegistration>> alumniByGraduationTerm;
@@ -72,6 +75,7 @@ public class IndexesHolder {
         this.registrationMap = new HashMap<>();
         this.actives = new ArrayList<>();
         this.activeByAdmissionTerm = new HashMap<>();
+        this.delayedByAdmissionTerm = new HashMap<>();
         this.alumni = new ArrayList<>();
         this.alumniByAdmissionTerm = new HashMap<>();
         this.alumniByGraduationTerm = new HashMap<>();
@@ -91,6 +95,18 @@ public class IndexesHolder {
                 if (list == null) list = new ArrayList<>();
                 list.add(k);
                 this.activeByAdmissionTerm.put(admissionTerm, list);
+
+                switch ((new Student(k, v)).getRiskClass()) {
+                    case CRITICAL:
+                    case LATE:
+                    case UNFEASIBLE:
+                        Collection<CpfRegistration> listDelayed = this.delayedByAdmissionTerm.get(admissionTerm);
+                        if (listDelayed == null) listDelayed = new ArrayList<>();
+                        listDelayed.add(k);
+                        this.delayedByAdmissionTerm.put(admissionTerm, listDelayed);
+                        break;
+                }
+
             }
             if (v.isAlumnus()) { // graduated
                 LOGGER.debug(String.format(Messages.INDEX_ALUMNUS_S, v.getName()));

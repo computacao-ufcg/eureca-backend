@@ -1,12 +1,12 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class RiskClassCountSummary {
-    int unfeasible;
-    int critical;
-    int late;
-    int normal;
-    int advanced;
-    int notApplicable;
+    private int unfeasible;
+    private int critical;
+    private int late;
+    private int normal;
+    private int advanced;
+    private int notApplicable;
 
     public RiskClassCountSummary(int unfeasible, int critical, int late, int normal, int advanced, int notApplicable) {
         this.unfeasible = unfeasible;

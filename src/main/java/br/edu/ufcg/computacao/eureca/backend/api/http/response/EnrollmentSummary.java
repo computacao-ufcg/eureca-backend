@@ -1,15 +1,14 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class EnrollmentSummary {
-    int studentCount;
-    int passed;
-    int failed;
-    int absent;
-    int dropout;
-    double successRate;
-    double unsuccessRate;
-    double failureRate;
-    double dropoutRate;
+    private int studentCount;
+    private int passed;
+    private int failed;
+    private int absent;
+    private int dropout;
+    private double successRate;
+    private double failureRate;
+    private double dropoutRate;
 
     public EnrollmentSummary() {
     }
@@ -23,7 +22,6 @@ public class EnrollmentSummary {
         this.successRate = (1.0*this.passed) / this.studentCount;
         this.failureRate = (1.0*(this.failed + this.absent)) / this.studentCount;
         this.dropoutRate = (1.0*this.dropout) / this.studentCount;
-        this.unsuccessRate = 1.0 - this.successRate;
     }
 
     public int getStudentCount() {
@@ -64,14 +62,6 @@ public class EnrollmentSummary {
 
     public void setSuccessRate(double successRate) {
         this.successRate = successRate;
-    }
-
-    public double getUnsuccessRate() {
-        return unsuccessRate;
-    }
-
-    public void setUnsuccessRate(double unsuccessRate) {
-        this.unsuccessRate = unsuccessRate;
     }
 
     public double getFailureRate() {

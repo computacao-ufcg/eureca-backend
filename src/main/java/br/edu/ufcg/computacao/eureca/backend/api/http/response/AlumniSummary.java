@@ -1,13 +1,13 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class AlumniSummary {
-    double averageGpa;
-    double averageDegreeCount;
-    int maxDegreeCount;
-    int minDegreeCount;
-    String maxDegreeCountTerm;
-    String minDegreeCountTerm;
-    int totalDegreeCount;
+    private double averageGpa;
+    private double averageDegreeCount;
+    private int maxDegreeCount;
+    private int minDegreeCount;
+    private String maxDegreeCountTerm;
+    private String minDegreeCountTerm;
+    private int totalDegreeCount;
 
     public AlumniSummary(double averageGpa, double averageDegreeCount, int maxDegreeCount, int minDegreeCount,
                          String maxDegreeCountTerm, String minDegreeCountTerm, int totalDegreeCount) {

@@ -1,14 +1,14 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class AlumniPerTermSummary implements Comparable {
-    String graduationTerm;
-    double averageGpa;
-    int alumniCount;
+    private String graduationTerm;
+    private int alumniCount;
+    private double averageGpa;
 
-    public AlumniPerTermSummary(String graduationTerm, double averageGpa, int alumniCount) {
+    public AlumniPerTermSummary(String graduationTerm, int alumniCount, double averageGpa) {
         this.graduationTerm = graduationTerm;
-        this.averageGpa = averageGpa;
         this.alumniCount = alumniCount;
+        this.averageGpa = averageGpa;
     }
 
     public double getAverageGpa() {
@@ -19,20 +19,20 @@ public class AlumniPerTermSummary implements Comparable {
         this.averageGpa = averageGpa;
     }
 
-    public String getGraduationTerm() {
-        return graduationTerm;
-    }
-
-    public void setGraduationTerm(String graduationTerm) {
-        this.graduationTerm = graduationTerm;
-    }
-
     public int getAlumniCount() {
         return alumniCount;
     }
 
     public void setAlumniCount(int alumniCount) {
         this.alumniCount = alumniCount;
+    }
+
+    public String getGraduationTerm() {
+        return graduationTerm;
+    }
+
+    public void setGraduationTerm(String graduationTerm) {
+        this.graduationTerm = graduationTerm;
     }
 
     @Override

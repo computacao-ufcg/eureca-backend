@@ -3,12 +3,12 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Registration;
 
 public class AlumniDigestResponse implements Comparable {
-    String registration;
-    String name;
-    int course;
-    int level;
-    String admissionTerm;
-    String graduationTerm;
+    private String registration;
+    private String name;
+    private int course;
+    private int level;
+    private String admissionTerm;
+    private String graduationTerm;
 
     public String getRegistration() {
         return registration;

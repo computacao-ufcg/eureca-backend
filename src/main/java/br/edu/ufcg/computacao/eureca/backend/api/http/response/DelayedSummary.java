@@ -1,7 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class DelayedSummary  {
-
     private int delayedCount;
     private double averageAttemptedCredits;
     private double averageLoad;

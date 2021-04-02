@@ -1,20 +1,20 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class DropoutPerTermSummary implements Comparable {
-    String term;
-    DropoutReasonSummary reasons;
+    private String dropoutTerm;
+    private DropoutReasonSummary reasons;
 
-    public DropoutPerTermSummary(String term, DropoutReasonSummary reasons) {
-        this.term = term;
+    public DropoutPerTermSummary(String dropoutTerm, DropoutReasonSummary reasons) {
+        this.dropoutTerm = dropoutTerm;
         this.reasons = reasons;
     }
 
-    public String getTerm() {
-        return term;
+    public String getDropoutTerm() {
+        return dropoutTerm;
     }
 
-    public void setTerm(String term) {
-        this.term = term;
+    public void setDropoutTerm(String dropoutTerm) {
+        this.dropoutTerm = dropoutTerm;
     }
 
     public DropoutReasonSummary getReasons() {
@@ -28,6 +28,6 @@ public class DropoutPerTermSummary implements Comparable {
     @Override
     public int compareTo(Object o) {
         DropoutPerTermSummary other = (DropoutPerTermSummary) o;
-        return this.getTerm().compareTo(other.getTerm());
+        return this.getDropoutTerm().compareTo(other.getDropoutTerm());
     }
 }

@@ -7,14 +7,12 @@ import java.util.Collection;
 
 public class AlumniSummaryResponse {
     @ApiModelProperty(position = 0, example = ApiDocumentation.Model.SLIDER_LABEL)
-    Collection<String> sliderLabel;
-    Collection<AlumniPerTermSummary> terms;
-    AlumniSummary summary;
+    private Collection<String> sliderLabel;
+    private Collection<AlumniPerTermSummary> terms;
 
-    public AlumniSummaryResponse(Collection<String> sliderLabel, Collection<AlumniPerTermSummary> terms, AlumniSummary summary) {
+    public AlumniSummaryResponse(Collection<String> sliderLabel, Collection<AlumniPerTermSummary> terms) {
         this.sliderLabel = sliderLabel;
         this.terms = terms;
-        this.summary = summary;
     }
 
     public Collection<String> getSliderLabel() {
@@ -31,13 +29,5 @@ public class AlumniSummaryResponse {
 
     public void setTerms(Collection<AlumniPerTermSummary> terms) {
         this.terms = terms;
-    }
-
-    public AlumniSummary getSummary() {
-        return summary;
-    }
-
-    public void setSummary(AlumniSummary summary) {
-        this.summary = summary;
     }
 }

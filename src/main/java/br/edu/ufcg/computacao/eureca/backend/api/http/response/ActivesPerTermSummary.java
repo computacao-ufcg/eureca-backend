@@ -1,13 +1,12 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class ActivesPerTermSummary {
+    private String admissionTerm;
+    private RiskClassCountSummary riskClassCount;
 
-    String admissionTerm;
-    ActivesSummary summary;
-
-    public ActivesPerTermSummary(String admissionTerm, ActivesSummary summary) {
+    public ActivesPerTermSummary(String admissionTerm, RiskClassCountSummary riskClassCount) {
         this.admissionTerm = admissionTerm;
-        this.summary = summary;
+        this.riskClassCount = riskClassCount;
     }
 
     public String getAdmissionTerm() {
@@ -18,11 +17,11 @@ public class ActivesPerTermSummary {
         this.admissionTerm = admissionTerm;
     }
 
-    public ActivesSummary getSummary() {
-        return summary;
+    public RiskClassCountSummary getRiskClassCount() {
+        return riskClassCount;
     }
 
-    public void setSummary(ActivesSummary summary) {
-        this.summary = summary;
+    public void setRiskClassCount(RiskClassCountSummary riskClassCount) {
+        this.riskClassCount = riskClassCount;
     }
 }

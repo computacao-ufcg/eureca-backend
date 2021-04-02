@@ -7,15 +7,12 @@ import java.util.Collection;
 
 public class DropoutsSummaryResponse {
     @ApiModelProperty(position = 0, example = ApiDocumentation.Model.SLIDER_LABEL)
-    Collection<String> sliderLabel;
-    Collection<DropoutPerTermSummary> terms;
-    DropoutsSummary summary;
+    private Collection<String> sliderLabel;
+    private Collection<DropoutPerTermSummary> terms;
 
-    public DropoutsSummaryResponse(Collection<String> sliderLabel, Collection<DropoutPerTermSummary> terms,
-                                   DropoutsSummary summary) {
+    public DropoutsSummaryResponse(Collection<String> sliderLabel, Collection<DropoutPerTermSummary> terms) {
         this.sliderLabel = sliderLabel;
         this.terms = terms;
-        this.summary = summary;
     }
 
     public Collection<String> getSliderLabel() {
@@ -32,13 +29,5 @@ public class DropoutsSummaryResponse {
 
     public void setTerms(Collection<DropoutPerTermSummary> terms) {
         this.terms = terms;
-    }
-
-    public DropoutsSummary getSummary() {
-        return summary;
-    }
-
-    public void setSummary(DropoutsSummary summary) {
-        this.summary = summary;
     }
 }

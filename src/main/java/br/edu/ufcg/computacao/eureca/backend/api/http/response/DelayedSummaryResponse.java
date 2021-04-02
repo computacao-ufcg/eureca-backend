@@ -7,15 +7,12 @@ import java.util.Collection;
 
 public class DelayedSummaryResponse {
     @ApiModelProperty(position = 0, example = ApiDocumentation.Model.SLIDER_LABEL)
-    Collection<String> sliderLabel;
-    Collection<DelayedPerTermSummary> terms;
-    DelayedSummary summary;
+    private Collection<String> sliderLabel;
+    private Collection<DelayedPerTermSummary> terms;
 
-    public DelayedSummaryResponse(Collection<String> sliderLabel, Collection<DelayedPerTermSummary> terms,
-                                  DelayedSummary summary) {
+    public DelayedSummaryResponse(Collection<String> sliderLabel, Collection<DelayedPerTermSummary> terms) {
         this.sliderLabel = sliderLabel;
         this.terms = terms;
-        this.summary = summary;
     }
 
     public Collection<String> getSliderLabel() {
@@ -32,13 +29,5 @@ public class DelayedSummaryResponse {
 
     public void setTerms(Collection<DelayedPerTermSummary> terms) {
         this.terms = terms;
-    }
-
-    public DelayedSummary getSummary() {
-        return summary;
-    }
-
-    public void setSummary(DelayedSummary summary) {
-        this.summary = summary;
     }
 }

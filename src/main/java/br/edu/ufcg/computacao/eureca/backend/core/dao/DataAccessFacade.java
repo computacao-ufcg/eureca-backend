@@ -21,6 +21,8 @@ public interface DataAccessFacade {
 
     Collection<DropoutPerTermSummary> getDropoutsPerTermSummary(String from, String to);
 
+    Collection<DelayedPerTermSummary> getDelayedPerTermSummary(String from, String to);
+
     Collection<AlumniDigestResponse> getAlumniPerStudentSummary(String from, String to);
 
     Collection<AttemptsSummary> getAttemptsSummary();

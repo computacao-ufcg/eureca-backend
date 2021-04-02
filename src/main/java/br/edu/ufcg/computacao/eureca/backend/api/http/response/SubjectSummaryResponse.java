@@ -3,11 +3,11 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 import java.util.Collection;
 
 public class SubjectSummaryResponse {
-    String term;
-    String code;
-    String name;
-    Collection<EnrollmentSummary> enrollments;
-    EnrollmentSummary summary;
+    private String term;
+    private String code;
+    private String name;
+    private Collection<EnrollmentSummary> enrollments;
+    private EnrollmentSummary summary;
 
     public SubjectSummaryResponse() {
     }

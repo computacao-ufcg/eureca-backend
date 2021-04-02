@@ -3,7 +3,6 @@ package br.edu.ufcg.computacao.eureca.backend.core;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import org.apache.log4j.Logger;
 
 import java.util.Collection;
@@ -22,42 +21,35 @@ public class StudentsStatisticsController {
 
     public ActivesSummaryResponse getActivesSummaryResponse(String from, String to) {
         Collection<ActivesPerTermSummary> terms = this.dataAccessFacade.getActivesPerTermSummary(from, to);
-        ActivesSummary summary = this.getActivesSummary(terms);
         Collection<String> sliderLabel = this.getSliderLabel(terms, ActivesPerTermSummary::getAdmissionTerm);
-        return new ActivesSummaryResponse(sliderLabel, terms, summary);
+        return new ActivesSummaryResponse(sliderLabel, terms);
     }
 
     public AlumniSummaryResponse getAlumniSummaryResponse(String from, String to) {
         Collection<AlumniPerTermSummary> terms = this.dataAccessFacade.getAlumniPerTermSummary(from, to);
-        AlumniSummary alumniSummary = this.getAlumniSummary(terms);
         Collection<String> sliderLabel = this.getSliderLabel(terms, AlumniPerTermSummary::getGraduationTerm);
-        return new AlumniSummaryResponse(sliderLabel, terms, alumniSummary);
+        return new AlumniSummaryResponse(sliderLabel, terms);
     }
 
     public DropoutsSummaryResponse getDropoutsSummaryResponse(String from, String to) {
         Collection<DropoutPerTermSummary> dropouts = this.dataAccessFacade.getDropoutsPerTermSummary(from, to);
         int activeCount = this.dataAccessFacade.getActives(from, to).size();
         int alumniCount = this.dataAccessFacade.getAlumni(from, to).size();
-        DropoutsSummary summary = this.getDropoutsSummary(dropouts, activeCount, alumniCount);
-        Collection<String> sliderLabel = this.getSliderLabel(dropouts, DropoutPerTermSummary::getTerm);
-        return new DropoutsSummaryResponse(sliderLabel, dropouts, summary);
+        Collection<String> sliderLabel = this.getSliderLabel(dropouts, DropoutPerTermSummary::getDropoutTerm);
+        return new DropoutsSummaryResponse(sliderLabel, dropouts);
     }
 
     public DelayedSummaryResponse getDelayedSummaryResponse(String from, String to) {
-        return null;
+        Collection<DelayedPerTermSummary> terms = this.dataAccessFacade.getDelayedPerTermSummary(from, to);
+        Collection<String> sliderLabel = this.getSliderLabel(terms, DelayedPerTermSummary::getAdmissionTerm);
+        return new DelayedSummaryResponse(sliderLabel, terms);
     }
 
     public StudentsSummaryResponse getStudentsSummaryResponse(String from, String to) {
         Collection<ActivesPerTermSummary> actives = this.dataAccessFacade.getActivesPerTermSummary(from, to);
         Collection<AlumniPerTermSummary> alumni = this.dataAccessFacade.getAlumniPerTermSummary(from, to);
         Collection<DropoutPerTermSummary> dropouts = this.dataAccessFacade.getDropoutsPerTermSummary(from, to);
-
-        Collection<Student> delayed = this.dataAccessFacade.getDelayed(from, to);
-
-        Collection<DelayedPerTermSummary> delayedData = delayed
-                .stream()
-                .map(DelayedPerTermSummary::new)
-                .collect(Collectors.toList());
+        Collection<DelayedPerTermSummary> delayed = this.dataAccessFacade.getDelayedPerTermSummary(from, to);
 
         int alumniCount = this.dataAccessFacade.getAlumni(from, to).size();
         int activesCount = actives.size();
