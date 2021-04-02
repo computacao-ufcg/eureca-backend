@@ -7,6 +7,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.models.AttemptsSummary;
 import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
+import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -74,12 +75,19 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
                 Collection<CpfRegistration> studentIds = entry.getValue();
                 int termAlumniCount = studentIds.size();
-                double termAccumulatedGPA = 0;
+                double aggregateGPA = 0.0;
+                double aggregateTermsCount = 0.0;
+                double aggregateCost = 0.0;
                 for (CpfRegistration id : studentIds) {
                     StudentData alumnus = studentsMap.get(id);
-                    termAccumulatedGPA += alumnus.getGpa();
+                    aggregateGPA += alumnus.getGpa();
+                    aggregateTermsCount += alumnus.getCompletedTerms();
+                    aggregateCost += (MetricsCalculator.getInstance().computeMetrics(new Student(id, alumnus)).getCost());
                 }
-                AlumniPerTermSummary termData = new AlumniPerTermSummary(term, termAlumniCount, termAccumulatedGPA/termAlumniCount
+                AlumniPerTermSummary termData = new AlumniPerTermSummary(term, termAlumniCount,
+                        (termAlumniCount == 0 ? 0.0 : aggregateGPA/termAlumniCount),
+                        (termAlumniCount == 0 ? 0.0 : aggregateTermsCount/termAlumniCount),
+                        (termAlumniCount == 0 ? 0.0 : aggregateCost/termAlumniCount)
                 );
                 terms.add(termData);
             }
@@ -95,12 +103,19 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         dropouts.forEach((k, v) -> {
             if (k.compareTo(from) >= 0 && k.compareTo(to) <= 0) {
                 int dropoutsCount[] = new int[SystemConstants.DROPOUT_TYPES_COUNT];
-                v.forEach(item -> {
-                    StudentData dropout = studentsMap.get(item);
+                double aggregateTermsCount = 0.0;
+                double aggregateCost = 0.0;
+                for (CpfRegistration id : v) {
+                    StudentData dropout = studentsMap.get(id);
                     dropoutsCount[dropout.getStatusIndex()]++;
-                });
+                    aggregateTermsCount += dropout.getCompletedTerms();
+                    aggregateCost += (MetricsCalculator.getInstance().computeMetrics(new Student(id, dropout)).getCost());
+                }
                 DropoutReasonSummary dropoutReasonSummary = new DropoutReasonSummary(dropoutsCount);
-                dropoutSummaryResponses.add(new DropoutPerTermSummary(k, dropoutReasonSummary));
+                int size = dropouts.size();
+                double averageTerms = (size == 0 ? 0.0 : aggregateTermsCount/size);
+                double averageCost = (size == 0 ? 0.0 : aggregateCost/size);
+                dropoutSummaryResponses.add(new DropoutPerTermSummary(k, size, dropoutReasonSummary, averageTerms, averageCost));
             }
         });
         return dropoutSummaryResponses;

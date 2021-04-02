@@ -1,23 +1,44 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class AlumniSummary {
+    private int alumniCount;
+    private double averageTerms;
+    private double averageCost;
     private double averageGpa;
     private double averageDegreeCount;
     private int maxDegreeCount;
     private int minDegreeCount;
     private String maxDegreeCountTerm;
     private String minDegreeCountTerm;
-    private int totalDegreeCount;
 
-    public AlumniSummary(double averageGpa, double averageDegreeCount, int maxDegreeCount, int minDegreeCount,
-                         String maxDegreeCountTerm, String minDegreeCountTerm, int totalDegreeCount) {
+    public AlumniSummary(int alumniCount, double averageTerms, double averageCost, double averageGpa,
+                         double averageDegreeCount, int maxDegreeCount, int minDegreeCount, String maxDegreeCountTerm,
+                         String minDegreeCountTerm) {
+        this.alumniCount = alumniCount;
+        this.averageTerms = averageTerms;
+        this.averageCost = averageCost;
         this.averageGpa = averageGpa;
-        this.maxDegreeCount = maxDegreeCount;
         this.averageDegreeCount = averageDegreeCount;
+        this.maxDegreeCount = maxDegreeCount;
         this.minDegreeCount = minDegreeCount;
         this.maxDegreeCountTerm = maxDegreeCountTerm;
         this.minDegreeCountTerm = minDegreeCountTerm;
-        this.totalDegreeCount = totalDegreeCount;
+    }
+
+    public double getAverageTerms() {
+        return averageTerms;
+    }
+
+    public void setAverageTerms(double averageTerms) {
+        this.averageTerms = averageTerms;
+    }
+
+    public double getAverageCost() {
+        return averageCost;
+    }
+
+    public void setAverageCost(double averageCost) {
+        this.averageCost = averageCost;
     }
 
     public double getAverageGpa() {
@@ -68,11 +89,11 @@ public class AlumniSummary {
         this.minDegreeCountTerm = minDegreeCountTerm;
     }
 
-    public int getTotalDegreeCount() {
-        return totalDegreeCount;
+    public int getAlumniCount() {
+        return alumniCount;
     }
 
-    public void setTotalDegreeCount(int totalDegreeCount) {
-        this.totalDegreeCount = totalDegreeCount;
+    public void setAlumniCount(int alumniCount) {
+        this.alumniCount = alumniCount;
     }
 }

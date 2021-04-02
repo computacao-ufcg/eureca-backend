@@ -4,11 +4,16 @@ public class AlumniPerTermSummary implements Comparable {
     private String graduationTerm;
     private int alumniCount;
     private double averageGpa;
+    private double averageTerms;
+    private double averageCost;
 
-    public AlumniPerTermSummary(String graduationTerm, int alumniCount, double averageGpa) {
+    public AlumniPerTermSummary(String graduationTerm, int alumniCount, double averageGpa, double averageTerms,
+                                double averageCost) {
         this.graduationTerm = graduationTerm;
         this.alumniCount = alumniCount;
         this.averageGpa = averageGpa;
+        this.averageTerms = averageTerms;
+        this.averageCost = averageCost;
     }
 
     public double getAverageGpa() {
@@ -33,6 +38,22 @@ public class AlumniPerTermSummary implements Comparable {
 
     public void setGraduationTerm(String graduationTerm) {
         this.graduationTerm = graduationTerm;
+    }
+
+    public double getAverageTerms() {
+        return averageTerms;
+    }
+
+    public void setAverageTerms(double averageTerms) {
+        this.averageTerms = averageTerms;
+    }
+
+    public double getAverageCost() {
+        return averageCost;
+    }
+
+    public void setAverageCost(double averageCost) {
+        this.averageCost = averageCost;
     }
 
     @Override

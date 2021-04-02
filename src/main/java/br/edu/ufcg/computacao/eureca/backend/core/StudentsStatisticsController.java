@@ -3,6 +3,9 @@ package br.edu.ufcg.computacao.eureca.backend.core;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Metrics;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
+import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 import org.apache.log4j.Logger;
 
 import java.util.Collection;
@@ -33,8 +36,6 @@ public class StudentsStatisticsController {
 
     public DropoutsSummaryResponse getDropoutsSummaryResponse(String from, String to) {
         Collection<DropoutPerTermSummary> dropouts = this.dataAccessFacade.getDropoutsPerTermSummary(from, to);
-        int activeCount = this.dataAccessFacade.getActives(from, to).size();
-        int alumniCount = this.dataAccessFacade.getAlumni(from, to).size();
         Collection<String> sliderLabel = this.getSliderLabel(dropouts, DropoutPerTermSummary::getDropoutTerm);
         return new DropoutsSummaryResponse(sliderLabel, dropouts);
     }
@@ -46,17 +47,17 @@ public class StudentsStatisticsController {
     }
 
     public StudentsSummaryResponse getStudentsSummaryResponse(String from, String to) {
-        Collection<ActivesPerTermSummary> actives = this.dataAccessFacade.getActivesPerTermSummary(from, to);
+        Collection<Student> actives = this.dataAccessFacade.getActives(from, to);
         Collection<AlumniPerTermSummary> alumni = this.dataAccessFacade.getAlumniPerTermSummary(from, to);
         Collection<DropoutPerTermSummary> dropouts = this.dataAccessFacade.getDropoutsPerTermSummary(from, to);
-        Collection<DelayedPerTermSummary> delayed = this.dataAccessFacade.getDelayedPerTermSummary(from, to);
+        Collection<Student> delayed = this.dataAccessFacade.getDelayed(from, to);
 
         int alumniCount = this.dataAccessFacade.getAlumni(from, to).size();
         int activesCount = actives.size();
 
         AlumniSummary alumniSummary = this.getAlumniSummary(alumni);
         ActivesSummary activesSummary = this.getActivesSummary(actives);
-        DelayedSummary delayedSummary = this.getDelayedSummary(delayedData);
+        DelayedSummary delayedSummary = this.getDelayedSummary(delayed);
         DropoutsSummary dropoutSummary = this.getDropoutsSummary(dropouts, activesCount, alumniCount);
 
         return new StudentsSummaryResponse(activesSummary, alumniSummary, delayedSummary, dropoutSummary);
@@ -69,16 +70,16 @@ public class StudentsStatisticsController {
                 .collect(Collectors.toCollection(TreeSet::new));
     }
 
-    private ActivesSummary getActivesSummary(Collection<ActivesPerTermSummary> terms) {
-        ActivesSummary summary = new ActivesSummary(0, new RiskClassCountSummary(0, 0, 0, 0, 0, 0));
-        for (ActivesPerTermSummary item : terms) {
-            summary.add(item.getSummary());
-        }
-        return summary;
+    private ActivesSummary getActivesSummary(Collection<Student> actives) {
+        int size = actives.size();
+        MetricsSummary summary = getMetricsSummary(size, actives);
+        return new ActivesSummary(size, summary);
     }
 
     private AlumniSummary getAlumniSummary(Collection<AlumniPerTermSummary> terms) {
-        double accumulatedGPA = 0;
+        double aggreagateTerms = 0.0;
+        double aggregateCost = 0.0;
+        double aggregateGPA = 0;
         int maxAlumniCount = 0;
         String maxAlumniCountTerm = "";
         int minAlumniCount = Integer.MAX_VALUE;
@@ -86,6 +87,8 @@ public class StudentsStatisticsController {
         int totalAlumniCount = 0;
 
         for (AlumniPerTermSummary item : terms) {
+            double averageTerms = item.getAverageTerms();
+            double averageCost = item.getAverageCost();
             double averageGPA = item.getAverageGpa();
             int termAlumniCount = item.getAlumniCount();
             String term = item.getGraduationTerm();
@@ -98,66 +101,75 @@ public class StudentsStatisticsController {
                 minAlumniCount = termAlumniCount;
                 minAlumniCountTerm = term;
             }
-            accumulatedGPA += averageGPA * termAlumniCount;
+            aggreagateTerms += (averageTerms * termAlumniCount);
+            aggregateCost += (averageCost * termAlumniCount);
+            aggregateGPA += (averageGPA * termAlumniCount);
         }
 
-        return new AlumniSummary((totalAlumniCount == 0 ? -1.0 : accumulatedGPA/totalAlumniCount),
+        return new AlumniSummary(totalAlumniCount, (totalAlumniCount == 0 ? -1.0 : aggreagateTerms/totalAlumniCount),
+                (totalAlumniCount == 0 ? -1.0 : aggregateCost/totalAlumniCount),
+                (totalAlumniCount == 0 ? -1.0 : aggregateGPA/totalAlumniCount),
                 (terms.size() == 0 ? -1.0 : (1.0*totalAlumniCount)/terms.size()), maxAlumniCount, minAlumniCount,
-                maxAlumniCountTerm, minAlumniCountTerm, totalAlumniCount);
+                maxAlumniCountTerm, minAlumniCountTerm);
     }
 
     private DropoutsSummary getDropoutsSummary(Collection<DropoutPerTermSummary> dropouts, int activeCount, int alumniCount) {
         DropoutReasonSummary aggregateDropouts = new DropoutReasonSummary(0, 0,
                 0, 0, 0, 0, 0,
                 0, 0, 0, 0);
-
+        double aggregateTermsCount = 0.0;
+        double aggregateCost = 0.0;
         for (DropoutPerTermSummary item : dropouts) {
+            aggregateTermsCount += (item.getAverageTerms() * item.getDropoutCount());
+            aggregateCost += (item.getAverageCost() * item.getDropoutCount());
             aggregateDropouts.add(item.getReasons());
         }
 
         int dropoutCount = aggregateDropouts.getTotalDropouts() - aggregateDropouts.getReenterSameCourse();
         int enrolled = dropoutCount + activeCount + alumniCount;
 
-        double dropoutAlumnusRate = 1.0 * dropoutCount / alumniCount;
-        double dropoutEnrolledRate = 1.0 * dropoutCount / enrolled;
+        double dropoutAlumnusRate = (alumniCount == 0 ? -1.0 : 1.0 * dropoutCount/alumniCount);
+        double dropoutEnrolledRate = (enrolled == 0 ? -1.0 : 1.0 * dropoutCount/enrolled);
+        double averageTerms = (dropoutCount == 0 ? -1.0 : aggregateTermsCount/dropoutCount);
+        double averageCost = (dropoutCount == 0 ? -1.0 : aggregateCost/dropoutCount);
 
-        return new DropoutsSummary(aggregateDropouts, dropoutCount, dropoutAlumnusRate, dropoutEnrolledRate);
+        return new DropoutsSummary(dropoutCount, averageTerms, averageCost, aggregateDropouts, dropoutAlumnusRate,
+                dropoutEnrolledRate);
     }
 
-    private DelayedSummary getDelayedSummary(Collection<DelayedPerTermSummary> delayedStudents) {
-        double totalAttemptedCredits = 0;
-        double totalLoad = 0;
-        double totalCost = 0;
-        double totalCourseDurationPrediction = 0;
-        double totalFeasibility = 0;
-        double totalPace = 0;
-        double totalRisk = 0;
-        double totalSuccessRate = 0;
-        int totalDelayed = delayedStudents.size();
+    private DelayedSummary getDelayedSummary(Collection<Student> delayed) {
+        int size = delayed.size();
+        MetricsSummary summary = getMetricsSummary(size, delayed);
+        return new DelayedSummary(size, summary);
+    }
+
+    private MetricsSummary getMetricsSummary(int size, Collection<Student> students) {
+        double aggregateTerms = 0.0;
+        double aggregateAttemptedCredits = 0.0;
+        double aggregateFeasibility = 0.0;
+        double aggregateSuccessRate = 0.0;
+        double aggregateLoad = 0.0;
+        double aggregateCost = 0.0;
+        double aggregatePace = 0.0;
+        double aggregateCourseDurationPrediction = 0.0;
+        double aggregateRisk = 0.0;
         double v;
-
-        for (DelayedPerTermSummary delayed : delayedStudents) {
-            totalAttemptedCredits += delayed.getAttemptedCredits();
-            totalLoad += ((v = delayed.getAverageLoad()) == -1.0 ? 0 : v);
-            totalCost += ((v = delayed.getCost()) == -1.0 ? 0 : v);
-            totalCourseDurationPrediction += ((v = delayed.getCourseDurationPrediction()) == -1.0 ? 0 : v);
-            totalFeasibility += ((v = delayed.getFeasibility()) == -1.0 ? 0 : v);
-            totalPace += ((v = delayed.getPace()) == -1.0 ? 0 : v);
-            totalRisk += ((v = delayed.getRisk()) == -1.0 ? 0 : v);
-            totalSuccessRate += ((v = delayed.getSuccessRate()) == -1.0 ? 0 : v);
+        for (Student item : students) {
+            aggregateTerms += item.getStudentData().getCompletedTerms();
+            Metrics studentMetrics = MetricsCalculator.getInstance().computeMetrics(item);
+            aggregateAttemptedCredits += studentMetrics.getAttemptedCredits();
+            aggregateFeasibility += ((v = studentMetrics.getFeasibility()) == -1.0 ? 0 : v);
+            aggregateSuccessRate += ((v = studentMetrics.getSuccessRate()) == -1.0 ? 0 : v);
+            aggregateLoad += ((v = studentMetrics.getAverageLoad()) == -1.0 ? 0 : v);
+            aggregateCost += ((v = studentMetrics.getCost()) == -1.0 ? 0 : v);
+            aggregatePace += ((v = studentMetrics.getPace()) == -1.0 ? 0 : v);
+            aggregateCourseDurationPrediction += ((v = studentMetrics.getCourseDurationPrediction()) == -1.0 ? 0 : v);
+            aggregateRisk += ((v = studentMetrics.getRisk()) == -1.0 ? 0 : v);
         }
-
-        double averageAttemptedCredits = totalAttemptedCredits / totalDelayed;
-        double averageLoad = totalLoad / totalDelayed;
-        double averageCost = totalCost / totalDelayed;
-        double averageCourseDurationPrediction = totalCourseDurationPrediction / totalDelayed;
-        double averageFeasibility = totalFeasibility / totalDelayed;
-        double averagePace = totalPace / totalDelayed;
-        double averageRisk = totalRisk / totalDelayed;
-        double averageSuccessRate = totalSuccessRate / totalDelayed;
-
-        return new DelayedSummary(totalDelayed, averageAttemptedCredits, averageLoad, averageCost,
-                averageCourseDurationPrediction, averageFeasibility, averagePace,
-                averageRisk, averageSuccessRate);
+        return (size == 0 ? null : new MetricsSummary(aggregateTerms/size,
+                aggregateAttemptedCredits/size, aggregateFeasibility/size,
+                aggregateSuccessRate/size, aggregateLoad/size,
+                aggregateCost/size, aggregatePace/size,
+                aggregateCourseDurationPrediction/size,aggregateRisk/size));
     }
 }
