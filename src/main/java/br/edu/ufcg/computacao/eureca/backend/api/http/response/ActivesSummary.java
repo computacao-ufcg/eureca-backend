@@ -1,15 +1,13 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class ActiveSummaryResume {
+public class ActivesSummary {
 
     private int activesCount;
     private RiskClassCountSummary riskClassCount;
-    private RiskClassPercentageSummary riskClassPercentage;
 
-    public ActiveSummaryResume(int activesCount, RiskClassCountSummary riskClassCount, RiskClassPercentageSummary riskClassPercentage) {
+    public ActivesSummary(int activesCount, RiskClassCountSummary riskClassCount) {
         this.activesCount = activesCount;
         this.riskClassCount = riskClassCount;
-        this.riskClassPercentage = riskClassPercentage;
     }
 
     public int getActivesCount() {
@@ -28,11 +26,8 @@ public class ActiveSummaryResume {
         this.riskClassCount = riskClassCount;
     }
 
-    public RiskClassPercentageSummary getRiskClassPercentage() {
-        return riskClassPercentage;
-    }
-
-    public void setRiskClassPercentage(RiskClassPercentageSummary riskClassPercentage) {
-        this.riskClassPercentage = riskClassPercentage;
+    public void add(ActivesSummary other) {
+        this.activesCount += other.getActivesCount();
+        this.riskClassCount.add(other.getRiskClassCount());
     }
 }

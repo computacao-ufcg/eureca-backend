@@ -5,13 +5,14 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Collection;
 
-public class AlumniSummaryResponse {
+public class DropoutsSummaryResponse {
     @ApiModelProperty(position = 0, example = ApiDocumentation.Model.SLIDER_LABEL)
     Collection<String> sliderLabel;
-    Collection<AlumniPerTermSummary> terms;
-    AlumniSummary summary;
+    Collection<DropoutPerTermSummary> terms;
+    DropoutsSummary summary;
 
-    public AlumniSummaryResponse(Collection<String> sliderLabel, Collection<AlumniPerTermSummary> terms, AlumniSummary summary) {
+    public DropoutsSummaryResponse(Collection<String> sliderLabel, Collection<DropoutPerTermSummary> terms,
+                                   DropoutsSummary summary) {
         this.sliderLabel = sliderLabel;
         this.terms = terms;
         this.summary = summary;
@@ -25,19 +26,19 @@ public class AlumniSummaryResponse {
         this.sliderLabel = sliderLabel;
     }
 
-    public Collection<AlumniPerTermSummary> getTerms() {
+    public Collection<DropoutPerTermSummary> getTerms() {
         return terms;
     }
 
-    public void setTerms(Collection<AlumniPerTermSummary> terms) {
+    public void setTerms(Collection<DropoutPerTermSummary> terms) {
         this.terms = terms;
     }
 
-    public AlumniSummary getSummary() {
+    public DropoutsSummary getSummary() {
         return summary;
     }
 
-    public void setSummary(AlumniSummary summary) {
+    public void setSummary(DropoutsSummary summary) {
         this.summary = summary;
     }
 }

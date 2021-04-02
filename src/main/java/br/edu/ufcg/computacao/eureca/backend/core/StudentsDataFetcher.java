@@ -1,7 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.AlumniPerStudentSummary;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.DelayedDataResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.AlumniDigestResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.StudentDataResponse;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
@@ -12,7 +11,6 @@ import org.apache.log4j.Logger;
 
 import java.util.Collection;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 public class StudentsDataFetcher {
     private Logger LOGGER = Logger.getLogger(StudentsDataFetcher.class);
@@ -59,14 +57,19 @@ public class StudentsDataFetcher {
         return dropoutsData;
     }
 
-    public Collection<DelayedDataResponse> getDelayedCSV(String from, String to) {
-        return this.dataAccessFacade.getDelayed(from, to)
-                .stream()
-                .map(DelayedDataResponse::new)
-                .collect(Collectors.toSet());
+    public Collection<StudentDataResponse> getDelayedCSV(String from, String to) {
+        Collection<StudentDataResponse> delayedData = new TreeSet<>();
+        Collection<Student> delayed = this.dataAccessFacade.getDelayed(from, to);
+        delayed.forEach(item -> {
+            Metrics metrics = MetricsCalculator.getInstance().computeMetrics(item);
+            StudentDataResponse studentDataResponse = new StudentDataResponse(item.getId().getRegistration(),
+                    item.getStudentData(), metrics);
+            delayedData.add(studentDataResponse);
+        });
+        return delayedData;
     }
 
-    public Collection<AlumniPerStudentSummary> getAlumniPerStudentSummary(String from, String to) {
+    public Collection<AlumniDigestResponse> getAlumniPerStudentSummary(String from, String to) {
         return this.dataAccessFacade.getAlumniPerStudentSummary(from, to);
     }
 

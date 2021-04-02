@@ -2,7 +2,7 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Registration;
 
-public class AlumniPerStudentSummary implements Comparable {
+public class AlumniDigestResponse implements Comparable {
     String registration;
     String name;
     int course;
@@ -58,8 +58,8 @@ public class AlumniPerStudentSummary implements Comparable {
         this.graduationTerm = graduationTerm;
     }
 
-    public AlumniPerStudentSummary(String registration, String name, int course, int level, String admissionTerm,
-                                   String graduationTerm) {
+    public AlumniDigestResponse(String registration, String name, int course, int level, String admissionTerm,
+                                String graduationTerm) {
         this.registration = registration;
         this.name = name;
         this.course = course;
@@ -70,7 +70,7 @@ public class AlumniPerStudentSummary implements Comparable {
 
     @Override
     public int compareTo(Object o) {
-        AlumniPerStudentSummary other = (AlumniPerStudentSummary) o;
+        AlumniDigestResponse other = (AlumniDigestResponse) o;
         return (new Registration(this.getRegistration())).compareTo((new Registration(other.getRegistration())));
     }
 }

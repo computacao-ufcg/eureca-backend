@@ -32,7 +32,7 @@ public class SubjectsStatisticsController {
     }
 
     public Map<String, Collection<SubjectSummaryResponse>> getSubjectsStatistics(String from, String to) {
-        Map<String, Collection<SubjectSummaryResponse>> completeMap = this.dataAccessFacade.getSubjectSummary();
+        Map<String, Collection<SubjectSummaryResponse>> completeMap = null;//this.dataAccessFacade.getSubjectSummary();
         Map<String, Collection<SubjectSummaryResponse>> resultMap = new HashMap<>();
         completeMap.forEach((term, summary) -> {
             if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {

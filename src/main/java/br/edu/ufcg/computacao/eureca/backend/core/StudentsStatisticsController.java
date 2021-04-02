@@ -3,7 +3,6 @@ package br.edu.ufcg.computacao.eureca.backend.core;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import org.apache.log4j.Logger;
 
@@ -21,6 +20,56 @@ public class StudentsStatisticsController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
+    public ActivesSummaryResponse getActivesSummaryResponse(String from, String to) {
+        Collection<ActivesPerTermSummary> terms = this.dataAccessFacade.getActivesPerTermSummary(from, to);
+        ActivesSummary summary = this.getActivesSummary(terms);
+        Collection<String> sliderLabel = this.getSliderLabel(terms, ActivesPerTermSummary::getAdmissionTerm);
+        return new ActivesSummaryResponse(sliderLabel, terms, summary);
+    }
+
+    public AlumniSummaryResponse getAlumniSummaryResponse(String from, String to) {
+        Collection<AlumniPerTermSummary> terms = this.dataAccessFacade.getAlumniPerTermSummary(from, to);
+        AlumniSummary alumniSummary = this.getAlumniSummary(terms);
+        Collection<String> sliderLabel = this.getSliderLabel(terms, AlumniPerTermSummary::getGraduationTerm);
+        return new AlumniSummaryResponse(sliderLabel, terms, alumniSummary);
+    }
+
+    public DropoutsSummaryResponse getDropoutsSummaryResponse(String from, String to) {
+        Collection<DropoutPerTermSummary> dropouts = this.dataAccessFacade.getDropoutsPerTermSummary(from, to);
+        int activeCount = this.dataAccessFacade.getActives(from, to).size();
+        int alumniCount = this.dataAccessFacade.getAlumni(from, to).size();
+        DropoutsSummary summary = this.getDropoutsSummary(dropouts, activeCount, alumniCount);
+        Collection<String> sliderLabel = this.getSliderLabel(dropouts, DropoutPerTermSummary::getTerm);
+        return new DropoutsSummaryResponse(sliderLabel, dropouts, summary);
+    }
+
+    public DelayedSummaryResponse getDelayedSummaryResponse(String from, String to) {
+        return null;
+    }
+
+    public StudentsSummaryResponse getStudentsSummaryResponse(String from, String to) {
+        Collection<ActivesPerTermSummary> actives = this.dataAccessFacade.getActivesPerTermSummary(from, to);
+        Collection<AlumniPerTermSummary> alumni = this.dataAccessFacade.getAlumniPerTermSummary(from, to);
+        Collection<DropoutPerTermSummary> dropouts = this.dataAccessFacade.getDropoutsPerTermSummary(from, to);
+
+        Collection<Student> delayed = this.dataAccessFacade.getDelayed(from, to);
+
+        Collection<DelayedPerTermSummary> delayedData = delayed
+                .stream()
+                .map(DelayedPerTermSummary::new)
+                .collect(Collectors.toList());
+
+        int alumniCount = this.dataAccessFacade.getAlumni(from, to).size();
+        int activesCount = actives.size();
+
+        AlumniSummary alumniSummary = this.getAlumniSummary(alumni);
+        ActivesSummary activesSummary = this.getActivesSummary(actives);
+        DelayedSummary delayedSummary = this.getDelayedSummary(delayedData);
+        DropoutsSummary dropoutSummary = this.getDropoutsSummary(dropouts, activesCount, alumniCount);
+
+        return new StudentsSummaryResponse(activesSummary, alumniSummary, delayedSummary, dropoutSummary);
+    }
+
     private <T> Collection<String> getSliderLabel(Collection<T> terms, Function<T, String> function) {
         return terms
                 .stream()
@@ -28,7 +77,15 @@ public class StudentsStatisticsController {
                 .collect(Collectors.toCollection(TreeSet::new));
     }
 
-    private synchronized AlumniSummary getAlumniSummary(Collection<AlumniPerTermSummary> terms) {
+    private ActivesSummary getActivesSummary(Collection<ActivesPerTermSummary> terms) {
+        ActivesSummary summary = new ActivesSummary(0, new RiskClassCountSummary(0, 0, 0, 0, 0, 0));
+        for (ActivesPerTermSummary item : terms) {
+            summary.add(item.getSummary());
+        }
+        return summary;
+    }
+
+    private AlumniSummary getAlumniSummary(Collection<AlumniPerTermSummary> terms) {
         double accumulatedGPA = 0;
         int maxAlumniCount = 0;
         String maxAlumniCountTerm = "";
@@ -57,91 +114,25 @@ public class StudentsStatisticsController {
                 maxAlumniCountTerm, minAlumniCountTerm, totalAlumniCount);
     }
 
-    public synchronized AlumniSummaryResponse getAlumniSummaryResponse(String from, String to) {
-        Collection<AlumniPerTermSummary> terms = this.dataAccessFacade.getAlumniPerTermSummary(from, to);
-        AlumniSummary alumniSummary = this.getAlumniSummary(terms);
-        Collection<String> sliderLabel = this.getSliderLabel(terms, AlumniPerTermSummary::getGraduationTerm);
-        return new AlumniSummaryResponse(sliderLabel, alumniSummary, terms);
-    }
-
-    public synchronized ActiveSummaryResponse getActiveSummaryResponse(String from, String to) {
-        Collection<ActiveStatusSummary> activeStatusSummaries = new TreeSet<>();
-        Collection<ActiveSummary> summary = this.dataAccessFacade.getActiveSummary(from, to);
-        Collection<String> sliderLabel = this.getSliderLabel(summary, ActiveSummary::getAdmissionTerm);
-
-        int activesCount = 0;
-        int unfeasible = 0, critical = 0, late = 0, normal = 0, advanced = 0, notApplicable = 0;
-        for (ActiveSummary item : summary) {
-            activesCount++;
-            Student active = this.dataAccessFacade.getStudent(item.getRegistration());
-            RiskClass riskClass = active.getRiskClass();
-            switch(riskClass) {
-                case UNFEASIBLE:
-                    unfeasible++;
-                    break;
-                case CRITICAL:
-                    critical++;
-                    break;
-                case LATE:
-                    late++;
-                    break;
-                case NORMAL:
-                    normal++;
-                    break;
-                case ADVANCED:
-                    advanced++;
-                    break;
-                default:
-                    notApplicable++;
-                    break;
-            }
-            ActiveStatusSummary statusSummary = new ActiveStatusSummary(item, riskClass);
-            activeStatusSummaries.add(statusSummary);
-        }
-
-        RiskClassCountSummary countSummary = new RiskClassCountSummary(unfeasible, critical, late, normal, advanced,
-                notApplicable);
-
-        RiskClassPercentageSummary percentageSummary =
-                new RiskClassPercentageSummary((1.0 * unfeasible)/activesCount,
-                        (1.0 * critical)/activesCount, (1.0 * late)/activesCount,
-                        (1.0 * normal)/activesCount, (1.0 * advanced)/activesCount,
-                        (1.0 * notApplicable)/activesCount);
-        ActiveSummaryResume riskSummary = new ActiveSummaryResume(activesCount, countSummary, percentageSummary);
-        return new ActiveSummaryResponse(sliderLabel, activeStatusSummaries, riskSummary);
-    }
-
-    private synchronized DropoutSummary getDropoutSummary(Collection<DropoutPerTermSummary> dropouts, int activeCount, int alumniCount) {
-        int grossDropoutCount = 0;
-        int dropoutReenterSameCourse = 0;
+    private DropoutsSummary getDropoutsSummary(Collection<DropoutPerTermSummary> dropouts, int activeCount, int alumniCount) {
+        DropoutReasonSummary aggregateDropouts = new DropoutReasonSummary(0, 0,
+                0, 0, 0, 0, 0,
+                0, 0, 0, 0);
 
         for (DropoutPerTermSummary item : dropouts) {
-            dropoutReenterSameCourse += item.getReasons().getReenterSameCourse();
-            grossDropoutCount += item.getReasons().getTotalDropouts();
+            aggregateDropouts.add(item.getReasons());
         }
-        int enrolled = grossDropoutCount + activeCount + alumniCount;
-        int netDropoutCount = grossDropoutCount - dropoutReenterSameCourse;
 
-        double grossDropoutAlumnusRate = 1.0 * grossDropoutCount / alumniCount;
-        double grossDropoutEnrolledRate = 1.0 * grossDropoutCount / enrolled;
-        double netDropoutAlumnusRate = 1.0 * netDropoutCount / alumniCount;
-        double netDropoutEnrolledRate = 1.0 * netDropoutCount / enrolled;
+        int dropoutCount = aggregateDropouts.getTotalDropouts() - aggregateDropouts.getReenterSameCourse();
+        int enrolled = dropoutCount + activeCount + alumniCount;
 
-        return new DropoutSummary(grossDropoutAlumnusRate, grossDropoutEnrolledRate, netDropoutAlumnusRate, netDropoutEnrolledRate, grossDropoutCount, netDropoutCount);
+        double dropoutAlumnusRate = 1.0 * dropoutCount / alumniCount;
+        double dropoutEnrolledRate = 1.0 * dropoutCount / enrolled;
+
+        return new DropoutsSummary(aggregateDropouts, dropoutCount, dropoutAlumnusRate, dropoutEnrolledRate);
     }
 
-    public synchronized DropoutSummaryResponse getDropoutsSummaryResponse(String from, String to) {
-        Collection<DropoutPerTermSummary> dropouts = this.dataAccessFacade.getDropoutsSummary(from, to);
-        Collection<String> sliderLabel = this.getSliderLabel(dropouts, DropoutPerTermSummary::getTerm);
-
-        int activeCount = this.dataAccessFacade.getActives(from, to).size();
-        int alumniCount = this.dataAccessFacade.getAlumni(from, to).size();
-        DropoutSummary summary = this.getDropoutSummary(dropouts, activeCount, alumniCount);
-
-        return new DropoutSummaryResponse(sliderLabel, dropouts, summary);
-    }
-
-    private synchronized DelayedSummary getDelayedSummary(Collection<DelayedDataResponse> delayedStudents) {
+    private DelayedSummary getDelayedSummary(Collection<DelayedPerTermSummary> delayedStudents) {
         double totalAttemptedCredits = 0;
         double totalLoad = 0;
         double totalCost = 0;
@@ -153,7 +144,7 @@ public class StudentsStatisticsController {
         int totalDelayed = delayedStudents.size();
         double v;
 
-        for (DelayedDataResponse delayed : delayedStudents) {
+        for (DelayedPerTermSummary delayed : delayedStudents) {
             totalAttemptedCredits += delayed.getAttemptedCredits();
             totalLoad += ((v = delayed.getAverageLoad()) == -1.0 ? 0 : v);
             totalCost += ((v = delayed.getCost()) == -1.0 ? 0 : v);
@@ -176,120 +167,5 @@ public class StudentsStatisticsController {
         return new DelayedSummary(totalDelayed, averageAttemptedCredits, averageLoad, averageCost,
                 averageCourseDurationPrediction, averageFeasibility, averagePace,
                 averageRisk, averageSuccessRate);
-    }
-
-    private synchronized ActiveSummaryResume getActiveSummaryResume(Collection<Student> actives) {
-        int activesCount = actives.size();
-        int advanced = 0, critical = 0, late = 0, normal = 0, notApplicable = 0, unfeasible = 0;
-        for (Student active : actives) {
-            switch (active.getRiskClass()) {
-                case ADVANCED:
-                    advanced++;
-                    break;
-                case CRITICAL:
-                    critical++;
-                    break;
-                case LATE:
-                    late++;
-                    break;
-                case NORMAL:
-                    normal++;
-                    break;
-                case NOT_APPLICABLE:
-                    notApplicable++;
-                    break;
-                case UNFEASIBLE:
-                    unfeasible++;
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        double advancedPercentage = advanced / (double) activesCount;
-        double criticalPercentage = critical / (double) activesCount;
-        double latePercentage = late / (double) activesCount;
-        double normalPercentage = normal / (double) activesCount;
-        double notApplicablePercentage = notApplicable / (double) activesCount;
-        double unfeasiblePercentage = unfeasible/ (double) activesCount;
-
-        RiskClassCountSummary riskClassCount = new RiskClassCountSummary(unfeasible, critical, late, normal, advanced, notApplicable);
-        RiskClassPercentageSummary riskClassPercentage = new RiskClassPercentageSummary(unfeasiblePercentage, criticalPercentage, latePercentage,
-                normalPercentage, advancedPercentage, notApplicablePercentage);
-
-        return new ActiveSummaryResume(activesCount, riskClassCount, riskClassPercentage);
-    }
-
-    private synchronized DropoutClassification getDropoutClassification(Collection<DropoutPerTermSummary> dropouts) {
-        int failed3Times = 0;
-        int reenterSameCourse = 0;
-        int reenterOtherCourse = 0;
-        int failedAll = 0;
-        int cancelled = 0;
-        int cancelledByDecree = 0;
-        int cancelledCourseChange = 0;
-        int cancelledUponRequest = 0;
-        int leftWithoutNotice = 0;
-        int missedGraduation = 0;
-        int transferred = 0;
-
-        for (DropoutPerTermSummary dropout : dropouts) {
-            failed3Times += dropout.getReasons().getFailed3Times();
-            reenterSameCourse += dropout.getReasons().getReenterSameCourse();
-            reenterOtherCourse += dropout.getReasons().getReenterOtherCourse();
-            failedAll += dropout.getReasons().getFailedAll();
-            cancelled += dropout.getReasons().getCancelled();
-            cancelledByDecree += dropout.getReasons().getCancelledByDecree();
-            cancelledCourseChange += dropout.getReasons().getCancelledCourseChange();
-            cancelledUponRequest += dropout.getReasons().getCancelledUponRequest();
-            leftWithoutNotice += dropout.getReasons().getLeftWithoutNotice();
-            missedGraduation += dropout.getReasons().getMissedGraduation();
-            transferred += dropout.getReasons().getTransferred();
-        }
-
-        int[] reasons = new int[] {
-                failed3Times,
-                reenterSameCourse,
-                reenterOtherCourse,
-                failedAll,
-                cancelled,
-                cancelledByDecree,
-                cancelledCourseChange,
-                cancelledUponRequest,
-                leftWithoutNotice,
-                missedGraduation,
-                transferred
-        };
-
-        return new DropoutClassification(reasons);
-    }
-
-    private synchronized DropoutSummaryResume getDropoutSummaryResume(Collection<DropoutPerTermSummary> dropouts, int activeCount, int alumniCount) {
-        DropoutSummary dropoutSummary = this.getDropoutSummary(dropouts, activeCount, alumniCount);
-        DropoutClassification dropoutClassification = getDropoutClassification(dropouts);
-
-        return new DropoutSummaryResume(dropoutSummary, dropoutClassification);
-    }
-
-    public synchronized StudentsSummaryResponse getStudentsSummaryResume(String from, String to) {
-        Collection<Student> actives = this.dataAccessFacade.getActives(from, to);
-        Collection<AlumniPerTermSummary> alumni = this.dataAccessFacade.getAlumniPerTermSummary(from, to);
-        Collection<DropoutPerTermSummary> dropouts = this.dataAccessFacade.getDropoutsSummary(from, to);
-        Collection<Student> delayed = this.dataAccessFacade.getDelayed(from, to);
-
-        Collection<DelayedDataResponse> delayedData = delayed
-                .stream()
-                .map(DelayedDataResponse::new)
-                .collect(Collectors.toList());
-
-        int alumniCount = this.dataAccessFacade.getAlumni(from, to).size();
-        int activesCount = actives.size();
-
-        AlumniSummary alumniSummary = this.getAlumniSummary(alumni);
-        ActiveSummaryResume activeSummary = this.getActiveSummaryResume(actives);
-        DelayedSummary delayedSummary = this.getDelayedSummary(delayedData);
-        DropoutSummaryResume dropoutSummary = this.getDropoutSummaryResume(dropouts, activesCount, alumniCount);
-
-        return new StudentsSummaryResponse(activeSummary, alumniSummary, delayedSummary, dropoutSummary);
     }
 }

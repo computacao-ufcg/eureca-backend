@@ -5,14 +5,14 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Collection;
 
-public class ActiveSummaryResponse {
+public class ActivesSummaryResponse {
     @ApiModelProperty(position = 0, example = ApiDocumentation.Model.SLIDER_LABEL)
     Collection<String> sliderLabel;
-    Collection<ActiveStatusSummary> actives;
-    ActiveSummaryResume summary;
+    Collection<ActivesPerTermSummary> actives;
+    ActivesSummary summary;
 
-    public ActiveSummaryResponse(Collection<String> sliderLabel, Collection<ActiveStatusSummary> actives,
-                                 ActiveSummaryResume summary) {
+    public ActivesSummaryResponse(Collection<String> sliderLabel, Collection<ActivesPerTermSummary> actives,
+                                  ActivesSummary summary) {
         this.sliderLabel = sliderLabel;
         this.actives = actives;
         this.summary = summary;
@@ -26,19 +26,19 @@ public class ActiveSummaryResponse {
         this.sliderLabel = sliderLabel;
     }
 
-    public Collection<ActiveStatusSummary> getActives() {
+    public Collection<ActivesPerTermSummary> getActives() {
         return actives;
     }
 
-    public void setActives(Collection<ActiveStatusSummary> actives) {
+    public void setActives(Collection<ActivesPerTermSummary> actives) {
         this.actives = actives;
     }
 
-    public ActiveSummaryResume getSummary() {
+    public ActivesSummary getSummary() {
         return summary;
     }
 
-    public void setSummary(ActiveSummaryResume summary) {
+    public void setSummary(ActivesSummary summary) {
         this.summary = summary;
     }
 }

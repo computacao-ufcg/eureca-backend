@@ -2,23 +2,24 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class StudentsSummaryResponse {
 
-    private ActiveSummaryResume activesSummary;
+    private ActivesSummary activesSummary;
     private AlumniSummary alumniSummary;
     private DelayedSummary delayedSummary;
-    private DropoutSummaryResume dropoutsSummary;
+    private DropoutsSummary dropoutsSummary;
 
-    public StudentsSummaryResponse(ActiveSummaryResume activesSummary, AlumniSummary alumniSummary, DelayedSummary delayedSummary, DropoutSummaryResume dropoutsSummary) {
+    public StudentsSummaryResponse(ActivesSummary activesSummary, AlumniSummary alumniSummary,
+                                   DelayedSummary delayedSummary, DropoutsSummary dropoutsSummary) {
         this.activesSummary = activesSummary;
         this.alumniSummary = alumniSummary;
         this.delayedSummary = delayedSummary;
         this.dropoutsSummary = dropoutsSummary;
     }
 
-    public ActiveSummaryResume getActivesSummary() {
+    public ActivesSummary getActivesSummary() {
         return activesSummary;
     }
 
-    public void setActivesSummary(ActiveSummaryResume activesSummary) {
+    public void setActivesSummary(ActivesSummary activesSummary) {
         this.activesSummary = activesSummary;
     }
 
@@ -38,11 +39,11 @@ public class StudentsSummaryResponse {
         this.delayedSummary = delayedSummary;
     }
 
-    public DropoutSummaryResume getDropoutsSummary() {
+    public DropoutsSummary getDropoutsSummary() {
         return dropoutsSummary;
     }
 
-    public void setDropoutsSummary(DropoutSummaryResume dropoutsSummary) {
+    public void setDropoutsSummary(DropoutsSummary dropoutsSummary) {
         this.dropoutsSummary = dropoutsSummary;
     }
 }

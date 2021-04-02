@@ -5,7 +5,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 
-public class DelayedDataResponse {
+public class DelayedPerTermSummary {
 
     private String registration;
     private RiskClass riskClass;
@@ -18,7 +18,7 @@ public class DelayedDataResponse {
     private double risk;
     private int attemptedCredits;
 
-    public DelayedDataResponse(String registration, RiskClass riskClass, double successRate, double averageLoad, double cost, double pace, int courseDurationPrediction, double risk, int attemptedCredits) {
+    public DelayedPerTermSummary(String registration, RiskClass riskClass, double successRate, double averageLoad, double cost, double pace, int courseDurationPrediction, double risk, int attemptedCredits) {
         this.registration = registration;
         this.riskClass = riskClass;
         this.successRate = successRate;
@@ -30,7 +30,7 @@ public class DelayedDataResponse {
         this.attemptedCredits = attemptedCredits;
     }
 
-    public DelayedDataResponse(Student student) {
+    public DelayedPerTermSummary(Student student) {
         Metrics metrics = MetricsCalculator.getInstance().computeMetrics(student);
 
         this.registration = student.getId().getRegistration();

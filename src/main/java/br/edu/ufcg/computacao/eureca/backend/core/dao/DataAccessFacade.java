@@ -15,13 +15,13 @@ public interface DataAccessFacade {
 
     Collection<Student> getDelayed(String from, String to);
 
-    Collection<ActiveSummary> getActiveSummary(String from, String to);
+    Collection<ActivesPerTermSummary> getActivesPerTermSummary(String from, String to);
 
     Collection<AlumniPerTermSummary> getAlumniPerTermSummary(String from, String to);
 
-    Collection<DropoutPerTermSummary> getDropoutsSummary(String from, String to);
+    Collection<DropoutPerTermSummary> getDropoutsPerTermSummary(String from, String to);
 
-    Collection<AlumniPerStudentSummary> getAlumniPerStudentSummary(String from, String to);
+    Collection<AlumniDigestResponse> getAlumniPerStudentSummary(String from, String to);
 
     Collection<AttemptsSummary> getAttemptsSummary();
 

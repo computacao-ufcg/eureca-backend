@@ -1,7 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.CommonKeys;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.AlumniPerStudentSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.AlumniDigestResponse;
 import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
@@ -29,7 +29,7 @@ public class Alumni {
 
     @ApiOperation(value = ApiDocumentation.Alumni.GET)
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Collection<AlumniPerStudentSummary>> getAlumni(
+    public ResponseEntity<Collection<AlumniDigestResponse>> getAlumni(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)
@@ -38,7 +38,7 @@ public class Alumni {
             @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
         try {
-            Collection<AlumniPerStudentSummary> alumniBasicData = ApplicationFacade.getInstance().getAlumniBasicData(token, from, to);
+            Collection<AlumniDigestResponse> alumniBasicData = ApplicationFacade.getInstance().getAlumniBasicData(token, from, to);
             return new ResponseEntity<>(alumniBasicData, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);

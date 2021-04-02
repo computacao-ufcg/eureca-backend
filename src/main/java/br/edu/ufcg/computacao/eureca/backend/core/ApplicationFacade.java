@@ -48,9 +48,9 @@ public class ApplicationFacade {
         this.authorizationPlugin = authorizationPlugin;
     }
 
-    public ActiveSummaryResponse getActiveSummary(String token, String from, String to) throws EurecaException {
+    public ActivesSummaryResponse getActiveSummary(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ACTIVES);
-        return this.studentsStatisticsController.getActiveSummaryResponse(from, to);
+        return this.studentsStatisticsController.getActivesSummaryResponse(from, to);
     }
 
     public Collection<StudentDataResponse> getActiveCSV(String token, String from, String to) throws EurecaException {
@@ -68,7 +68,7 @@ public class ApplicationFacade {
         return this.studentsDataFetcher.getAlumniCSV(from, to);
     }
 
-    public DropoutSummaryResponse getDropoutsSummary(String token, String from, String to) throws EurecaException {
+    public DropoutsSummaryResponse getDropoutsSummary(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DROPOUTS);
         return this.studentsStatisticsController.getDropoutsSummaryResponse(from, to);
     }
@@ -78,19 +78,24 @@ public class ApplicationFacade {
         return this.studentsDataFetcher.getDropoutsCSV(from, to);
     }
 
-    public Collection<AlumniPerStudentSummary> getAlumniBasicData(String token, String from, String to) throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_BASIC_DATA);
-        return this.studentsDataFetcher.getAlumniPerStudentSummary(from, to);
+    public DelayedSummaryResponse getDelayedSummary(String token, String from, String to) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_DELAYED);
+        return this.studentsStatisticsController.getDelayedSummaryResponse(from, to);
     }
 
-    public Collection<DelayedDataResponse> getDelayedCSV(String token, String from, String to) throws EurecaException {
+    public Collection<StudentDataResponse> getDelayedCSV(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DELAYED_CSV);
         return this.studentsDataFetcher.getDelayedCSV(from, to);
     }
 
+    public Collection<AlumniDigestResponse> getAlumniBasicData(String token, String from, String to) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_BASIC_DATA);
+        return this.studentsDataFetcher.getAlumniPerStudentSummary(from, to);
+    }
+
     public StudentsSummaryResponse getStudentsStatistics(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_STATISTICS);
-        return this.studentsStatisticsController.getStudentsSummaryResume(from, to);
+        return this.studentsStatisticsController.getStudentsSummaryResponse(from, to);
     }
 
     public Map<String, Collection<SubjectSummaryResponse>> getSubjectsStatistics(String token, String from, String to) throws EurecaException {

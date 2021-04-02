@@ -38,21 +38,67 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Collection<ActiveSummary> getActiveSummary(String from, String to) {
-        Collection<ActiveSummary> activeStudentsSummary = new TreeSet<>();
-        Collection<Student> actives = this.indexesHolder.getAllActives();
-        actives.forEach(item -> {
-            String admission = item.getStudentData().getAdmissionTerm();
-            if (admission != null && admission.compareTo(from) >= 0 && admission.compareTo(to) <= 0) {
-                ActiveSummary studentSummary = new ActiveSummary(
-                        item.getId().getRegistration(),
-                        item.getStudentData().getAdmissionTerm(),
-                        item.getStudentData().getCompletedTerms(),
-                        computePercentage(item));
-                activeStudentsSummary.add(studentSummary);
-            }
-        });
-        return activeStudentsSummary;
+    public Collection<ActivesPerTermSummary> getActivesPerTermSummary(String from, String to) {
+//        Collection<ActiveSummaryDeprecated> activeStudentsSummary = new TreeSet<>();
+//        Collection<Student> actives = this.indexesHolder.getAllActives();
+//        actives.forEach(item -> {
+//            String admission = item.getStudentData().getAdmissionTerm();
+//            if (admission != null && admission.compareTo(from) >= 0 && admission.compareTo(to) <= 0) {
+//                ActiveSummaryDeprecated studentSummary = new ActiveSummaryDeprecated(
+//                        item.getId().getRegistration(),
+//                        item.getStudentData().getAdmissionTerm(),
+//                        item.getStudentData().getCompletedTerms(),
+//                        computePercentage(item));
+//                activeStudentsSummary.add(studentSummary);
+//            }
+//        });
+//        return activeStudentsSummary;
+        Collection<ActivesPerTermSummary> terms = new TreeSet<>();
+//        Map<String, Collection<CpfRegistration>> map = indexesHolder.getAlumniByGraduationTerm();
+//        Map<CpfRegistration, StudentData> studentsMap = mapsHolder.getMap("students");
+//        for (Map.Entry<String, Collection<CpfRegistration>> entry : map.entrySet()) {
+//            String term = entry.getKey();
+//            if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
+//                Collection<CpfRegistration> studentIds = entry.getValue();
+//                int termAlumniCount = studentIds.size();
+//                double termAccumulatedGPA = 0;
+//                for (CpfRegistration id : studentIds) {
+//                    StudentData alumnus = studentsMap.get(id);
+//                    termAccumulatedGPA += alumnus.getGpa();
+//                }
+//                AlumniPerTermSummary termData = new AlumniPerTermSummary(term, termAccumulatedGPA/termAlumniCount,
+//                        termAlumniCount);
+//                terms.add(termData);
+//            }
+//        }
+
+//        int activesCount = 0;
+//        int unfeasible = 0, critical = 0, late = 0, normal = 0, advanced = 0, notApplicable = 0;
+//        for (ActivePerTermSummary item : summary) {
+//            activesCount++;
+//            Student active = this.dataAccessFacade.getStudent(item.getRegistration());
+//            RiskClass riskClass = active.getRiskClass();
+//            switch(riskClass) {
+//                case UNFEASIBLE:
+//                    unfeasible++;
+//                    break;
+//                case CRITICAL:
+//                    critical++;
+//                    break;
+//                case LATE:
+//                    late++;
+//                    break;
+//                case NORMAL:
+//                    normal++;
+//                    break;
+//                case ADVANCED:
+//                    advanced++;
+//                    break;
+//                default:
+//                    notApplicable++;
+//                    break;
+//            }
+        return terms;
     }
 
     private double computePercentage(Student item) {
@@ -89,7 +135,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                     StudentData alumnus = studentsMap.get(id);
                     termAccumulatedGPA += alumnus.getGpa();
                 }
-                AlumniPerTermSummary termData = new AlumniPerTermSummary(termAccumulatedGPA/termAlumniCount, term,
+                AlumniPerTermSummary termData = new AlumniPerTermSummary(term, termAccumulatedGPA/termAlumniCount,
                         termAlumniCount);
                 terms.add(termData);
             }
@@ -114,12 +160,13 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     public Collection<Student> getDelayed(String from, String to) {
         return this.getActives(from, to)
                 .stream()
-                .filter(item -> item.getRiskClass().equals(RiskClass.CRITICAL) || item.getRiskClass().equals(RiskClass.LATE) || item.getRiskClass().equals(RiskClass.UNFEASIBLE))
+                .filter(item -> item.getRiskClass().equals(RiskClass.CRITICAL) ||
+                        item.getRiskClass().equals(RiskClass.LATE) || item.getRiskClass().equals(RiskClass.UNFEASIBLE))
                 .collect(Collectors.toSet());
     }
 
     @Override
-    public Collection<DropoutPerTermSummary> getDropoutsSummary(String from, String to) {
+    public Collection<DropoutPerTermSummary> getDropoutsPerTermSummary(String from, String to) {
         Collection<DropoutPerTermSummary> dropoutSummaryResponses = new TreeSet<>();
         Map<String, Collection<CpfRegistration>> dropouts = this.indexesHolder.getDropoutByLeaveTerm();
         Map<CpfRegistration, StudentData> studentsMap = this.mapsHolder.getMap("students");
@@ -128,27 +175,27 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                 int dropoutsCount[] = new int[SystemConstants.DROPOUT_TYPES_COUNT];
                 v.forEach(item -> {
                     StudentData dropout = studentsMap.get(item);
-                    dropoutsCount[dropout.getDetailedStatusId()]++;
+                    dropoutsCount[dropout.getStatusIndex()]++;
                 });
-                DropoutClassification dropoutClassification = new DropoutClassification(dropoutsCount);
-                dropoutSummaryResponses.add(new DropoutPerTermSummary(k, dropoutClassification));
+                DropoutReasonSummary dropoutReasonSummary = new DropoutReasonSummary(dropoutsCount);
+                dropoutSummaryResponses.add(new DropoutPerTermSummary(k, dropoutReasonSummary));
             }
         });
         return dropoutSummaryResponses;
     }
 
     @Override
-    public Collection<AlumniPerStudentSummary> getAlumniPerStudentSummary(String from, String to) {
+    public Collection<AlumniDigestResponse> getAlumniPerStudentSummary(String from, String to) {
         String parsedFrom = "1" + from.substring(2,4) + from.substring(5,6) + "00000";
         String parsedTo = "1" + to.substring(2,4) + to.substring(5,6) + "99999";
-        Collection<AlumniPerStudentSummary> alumniBasicData = new TreeSet<>();
+        Collection<AlumniDigestResponse> alumniBasicData = new TreeSet<>();
         Collection<CpfRegistration> alumni = this.indexesHolder.getAlumni();
         Map<CpfRegistration, StudentData> studentsMap = this.mapsHolder.getMap("students");
         for (CpfRegistration item : alumni) {
             if (new Registration(item.getRegistration()).compareTo(new Registration(parsedFrom)) >= 0 &&
                     new Registration(item.getRegistration()).compareTo(new Registration(parsedTo)) <= 0) {
                 StudentData alumnus = studentsMap.get(item);
-                AlumniPerStudentSummary basicData = new AlumniPerStudentSummary(item.getRegistration(), alumnus.getName(),
+                AlumniDigestResponse basicData = new AlumniDigestResponse(item.getRegistration(), alumnus.getName(),
                         2, 1, alumnus.getAdmissionTerm(), alumnus.getStatusTerm());
                 alumniBasicData.add(basicData);
             }

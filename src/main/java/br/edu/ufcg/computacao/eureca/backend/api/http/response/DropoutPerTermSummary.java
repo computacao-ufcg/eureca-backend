@@ -2,9 +2,9 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class DropoutPerTermSummary implements Comparable {
     String term;
-    DropoutClassification reasons;
+    DropoutReasonSummary reasons;
 
-    public DropoutPerTermSummary(String term, DropoutClassification reasons) {
+    public DropoutPerTermSummary(String term, DropoutReasonSummary reasons) {
         this.term = term;
         this.reasons = reasons;
     }
@@ -17,11 +17,11 @@ public class DropoutPerTermSummary implements Comparable {
         this.term = term;
     }
 
-    public DropoutClassification getReasons() {
+    public DropoutReasonSummary getReasons() {
         return reasons;
     }
 
-    public void setReasons(DropoutClassification reasons) {
+    public void setReasons(DropoutReasonSummary reasons) {
         this.reasons = reasons;
     }
 

@@ -64,4 +64,13 @@ public class RiskClassCountSummary {
     public void setNotApplicable(int notApplicable) {
         this.notApplicable = notApplicable;
     }
+
+    public void add(RiskClassCountSummary other) {
+        this.unfeasible += other.getUnfeasible();
+        this.critical = getCritical();
+        this.late += other.getLate();
+        this.normal += other.getNormal();
+        this.advanced += other.getAdvanced();
+        this.notApplicable += other.getNotApplicable();
+    }
 }

@@ -362,7 +362,7 @@ public class StudentData extends EurecaMapValue {
         this.admissionGrade = admissionGrade;
     }
 
-    public int getDetailedStatusId() {
+    public int getStatusIndex() {
         switch(this.statusStr) {
             case SystemConstants.FAILED_3_TIMES:
                 return SystemConstants.FAILED_3_TIMES_INDEX;
