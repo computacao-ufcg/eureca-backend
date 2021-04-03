@@ -31,6 +31,7 @@ public class StudentData extends EurecaMapValue {
     int electiveCredits;
     int complementaryHours;
     int complementaryCredits;
+    int attemptedCredits;
     double gpa;
     double mc;
     double iea;
@@ -82,7 +83,6 @@ public class StudentData extends EurecaMapValue {
         this.admissionGrade = admissionGrade;
         parseStatusStr(this.statusStr);
         parseAdmissionStr(this.admissionStr);
-
     }
 
     public boolean isActive() {
@@ -288,6 +288,14 @@ public class StudentData extends EurecaMapValue {
 
     public void setComplementaryCredits(int complementaryCredits) {
         this.complementaryCredits = complementaryCredits;
+    }
+
+    public int getAttemptedCredits() {
+        return attemptedCredits;
+    }
+
+    public void setAttemptedCredits(int attemptedCredits) {
+        this.attemptedCredits = attemptedCredits;
     }
 
     public double getGpa() {

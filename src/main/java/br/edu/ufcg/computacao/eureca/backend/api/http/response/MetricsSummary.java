@@ -1,28 +1,17 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
+import br.edu.ufcg.computacao.eureca.backend.core.models.Metrics;
+import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
+
 public class MetricsSummary {
     private double averageTermsCount;
-    private double averageAttemptedCredits;
-    private double averageFeasibility;
-    private double averageSuccessRate;
-    private double averageLoad;
-    private double averageCost;
-    private double averagePace;
-    private double averageCourseDurationPrediction;
-    private double averageRisk;
+    private Metrics averageMetrics;
+    private RiskClass averageRiskClass;
 
-    public MetricsSummary(double averageTermsCount, double averageAttemptedCredits, double averageFeasibility,
-                          double averageSuccessRate, double averageLoad, double averageCost, double averagePace,
-                          double averageCourseDurationPrediction, double averageRisk) {
+    public MetricsSummary(double averageTermsCount, Metrics metrics) {
         this.averageTermsCount = averageTermsCount;
-        this.averageAttemptedCredits = averageAttemptedCredits;
-        this.averageFeasibility = averageFeasibility;
-        this.averageSuccessRate = averageSuccessRate;
-        this.averageLoad = averageLoad;
-        this.averageCost = averageCost;
-        this.averagePace = averagePace;
-        this.averageCourseDurationPrediction = averageCourseDurationPrediction;
-        this.averageRisk = averageRisk;
+        this.averageMetrics = metrics;
+        this.averageRiskClass = metrics.computeRiskClass();
     }
 
     public double getAverageTermsCount() {
@@ -33,67 +22,19 @@ public class MetricsSummary {
         this.averageTermsCount = averageTermsCount;
     }
 
-    public double getAverageAttemptedCredits() {
-        return averageAttemptedCredits;
+    public Metrics getAverageMetrics() {
+        return averageMetrics;
     }
 
-    public void setAverageAttemptedCredits(double averageAttemptedCredits) {
-        this.averageAttemptedCredits = averageAttemptedCredits;
+    public void setAverageMetrics(Metrics averageMetrics) {
+        this.averageMetrics = averageMetrics;
     }
 
-    public double getAverageFeasibility() {
-        return averageFeasibility;
+    public RiskClass getAverageRiskClass() {
+        return averageRiskClass;
     }
 
-    public void setAverageFeasibility(double averageFeasibility) {
-        this.averageFeasibility = averageFeasibility;
-    }
-
-    public double getAverageSuccessRate() {
-        return averageSuccessRate;
-    }
-
-    public void setAverageSuccessRate(double averageSuccessRate) {
-        this.averageSuccessRate = averageSuccessRate;
-    }
-
-    public double getAverageLoad() {
-        return averageLoad;
-    }
-
-    public void setAverageLoad(double averageLoad) {
-        this.averageLoad = averageLoad;
-    }
-
-    public double getAverageCost() {
-        return averageCost;
-    }
-
-    public void setAverageCost(double averageCost) {
-        this.averageCost = averageCost;
-    }
-
-    public double getAveragePace() {
-        return averagePace;
-    }
-
-    public void setAveragePace(double averagePace) {
-        this.averagePace = averagePace;
-    }
-
-    public double getAverageCourseDurationPrediction() {
-        return averageCourseDurationPrediction;
-    }
-
-    public void setAverageCourseDurationPrediction(double averageCourseDurationPrediction) {
-        this.averageCourseDurationPrediction = averageCourseDurationPrediction;
-    }
-
-    public double getAverageRisk() {
-        return averageRisk;
-    }
-
-    public void setAverageRisk(double averageRisk) {
-        this.averageRisk = averageRisk;
+    public void setAverageRiskClass(RiskClass averageRiskClass) {
+        this.averageRiskClass = averageRiskClass;
     }
 }

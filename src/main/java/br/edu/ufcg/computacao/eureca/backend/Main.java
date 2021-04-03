@@ -42,9 +42,6 @@ public class Main implements ApplicationRunner {
             DataAccessFacade dataAccessFacade = new ScsvFilesDataAccessFacade(mapsListFile);
             DataAccessFacadeHolder.getInstance().setDataAccessFacade(dataAccessFacade);
 
-            // Computing metrics
-            MetricsCalculator.create();
-
             // Setting up Application facade
             ApplicationFacade applicationFacade = ApplicationFacade.getInstance();
             applicationFacade.setAuthorizationPlugin(authorizationPlugin);

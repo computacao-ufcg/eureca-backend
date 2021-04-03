@@ -25,9 +25,8 @@ public class StudentsDataFetcher {
         Collection<StudentDataResponse> activeStudentsData = new TreeSet<>();
         Collection<Student> actives = this.dataAccessFacade.getActives(from, to);
         actives.forEach(item -> {
-            Metrics metrics = MetricsCalculator.getInstance().computeMetrics(item);
             StudentDataResponse studentDataResponse = new StudentDataResponse(item.getId().getRegistration(),
-                    item.getStudentData(), metrics, item.getRiskClass());
+                    item.getStudentData());
             activeStudentsData.add(studentDataResponse);
         });
         return activeStudentsData;
@@ -37,9 +36,8 @@ public class StudentsDataFetcher {
         Collection<StudentDataResponse> alumniData = new TreeSet<>();
         Collection<Student> actives = this.dataAccessFacade.getAlumni(from, to);
         actives.forEach(item -> {
-            Metrics metrics = MetricsCalculator.getInstance().computeMetrics(item);
             StudentDataResponse studentDataResponse = new StudentDataResponse(item.getId().getRegistration(),
-                    item.getStudentData(), metrics, item.getRiskClass());
+                    item.getStudentData());
             alumniData.add(studentDataResponse);
         });
         return alumniData;
@@ -49,9 +47,8 @@ public class StudentsDataFetcher {
         Collection<StudentDataResponse> dropoutsData = new TreeSet<>();
         Collection<Student> dropouts = this.dataAccessFacade.getDropouts(from, to);
         dropouts.forEach(item -> {
-            Metrics metrics = MetricsCalculator.getInstance().computeMetrics(item);
             StudentDataResponse studentDataResponse = new StudentDataResponse(item.getId().getRegistration(),
-                    item.getStudentData(), metrics, item.getRiskClass());
+                    item.getStudentData());
             dropoutsData.add(studentDataResponse);
         });
         return dropoutsData;
@@ -61,9 +58,8 @@ public class StudentsDataFetcher {
         Collection<StudentDataResponse> delayedData = new TreeSet<>();
         Collection<Student> delayed = this.dataAccessFacade.getDelayed(from, to);
         delayed.forEach(item -> {
-            Metrics metrics = MetricsCalculator.getInstance().computeMetrics(item);
             StudentDataResponse studentDataResponse = new StudentDataResponse(item.getId().getRegistration(),
-                    item.getStudentData(), metrics, item.getRiskClass());
+                    item.getStudentData());
             delayedData.add(studentDataResponse);
         });
         return delayedData;

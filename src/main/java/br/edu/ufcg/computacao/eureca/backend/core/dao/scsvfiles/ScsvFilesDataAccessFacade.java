@@ -4,10 +4,10 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
-import br.edu.ufcg.computacao.eureca.backend.core.models.AttemptsSummary;
 import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
+import org.apache.log4j.Logger;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,12 +16,14 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class ScsvFilesDataAccessFacade implements DataAccessFacade {
+    private final Logger LOGGER = Logger.getLogger(ScsvFilesDataAccessFacade.class);
     private MapsHolder mapsHolder;
     private IndexesHolder indexesHolder;
 
     public ScsvFilesDataAccessFacade(String mapsListFile) {
         this.mapsHolder = new MapsHolder(mapsListFile);
         this.indexesHolder = new IndexesHolder(this.mapsHolder);
+        setAttemptedCredits();
     }
 
     @Override
@@ -43,8 +45,8 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     public Collection<Student> getDelayed(String from, String to) {
         return this.getActives(from, to)
                 .stream()
-                .filter(item -> item.getRiskClass().equals(RiskClass.CRITICAL) ||
-                        item.getRiskClass().equals(RiskClass.LATE) || item.getRiskClass().equals(RiskClass.UNFEASIBLE))
+                .filter(item -> item.computeRiskClass().equals(RiskClass.CRITICAL) ||
+                        item.computeRiskClass().equals(RiskClass.LATE) || item.computeRiskClass().equals(RiskClass.UNFEASIBLE))
                 .collect(Collectors.toSet());
     }
 
@@ -82,7 +84,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                     StudentData alumnus = studentsMap.get(id);
                     aggregateGPA += alumnus.getGpa();
                     aggregateTermsCount += alumnus.getCompletedTerms();
-                    aggregateCost += (MetricsCalculator.getInstance().computeMetrics(new Student(id, alumnus)).getCost());
+                    aggregateCost += (MetricsCalculator.computeMetrics(alumnus).getCost());
                 }
                 AlumniPerTermSummary termData = new AlumniPerTermSummary(term, termAlumniCount,
                         (termAlumniCount == 0 ? 0.0 : aggregateGPA/termAlumniCount),
@@ -109,7 +111,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                     StudentData dropout = studentsMap.get(id);
                     dropoutsCount[dropout.getStatusIndex()]++;
                     aggregateTermsCount += dropout.getCompletedTerms();
-                    aggregateCost += (MetricsCalculator.getInstance().computeMetrics(new Student(id, dropout)).getCost());
+                    aggregateCost += (MetricsCalculator.computeMetrics(dropout).getCost());
                 }
                 DropoutReasonSummary dropoutReasonSummary = new DropoutReasonSummary(dropoutsCount);
                 int size = v.size();
@@ -160,9 +162,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return alumniBasicData;
     }
 
-    @Override
-    public Collection<AttemptsSummary> getAttemptsSummary() {
-        Collection<AttemptsSummary> summary = new TreeSet<>();
+    private void setAttemptedCredits() {
         Map<Registration, Integer> attemptsSummary = new HashMap<>();
         Map<RegistrationCodeTerm, Subject> enrollments = this.mapsHolder.getMap("enrollments");
         enrollments.forEach((k, v) -> {
@@ -177,10 +177,14 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             }
         });
         attemptsSummary.forEach((k, v) -> {
-            AttemptsSummary item = new AttemptsSummary(k, v);
-            summary.add(item);
+            Student student = getStudent(k.getRegistration());
+            if (student != null) {
+                student.getStudentData().setAttemptedCredits(v.intValue());
+                updateStudent(student);
+            } else {
+                LOGGER.debug(String.format("Inexistent student: " + student));
+            }
         });
-        return summary;
     }
 
     @Override
@@ -190,6 +194,11 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         CpfRegistration key = registrationMap.get(registration);
         StudentData studentData = studentsMap.get(key);
         return new Student(key, studentData);
+    }
+
+    private void updateStudent(Student student) {
+        Map<CpfRegistration, StudentData> studentsMap = this.mapsHolder.getMap("students");
+        studentsMap.replace(student.getId(), student.getStudentData());
     }
 
     private Collection<Student> getFilteredStudents(StudentStatus status, String from, String to) {
@@ -239,7 +248,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         int notApplicable = 0;
         for (CpfRegistration id : studentIds) {
             Student student = new Student(id, studentsMap.get(id));
-            RiskClass riskClass = student.getRiskClass();
+            RiskClass riskClass = student.computeRiskClass();
             switch (riskClass) {
                 case UNFEASIBLE:
                     unfeasible++;

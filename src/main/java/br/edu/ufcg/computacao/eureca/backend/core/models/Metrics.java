@@ -1,18 +1,20 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
+import br.edu.ufcg.computacao.eureca.backend.constants.Curriculum;
+
 public class Metrics {
-    private int attemptedCredits;
+    private double attemptedCredits;
     private double feasibility;
     private double successRate;
     private double averageLoad;
     private double cost;
     private double pace;
-    private int courseDurationPrediction;
+    private double courseDurationPrediction;
     private double risk;
 
-    public Metrics(Integer attemptedCredits, double feasibility, double successRate, double averageLoad, double cost,
-                   double pace, int courseDurationPrediction, double risk) {
-        this.attemptedCredits = (attemptedCredits == null ? 0 : attemptedCredits);
+    public Metrics(double attemptedCredits, double feasibility, double successRate, double averageLoad, double cost,
+                   double pace, double courseDurationPrediction, double risk) {
+        this.attemptedCredits = attemptedCredits;
         this.feasibility = feasibility;
         this.successRate = successRate;
         this.averageLoad = averageLoad;
@@ -22,11 +24,11 @@ public class Metrics {
         this.risk = risk;
     }
 
-    public int getAttemptedCredits() {
+    public double getAttemptedCredits() {
         return attemptedCredits;
     }
 
-    public void setAttemptedCredits(int attemptedCredits) {
+    public void setAttemptedCredits(double attemptedCredits) {
         this.attemptedCredits = attemptedCredits;
     }
 
@@ -70,11 +72,11 @@ public class Metrics {
         this.pace = pace;
     }
 
-    public int getCourseDurationPrediction() {
+    public double getCourseDurationPrediction() {
         return courseDurationPrediction;
     }
 
-    public void setCourseDurationPrediction(int courseDurationPrediction) {
+    public void setCourseDurationPrediction(double courseDurationPrediction) {
         this.courseDurationPrediction = courseDurationPrediction;
     }
 
@@ -84,5 +86,20 @@ public class Metrics {
 
     public void setRisk(double risk) {
         this.risk = risk;
+    }
+
+    public RiskClass computeRiskClass() {
+        double feasibility = this.getFeasibility();
+        if (feasibility > 1) return RiskClass.UNFEASIBLE;
+        if (feasibility < 0) return RiskClass.NOT_APPLICABLE;
+        double risk = this.getRisk();
+        if (risk > 0) return RiskClass.CRITICAL;
+        double highRiskThreshold = (1.0 * (Curriculum.EXPECTED_NUMBER_OF_TERMS - Curriculum.MAX_NUMBER_OF_TERMS)) /
+                (Curriculum.MAX_NUMBER_OF_TERMS - 1);
+        if (risk >= highRiskThreshold) return RiskClass.LATE;
+        double lowRiskThreshold = (1.0 * (Curriculum.MIN_NUMBER_OF_TERMS - Curriculum.MAX_NUMBER_OF_TERMS)) /
+                (Curriculum.MAX_NUMBER_OF_TERMS - 1);
+        if (risk >= lowRiskThreshold) return RiskClass.NORMAL;
+        return RiskClass.ADVANCED;
     }
 }

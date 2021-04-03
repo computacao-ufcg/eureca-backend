@@ -156,7 +156,7 @@ public class StudentsStatisticsController {
         double v;
         for (Student item : students) {
             aggregateTerms += item.getStudentData().getCompletedTerms();
-            Metrics studentMetrics = MetricsCalculator.getInstance().computeMetrics(item);
+            Metrics studentMetrics = MetricsCalculator.computeMetrics(item.getStudentData());
             aggregateAttemptedCredits += studentMetrics.getAttemptedCredits();
             aggregateFeasibility += ((v = studentMetrics.getFeasibility()) == -1.0 ? 0 : v);
             aggregateSuccessRate += ((v = studentMetrics.getSuccessRate()) == -1.0 ? 0 : v);
@@ -166,10 +166,10 @@ public class StudentsStatisticsController {
             aggregateCourseDurationPrediction += ((v = studentMetrics.getCourseDurationPrediction()) == -1.0 ? 0 : v);
             aggregateRisk += ((v = studentMetrics.getRisk()) == -1.0 ? 0 : v);
         }
-        return (size == 0 ? null : new MetricsSummary(aggregateTerms/size,
-                aggregateAttemptedCredits/size, aggregateFeasibility/size,
-                aggregateSuccessRate/size, aggregateLoad/size,
+        Metrics metricsSummary = new Metrics(aggregateAttemptedCredits/size,
+                aggregateFeasibility/size, aggregateSuccessRate/size, aggregateLoad/size,
                 aggregateCost/size, aggregatePace/size,
-                aggregateCourseDurationPrediction/size,aggregateRisk/size));
+                aggregateCourseDurationPrediction/size,aggregateRisk/size);
+        return (size == 0 ? null : new MetricsSummary(aggregateTerms/size, metricsSummary));
     }
 }
