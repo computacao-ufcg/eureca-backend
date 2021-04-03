@@ -27,7 +27,7 @@ public class StudentsDataFetcher {
         actives.forEach(item -> {
             Metrics metrics = MetricsCalculator.getInstance().computeMetrics(item);
             StudentDataResponse studentDataResponse = new StudentDataResponse(item.getId().getRegistration(),
-                    item.getStudentData(), metrics);
+                    item.getStudentData(), metrics, item.getRiskClass());
             activeStudentsData.add(studentDataResponse);
         });
         return activeStudentsData;
@@ -39,7 +39,7 @@ public class StudentsDataFetcher {
         actives.forEach(item -> {
             Metrics metrics = MetricsCalculator.getInstance().computeMetrics(item);
             StudentDataResponse studentDataResponse = new StudentDataResponse(item.getId().getRegistration(),
-                    item.getStudentData(), metrics);
+                    item.getStudentData(), metrics, item.getRiskClass());
             alumniData.add(studentDataResponse);
         });
         return alumniData;
@@ -51,7 +51,7 @@ public class StudentsDataFetcher {
         dropouts.forEach(item -> {
             Metrics metrics = MetricsCalculator.getInstance().computeMetrics(item);
             StudentDataResponse studentDataResponse = new StudentDataResponse(item.getId().getRegistration(),
-                    item.getStudentData(), metrics);
+                    item.getStudentData(), metrics, item.getRiskClass());
             dropoutsData.add(studentDataResponse);
         });
         return dropoutsData;
@@ -63,7 +63,7 @@ public class StudentsDataFetcher {
         delayed.forEach(item -> {
             Metrics metrics = MetricsCalculator.getInstance().computeMetrics(item);
             StudentDataResponse studentDataResponse = new StudentDataResponse(item.getId().getRegistration(),
-                    item.getStudentData(), metrics);
+                    item.getStudentData(), metrics, item.getRiskClass());
             delayedData.add(studentDataResponse);
         });
         return delayedData;

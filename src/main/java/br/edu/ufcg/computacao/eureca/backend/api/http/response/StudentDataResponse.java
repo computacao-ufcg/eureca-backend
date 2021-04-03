@@ -3,6 +3,7 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Registration;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Metrics;
+import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
 
 public class StudentDataResponse implements Comparable {
     private String registration;
@@ -34,8 +35,9 @@ public class StudentDataResponse implements Comparable {
     private double pace;
     private int courseDurationPrediction;
     private double risk;
+    private RiskClass riskClass;
 
-    public StudentDataResponse(String registration, StudentData studentData, Metrics metrics) {
+    public StudentDataResponse(String registration, StudentData studentData, Metrics metrics, RiskClass riskClass) {
         this.registration = registration;
         this.name = studentData.getName();
         this.gender = studentData.getGender();
@@ -65,6 +67,7 @@ public class StudentDataResponse implements Comparable {
         this.pace = metrics.getPace();
         this.courseDurationPrediction = metrics.getCourseDurationPrediction();
         this.risk = metrics.getRisk();
+        this.riskClass = riskClass;
     }
 
     public String getRegistration() {
@@ -302,6 +305,14 @@ public class StudentDataResponse implements Comparable {
 
     public void setRisk(double risk) {
         this.risk = risk;
+    }
+
+    public RiskClass getRiskClass() {
+        return riskClass;
+    }
+
+    public void setRiskClass(RiskClass riskClass) {
+        this.riskClass = riskClass;
     }
 
     @Override

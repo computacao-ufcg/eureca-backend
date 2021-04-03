@@ -55,8 +55,8 @@ public class StudentsStatisticsController {
         int alumniCount = this.dataAccessFacade.getAlumni(from, to).size();
         int activesCount = actives.size();
 
-        AlumniSummary alumniSummary = this.getAlumniSummary(alumni);
         ActivesSummary activesSummary = this.getActivesSummary(actives);
+        AlumniSummary alumniSummary = this.getAlumniSummary(alumni);
         DelayedSummary delayedSummary = this.getDelayedSummary(delayed);
         DropoutsSummary dropoutSummary = this.getDropoutsSummary(dropouts, activesCount, alumniCount);
 
@@ -125,7 +125,7 @@ public class StudentsStatisticsController {
             aggregateDropouts.add(item.getReasons());
         }
 
-        int dropoutCount = aggregateDropouts.getTotalDropouts() - aggregateDropouts.getReenterSameCourse();
+        int dropoutCount = aggregateDropouts.computeTotalDropouts() - aggregateDropouts.getReenterSameCourse();
         int enrolled = dropoutCount + activeCount + alumniCount;
 
         double dropoutAlumnusRate = (alumniCount == 0 ? -1.0 : 1.0 * dropoutCount/alumniCount);

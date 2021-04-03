@@ -59,10 +59,11 @@ public class MetricsCalculator {
 
     private double computeFeasibility(Student student) {
         int completed = student.getStudentData().getCompletedTerms();
-        if (completed > 0 && completed < Curriculum.MAX_NUMBER_OF_TERMS) {
-            return (1.0 * (Curriculum.TOTAL_CREDITS_NEEDED - student.getStudentData().getCompletedCredits())) /
-                    ((Curriculum.MAX_NUMBER_OF_TERMS - student.getStudentData().getCompletedTerms()) *
-                            Curriculum.MAX_NUMBER_OF_CREDITS + Curriculum.EXCEPTIONAL_ADDITIONAL_CREDITS);
+        if (completed > 0) {
+            double creditsMissing = 1.0 * (Curriculum.TOTAL_CREDITS_NEEDED - student.getStudentData().getCompletedCredits());
+            double maxCredits = ((Curriculum.MAX_NUMBER_OF_TERMS - student.getStudentData().getCompletedTerms()) *
+                    Curriculum.MAX_NUMBER_OF_CREDITS + Curriculum.EXCEPTIONAL_ADDITIONAL_CREDITS);
+            return (creditsMissing < 0 ? 0.0 : (maxCredits <= 0 ? -1.0 : creditsMissing/maxCredits));
         } else {
             return -1.0;
         }

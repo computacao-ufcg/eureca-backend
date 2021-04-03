@@ -98,7 +98,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     @Override
     public Collection<DropoutPerTermSummary> getDropoutsPerTermSummary(String from, String to) {
         Collection<DropoutPerTermSummary> dropoutSummaryResponses = new TreeSet<>();
-        Map<String, Collection<CpfRegistration>> dropouts = this.indexesHolder.getDropoutByLeaveTerm();
+        Map<String, Collection<CpfRegistration>> dropouts = this.indexesHolder.getDropoutByDropoutTerm();
         Map<CpfRegistration, StudentData> studentsMap = this.mapsHolder.getMap("students");
         dropouts.forEach((k, v) -> {
             if (k.compareTo(from) >= 0 && k.compareTo(to) <= 0) {
@@ -112,7 +112,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                     aggregateCost += (MetricsCalculator.getInstance().computeMetrics(new Student(id, dropout)).getCost());
                 }
                 DropoutReasonSummary dropoutReasonSummary = new DropoutReasonSummary(dropoutsCount);
-                int size = dropouts.size();
+                int size = v.size();
                 double averageTerms = (size == 0 ? 0.0 : aggregateTermsCount/size);
                 double averageCost = (size == 0 ? 0.0 : aggregateCost/size);
                 dropoutSummaryResponses.add(new DropoutPerTermSummary(k, size, dropoutReasonSummary, averageTerms, averageCost));
@@ -131,6 +131,9 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             String term = entry.getKey();
             if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
                 RiskClassCountSummary riskClassCount = getRiskClassCountSummary(entry.getValue(), studentsMap);
+                riskClassCount.setAdvanced(0);
+                riskClassCount.setNormal(0);
+                riskClassCount.setNotApplicable(0);
                 DelayedPerTermSummary termData = new DelayedPerTermSummary(term, riskClassCount);
                 terms.add(termData);
             }

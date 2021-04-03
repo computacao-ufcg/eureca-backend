@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class DelayedPerTermSummary {
+public class DelayedPerTermSummary implements Comparable {
     private String admissionTerm;
     private RiskClassCountSummary riskCount;
 
@@ -23,5 +23,11 @@ public class DelayedPerTermSummary {
 
     public void setRiskCount(RiskClassCountSummary riskCount) {
         this.riskCount = riskCount;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        DelayedPerTermSummary other = (DelayedPerTermSummary) o;
+        return this.getAdmissionTerm().compareTo(other.getAdmissionTerm());
     }
 }
