@@ -2,7 +2,7 @@ package br.edu.ufcg.computacao.eureca.backend.core.util;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.MetricsSummary;
 import br.edu.ufcg.computacao.eureca.backend.constants.Curriculum;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
+import br.edu.ufcg.computacao.eureca.backend.core.models.StudentData;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 
 import org.apache.log4j.Logger;

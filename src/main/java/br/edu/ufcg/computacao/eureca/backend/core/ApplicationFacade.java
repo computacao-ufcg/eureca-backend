@@ -6,7 +6,7 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.constants.*;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EurecaAsPublicKeyHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.PropertiesHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
+import br.edu.ufcg.computacao.eureca.backend.core.models.EurecaOperation;
 import br.edu.ufcg.computacao.eureca.backend.core.plugins.AuthorizationPlugin;
 import br.edu.ufcg.computacao.eureca.common.exceptions.ConfigurationErrorException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;

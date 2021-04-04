@@ -3,9 +3,7 @@ package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
-import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
+import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 import org.apache.log4j.Logger;
 
@@ -28,17 +26,17 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
     @Override
     public Collection<Student> getActives(String from, String to) {
-        return getFilteredStudents(StudentStatus.ACTIVE, from, to);
+        return getFilteredStudents(StudentClassification.ACTIVE, from, to);
     }
 
     @Override
     public Collection<Student> getAlumni(String from, String to) {
-        return getFilteredStudents(StudentStatus.ALUMNI, from, to);
+        return getFilteredStudents(StudentClassification.ALUMNI, from, to);
     }
 
     @Override
     public Collection<Student> getDropouts(String from, String to) {
-        return getFilteredStudents(StudentStatus.DROPOUT, from, to);
+        return getFilteredStudents(StudentClassification.DROPOUT, from, to);
     }
 
     @Override
@@ -202,7 +200,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         studentsMap.replace(student.getId(), student.getStudentData());
     }
 
-    private Collection<Student> getFilteredStudents(StudentStatus status, String from, String to) {
+    private Collection<Student> getFilteredStudents(StudentClassification status, String from, String to) {
         Collection<Student> filteredStudents = new TreeSet<>();
         Collection<Student> allStudents = getAllStudentsByStatus(status);
         allStudents.forEach(item -> {
@@ -214,7 +212,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return filteredStudents;
     }
 
-    private String getGroupingTerm(StudentStatus status, Student item) {
+    private String getGroupingTerm(StudentClassification status, Student item) {
         switch(status) {
             case ALUMNI:
             case DROPOUT:
@@ -226,7 +224,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         }
     }
 
-    private Collection<Student> getAllStudentsByStatus(StudentStatus status) {
+    private Collection<Student> getAllStudentsByStatus(StudentClassification status) {
         switch(status) {
             case ALUMNI:
                 return this.indexesHolder.getAllAlumni();

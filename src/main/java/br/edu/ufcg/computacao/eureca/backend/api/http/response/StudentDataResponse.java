@@ -1,10 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Registration;
-import br.edu.ufcg.computacao.eureca.backend.core.models.CostClass;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Metrics;
-import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
+import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 
 public class StudentDataResponse implements Comparable {

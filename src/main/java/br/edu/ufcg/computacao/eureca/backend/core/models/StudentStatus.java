@@ -1,4 +1,4 @@
-package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
+package br.edu.ufcg.computacao.eureca.backend.core.models;
 
 public enum StudentStatus {
     ACTIVE("Ativo"),

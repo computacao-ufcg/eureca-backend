@@ -1,8 +1,5 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.CpfRegistration;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Registration;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 
 public class Student implements Comparable {

@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
-public enum StudentStatus {
+public enum StudentClassification {
     ACTIVE,
     ALUMNI,
     DROPOUT,

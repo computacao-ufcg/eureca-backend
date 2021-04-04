@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Registration;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Registration;
 
 public class AlumniDigestResponse implements Comparable {
     private String registration;
