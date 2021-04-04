@@ -132,11 +132,13 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         for (Map.Entry<String, Collection<CpfRegistration>> entry : index.entrySet()) {
             String term = entry.getKey();
             if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
-                RiskClassCountSummary riskClassCount = getRiskClassCountSummary(entry.getValue(), studentsMap);
-                riskClassCount.setAdvanced(0);
-                riskClassCount.setNormal(0);
-                riskClassCount.setNotApplicable(0);
-                DelayedPerTermSummary termData = new DelayedPerTermSummary(term, riskClassCount);
+                Collection<Student> delayed = new TreeSet<>();
+                entry.getValue().forEach(cpfRegistration -> {
+                    StudentData studentData = studentsMap.get(cpfRegistration);
+                    delayed.add(new Student(cpfRegistration, studentData));
+                });
+                MetricsSummary metricsSummary = MetricsCalculator.computeMetricsSummary(delayed);
+                DelayedPerTermSummary termData = new DelayedPerTermSummary(term, metricsSummary);
                 terms.add(termData);
             }
         }
@@ -181,8 +183,6 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             if (student != null) {
                 student.getStudentData().setAttemptedCredits(v.intValue());
                 updateStudent(student);
-            } else {
-                LOGGER.debug(String.format("Inexistent student: " + student));
             }
         });
     }

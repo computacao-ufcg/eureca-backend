@@ -187,7 +187,7 @@ public class StudentsStatistics {
         }
     }
 
-    @RequestMapping(value = "students/summary", method = RequestMethod.GET)
+    @RequestMapping(value = "summary", method = RequestMethod.GET)
     public ResponseEntity<StudentsSummaryResponse> getStudentsSummary(
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)

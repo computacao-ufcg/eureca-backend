@@ -1,10 +1,13 @@
 package br.edu.ufcg.computacao.eureca.backend.core.util;
 
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.MetricsSummary;
 import br.edu.ufcg.computacao.eureca.backend.constants.Curriculum;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 
 import org.apache.log4j.Logger;
+
+import java.util.Collection;
 
 public class MetricsCalculator {
     private Logger LOGGER = Logger.getLogger(MetricsCalculator.class);
@@ -94,5 +97,36 @@ public class MetricsCalculator {
         } else {
             return -1.0;
         }
+    }
+
+    public static MetricsSummary computeMetricsSummary(Collection<Student> students) {
+        int size = students.size();
+        double aggregateTerms = 0.0;
+        double aggregateAttemptedCredits = 0.0;
+        double aggregateFeasibility = 0.0;
+        double aggregateSuccessRate = 0.0;
+        double aggregateLoad = 0.0;
+        double aggregateCost = 0.0;
+        double aggregatePace = 0.0;
+        double aggregateCourseDurationPrediction = 0.0;
+        double aggregateRisk = 0.0;
+        double v;
+        for (Student item : students) {
+            aggregateTerms += item.getStudentData().getCompletedTerms();
+            Metrics studentMetrics = MetricsCalculator.computeMetrics(item.getStudentData());
+            aggregateAttemptedCredits += studentMetrics.getAttemptedCredits();
+            aggregateFeasibility += ((v = studentMetrics.getFeasibility()) == -1.0 ? 0 : v);
+            aggregateSuccessRate += ((v = studentMetrics.getSuccessRate()) == -1.0 ? 0 : v);
+            aggregateLoad += ((v = studentMetrics.getAverageLoad()) == -1.0 ? 0 : v);
+            aggregateCost += ((v = studentMetrics.getCost()) == -1.0 ? 0 : v);
+            aggregatePace += ((v = studentMetrics.getPace()) == -1.0 ? 0 : v);
+            aggregateCourseDurationPrediction += ((v = studentMetrics.getCourseDurationPrediction()) == -1.0 ? 0 : v);
+            aggregateRisk += ((v = studentMetrics.getRisk()) == -1.0 ? 0 : v);
+        }
+        Metrics metricsSummary = new Metrics(aggregateAttemptedCredits/size,
+                aggregateFeasibility/size, aggregateSuccessRate/size, aggregateLoad/size,
+                aggregateCost/size, aggregatePace/size,
+                aggregateCourseDurationPrediction/size,aggregateRisk/size);
+        return (size == 0 ? null : new MetricsSummary(aggregateTerms/size, metricsSummary));
     }
 }

@@ -3,7 +3,6 @@ package br.edu.ufcg.computacao.eureca.backend.core;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Metrics;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 import org.apache.log4j.Logger;
@@ -71,9 +70,8 @@ public class StudentsStatisticsController {
     }
 
     private ActivesSummary getActivesSummary(Collection<Student> actives) {
-        int size = actives.size();
-        MetricsSummary summary = getMetricsSummary(size, actives);
-        return new ActivesSummary(size, summary);
+        MetricsSummary summary = MetricsCalculator.computeMetricsSummary(actives);
+        return new ActivesSummary(actives.size(), summary);
     }
 
     private AlumniSummary getAlumniSummary(Collection<AlumniPerTermSummary> terms) {
@@ -138,38 +136,7 @@ public class StudentsStatisticsController {
     }
 
     private DelayedSummary getDelayedSummary(Collection<Student> delayed) {
-        int size = delayed.size();
-        MetricsSummary summary = getMetricsSummary(size, delayed);
-        return new DelayedSummary(size, summary);
-    }
-
-    private MetricsSummary getMetricsSummary(int size, Collection<Student> students) {
-        double aggregateTerms = 0.0;
-        double aggregateAttemptedCredits = 0.0;
-        double aggregateFeasibility = 0.0;
-        double aggregateSuccessRate = 0.0;
-        double aggregateLoad = 0.0;
-        double aggregateCost = 0.0;
-        double aggregatePace = 0.0;
-        double aggregateCourseDurationPrediction = 0.0;
-        double aggregateRisk = 0.0;
-        double v;
-        for (Student item : students) {
-            aggregateTerms += item.getStudentData().getCompletedTerms();
-            Metrics studentMetrics = MetricsCalculator.computeMetrics(item.getStudentData());
-            aggregateAttemptedCredits += studentMetrics.getAttemptedCredits();
-            aggregateFeasibility += ((v = studentMetrics.getFeasibility()) == -1.0 ? 0 : v);
-            aggregateSuccessRate += ((v = studentMetrics.getSuccessRate()) == -1.0 ? 0 : v);
-            aggregateLoad += ((v = studentMetrics.getAverageLoad()) == -1.0 ? 0 : v);
-            aggregateCost += ((v = studentMetrics.getCost()) == -1.0 ? 0 : v);
-            aggregatePace += ((v = studentMetrics.getPace()) == -1.0 ? 0 : v);
-            aggregateCourseDurationPrediction += ((v = studentMetrics.getCourseDurationPrediction()) == -1.0 ? 0 : v);
-            aggregateRisk += ((v = studentMetrics.getRisk()) == -1.0 ? 0 : v);
-        }
-        Metrics metricsSummary = new Metrics(aggregateAttemptedCredits/size,
-                aggregateFeasibility/size, aggregateSuccessRate/size, aggregateLoad/size,
-                aggregateCost/size, aggregatePace/size,
-                aggregateCourseDurationPrediction/size,aggregateRisk/size);
-        return (size == 0 ? null : new MetricsSummary(aggregateTerms/size, metricsSummary));
+        MetricsSummary summary = MetricsCalculator.computeMetricsSummary(delayed);
+        return new DelayedSummary(delayed.size(), summary);
     }
 }
