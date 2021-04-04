@@ -2,7 +2,7 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class AlumniSummary {
     private int alumniCount;
-    private double averageTerms;
+    private double averageTermsCount;
     private double averageCost;
     private double averageGpa;
     private double averageDegreeCount;
@@ -11,11 +11,11 @@ public class AlumniSummary {
     private String maxDegreeCountTerm;
     private String minDegreeCountTerm;
 
-    public AlumniSummary(int alumniCount, double averageTerms, double averageCost, double averageGpa,
+    public AlumniSummary(int alumniCount, double averageTermsCount, double averageCost, double averageGpa,
                          double averageDegreeCount, int maxDegreeCount, int minDegreeCount, String maxDegreeCountTerm,
                          String minDegreeCountTerm) {
         this.alumniCount = alumniCount;
-        this.averageTerms = averageTerms;
+        this.averageTermsCount = averageTermsCount;
         this.averageCost = averageCost;
         this.averageGpa = averageGpa;
         this.averageDegreeCount = averageDegreeCount;
@@ -25,12 +25,12 @@ public class AlumniSummary {
         this.minDegreeCountTerm = minDegreeCountTerm;
     }
 
-    public double getAverageTerms() {
-        return averageTerms;
+    public double getAverageTermsCount() {
+        return averageTermsCount;
     }
 
-    public void setAverageTerms(double averageTerms) {
-        this.averageTerms = averageTerms;
+    public void setAverageTermsCount(double averageTermsCount) {
+        this.averageTermsCount = averageTermsCount;
     }
 
     public double getAverageCost() {

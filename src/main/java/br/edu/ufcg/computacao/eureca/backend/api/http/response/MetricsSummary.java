@@ -4,37 +4,37 @@ import br.edu.ufcg.computacao.eureca.backend.core.models.Metrics;
 import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
 
 public class MetricsSummary {
-    private double averageTermsCount;
-    private Metrics averageMetrics;
-    private RiskClass averageRiskClass;
+    private double termsCount;
+    private Metrics metrics;
+    private RiskClass riskClass;
 
-    public MetricsSummary(double averageTermsCount, Metrics metrics) {
-        this.averageTermsCount = averageTermsCount;
-        this.averageMetrics = metrics;
-        this.averageRiskClass = metrics.computeRiskClass();
+    public MetricsSummary(double termsCount, Metrics metrics) {
+        this.termsCount = termsCount;
+        this.metrics = metrics;
+        this.riskClass = metrics.computeRiskClass();
     }
 
-    public double getAverageTermsCount() {
-        return averageTermsCount;
+    public double getTermsCount() {
+        return termsCount;
     }
 
-    public void setAverageTermsCount(double averageTermsCount) {
-        this.averageTermsCount = averageTermsCount;
+    public void setTermsCount(double termsCount) {
+        this.termsCount = termsCount;
     }
 
-    public Metrics getAverageMetrics() {
-        return averageMetrics;
+    public Metrics getMetrics() {
+        return metrics;
     }
 
-    public void setAverageMetrics(Metrics averageMetrics) {
-        this.averageMetrics = averageMetrics;
+    public void setMetrics(Metrics metrics) {
+        this.metrics = metrics;
     }
 
-    public RiskClass getAverageRiskClass() {
-        return averageRiskClass;
+    public RiskClass getRiskClass() {
+        return riskClass;
     }
 
-    public void setAverageRiskClass(RiskClass averageRiskClass) {
-        this.averageRiskClass = averageRiskClass;
+    public void setRiskClass(RiskClass riskClass) {
+        this.riskClass = riskClass;
     }
 }

@@ -15,15 +15,15 @@ public class MetricsCalculator {
     public static Metrics computeMetrics(StudentData student) {
         try {
             int attemptedCredits = student.getAttemptedCredits();
-            int completedTerms = student.getCompletedTerms();
+            int termsAccounted = student.getCompletedTerms() + student.getInstitutionalTerms() + student.getInstitutionalTerms();
             int completedCredits = student.getCompletedCredits();
-            double feasibility = computeFeasibility(completedTerms, completedCredits);
+            double feasibility = computeFeasibility(termsAccounted, completedCredits);
             double successRate = computeSuccessRate(completedCredits, attemptedCredits);
-            double averageLoad = computeAverageLoad(completedTerms, attemptedCredits);
-            double cost = computeCost(completedTerms, completedCredits, attemptedCredits);
-            double pace = computePace(completedTerms, completedCredits);
-            int courseDurationPrediction = computeCourseDurationPrediction(completedTerms, completedCredits);
-            double risk = computeRisk(completedTerms, completedCredits);
+            double averageLoad = computeAverageLoad(termsAccounted, attemptedCredits);
+            double cost = computeCost(termsAccounted, completedCredits, attemptedCredits);
+            double pace = computePace(termsAccounted, completedCredits);
+            int courseDurationPrediction = computeCourseDurationPrediction(termsAccounted, completedCredits);
+            double risk = computeRisk(termsAccounted, completedCredits);
             return new Metrics(attemptedCredits, feasibility, successRate, averageLoad, cost, pace,
                     courseDurationPrediction, risk);
         } catch (Exception e) {

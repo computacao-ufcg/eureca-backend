@@ -2,11 +2,11 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class ActivesSummary {
     private int activesCount;
-    private MetricsSummary summary;
+    private MetricsSummary average;
 
-    public ActivesSummary(int activesCount, MetricsSummary summary) {
+    public ActivesSummary(int activesCount, MetricsSummary average) {
         this.activesCount = activesCount;
-        this.summary = summary;
+        this.average = average;
     }
 
     public int getActivesCount() {
@@ -17,11 +17,11 @@ public class ActivesSummary {
         this.activesCount = activesCount;
     }
 
-    public MetricsSummary getSummary() {
-        return summary;
+    public MetricsSummary getAverage() {
+        return average;
     }
 
-    public void setSummary(MetricsSummary summary) {
-        this.summary = summary;
+    public void setAverage(MetricsSummary average) {
+        this.average = average;
     }
 }

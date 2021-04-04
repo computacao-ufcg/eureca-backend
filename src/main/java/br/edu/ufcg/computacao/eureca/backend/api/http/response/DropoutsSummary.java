@@ -2,16 +2,16 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class DropoutsSummary {
     private int dropoutCount;
-    private double averageTerms;
+    private double averageTermsCount;
     private double averageCost;
     private DropoutReasonSummary dropouts;
     private double dropoutAlumnusRate;
     private double dropoutEnrolledRate;
 
-    public DropoutsSummary(int dropoutCount, double averageTerms, double averageCost, DropoutReasonSummary dropouts,
+    public DropoutsSummary(int dropoutCount, double averageTermsCount, double averageCost, DropoutReasonSummary dropouts,
                            double dropoutAlumnusRate, double dropoutEnrolledRate) {
         this.dropoutCount = dropoutCount;
-        this.averageTerms = averageTerms;
+        this.averageTermsCount = averageTermsCount;
         this.averageCost = averageCost;
         this.dropouts = dropouts;
         this.dropoutAlumnusRate = dropoutAlumnusRate;
@@ -26,12 +26,12 @@ public class DropoutsSummary {
         this.dropoutCount = dropoutCount;
     }
 
-    public double getAverageTerms() {
-        return averageTerms;
+    public double getAverageTermsCount() {
+        return averageTermsCount;
     }
 
-    public void setAverageTerms(double averageTerms) {
-        this.averageTerms = averageTerms;
+    public void setAverageTermsCount(double averageTermsCount) {
+        this.averageTermsCount = averageTermsCount;
     }
 
     public double getAverageCost() {

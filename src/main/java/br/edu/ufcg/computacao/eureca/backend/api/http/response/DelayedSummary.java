@@ -2,11 +2,11 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class DelayedSummary  {
     private int delayedCount;
-    private MetricsSummary summary;
+    private MetricsSummary average;
 
-    public DelayedSummary(int delayedCount, MetricsSummary summary) {
+    public DelayedSummary(int delayedCount, MetricsSummary average) {
         this.delayedCount = delayedCount;
-        this.summary = summary;
+        this.average = average;
     }
 
     public int getDelayedCount() {
@@ -17,11 +17,11 @@ public class DelayedSummary  {
         this.delayedCount = delayedCount;
     }
 
-    public MetricsSummary getSummary() {
-        return summary;
+    public MetricsSummary getAverage() {
+        return average;
     }
 
-    public void setSummary(MetricsSummary summary) {
-        this.summary = summary;
+    public void setAverage(MetricsSummary average) {
+        this.average = average;
     }
 }
