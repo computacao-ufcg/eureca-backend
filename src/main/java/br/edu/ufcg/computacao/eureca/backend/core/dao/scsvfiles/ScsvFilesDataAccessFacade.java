@@ -31,7 +31,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
     @Override
     public Collection<Student> getAlumni(String from, String to) {
-        return getFilteredStudents(StudentClassification.ALUMNI, from, to);
+        return getFilteredStudents(StudentClassification.ALUMNUS, from, to);
     }
 
     @Override
@@ -214,7 +214,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
     private String getGroupingTerm(StudentClassification status, Student item) {
         switch(status) {
-            case ALUMNI:
+            case ALUMNUS:
             case DROPOUT:
                 return item.getStudentData().getStatusTerm();
             case ACTIVE:
@@ -226,7 +226,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
     private Collection<Student> getAllStudentsByStatus(StudentClassification status) {
         switch(status) {
-            case ALUMNI:
+            case ALUMNUS:
                 return this.indexesHolder.getAllAlumni();
             case DROPOUT:
                 return this.indexesHolder.getAllDropouts();
