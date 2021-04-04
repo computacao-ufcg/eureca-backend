@@ -45,8 +45,9 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     public Collection<Student> getDelayed(String from, String to) {
         return this.getActives(from, to)
                 .stream()
-                .filter(item -> item.computeRiskClass().equals(RiskClass.CRITICAL) ||
-                        item.computeRiskClass().equals(RiskClass.LATE) || item.computeRiskClass().equals(RiskClass.UNFEASIBLE))
+                .filter(item -> item.computeRiskClass().equals(RiskClass.AVERAGE) ||
+                        item.computeRiskClass().equals(RiskClass.HIGH) ||
+                        item.computeRiskClass().equals(RiskClass.UNFEASIBLE))
                 .collect(Collectors.toSet());
     }
 
@@ -240,38 +241,43 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
     private RiskClassCountSummary getRiskClassCountSummary(Collection<CpfRegistration> studentIds, Map<CpfRegistration,
             StudentData> studentsMap) {
+        int inaccurate = 0;
+        int safe = 0;
+        int low = 0;
+        int average = 0;
+        int high = 0;
         int unfeasible = 0;
-        int critical = 0;
-        int late = 0;
-        int normal = 0;
-        int advanced = 0;
         int notApplicable = 0;
         for (CpfRegistration id : studentIds) {
             Student student = new Student(id, studentsMap.get(id));
             RiskClass riskClass = student.computeRiskClass();
             switch (riskClass) {
+                case INACCURATE:
+                    inaccurate++;
+                    break;
+                case SAFE:
+                    safe++;
+                    break;
+                case LOW:
+                    low++;
+                    break;
+                case AVERAGE:
+                    average++;
+                    break;
+                case HIGH:
+                    high++;
+                    break;
                 case UNFEASIBLE:
                     unfeasible++;
                     break;
-                case CRITICAL:
-                    critical++;
-                    break;
-                case LATE:
-                    late++;
-                    break;
-                case NORMAL:
-                    normal++;
-                    break;
-                case ADVANCED:
-                    advanced++;
-                    break;
+                case NOT_APPLICABLE:
                 default:
                     notApplicable++;
                     break;
             }
         }
-        RiskClassCountSummary riskClassCount = new RiskClassCountSummary(unfeasible, critical, late, normal,
-                advanced, notApplicable);
+        RiskClassCountSummary riskClassCount = new
+                RiskClassCountSummary(inaccurate, safe, low, average, high, unfeasible, notApplicable);
         return riskClassCount;
     }
 }

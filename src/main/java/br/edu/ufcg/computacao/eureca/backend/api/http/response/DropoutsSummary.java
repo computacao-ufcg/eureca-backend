@@ -1,21 +1,20 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
+import br.edu.ufcg.computacao.eureca.backend.core.models.CostClass;
+
 public class DropoutsSummary {
     private int dropoutCount;
     private double averageTermsCount;
     private double averageCost;
+    private CostClass costClass;
     private DropoutReasonSummary dropouts;
-    private double dropoutAlumnusRate;
-    private double dropoutEnrolledRate;
 
-    public DropoutsSummary(int dropoutCount, double averageTermsCount, double averageCost, DropoutReasonSummary dropouts,
-                           double dropoutAlumnusRate, double dropoutEnrolledRate) {
+    public DropoutsSummary(int dropoutCount, double averageTermsCount, double averageCost, CostClass costClass, DropoutReasonSummary dropouts) {
         this.dropoutCount = dropoutCount;
         this.averageTermsCount = averageTermsCount;
         this.averageCost = averageCost;
+        this.costClass = costClass;
         this.dropouts = dropouts;
-        this.dropoutAlumnusRate = dropoutAlumnusRate;
-        this.dropoutEnrolledRate = dropoutEnrolledRate;
     }
 
     public int getDropoutCount() {
@@ -42,27 +41,19 @@ public class DropoutsSummary {
         this.averageCost = averageCost;
     }
 
+    public CostClass getCostClass() {
+        return costClass;
+    }
+
+    public void setCostClass(CostClass costClass) {
+        this.costClass = costClass;
+    }
+
     public DropoutReasonSummary getDropouts() {
         return dropouts;
     }
 
     public void setDropouts(DropoutReasonSummary dropouts) {
         this.dropouts = dropouts;
-    }
-
-    public double getDropoutAlumnusRate() {
-        return dropoutAlumnusRate;
-    }
-
-    public void setDropoutAlumnusRate(double dropoutAlumnusRate) {
-        this.dropoutAlumnusRate = dropoutAlumnusRate;
-    }
-
-    public double getDropoutEnrolledRate() {
-        return dropoutEnrolledRate;
-    }
-
-    public void setDropoutEnrolledRate(double dropoutEnrolledRate) {
-        this.dropoutEnrolledRate = dropoutEnrolledRate;
     }
 }

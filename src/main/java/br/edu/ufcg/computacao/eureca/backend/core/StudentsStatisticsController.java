@@ -3,6 +3,7 @@ package br.edu.ufcg.computacao.eureca.backend.core;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
+import br.edu.ufcg.computacao.eureca.backend.core.models.CostClass;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 import org.apache.log4j.Logger;
@@ -57,7 +58,7 @@ public class StudentsStatisticsController {
         ActivesSummary activesSummary = this.getActivesSummary(actives);
         AlumniSummary alumniSummary = this.getAlumniSummary(alumni);
         DelayedSummary delayedSummary = this.getDelayedSummary(delayed);
-        DropoutsSummary dropoutSummary = this.getDropoutsSummary(dropouts, activesCount, alumniCount);
+        DropoutsSummary dropoutSummary = this.getDropoutsSummary(dropouts);
 
         return new StudentsSummaryResponse(activesSummary, alumniSummary, delayedSummary, dropoutSummary);
     }
@@ -111,7 +112,7 @@ public class StudentsStatisticsController {
                 maxAlumniCountTerm, minAlumniCountTerm);
     }
 
-    private DropoutsSummary getDropoutsSummary(Collection<DropoutPerTermSummary> dropouts, int activeCount, int alumniCount) {
+    private DropoutsSummary getDropoutsSummary(Collection<DropoutPerTermSummary> dropouts) {
         DropoutReasonSummary aggregateDropouts = new DropoutReasonSummary(0, 0,
                 0, 0, 0, 0, 0,
                 0, 0, 0, 0);
@@ -124,15 +125,12 @@ public class StudentsStatisticsController {
         }
 
         int dropoutCount = aggregateDropouts.computeTotalDropouts() - aggregateDropouts.getReenterSameCourse();
-        int enrolled = dropoutCount + activeCount + alumniCount;
 
-        double dropoutAlumnusRate = (alumniCount == 0 ? -1.0 : 1.0 * dropoutCount/alumniCount);
-        double dropoutEnrolledRate = (enrolled == 0 ? -1.0 : 1.0 * dropoutCount/enrolled);
-        double averageTerms = (dropoutCount == 0 ? -1.0 : aggregateTermsCount/dropoutCount);
+        double averageTermsCount = (dropoutCount == 0 ? -1.0 : aggregateTermsCount/dropoutCount);
         double averageCost = (dropoutCount == 0 ? -1.0 : aggregateCost/dropoutCount);
+        CostClass costClass = MetricsCalculator.computeCostClass(averageCost);
 
-        return new DropoutsSummary(dropoutCount, averageTerms, averageCost, aggregateDropouts, dropoutAlumnusRate,
-                dropoutEnrolledRate);
+        return new DropoutsSummary(dropoutCount, averageTermsCount, averageCost, costClass, aggregateDropouts);
     }
 
     private DelayedSummary getDelayedSummary(Collection<Student> delayed) {

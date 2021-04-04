@@ -87,19 +87,4 @@ public class Metrics {
     public void setRisk(double risk) {
         this.risk = risk;
     }
-
-    public RiskClass computeRiskClass() {
-        double feasibility = this.getFeasibility();
-        if (feasibility > 1) return RiskClass.UNFEASIBLE;
-        if (feasibility < 0) return RiskClass.NOT_APPLICABLE;
-        double risk = this.getRisk();
-        if (risk > 0) return RiskClass.CRITICAL;
-        double highRiskThreshold = (1.0 * (Curriculum.EXPECTED_NUMBER_OF_TERMS - Curriculum.MAX_NUMBER_OF_TERMS)) /
-                (Curriculum.MAX_NUMBER_OF_TERMS - 1);
-        if (risk >= highRiskThreshold) return RiskClass.LATE;
-        double lowRiskThreshold = (1.0 * (Curriculum.MIN_NUMBER_OF_TERMS - Curriculum.MAX_NUMBER_OF_TERMS)) /
-                (Curriculum.MAX_NUMBER_OF_TERMS - 1);
-        if (risk >= lowRiskThreshold) return RiskClass.NORMAL;
-        return RiskClass.ADVANCED;
-    }
 }

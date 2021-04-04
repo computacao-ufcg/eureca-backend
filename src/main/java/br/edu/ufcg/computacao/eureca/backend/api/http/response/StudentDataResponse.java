@@ -2,6 +2,7 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Registration;
+import br.edu.ufcg.computacao.eureca.backend.core.models.CostClass;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Metrics;
 import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
@@ -37,6 +38,7 @@ public class StudentDataResponse implements Comparable {
     private double courseDurationPrediction;
     private double risk;
     private RiskClass riskClass;
+    private CostClass costClass;
 
     public StudentDataResponse(String registration, StudentData studentData) {
         this.registration = registration;
@@ -70,10 +72,11 @@ public class StudentDataResponse implements Comparable {
         this.courseDurationPrediction = metrics.getCourseDurationPrediction();
         this.risk = metrics.getRisk();
         if (studentData.isActive()) {
-            this.riskClass = metrics.computeRiskClass();
+            this.riskClass = MetricsCalculator.computeRiskClass(metrics.getRisk());
         } else {
             this.riskClass = RiskClass.NOT_APPLICABLE;
         }
+        this.costClass = MetricsCalculator.computeCostClass(this.cost);
     }
 
     public String getRegistration() {
@@ -319,6 +322,14 @@ public class StudentDataResponse implements Comparable {
 
     public void setRiskClass(RiskClass riskClass) {
         this.riskClass = riskClass;
+    }
+
+    public CostClass getCostClass() {
+        return costClass;
+    }
+
+    public void setCostClass(CostClass costClass) {
+        this.costClass = costClass;
     }
 
     @Override

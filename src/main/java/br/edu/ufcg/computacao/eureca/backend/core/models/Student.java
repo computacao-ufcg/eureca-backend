@@ -24,7 +24,7 @@ public class Student implements Comparable {
 
     public RiskClass computeRiskClass() {
         Metrics studentMetrics = MetricsCalculator.computeMetrics(this.getStudentData());
-        return studentMetrics.computeRiskClass();
+        return MetricsCalculator.computeRiskClass(studentMetrics.getRisk());
     }
 
     @Override

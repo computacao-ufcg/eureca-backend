@@ -1,9 +1,13 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
+import br.edu.ufcg.computacao.eureca.backend.core.models.CostClass;
+import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
+
 public class AlumniSummary {
     private int alumniCount;
     private double averageTermsCount;
     private double averageCost;
+    private CostClass costClass;
     private double averageGpa;
     private double averageDegreeCount;
     private int maxDegreeCount;
@@ -17,6 +21,7 @@ public class AlumniSummary {
         this.alumniCount = alumniCount;
         this.averageTermsCount = averageTermsCount;
         this.averageCost = averageCost;
+        this.costClass = MetricsCalculator.computeCostClass(this.averageCost);
         this.averageGpa = averageGpa;
         this.averageDegreeCount = averageDegreeCount;
         this.maxDegreeCount = maxDegreeCount;
@@ -39,6 +44,14 @@ public class AlumniSummary {
 
     public void setAverageCost(double averageCost) {
         this.averageCost = averageCost;
+    }
+
+    public CostClass getCostClass() {
+        return costClass;
+    }
+
+    public void setCostClass(CostClass costClass) {
+        this.costClass = costClass;
     }
 
     public double getAverageGpa() {
