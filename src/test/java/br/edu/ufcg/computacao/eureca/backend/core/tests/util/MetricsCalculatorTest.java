@@ -65,10 +65,4 @@ public class MetricsCalculatorTest {
         Assert.assertEquals(metricsCalculator.computeMetrics(student) instanceof Metrics, true);
     }
 
-    // checks the behavior of computeMetrics when the student parameter is null.
-    @Test
-    public void computeMetricsWithNullStudentParameter() throws NullPointerException {
-        Assert.assertEquals(metricsCalculator.computeMetrics(null), null);
-    }
-
 }
