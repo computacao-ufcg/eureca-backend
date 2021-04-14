@@ -29,7 +29,7 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "actives", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.Statistics.GET_ACTIVES)
-    public ResponseEntity<ActiveSummaryResponse> getActives(
+    public ResponseEntity<ActivesSummaryResponse> getActives(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)
@@ -39,7 +39,7 @@ public class StudentsStatistics {
             throws EurecaException {
 
         try {
-            ActiveSummaryResponse ret = ApplicationFacade.getInstance().getActiveSummary(token, from, to);
+            ActivesSummaryResponse ret = ApplicationFacade.getInstance().getActiveSummary(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -109,7 +109,7 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "dropouts", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.Statistics.GET_DROPOUT)
-    public ResponseEntity<DropoutSummaryResponse> getDropouts(
+    public ResponseEntity<DropoutsSummaryResponse> getDropouts(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)
@@ -119,7 +119,7 @@ public class StudentsStatistics {
             throws EurecaException {
 
         try {
-            DropoutSummaryResponse ret = ApplicationFacade.getInstance().getDropoutsSummary(token, from, to);
+            DropoutsSummaryResponse ret = ApplicationFacade.getInstance().getDropoutsSummary(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -147,9 +147,9 @@ public class StudentsStatistics {
         }
     }
 
-    @RequestMapping(value = "delayed/csv", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.Statistics.GET_DELAYED_CSV)
-    public ResponseEntity<Collection<DelayedDataResponse>> getDelayedCSV(
+    @RequestMapping(value = "delayed", method = RequestMethod.GET)
+    @ApiOperation(value = ApiDocumentation.Statistics.GET_DELAYED)
+    public ResponseEntity<DelayedSummaryResponse> getDelayed(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)
@@ -159,7 +159,27 @@ public class StudentsStatistics {
             throws EurecaException {
 
         try {
-            Collection<DelayedDataResponse> delayed = ApplicationFacade.getInstance().getDelayedCSV(token, from, to);
+            DelayedSummaryResponse ret = ApplicationFacade.getInstance().getDelayedSummary(token, from, to);
+            return new ResponseEntity<>(ret, HttpStatus.OK);
+        } catch (EurecaException e) {
+            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
+            throw e;
+        }
+    }
+
+    @RequestMapping(value = "delayed/csv", method = RequestMethod.GET)
+    @ApiOperation(value = ApiDocumentation.Statistics.GET_DELAYED_CSV)
+    public ResponseEntity<Collection<StudentDataResponse>> getDelayedCSV(
+            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+            @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
+            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
+            @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
+            @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
+            throws EurecaException {
+
+        try {
+            Collection<StudentDataResponse> delayed = ApplicationFacade.getInstance().getDelayedCSV(token, from, to);
             return new ResponseEntity<>(delayed, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
@@ -167,15 +187,15 @@ public class StudentsStatistics {
         }
     }
 
-    @RequestMapping(value = "students/summary", method = RequestMethod.GET)
-    public ResponseEntity<StudentsSummaryResume> getStudentsSummary(
+    @RequestMapping(value = "summary", method = RequestMethod.GET)
+    public ResponseEntity<StudentsSummaryResponse> getStudentsSummary(
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
-            StudentsSummaryResume summary = ApplicationFacade.getInstance().getStudentsStatistics(token, from, to);
+            StudentsSummaryResponse summary = ApplicationFacade.getInstance().getStudentsStatistics(token, from, to);
             return new ResponseEntity<>(summary, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));

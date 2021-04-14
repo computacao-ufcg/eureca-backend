@@ -1,7 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
-import br.edu.ufcg.computacao.eureca.backend.core.models.AttemptsSummary;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 
 import java.util.Collection;
@@ -15,15 +14,15 @@ public interface DataAccessFacade {
 
     Collection<Student> getDelayed(String from, String to);
 
-    Collection<ActiveSummary> getActiveSummary(String from, String to);
+    Collection<ActivesPerTermSummary> getActivesPerTermSummary(String from, String to);
 
     Collection<AlumniPerTermSummary> getAlumniPerTermSummary(String from, String to);
 
-    Collection<DropoutPerTermSummary> getDropoutsSummary(String from, String to);
+    Collection<DropoutPerTermSummary> getDropoutsPerTermSummary(String from, String to);
 
-    Collection<AlumniPerStudentSummary> getAlumniPerStudentSummary(String from, String to);
+    Collection<DelayedPerTermSummary> getDelayedPerTermSummary(String from, String to);
 
-    Collection<AttemptsSummary> getAttemptsSummary();
+    Collection<AlumniDigestResponse> getAlumniPerStudentSummary(String from, String to);
 
     Student getStudent(String registration);
 }

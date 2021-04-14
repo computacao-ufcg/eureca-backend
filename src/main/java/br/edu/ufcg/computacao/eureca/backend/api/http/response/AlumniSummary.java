@@ -1,26 +1,57 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-import java.util.Collection;
-import java.util.TreeSet;
+import br.edu.ufcg.computacao.eureca.backend.core.models.CostClass;
+import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 
 public class AlumniSummary {
-    double averageGpa;
-    int maxDegreeCount;
-    double averageDegreeCount;
-    int minDegreeCount;
-    String maxDegreeCountTerm;
-    String minDegreeCountTerm;
-    int totalDegreeCount;
+    private int alumniCount;
+    private double averageTermsCount;
+    private double averageCost;
+    private CostClass costClass;
+    private double averageGpa;
+    private double averageDegreeCount;
+    private int maxDegreeCount;
+    private int minDegreeCount;
+    private String maxDegreeCountTerm;
+    private String minDegreeCountTerm;
 
-    public AlumniSummary(double averageGpa, int maxDegreeCount, double averageDegreeCount, int minDegreeCount,
-                         String maxDegreeCountTerm, String minDegreeCountTerm, int totalDegreeCount) {
+    public AlumniSummary(int alumniCount, double averageTermsCount, double averageCost, double averageGpa,
+                         double averageDegreeCount, int maxDegreeCount, int minDegreeCount, String maxDegreeCountTerm,
+                         String minDegreeCountTerm) {
+        this.alumniCount = alumniCount;
+        this.averageTermsCount = averageTermsCount;
+        this.averageCost = averageCost;
+        this.costClass = MetricsCalculator.computeCostClass(this.averageCost);
         this.averageGpa = averageGpa;
-        this.maxDegreeCount = maxDegreeCount;
         this.averageDegreeCount = averageDegreeCount;
+        this.maxDegreeCount = maxDegreeCount;
         this.minDegreeCount = minDegreeCount;
         this.maxDegreeCountTerm = maxDegreeCountTerm;
         this.minDegreeCountTerm = minDegreeCountTerm;
-        this.totalDegreeCount = totalDegreeCount;
+    }
+
+    public double getAverageTermsCount() {
+        return averageTermsCount;
+    }
+
+    public void setAverageTermsCount(double averageTermsCount) {
+        this.averageTermsCount = averageTermsCount;
+    }
+
+    public double getAverageCost() {
+        return averageCost;
+    }
+
+    public void setAverageCost(double averageCost) {
+        this.averageCost = averageCost;
+    }
+
+    public CostClass getCostClass() {
+        return costClass;
+    }
+
+    public void setCostClass(CostClass costClass) {
+        this.costClass = costClass;
     }
 
     public double getAverageGpa() {
@@ -71,11 +102,11 @@ public class AlumniSummary {
         this.minDegreeCountTerm = minDegreeCountTerm;
     }
 
-    public int getTotalDegreeCount() {
-        return totalDegreeCount;
+    public int getAlumniCount() {
+        return alumniCount;
     }
 
-    public void setTotalDegreeCount(int totalDegreeCount) {
-        this.totalDegreeCount = totalDegreeCount;
+    public void setAlumniCount(int alumniCount) {
+        this.alumniCount = alumniCount;
     }
 }

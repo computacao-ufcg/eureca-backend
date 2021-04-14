@@ -1,9 +1,5 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
-import br.edu.ufcg.computacao.eureca.backend.constants.Curriculum;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.CpfRegistration;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Registration;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 
 public class Student implements Comparable {
@@ -23,20 +19,9 @@ public class Student implements Comparable {
         return data;
     }
 
-    public RiskClass getRiskClass() {
-        Metrics studentMetrics = MetricsCalculator.getInstance().computeMetrics(this);
-        double feasibility = studentMetrics.getFeasibility();
-        if (feasibility > 1) return RiskClass.UNFEASIBLE;
-        if (feasibility < 0) return RiskClass.NOT_APPLICABLE;
-        double risk = studentMetrics.getRisk();
-        if (risk > 0) return RiskClass.CRITICAL;
-        double highRiskThreshold = (1.0 * (Curriculum.EXPECTED_NUMBER_OF_TERMS - Curriculum.MAX_NUMBER_OF_TERMS)) /
-                (Curriculum.MAX_NUMBER_OF_TERMS - 1);
-        if (risk >= highRiskThreshold) return RiskClass.LATE;
-        double lowRiskThreshold = (1.0 * (Curriculum.MIN_NUMBER_OF_TERMS - Curriculum.MAX_NUMBER_OF_TERMS)) /
-                (Curriculum.MAX_NUMBER_OF_TERMS - 1);
-        if (risk >= lowRiskThreshold) return RiskClass.NORMAL;
-        return RiskClass.ADVANCED;
+    public RiskClass computeRiskClass() {
+        Metrics studentMetrics = MetricsCalculator.computeMetrics(this.getStudentData());
+        return MetricsCalculator.computeRiskClass(studentMetrics.getRisk());
     }
 
     @Override

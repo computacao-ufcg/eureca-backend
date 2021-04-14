@@ -1,8 +1,9 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
+import br.edu.ufcg.computacao.eureca.backend.core.models.CpfRegistration;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
+import br.edu.ufcg.computacao.eureca.backend.core.models.StudentData;
 import org.apache.log4j.Logger;
 
 import java.util.*;
@@ -56,7 +57,7 @@ public class IndexesHolder {
         return dropoutByAdmissionTerm;
     }
 
-    public Map<String, Collection<CpfRegistration>> getDropoutByLeaveTerm() {
+    public Map<String, Collection<CpfRegistration>> getDropoutByDropoutTerm() {
         return dropoutByLeaveTerm;
     }
 

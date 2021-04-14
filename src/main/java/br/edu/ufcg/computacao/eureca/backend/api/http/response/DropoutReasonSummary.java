@@ -2,20 +2,20 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 
-public class DropoutClassification {
-    int failed3Times;
-    int reenterSameCourse;
-    int reenterOtherCourse;
-    int failedAll;
-    int cancelled;
-    int cancelledByDecree;
-    int cancelledCourseChange;
-    int cancelledUponRequest;
-    int leftWithoutNotice;
-    int missedGraduation;
-    int transferred;
+public class DropoutReasonSummary {
+    private int failed3Times;
+    private int reenterSameCourse;
+    private int reenterOtherCourse;
+    private int failedAll;
+    private int cancelled;
+    private int cancelledByDecree;
+    private int cancelledCourseChange;
+    private int cancelledUponRequest;
+    private int leftWithoutNotice;
+    private int missedGraduation;
+    private int transferred;
 
-    public DropoutClassification(int[] dropouts) {
+    public DropoutReasonSummary(int[] dropouts) {
         this.failed3Times = dropouts[SystemConstants.FAILED_3_TIMES_INDEX];
         this.reenterSameCourse = dropouts[SystemConstants.REENTER_SAME_COURSE_INDEX];
         this.reenterOtherCourse = dropouts[SystemConstants.REENTER_OTHER_COURSE_INDEX];
@@ -27,6 +27,22 @@ public class DropoutClassification {
         this.leftWithoutNotice = dropouts[SystemConstants.LEFT_WITHOUT_NOTICE_INDEX];
         this.missedGraduation = dropouts[SystemConstants.MISSED_GRADUATION_INDEX];
         this.transferred = dropouts[SystemConstants.TRANSFERRED_INDEX];
+    }
+
+    public DropoutReasonSummary(int cancelled, int cancelledByDecree, int cancelledCourseChange,
+                                int cancelledUponRequest, int failed3Times, int failedAll, int leftWithoutNotice,
+                                int missedGraduation, int reenterOtherCourse, int reenterSameCourse, int transferred) {
+        this.failed3Times = failed3Times;
+        this.reenterSameCourse = reenterSameCourse;
+        this.reenterOtherCourse = reenterOtherCourse;
+        this.failedAll = failedAll;
+        this.cancelled = cancelled;
+        this.cancelledByDecree = cancelledByDecree;
+        this.cancelledCourseChange = cancelledCourseChange;
+        this.cancelledUponRequest = cancelledUponRequest;
+        this.leftWithoutNotice = leftWithoutNotice;
+        this.missedGraduation = missedGraduation;
+        this.transferred = transferred;
     }
 
     public int getFailed3Times() {
@@ -117,9 +133,23 @@ public class DropoutClassification {
         this.missedGraduation = missedGraduation;
     }
 
-    public int getTotalDropouts() {
+    public int computeTotalDropouts() {
         return this.cancelled + this.cancelledByDecree + this.cancelledCourseChange + this.cancelledUponRequest +
                 this.failed3Times + this.failedAll + this.leftWithoutNotice + this.missedGraduation +
                 this.reenterOtherCourse + this.reenterSameCourse + this.transferred;
+    }
+
+    public void add(DropoutReasonSummary other) {
+        this.failed3Times += other.getFailed3Times();
+        this.reenterSameCourse += other.getReenterSameCourse();
+        this.reenterOtherCourse += other.getReenterOtherCourse();
+        this.failedAll += other.getFailedAll();
+        this.cancelled += other.getCancelled();
+        this.cancelledByDecree += other.getCancelledByDecree();
+        this.cancelledCourseChange += other.getCancelledCourseChange();
+        this.cancelledUponRequest += other.getCancelledUponRequest();
+        this.leftWithoutNotice += other.getLeftWithoutNotice();
+        this.missedGraduation += other.getMissedGraduation();
+        this.transferred += other.getTransferred();
     }
 }
