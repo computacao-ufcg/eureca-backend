@@ -76,7 +76,7 @@ public class StudentsStatisticsController {
     }
 
     private AlumniSummary getAlumniSummary(Collection<AlumniPerTermSummary> terms) {
-        double aggreagateTerms = 0.0;
+        double aggregateTerms = 0.0;
         double aggregateCost = 0.0;
         double aggregateGPA = 0;
         int maxAlumniCount = 0;
@@ -100,12 +100,12 @@ public class StudentsStatisticsController {
                 minAlumniCount = termAlumniCount;
                 minAlumniCountTerm = term;
             }
-            aggreagateTerms += (averageTerms * termAlumniCount);
+            aggregateTerms += (averageTerms * termAlumniCount);
             aggregateCost += (averageCost * termAlumniCount);
             aggregateGPA += (averageGPA * termAlumniCount);
         }
 
-        return new AlumniSummary(totalAlumniCount, (totalAlumniCount == 0 ? -1.0 : aggreagateTerms/totalAlumniCount),
+        return new AlumniSummary(totalAlumniCount, (totalAlumniCount == 0 ? -1.0 : aggregateTerms/totalAlumniCount),
                 (totalAlumniCount == 0 ? -1.0 : aggregateCost/totalAlumniCount),
                 (totalAlumniCount == 0 ? -1.0 : aggregateGPA/totalAlumniCount),
                 (terms.size() == 0 ? -1.0 : (1.0*totalAlumniCount)/terms.size()), maxAlumniCount, minAlumniCount,
