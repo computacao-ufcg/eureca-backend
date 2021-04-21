@@ -85,10 +85,15 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                     aggregateTermsCount += alumnus.getCompletedTerms();
                     aggregateCost += (MetricsCalculator.computeMetrics(alumnus).getCost());
                 }
+
+                double averageGPA = termAlumniCount == 0 ? 0.0 : Double.parseDouble(String.format("%.2f", aggregateGPA/termAlumniCount).replace(",", "."));
+                double averageTermsCount = termAlumniCount == 0 ? 0.0 : Double.parseDouble(String.format("%.2f", aggregateTermsCount/termAlumniCount).replace(",", "."));
+                double averageCost = termAlumniCount == 0 ? 0.0 : Double.parseDouble(String.format("%.2f", aggregateCost/termAlumniCount).replace(",", "."));
+
                 AlumniPerTermSummary termData = new AlumniPerTermSummary(term, termAlumniCount,
-                        (termAlumniCount == 0 ? 0.0 : aggregateGPA/termAlumniCount),
-                        (termAlumniCount == 0 ? 0.0 : aggregateTermsCount/termAlumniCount),
-                        (termAlumniCount == 0 ? 0.0 : aggregateCost/termAlumniCount)
+                        averageGPA,
+                        averageTermsCount,
+                        averageCost
                 );
                 terms.add(termData);
             }
