@@ -18,6 +18,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import static br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass.LATE;
+import static br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass.NOT_APPLICABLE;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -30,10 +31,10 @@ public class StudentTest {
 
     @Before
     public void setUp() {
-        this.student = createNewStudent("nationalID","registration1", 0,
-                0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0,
-                0, 0);
+        this.student = createNewStudent("nationalID","registration1", 0,120,0,
+                58,0,26,5.68,
+                7,1.69,14,1,0,
+                0,0,0);
         mockDataAccessFacadeHolder();
         this.metricsCalculator = MetricsCalculator.getInstance();
     }
@@ -54,10 +55,10 @@ public class StudentTest {
         StudentData expected = new StudentData("x", "x", "x", "x", "x",
                 "x", "x", "x", "Ativo",
                 "VESTIBULAR 2007.2", "x", "x", "x",
-                "x",0,
-                0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0,
-                0, 0);
+                "x",0,120,0,
+                58,0,26,5.68,
+                7,1.69,14,1,0,
+                0,0,0);
 
         StudentData result = this.student.getStudentData();
         Assert.assertEquals(expected, result);
@@ -69,7 +70,7 @@ public class StudentTest {
     public void getRiskClassTest() {
         //        mockMetricsCalculator();
         this.metricsCalculator.computeMetrics(this.student);
-        RiskClass riskClassExpectedStudent = LATE;
+        RiskClass riskClassExpectedStudent = NOT_APPLICABLE;
 
         RiskClass resultStudent = this.student.getRiskClass();
 
