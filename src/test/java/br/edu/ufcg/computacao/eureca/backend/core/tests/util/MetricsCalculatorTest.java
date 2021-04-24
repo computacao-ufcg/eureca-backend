@@ -30,7 +30,7 @@ public class MetricsCalculatorTest {
     public void setUp() {
         CpfRegistration cpfRegistrationStudent = new CpfRegistration("+55", "12346533354");
         StudentData studentData = new StudentData("x", "x", "x", "x", "x",
-                "x", "x", "x", "Inativo (GRADUADO 2011.2)",
+                "x", "x", "x", "Ativo",
                 "VESTIBULAR 2007.2", "x", "x", "x",
                 "x", 0,120,0,
                 58,0,26,5.68,

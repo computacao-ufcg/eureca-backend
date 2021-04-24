@@ -1,11 +1,14 @@
 package br.edu.ufcg.computacao.eureca.backend.core.tests.models;
 
+import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.CpfRegistration;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
+import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Metrics;
 import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,80 +22,96 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(MetricsCalculator.class)
+@PrepareForTest({MetricsCalculator.class, DataAccessFacadeHolder.class})
 public class StudentTest {
 
-    // instance of a student.
+    private MetricsCalculator metricsCalculator;
     private Student student;
 
-    // instance of a StudentData object.
-    private StudentData fakeStudentData;
-
-    // instance of a CpfRegistration.
-    private CpfRegistration fakeCpfRegistration;
-
-    // setup: creation of a base object of the type Student that will be used in the tests.
     @Before
     public void setUp() {
-        this.fakeStudentData = new StudentData("x", "x", "x", "x", "x",
-                "x", "x", "x", "Inativo (GRADUADO 2011.2)",
-                "VESTIBULAR 2007.2", "x", "x", "x",
-                "x", 0,0,0,
-                0,0,0,0,
-                0,0,0,0,0,
-                0,0,0);
-        this.fakeCpfRegistration = new CpfRegistration("nationalId", "registration");
-        this.student = new Student(fakeCpfRegistration, fakeStudentData);
-
+        this.student = createNewStudent("nationalID","registration1", 0,
+                0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0,
+                0, 0);
+        mockDataAccessFacadeHolder();
+        this.metricsCalculator = MetricsCalculator.getInstance();
     }
 
     // test case: Call the getId method and tests a successfully return.
     @Test
     public void getIdTest() {
-        // set up
-        CpfRegistration expected = this.fakeCpfRegistration;
+        CpfRegistration expected = new CpfRegistration("nationalID","registration1");
 
-        // exercise
-        CpfRegistration id = this.student.getId();
+        CpfRegistration result = this.student.getId();
 
-        // verify
-        assertEquals(expected, id);
+        Assert.assertEquals(expected, result);
     }
 
     // test case: Call the getStudentData method and tests a successfully return.
     @Test
     public void getStudentDataTest() {
-        // set up
-        StudentData expected = this.fakeStudentData;
+        StudentData expected = new StudentData("x", "x", "x", "x", "x",
+                "x", "x", "x", "Ativo",
+                "VESTIBULAR 2007.2", "x", "x", "x",
+                "x",0,
+                0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0,
+                0, 0);
 
-        // exercise
-        StudentData studentData = this.student.getStudentData();
+        StudentData result = this.student.getStudentData();
+        Assert.assertEquals(expected, result);
 
-        // verify
-        assertEquals(expected, studentData);
     }
 
     // test case: Call the getRiskClass method and tests a successfully return.
     @Test
     public void getRiskClassTest() {
-        // set up
-        RiskClass expected = LATE;
-        mockMetricsCalculator();
+        //        mockMetricsCalculator();
+        this.metricsCalculator.computeMetrics(this.student);
+        RiskClass riskClassExpectedStudent = LATE;
 
-        // exercise
-        RiskClass riskClass = this.student.getRiskClass();
+        RiskClass resultStudent = this.student.getRiskClass();
 
-        // verify
-        assertEquals(expected, riskClass);
-
+        Assert.assertEquals(riskClassExpectedStudent, resultStudent);
     }
 
-    private void mockMetricsCalculator() {
-        Metrics metrics = new Metrics(0,0,0,0,0,0,0,0);
-        MetricsCalculator metricsCalculator = mock(MetricsCalculator.class);
-        Mockito.when(metricsCalculator.computeMetrics(this.student)).thenReturn(metrics);
-        PowerMockito.mockStatic(MetricsCalculator.class);
-        BDDMockito.given(MetricsCalculator.getInstance()).willReturn(metricsCalculator);
+    @Test
+    public void compareToTest() {
+        Student student2 = createNewStudent("nationalID","registration2", 0,
+                0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0,
+                0, 0);
+        Assert.assertEquals(0,this.student.compareTo(student2));
     }
 
+//    private void mockMetricsCalculator() {
+//        Metrics metrics = new Metrics(0,0,0,0,0,0,0,0);
+//        MetricsCalculator metricsCalculator = mock(MetricsCalculator.class);
+//        Mockito.when(metricsCalculator.computeMetrics(this.student)).thenReturn(metrics);
+//        PowerMockito.mockStatic(MetricsCalculator.class);
+//        BDDMockito.given(MetricsCalculator.getInstance()).willReturn(metricsCalculator);
+//    }
+
+    public void mockDataAccessFacadeHolder() {
+        DataAccessFacadeHolder dataAccessFacadeHolder = DataAccessFacadeHolder.getInstance();
+        DataAccessFacade dataAccessFacade = mock(DataAccessFacade.class);
+        dataAccessFacadeHolder.setDataAccessFacade(dataAccessFacade);
+        PowerMockito.mockStatic(DataAccessFacadeHolder.class);
+        BDDMockito.given(DataAccessFacadeHolder.getInstance()).willReturn(dataAccessFacadeHolder);
+    }
+
+    private Student createNewStudent(String nationalId, String registration, int mandatoryHours, int mandatoryCredits, int electiveHours, int electiveCredits,
+                                  int complementaryHours, int complementaryCredits, double gpa, double mc,
+                                  double iea, int completedTerms, int suspendedTerms, int institutionalTerms,
+                                  int mobilityTerms, int enrolledCredits, double admissionGrade) {
+
+        CpfRegistration cpfRegistration = new CpfRegistration(nationalId, registration);
+        StudentData studentData = new StudentData("x", "x", "x", "x", "x",
+                "x", "x", "x", "Ativo",
+                "VESTIBULAR 2007.2", "x", "x", "x",
+                "x", mandatoryHours, mandatoryCredits, electiveHours, electiveCredits, complementaryHours, complementaryCredits,
+                gpa, mc, iea, completedTerms, suspendedTerms, institutionalTerms, mobilityTerms, enrolledCredits, admissionGrade);
+        return new Student(cpfRegistration, studentData);
+    }
 }
