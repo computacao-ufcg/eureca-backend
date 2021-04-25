@@ -1,6 +1,10 @@
 package br.edu.ufcg.computacao.eureca.backend.constants;
 
 public class GlossaryFields {
+    Field Active;
+    Field Delayed;
+    Field Dropout;
+    Field Alumnus;
     Field averageRisk;
     Field averageLoad;
     Field successRate;
@@ -16,10 +20,15 @@ public class GlossaryFields {
     Field abandonCount;
     Field transferCount;
 
-    public GlossaryFields(Field averageRisk, Field averageLoad, Field successRate, Field predictedGraduation,
-                          Field averageCost, Field averageTime, Field minimumAlumni, Field maximumAlumni,
-                          Field averageAlumni, Field averageGpa, Field rejoinCount, Field canceledCount,
-                          Field abandonCount, Field transferCount) {
+    public GlossaryFields(Field active, Field delayed, Field dropout, Field alumnus, Field averageRisk,
+                          Field averageLoad, Field successRate, Field predictedGraduation, Field averageCost,
+                          Field averageTime, Field minimumAlumni, Field maximumAlumni, Field averageAlumni,
+                          Field averageGpa, Field rejoinCount, Field canceledCount, Field abandonCount,
+                          Field transferCount) {
+        Active = active;
+        Delayed = delayed;
+        Dropout = dropout;
+        Alumnus = alumnus;
         this.averageRisk = averageRisk;
         this.averageLoad = averageLoad;
         this.successRate = successRate;
@@ -34,6 +43,38 @@ public class GlossaryFields {
         this.canceledCount = canceledCount;
         this.abandonCount = abandonCount;
         this.transferCount = transferCount;
+    }
+
+    public Field getActive() {
+        return Active;
+    }
+
+    public void setActive(Field active) {
+        Active = active;
+    }
+
+    public Field getDelayed() {
+        return Delayed;
+    }
+
+    public void setDelayed(Field delayed) {
+        Delayed = delayed;
+    }
+
+    public Field getDropout() {
+        return Dropout;
+    }
+
+    public void setDropout(Field dropout) {
+        Dropout = dropout;
+    }
+
+    public Field getAlumnus() {
+        return Alumnus;
+    }
+
+    public void setAlumnus(Field alumnus) {
+        Alumnus = alumnus;
     }
 
     public Field getAverageRisk() {
