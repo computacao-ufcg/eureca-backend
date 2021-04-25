@@ -189,13 +189,16 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "summary", method = RequestMethod.GET)
     public ResponseEntity<StudentsSummaryResponse> getStudentsSummary(
+            @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
+            @ApiParam(value = ApiDocumentation.Statistics.LANGUAGE)
+            @RequestParam(required = false, value = "language", defaultValue = SystemConstants.PORTUGUESE) String lang,
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
-            StudentsSummaryResponse summary = ApplicationFacade.getInstance().getStudentsStatistics(token, from, to);
+            StudentsSummaryResponse summary = ApplicationFacade.getInstance().getStudentsStatistics(token, from, to, lang);
             return new ResponseEntity<>(summary, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
