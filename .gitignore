@@ -25,3 +25,6 @@ target/test-classes/private
 
 table/*
 private/*
+
+### Mac OS files ###
+.DS_Store
