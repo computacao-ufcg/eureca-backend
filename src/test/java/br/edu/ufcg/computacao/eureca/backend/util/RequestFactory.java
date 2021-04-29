@@ -17,6 +17,8 @@ public class RequestFactory {
                         .accept(MediaType.APPLICATION_JSON)
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON);
+            case POST:
+                return null;
             default:
                 return null;
         }

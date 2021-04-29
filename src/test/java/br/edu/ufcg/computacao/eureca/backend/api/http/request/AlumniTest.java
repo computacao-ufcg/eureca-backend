@@ -1,6 +1,5 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.CommonKeys;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.AlumniDigestResponse;
 import br.edu.ufcg.computacao.eureca.backend.util.RequestFactory;
 import org.junit.Test;
