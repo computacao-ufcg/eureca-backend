@@ -47,7 +47,7 @@ public class MetricsCalculatorTest {
     @Test
     public void computeMetricsWithValidStudentTest() {
         // set up
-        Metrics expected = new Metrics(0,2.5,-1,0,-1,13.2,15,1.4);
+        Metrics expected = new Metrics(0,0,-1,0,-1,14,14,1.4);
 
         // exercise
         Metrics result = MetricsCalculator.computeMetrics(this.studentData);
@@ -185,10 +185,10 @@ public class MetricsCalculatorTest {
     @Test
     public void computeCostClassTest() {
         // set up
-        CostClass expected = CostClass.ADEQUATE;
+        CostClass expected = CostClass.NOT_APPLICABLE;
 
         // exercise
-        CostClass result = MetricsCalculator.computeCostClass(1);
+        CostClass result = MetricsCalculator.computeCostClass(-1);
 
         // verify
         Assert.assertEquals(expected, result);

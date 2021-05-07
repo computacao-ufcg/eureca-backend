@@ -73,6 +73,22 @@ public class StudentStatisticsTest {
         Assert.assertEquals(expectedStatus, result.getResponse().getStatus());
     }
 
+    @Test
+    public void getDropoutsCsvTest() throws Exception {
+        // set up
+        Collection<StudentDataResponse> response = this.getStudentsCsvResponse();
+        Mockito.doReturn(response).when(this.facade).getDropoutsCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+
+        RequestBuilder req = createRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/dropouts/csv", getHttpHeaders(), "");
+
+        // exercise
+        MvcResult res = this.mockMvc.perform(req).andReturn();
+
+        // verify
+        Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
+
+    }
+
     // test case: Call the getDelayed route and tests a successfully return.
     @Test
     public void getDelayedTest() throws Exception {
@@ -86,6 +102,21 @@ public class StudentStatisticsTest {
 
         // verify
         Assert.assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
+    }
+
+    @Test
+    public void getDelayedCsvTest() throws Exception {
+        // set up
+        Collection<StudentDataResponse> response = this.getStudentsCsvResponse();
+        Mockito.doReturn(response).when(this.facade).getDelayedCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+
+        RequestBuilder req = createRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/delayed/csv", getHttpHeaders(), "");
+
+        // exercise
+        MvcResult res = this.mockMvc.perform(req).andReturn();
+
+        // verify
+        Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
     }
 
     private DropoutsSummaryResponse getDropoutsSummaryResponse() {
