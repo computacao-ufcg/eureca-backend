@@ -1,4 +1,4 @@
-package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
+package br.edu.ufcg.computacao.eureca.backend.core.models;
 
 public enum EurecaOperation {
     GET_ACTIVES("getActives"),
@@ -8,8 +8,10 @@ public enum EurecaOperation {
     GET_ALUMNI_BASIC_DATA("getAlumniBasicData"),
     GET_DROPOUTS("getDropouts"),
     GET_DROPOUTS_CSV("getDropoutsCSV"),
+    GET_DELAYED("getDelayed"),
     GET_DELAYED_CSV("getDelayedCSV"),
-    GET_STUDENTS_STATISTICS("getStudentsStatistics");
+    GET_STUDENTS_STATISTICS("getStudentsStatistics"),
+    GET_SUBJECTS_STATISTICS("getSubjectsStatistics");
 
     private String value;
 

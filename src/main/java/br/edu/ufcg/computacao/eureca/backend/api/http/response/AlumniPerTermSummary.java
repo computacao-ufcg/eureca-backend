@@ -1,14 +1,19 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class AlumniPerTermSummary implements Comparable {
-    double averageGpa;
-    String graduationTerm;
-    int alumniCount;
+    private String graduationTerm;
+    private int alumniCount;
+    private double averageGpa;
+    private double averageTerms;
+    private double averageCost;
 
-    public AlumniPerTermSummary(double averageGpa, String graduationTerm, int alumniCount) {
-        this.averageGpa = averageGpa;
+    public AlumniPerTermSummary(String graduationTerm, int alumniCount, double averageGpa, double averageTerms,
+                                double averageCost) {
         this.graduationTerm = graduationTerm;
         this.alumniCount = alumniCount;
+        this.averageGpa = averageGpa;
+        this.averageTerms = averageTerms;
+        this.averageCost = averageCost;
     }
 
     public double getAverageGpa() {
@@ -19,6 +24,14 @@ public class AlumniPerTermSummary implements Comparable {
         this.averageGpa = averageGpa;
     }
 
+    public int getAlumniCount() {
+        return alumniCount;
+    }
+
+    public void setAlumniCount(int alumniCount) {
+        this.alumniCount = alumniCount;
+    }
+
     public String getGraduationTerm() {
         return graduationTerm;
     }
@@ -27,12 +40,20 @@ public class AlumniPerTermSummary implements Comparable {
         this.graduationTerm = graduationTerm;
     }
 
-    public int getAlumniCount() {
-        return alumniCount;
+    public double getAverageTerms() {
+        return averageTerms;
     }
 
-    public void setAlumniCount(int alumniCount) {
-        this.alumniCount = alumniCount;
+    public void setAverageTerms(double averageTerms) {
+        this.averageTerms = averageTerms;
+    }
+
+    public double getAverageCost() {
+        return averageCost;
+    }
+
+    public void setAverageCost(double averageCost) {
+        this.averageCost = averageCost;
     }
 
     @Override

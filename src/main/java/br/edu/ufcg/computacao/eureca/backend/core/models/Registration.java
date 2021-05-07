@@ -1,8 +1,8 @@
-package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
+package br.edu.ufcg.computacao.eureca.backend.core.models;
 
 import java.util.Objects;
 
-public class Registration extends EurecaMapKey implements Comparable {
+public class Registration implements Comparable {
     String registration;
 
     public Registration(String registration) {

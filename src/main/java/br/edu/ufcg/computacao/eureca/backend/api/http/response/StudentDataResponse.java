@@ -1,8 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Registration;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Metrics;
+import br.edu.ufcg.computacao.eureca.backend.core.models.*;
+import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 
 public class StudentDataResponse implements Comparable {
     private String registration;
@@ -23,7 +22,7 @@ public class StudentDataResponse implements Comparable {
     private int complementaryCredits;
     private int electiveCredits;
     private int completedTerms;
-    private int attemptedCredits;
+    private double attemptedCredits;
     private int institutionalEnrollments;
     private int mobilityTerms;
     private int suspendedTerms;
@@ -32,10 +31,12 @@ public class StudentDataResponse implements Comparable {
     private double averageLoad;
     private double cost;
     private double pace;
-    private int courseDurationPrediction;
+    private double courseDurationPrediction;
     private double risk;
+    private RiskClass riskClass;
+    private CostClass costClass;
 
-    public StudentDataResponse(String registration, StudentData studentData, Metrics metrics) {
+    public StudentDataResponse(String registration, StudentData studentData) {
         this.registration = registration;
         this.name = studentData.getName();
         this.gender = studentData.getGender();
@@ -54,10 +55,11 @@ public class StudentDataResponse implements Comparable {
         this.complementaryCredits = studentData.getComplementaryCredits();
         this.electiveCredits = studentData.getElectiveCredits();
         this.completedTerms = studentData.getCompletedTerms();
-        this.attemptedCredits = metrics.getAttemptedCredits();
+        this.attemptedCredits = studentData.getAttemptedCredits();
         this.institutionalEnrollments = studentData.getInstitutionalTerms();
         this.mobilityTerms = studentData.getMobilityTerms();
         this.suspendedTerms = studentData.getSuspendedTerms();
+        Metrics metrics = MetricsCalculator.computeMetrics(studentData);
         this.feasibility = metrics.getFeasibility();
         this.successRate = metrics.getSuccessRate();
         this.averageLoad = metrics.getAverageLoad();
@@ -65,6 +67,12 @@ public class StudentDataResponse implements Comparable {
         this.pace = metrics.getPace();
         this.courseDurationPrediction = metrics.getCourseDurationPrediction();
         this.risk = metrics.getRisk();
+        if (studentData.isActive()) {
+            this.riskClass = MetricsCalculator.computeRiskClass(metrics.getRisk());
+        } else {
+            this.riskClass = RiskClass.NOT_APPLICABLE;
+        }
+        this.costClass = MetricsCalculator.computeCostClass(this.cost);
     }
 
     public String getRegistration() {
@@ -203,7 +211,7 @@ public class StudentDataResponse implements Comparable {
         this.electiveCredits = electiveCredits;
     }
 
-    public int getCompletedCredits() {
+    public int computeCompletedCredits() {
         int complementary = (this.getComplementaryCredits() > 8 ? 8 : this.getComplementaryCredits());
         return this.getMandatoryCredits() + this.getElectiveCredits() + complementary;
     }
@@ -216,11 +224,11 @@ public class StudentDataResponse implements Comparable {
         this.completedTerms = completedTerms;
     }
 
-    public int getAttemptedCredits() {
+    public double getAttemptedCredits() {
         return attemptedCredits;
     }
 
-    public void setAttemptedCredits(int attemptedCredits) {
+    public void setAttemptedCredits(double attemptedCredits) {
         this.attemptedCredits = attemptedCredits;
     }
 
@@ -288,11 +296,11 @@ public class StudentDataResponse implements Comparable {
         this.pace = pace;
     }
 
-    public int getCourseDurationPrediction() {
+    public double getCourseDurationPrediction() {
         return courseDurationPrediction;
     }
 
-    public void setCourseDurationPrediction(int courseDurationPrediction) {
+    public void setCourseDurationPrediction(double courseDurationPrediction) {
         this.courseDurationPrediction = courseDurationPrediction;
     }
 
@@ -302,6 +310,22 @@ public class StudentDataResponse implements Comparable {
 
     public void setRisk(double risk) {
         this.risk = risk;
+    }
+
+    public RiskClass getRiskClass() {
+        return riskClass;
+    }
+
+    public void setRiskClass(RiskClass riskClass) {
+        this.riskClass = riskClass;
+    }
+
+    public CostClass getCostClass() {
+        return costClass;
+    }
+
+    public void setCostClass(CostClass costClass) {
+        this.costClass = costClass;
     }
 
     @Override

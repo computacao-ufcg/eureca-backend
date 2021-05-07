@@ -1,11 +1,11 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
-public enum RiskClass {
+public enum CostClass {
     INACCURATE,
-    SAFE,
-    LOW,
-    AVERAGE,
+    ADEQUATE,
+    REGULAR,
     HIGH,
-    UNFEASIBLE,
+    VERY_HIGH,
+    UNACCEPTABLE,
     NOT_APPLICABLE;
 }

@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.VersionNumber;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.VersionResponse;
 import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.ApplicationFacade;
@@ -27,9 +27,9 @@ public class Version {
 
     @ApiOperation(value = ApiDocumentation.Version.GET_VERSION)
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<VersionNumber> getVersion() {
+    public ResponseEntity<VersionResponse> getVersion() {
         String versionNumber = null;
         versionNumber = ApplicationFacade.getInstance().getVersionNumber();
-        return new ResponseEntity<VersionNumber>(new VersionNumber(versionNumber), HttpStatus.OK);
+        return new ResponseEntity<VersionResponse>(new VersionResponse(versionNumber), HttpStatus.OK);
     }
 }

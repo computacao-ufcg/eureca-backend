@@ -5,17 +5,14 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Collection;
 
-public class DropoutSummaryResponse {
+public class DelayedSummaryResponse {
     @ApiModelProperty(position = 0, example = ApiDocumentation.Model.SLIDER_LABEL)
-    Collection<String> sliderLabel;
-    Collection<DropoutPerTermSummary> terms;
-    DropoutSummary summary;
+    private Collection<String> sliderLabel;
+    private Collection<DelayedPerTermSummary> terms;
 
-    public DropoutSummaryResponse(Collection<String> sliderLabel, Collection<DropoutPerTermSummary> terms,
-                                  DropoutSummary summary) {
+    public DelayedSummaryResponse(Collection<String> sliderLabel, Collection<DelayedPerTermSummary> terms) {
         this.sliderLabel = sliderLabel;
         this.terms = terms;
-        this.summary = summary;
     }
 
     public Collection<String> getSliderLabel() {
@@ -26,19 +23,11 @@ public class DropoutSummaryResponse {
         this.sliderLabel = sliderLabel;
     }
 
-    public Collection<DropoutPerTermSummary> getTerms() {
+    public Collection<DelayedPerTermSummary> getTerms() {
         return terms;
     }
 
-    public void setTerms(Collection<DropoutPerTermSummary> terms) {
+    public void setTerms(Collection<DelayedPerTermSummary> terms) {
         this.terms = terms;
-    }
-
-    public DropoutSummary getSummary() {
-        return summary;
-    }
-
-    public void setSummary(DropoutSummary summary) {
-        this.summary = summary;
     }
 }

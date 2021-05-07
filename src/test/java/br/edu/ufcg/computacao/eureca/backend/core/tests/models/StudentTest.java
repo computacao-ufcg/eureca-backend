@@ -1,32 +1,24 @@
 package br.edu.ufcg.computacao.eureca.backend.core.tests.models;
 
-import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.CpfRegistration;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
+import br.edu.ufcg.computacao.eureca.backend.core.models.CpfRegistration;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Metrics;
 import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
+import br.edu.ufcg.computacao.eureca.backend.core.models.StudentData;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.BDDMockito;
-import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import static br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass.LATE;
-import static br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass.NOT_APPLICABLE;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+
+import static br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass.*;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({MetricsCalculator.class, DataAccessFacadeHolder.class})
 public class StudentTest {
 
-    private MetricsCalculator metricsCalculator;
     private Student student;
 
     @Before
@@ -35,23 +27,25 @@ public class StudentTest {
                 58,0,26,5.68,
                 7,1.69,14,1,0,
                 0,0,0);
-        mockDataAccessFacadeHolder();
-        this.metricsCalculator = MetricsCalculator.getInstance();
     }
 
     // test case: Call the getId method and tests a successfully return.
     @Test
     public void getIdTest() {
+        // set up
         CpfRegistration expected = new CpfRegistration("nationalID","registration1");
 
+        // exercise
         CpfRegistration result = this.student.getId();
 
+        // verify
         Assert.assertEquals(expected, result);
     }
 
     // test case: Call the getStudentData method and tests a successfully return.
     @Test
     public void getStudentDataTest() {
+        // set up
         StudentData expected = new StudentData("x", "x", "x", "x", "x",
                 "x", "x", "x", "Ativo",
                 "VESTIBULAR 2007.2", "x", "x", "x",
@@ -60,7 +54,10 @@ public class StudentTest {
                 7,1.69,14,1,0,
                 0,0,0);
 
+        // exercise
         StudentData result = this.student.getStudentData();
+
+        // verify
         Assert.assertEquals(expected, result);
 
     }
@@ -68,38 +65,34 @@ public class StudentTest {
     // test case: Call the getRiskClass method and tests a successfully return.
     @Test
     public void getRiskClassTest() {
-        //        mockMetricsCalculator();
-        this.metricsCalculator.computeMetrics(this.student);
-        RiskClass riskClassExpectedStudent = NOT_APPLICABLE;
+        // set up
+        RiskClass riskClassExpectedStudent = UNFEASIBLE;
 
-        RiskClass resultStudent = this.student.getRiskClass();
+        // exercise
+        RiskClass resultStudent = this.student.computeRiskClass();
 
+        // verify
         Assert.assertEquals(riskClassExpectedStudent, resultStudent);
+
     }
 
+    // test case: Call the getRiskClass method and tests a successfully return.
     @Test
-    public void compareToTest() {
-        Student student2 = createNewStudent("nationalID","registration2", 0,
-                0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0,
-                0, 0);
-        Assert.assertEquals(0,this.student.compareTo(student2));
-    }
+    public void getRiskClass2Test() {
+        // set up
+        RiskClass riskClassExpectedStudent = LOW;
 
-//    private void mockMetricsCalculator() {
-//        Metrics metrics = new Metrics(0,0,0,0,0,0,0,0);
-//        MetricsCalculator metricsCalculator = mock(MetricsCalculator.class);
-//        Mockito.when(metricsCalculator.computeMetrics(this.student)).thenReturn(metrics);
-//        PowerMockito.mockStatic(MetricsCalculator.class);
-//        BDDMockito.given(MetricsCalculator.getInstance()).willReturn(metricsCalculator);
-//    }
+        Student student3 = createNewStudent("nationalID","registration2",0,
+                120,0,
+                58,0,26,5.68,
+                7,1.69,10,2,0,
+                0,4,0);
 
-    public void mockDataAccessFacadeHolder() {
-        DataAccessFacadeHolder dataAccessFacadeHolder = DataAccessFacadeHolder.getInstance();
-        DataAccessFacade dataAccessFacade = mock(DataAccessFacade.class);
-        dataAccessFacadeHolder.setDataAccessFacade(dataAccessFacade);
-        PowerMockito.mockStatic(DataAccessFacadeHolder.class);
-        BDDMockito.given(DataAccessFacadeHolder.getInstance()).willReturn(dataAccessFacadeHolder);
+        // exercise
+        RiskClass result = student3.computeRiskClass();
+
+        // verify
+        Assert.assertEquals(riskClassExpectedStudent, result);
     }
 
     private Student createNewStudent(String nationalId, String registration, int mandatoryHours, int mandatoryCredits, int electiveHours, int electiveCredits,
@@ -107,7 +100,7 @@ public class StudentTest {
                                   double iea, int completedTerms, int suspendedTerms, int institutionalTerms,
                                   int mobilityTerms, int enrolledCredits, double admissionGrade) {
 
-        CpfRegistration cpfRegistration = new CpfRegistration(nationalId, registration);
+        CpfRegistration cpfRegistration = new CpfRegistration(nationalId,registration);
         StudentData studentData = new StudentData("x", "x", "x", "x", "x",
                 "x", "x", "x", "Ativo",
                 "VESTIBULAR 2007.2", "x", "x", "x",

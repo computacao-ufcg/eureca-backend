@@ -22,7 +22,7 @@ public class MetricsTest {
         int expected = 1;
 
         // exercise
-        int attemptedCredits = this.metrics.getAttemptedCredits();
+        double attemptedCredits = this.metrics.getAttemptedCredits();
 
         // verify
         assertEquals(expected, attemptedCredits);
@@ -32,12 +32,12 @@ public class MetricsTest {
     @Test
     public void getNullAttemptedCreditsTest() {
         // set up
-        Metrics metrics = new Metrics(null,1,1,1,
+        Metrics metrics = new Metrics(0,1,1,1,
                 1,1,1,1);
         int expected = 0;
 
         // exercise
-        int attemptedCredits = metrics.getAttemptedCredits();
+        double attemptedCredits = metrics.getAttemptedCredits();
 
         // verify
         assertEquals(expected, attemptedCredits);
@@ -54,7 +54,7 @@ public class MetricsTest {
         this.metrics.setAttemptedCredits(2);
 
         // verify
-        int attemptedCredits = this.metrics.getAttemptedCredits();
+        double attemptedCredits = this.metrics.getAttemptedCredits();
         assertEquals(expected, attemptedCredits);
     }
 
@@ -201,7 +201,7 @@ public class MetricsTest {
         int expected = 1;
 
         // exercise
-        int courseDurationPrediction = this.metrics.getCourseDurationPrediction();
+        double courseDurationPrediction = this.metrics.getCourseDurationPrediction();
 
         // verify
         assertEquals(expected, courseDurationPrediction);
@@ -217,7 +217,7 @@ public class MetricsTest {
         this.metrics.setCourseDurationPrediction(2);
 
         // verify
-        int courseDurationPrediction = this.metrics.getCourseDurationPrediction();
+        double courseDurationPrediction = this.metrics.getCourseDurationPrediction();
         assertEquals(expected, courseDurationPrediction);
     }
 

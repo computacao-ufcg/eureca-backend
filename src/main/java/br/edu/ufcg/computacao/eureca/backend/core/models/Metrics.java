@@ -1,18 +1,20 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
+import br.edu.ufcg.computacao.eureca.backend.constants.Curriculum;
+
 public class Metrics {
-    private int attemptedCredits;
+    private double attemptedCredits;
     private double feasibility;
     private double successRate;
     private double averageLoad;
     private double cost;
     private double pace;
-    private int courseDurationPrediction;
+    private double courseDurationPrediction;
     private double risk;
 
-    public Metrics(Integer attemptedCredits, double feasibility, double successRate, double averageLoad, double cost,
-                   double pace, int courseDurationPrediction, double risk) {
-        this.attemptedCredits = (attemptedCredits == null ? 0 : attemptedCredits);
+    public Metrics(double attemptedCredits, double feasibility, double successRate, double averageLoad, double cost,
+                   double pace, double courseDurationPrediction, double risk) {
+        this.attemptedCredits = attemptedCredits;
         this.feasibility = feasibility;
         this.successRate = successRate;
         this.averageLoad = averageLoad;
@@ -22,11 +24,11 @@ public class Metrics {
         this.risk = risk;
     }
 
-    public int getAttemptedCredits() {
+    public double getAttemptedCredits() {
         return attemptedCredits;
     }
 
-    public void setAttemptedCredits(int attemptedCredits) {
+    public void setAttemptedCredits(double attemptedCredits) {
         this.attemptedCredits = attemptedCredits;
     }
 
@@ -70,11 +72,11 @@ public class Metrics {
         this.pace = pace;
     }
 
-    public int getCourseDurationPrediction() {
+    public double getCourseDurationPrediction() {
         return courseDurationPrediction;
     }
 
-    public void setCourseDurationPrediction(int courseDurationPrediction) {
+    public void setCourseDurationPrediction(double courseDurationPrediction) {
         this.courseDurationPrediction = courseDurationPrediction;
     }
 
