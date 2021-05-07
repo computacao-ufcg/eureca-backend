@@ -57,5 +57,6 @@ public class ApiDocumentation {
         public static final String GET_SUBJECTS = "Retorna um sumário dos dados das disciplinas.";
         public static final String FROM = "Período inicial";
         public static final String TO = "Período final";
+        public static final String LANGUAGE = "Língua";
     }
 }
