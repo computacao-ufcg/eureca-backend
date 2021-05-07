@@ -18,7 +18,6 @@ import java.security.GeneralSecurityException;
 
 import java.security.interfaces.RSAPublicKey;
 import java.util.Collection;
-import java.util.Map;
 
 public class ApplicationFacade {
     private static final Logger LOGGER = Logger.getLogger(ApplicationFacade.class);
@@ -88,12 +87,14 @@ public class ApplicationFacade {
         return this.studentsDataFetcher.getDelayedCSV(from, to);
     }
 
-    public Collection<AlumniDigestResponse> getAlumniBasicData(String token, String from, String to) throws EurecaException {
+    public Collection<AlumniDigestResponse> getAlumniBasicData(String token, String from, String to)
+            throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_BASIC_DATA);
         return this.studentsDataFetcher.getAlumniPerStudentSummary(from, to);
     }
 
-    public StudentsSummaryResponse getStudentsStatistics(String token, String from, String to, String language) throws EurecaException {
+    public StudentsSummaryResponse getStudentsStatistics(String token, String from, String to, String language)
+            throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_STATISTICS);
         StudentsSummaryResponse response = this.studentsStatisticsController.getStudentsSummaryResponse(from, to);
         GlossaryFields glossaryFields = null;
@@ -106,9 +107,21 @@ public class ApplicationFacade {
         return response;
     }
 
-    public Map<String, Collection<SubjectSummaryResponse>> getSubjectsStatistics(String token, String from, String to) throws EurecaException {
+    public SubjectsSummaryResponse getSubjectsStatistics(String token, String from, String to, String language)
+            throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_STATISTICS);
-        return this.subjectsStatisticsController.getSubjectsStatistics(from, to);
+        //return this.subjectsStatisticsController.getSubjectsStatistics(from, to, lang);
+        return null;
+    }
+
+    public TeachersSummaryResponse getTeachersStatistics(String token, String from, String to, String lang)
+            throws EurecaException {
+        return null;
+    }
+
+    public EnrollmentsSummaryResponse getEnrollmentsStatistics(String token, String from, String to, String lang)
+            throws EurecaException {
+        return null;
     }
 
     public String getPublicKey() throws EurecaException {
