@@ -93,9 +93,17 @@ public class ApplicationFacade {
         return this.studentsDataFetcher.getAlumniPerStudentSummary(from, to);
     }
 
-    public StudentsSummaryResponse getStudentsStatistics(String token, String from, String to) throws EurecaException {
+    public StudentsSummaryResponse getStudentsStatistics(String token, String from, String to, String language) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_STATISTICS);
-        return this.studentsStatisticsController.getStudentsSummaryResponse(from, to);
+        StudentsSummaryResponse response = this.studentsStatisticsController.getStudentsSummaryResponse(from, to);
+        GlossaryFields glossaryFields = null;
+        switch(language) {
+            case SystemConstants.PORTUGUESE:
+            default:
+                glossaryFields = new PortugueseGlossary().getGlossary();
+        }
+        response.setGlossary(glossaryFields);
+        return response;
     }
 
     public Map<String, Collection<SubjectSummaryResponse>> getSubjectsStatistics(String token, String from, String to) throws EurecaException {
