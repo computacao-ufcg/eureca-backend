@@ -25,7 +25,7 @@ public class MetricsTest {
         double attemptedCredits = this.metrics.getAttemptedCredits();
 
         // verify
-        assertEquals(expected, attemptedCredits);
+        assertEquals(expected, attemptedCredits, 0.1);
     }
 
     // test case: Call the getAttemptedCredits method with null attempted credits and tests a successfully return.
@@ -40,7 +40,7 @@ public class MetricsTest {
         double attemptedCredits = metrics.getAttemptedCredits();
 
         // verify
-        assertEquals(expected, attemptedCredits);
+        assertEquals(expected, attemptedCredits, 0.1);
 
     }
 
@@ -55,7 +55,7 @@ public class MetricsTest {
 
         // verify
         double attemptedCredits = this.metrics.getAttemptedCredits();
-        assertEquals(expected, attemptedCredits);
+        assertEquals(expected, attemptedCredits, 0.1);
     }
 
     // test case: Call the getFeasibility method and tests a successfully return.
@@ -119,10 +119,10 @@ public class MetricsTest {
         int expected = 1;
 
         // exercise
-        double avarageLoad = this.metrics.getAverageLoad();
+        double averageLoad = this.metrics.getAverageLoad();
 
         // verify
-        assertEquals(expected, avarageLoad, 0);
+        assertEquals(expected, averageLoad, 0);
     }
 
     // test case: Call the setAverageLoad method and tests a successfully return.
@@ -135,8 +135,8 @@ public class MetricsTest {
         this.metrics.setAverageLoad(2);
 
         // verify
-        double avarageLoad = this.metrics.getAverageLoad();
-        assertEquals(expected, avarageLoad, 0);
+        double averageLoad = this.metrics.getAverageLoad();
+        assertEquals(expected, averageLoad, 0);
     }
 
     // test case: Call the getCost method and tests a successfully return.
@@ -204,7 +204,7 @@ public class MetricsTest {
         double courseDurationPrediction = this.metrics.getCourseDurationPrediction();
 
         // verify
-        assertEquals(expected, courseDurationPrediction);
+        assertEquals(expected, courseDurationPrediction, 0.1);
     }
 
     // test case: Call the setCourseDurationPrediction method and tests a successfully return.
@@ -218,7 +218,7 @@ public class MetricsTest {
 
         // verify
         double courseDurationPrediction = this.metrics.getCourseDurationPrediction();
-        assertEquals(expected, courseDurationPrediction);
+        assertEquals(expected, courseDurationPrediction, 0.1);
     }
 
     // test case: Call the getRisk method and tests a successfully return.
