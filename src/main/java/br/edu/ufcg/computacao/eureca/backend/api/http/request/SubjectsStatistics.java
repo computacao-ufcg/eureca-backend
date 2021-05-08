@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(description = ApiDocumentation.Statistics.API)
 public class SubjectsStatistics {
 
-    protected static final String ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "statistics/teachers";
+    protected static final String ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "statistics/subjects";
 
     private static final Logger LOGGER = Logger.getLogger(SubjectsStatistics.class);
 
