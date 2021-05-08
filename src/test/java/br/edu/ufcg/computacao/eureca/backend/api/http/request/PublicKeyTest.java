@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
-import br.edu.ufcg.computacao.eureca.backend.util.RequestFactory;
+import br.edu.ufcg.computacao.eureca.backend.util.TestUtils;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.mockito.Mockito;
@@ -21,7 +21,7 @@ public class PublicKeyTest extends EndpointTest {
         String response = "public key";
         Mockito.doReturn(response).when(this.facade).getPublicKey();
 
-        RequestBuilder request = RequestFactory.createRequestBuilder(HttpMethod.GET, PUBLIC_KEY, new HttpHeaders(), "");
+        RequestBuilder request = TestUtils.createRequestBuilder(HttpMethod.GET, PUBLIC_KEY, new HttpHeaders(), "");
 
         MvcResult result = this.mockMvc.perform(request).andReturn();
 

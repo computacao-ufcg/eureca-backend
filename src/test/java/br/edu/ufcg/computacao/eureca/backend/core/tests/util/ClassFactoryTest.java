@@ -20,7 +20,7 @@ public class ClassFactoryTest {
         this.classFactory = new ClassFactory();
     }
 
-    // Test case: Call the createClass method with invalid className and tests if the right exception is thrown.
+    // Test case: Calls the createClass method with invalid className and tests if the right exception is thrown.
     @Test
     public void createClassInvalidClassName() {
         String invalidClassname = "k";
@@ -30,7 +30,7 @@ public class ClassFactoryTest {
         });
     }
 
-    // Test case: Call the createClass method and tests a successfully return.
+    // Test case: Calls the createClass method and tests a successfully return.
     @Test
     public void createClassTest() {
         // set up

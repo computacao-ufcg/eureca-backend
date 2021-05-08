@@ -370,67 +370,32 @@ public class StudentData {
     }
 
     public int getStatusIndex() {
-        if (this.statusStr.contains(SystemConstants.FAILED_3_TIMES)) {
-            return SystemConstants.FAILED_3_TIMES_INDEX;
+        switch(this.statusStr) {
+            case SystemConstants.FAILED_3_TIMES:
+                return SystemConstants.FAILED_3_TIMES_INDEX;
+            case SystemConstants.REENTER_SAME_COURSE:
+                return SystemConstants.REENTER_SAME_COURSE_INDEX;
+            case SystemConstants.REENTER_OTHER_COURSE:
+                return SystemConstants.REENTER_OTHER_COURSE_INDEX;
+            case SystemConstants.FAILED_ALL:
+                return SystemConstants.FAILED_ALL_INDEX;
+            case SystemConstants.CANCELLED:
+                return SystemConstants.CANCELLED_INDEX;
+            case SystemConstants.CANCELLED_BY_DECREE:
+                return SystemConstants.CANCELLED_BY_DECREE_INDEX;
+            case SystemConstants.CANCELLED_COURSE_CHANGE:
+                return SystemConstants.CANCELLED_COURSE_CHANGE_INDEX;
+            case SystemConstants.CANCELLED_UPON_REQUEST:
+                return SystemConstants.CANCELLED_UPON_REQUEST_INDEX;
+            case SystemConstants.LEFT_WITHOUT_NOTICE:
+                return SystemConstants.LEFT_WITHOUT_NOTICE_INDEX;
+            case SystemConstants.MISSED_GRADUATION:
+                return SystemConstants.MISSED_GRADUATION_INDEX;
+            case SystemConstants.TRANSFERRED:
+                return SystemConstants.TRANSFERRED_INDEX;
+            default:
+                return SystemConstants.UNKNOWN;
         }
-        else if (this.statusStr.contains(SystemConstants.REENTER_SAME_COURSE)) {
-            return SystemConstants.REENTER_SAME_COURSE_INDEX;
-        }
-        else if (this.statusStr.contains(SystemConstants.REENTER_OTHER_COURSE)) {
-            return SystemConstants.REENTER_OTHER_COURSE_INDEX;
-        }
-        else if (this.statusStr.contains(SystemConstants.FAILED_ALL)) {
-            return SystemConstants.FAILED_ALL_INDEX;
-        }
-        else if (this.statusStr.contains(SystemConstants.CANCELLED)) {
-            return SystemConstants.CANCELLED_INDEX;
-        }
-        else if (this.statusStr.contains(SystemConstants.CANCELLED_BY_DECREE)) {
-            return SystemConstants.CANCELLED_BY_DECREE_INDEX;
-        }
-        else if (this.statusStr.contains(SystemConstants.CANCELLED_COURSE_CHANGE)) {
-            return SystemConstants.CANCELLED_COURSE_CHANGE_INDEX;
-        }
-        else if (this.statusStr.contains(SystemConstants.CANCELLED_UPON_REQUEST)) {
-            return SystemConstants.CANCELLED_UPON_REQUEST_INDEX;
-        }
-        else if (this.statusStr.contains(SystemConstants.LEFT_WITHOUT_NOTICE)) {
-            return SystemConstants.LEFT_WITHOUT_NOTICE_INDEX;
-        }
-        else if (this.statusStr.contains(SystemConstants.MISSED_GRADUATION)) {
-            return SystemConstants.MISSED_GRADUATION_INDEX;
-        }
-        else if (this.statusStr.contains(SystemConstants.TRANSFERRED)) {
-            return SystemConstants.TRANSFERRED_INDEX;
-        }
-        else {
-            return SystemConstants.UNKNOWN;
-        }
-//        switch(filteredStatus) {
-//            case SystemConstants.FAILED_3_TIMES:
-//                return SystemConstants.FAILED_3_TIMES_INDEX;
-//            case SystemConstants.REENTER_SAME_COURSE:
-//                return SystemConstants.REENTER_SAME_COURSE_INDEX;
-//            case SystemConstants.REENTER_OTHER_COURSE:
-//                return SystemConstants.REENTER_OTHER_COURSE_INDEX;
-//            case SystemConstants.FAILED_ALL:
-//                return SystemConstants.FAILED_ALL_INDEX;
-//            case SystemConstants.CANCELLED:
-//                return SystemConstants.CANCELLED_INDEX;
-//            case SystemConstants.CANCELLED_BY_DECREE:
-//                return SystemConstants.CANCELLED_BY_DECREE_INDEX;
-//            case SystemConstants.CANCELLED_COURSE_CHANGE:
-//                return SystemConstants.CANCELLED_COURSE_CHANGE_INDEX;
-//            case SystemConstants.CANCELLED_UPON_REQUEST:
-//                return SystemConstants.CANCELLED_UPON_REQUEST_INDEX;
-//            case SystemConstants.LEFT_WITHOUT_NOTICE:
-//                return SystemConstants.LEFT_WITHOUT_NOTICE_INDEX;
-//            case SystemConstants.MISSED_GRADUATION:
-//                return SystemConstants.MISSED_GRADUATION_INDEX;
-//            case SystemConstants.TRANSFERRED:
-//                return SystemConstants.TRANSFERRED_INDEX;
-//            default:
-//                return SystemConstants.UNKNOWN;
     }
 
     private void parseAdmissionStr(String admission) {
@@ -446,7 +411,14 @@ public class StudentData {
             this.status = StudentStatus.ACTIVE;
             this.statusTerm = "Current";
         } else {
-            String filteredStatus = filterStatus();
+            StringBuilder sb = new StringBuilder(statusStr);
+            int firstSpace = sb.indexOf(" ");
+            sb.delete(0, (firstSpace + 1));
+            int op = sb.indexOf("(");
+            sb.delete(op, (op + 1));
+            int cp = sb.indexOf(")");
+            sb.delete(cp, (cp + 1));
+            String filteredStatus = sb.toString();
             int termStart = getFirstDigitIndex(filteredStatus);
             int termEnd = filteredStatus.length();
             this.statusTerm = filteredStatus.substring(termStart, termEnd);
@@ -458,17 +430,6 @@ public class StudentData {
                 this.status = StudentStatus.DROPOUT;
             }
         }
-    }
-
-    private String filterStatus() {
-        StringBuilder sb = new StringBuilder(statusStr);
-        int firstSpace = sb.indexOf(" ");
-        sb.delete(0, (firstSpace + 1));
-        int op = sb.indexOf("(");
-        sb.delete(op, (op + 1));
-        int cp = sb.indexOf(")");
-        sb.delete(cp, (cp + 1));
-        return sb.toString();
     }
 
     private int getFirstDigitIndex(String admission) {
