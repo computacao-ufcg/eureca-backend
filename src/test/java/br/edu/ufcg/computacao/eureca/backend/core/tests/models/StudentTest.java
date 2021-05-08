@@ -23,13 +23,13 @@ public class StudentTest {
 
     @Before
     public void setUp() {
-        this.student = createNewStudent("nationalID","registration1", 0,120,0,
-                58,0,26,5.68,
+        this.student = createNewStudent("nationalID","registration1", 1980,120,840,
+                58,450,26,5.68,
                 7,1.69,14,1,0,
                 0,0,0);
     }
 
-    // test case: Call the getId method and tests a successfully return.
+    // test case: Calls the getId method and tests a successfully return.
     @Test
     public void getIdTest() {
         // set up
@@ -42,15 +42,15 @@ public class StudentTest {
         Assert.assertEquals(expected, result);
     }
 
-    // test case: Call the getStudentData method and tests a successfully return.
+    // test case: Calls the getStudentData method and tests a successfully return.
     @Test
     public void getStudentDataTest() {
         // set up
         StudentData expected = new StudentData("x", "x", "x", "x", "x",
                 "x", "x", "x", "Ativo",
                 "VESTIBULAR 2007.2", "x", "x", "x",
-                "x",0,120,0,
-                58,0,26,5.68,
+                "x",1980,120,840,
+                58,450,26,5.68,
                 7,1.69,14,1,0,
                 0,0,0);
 
@@ -62,7 +62,7 @@ public class StudentTest {
 
     }
 
-    // test case: Call the getRiskClass method and tests a successfully return.
+    // test case: Calls the getRiskClass method and tests a successfully return.
     @Test
     public void getRiskClassTest() {
         // set up
@@ -76,15 +76,15 @@ public class StudentTest {
 
     }
 
-    // test case: Call the getRiskClass method and tests a successfully return.
+    // test case: Calls the getRiskClass method and tests a successfully return.
     @Test
     public void getRiskClass2Test() {
         // set up
         RiskClass riskClassExpectedStudent = LOW;
 
-        Student student3 = createNewStudent("nationalID","registration2",0,
-                120,0,
-                58,0,26,5.68,
+        Student student3 = createNewStudent("nationalID","registration2",1980,
+                120,840,
+                58,450,26,5.68,
                 7,1.69,10,2,0,
                 0,4,0);
 

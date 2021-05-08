@@ -37,13 +37,13 @@ public class MetricsCalculatorTest {
 
     }
 
-    // Test case: Call the getInstance method and tests a successfully return.
+    // Test case: Calls the getInstance method and tests a successfully return.
     @Test
     public void getInstanceTest() {
         assertNotEquals(this.metricsCalculator, null);
     }
 
-    // Test case: Call the computeMetrics method with valid studentData and tests a successfully return.
+    // Test case: Calls the computeMetrics method with valid studentData and tests a successfully return.
     @Test
     public void computeMetricsWithValidStudentTest() {
         // set up
@@ -63,7 +63,7 @@ public class MetricsCalculatorTest {
         Assert.assertEquals(expected.getSuccessRate(), result.getSuccessRate(), 0.1);
     }
 
-    // Test case: Call the computeFeasibility method with valid parameters and tests a successfully return.
+    // Test case: Calls the computeFeasibility method with valid parameters and tests a successfully return.
     @Test
     public void computeFeasibilityTest() throws Exception {
         // set up
@@ -78,7 +78,7 @@ public class MetricsCalculatorTest {
         Assert.assertEquals(expected, result, 0.1);
     }
 
-    // Test case: Call the computeSuccessRate method with valid parameters and tests a successfully return.
+    // Test case: Calls the computeSuccessRate method with valid parameters and tests a successfully return.
     @Test
     public void computeSuccessRateTest() throws Exception {
         // set up
@@ -93,7 +93,7 @@ public class MetricsCalculatorTest {
         Assert.assertEquals(expected, result, 0.1);
     }
 
-    // Test case: Call the computeAverageLoad method with valid parameters and tests a successfully return.
+    // Test case: Calls the computeAverageLoad method with valid parameters and tests a successfully return.
     @Test
     public void computeAverageLoadTest() throws Exception {
         // set up
@@ -108,7 +108,7 @@ public class MetricsCalculatorTest {
         Assert.assertEquals(expected, result, 0.1);
     }
 
-    // Test case: Call the computeCost method with valid parameters and tests a successfully return.
+    // Test case: Calls the computeCost method with valid parameters and tests a successfully return.
     @Test
     public void computeCostTest() throws Exception {
         // set up
@@ -124,7 +124,7 @@ public class MetricsCalculatorTest {
         Assert.assertEquals(expected, result, 0.1);
     }
 
-    // Test case: Call the computePace method with valid parameters and tests a successfully return.
+    // Test case: Calls the computePace method with valid parameters and tests a successfully return.
     @Test
     public void computePaceTest() throws Exception {
         // set up
@@ -139,7 +139,7 @@ public class MetricsCalculatorTest {
         Assert.assertEquals(expected, result, 0.1);
     }
 
-    // Test case: Call the computeCourseDurationPrediction method with valid parameters and tests a successfully return.
+    // Test case: Calls the computeCourseDurationPrediction method with valid parameters and tests a successfully return.
     @Test
     public void computeCourseDurationPredictionTest() throws Exception {
         // set up
@@ -154,7 +154,7 @@ public class MetricsCalculatorTest {
         Assert.assertEquals(expected, result);
     }
 
-    // Test case: Call the computeRisk method with valid parameters and tests a successfully return.
+    // Test case: Calls the computeRisk method with valid parameters and tests a successfully return.
     @Test
     public void computeRiskTest() throws Exception {
         // set up
@@ -169,7 +169,7 @@ public class MetricsCalculatorTest {
         Assert.assertEquals(expected, result, 0.1);
     }
 
-    // Test case: Call the computeRiskClass method with valid parameters and tests a successfully return.
+    // Test case: Calls the computeRiskClass method with valid parameters and tests a successfully return.
     @Test
     public void computeRiskClassTest() {
         // set up
@@ -181,7 +181,7 @@ public class MetricsCalculatorTest {
         Assert.assertEquals(expected, result);
     }
 
-    // Test case: Call the computeCostClass method with valid parameters and tests a successfully return.
+    // Test case: Calls the computeCostClass method with valid parameters and tests a successfully return.
     @Test
     public void computeCostClassTest() {
         // set up
@@ -194,7 +194,7 @@ public class MetricsCalculatorTest {
         Assert.assertEquals(expected, result);
     }
 
-    // Test case: Call the computeMetricsSummary method with valid parameters and tests a successfully return.
+    // Test case: Calls the computeMetricsSummary method with valid parameters and tests a successfully return.
     @Test
     public void computeMetricsSummaryTest() {
         // set up

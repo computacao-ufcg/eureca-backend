@@ -1,7 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.AlumniDigestResponse;
-import br.edu.ufcg.computacao.eureca.backend.util.RequestFactory;
+import br.edu.ufcg.computacao.eureca.backend.util.TestUtils;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.mockito.Mockito;
@@ -26,8 +26,8 @@ public class AlumniTest extends EndpointTest {
         Collection<AlumniDigestResponse> response = new ArrayList<>();
         Mockito.doReturn(response).when(this.facade).getAlumniBasicData(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
 
-        HttpHeaders headers = RequestFactory.getTokenHeaders();
-        RequestBuilder request = RequestFactory.createRequestBuilder(HttpMethod.GET, ALUMNI_ENDPOINT, headers, "");
+        HttpHeaders headers = TestUtils.getTokenHeaders();
+        RequestBuilder request = TestUtils.createRequestBuilder(HttpMethod.GET, ALUMNI_ENDPOINT, headers, "");
 
         MvcResult result = this.mockMvc.perform(request).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 

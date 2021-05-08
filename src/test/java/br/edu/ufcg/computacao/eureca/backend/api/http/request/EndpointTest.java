@@ -1,7 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
 import br.edu.ufcg.computacao.eureca.backend.core.ApplicationFacade;
-import br.edu.ufcg.computacao.eureca.backend.util.RequestFactory;
+import br.edu.ufcg.computacao.eureca.backend.util.TestUtils;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
@@ -37,7 +37,7 @@ public abstract class EndpointTest {
     }
 
     protected RequestBuilder getRequestBuilder(HttpMethod method, String url, HttpHeaders headers, String content) {
-        HttpHeaders header = headers == null ? RequestFactory.getTokenHeaders() : headers;
-        return RequestFactory.createRequestBuilder(method, url, header, content);
+        HttpHeaders header = headers == null ? TestUtils.getTokenHeaders() : headers;
+        return TestUtils.createRequestBuilder(method, url, header, content);
     }
 }
