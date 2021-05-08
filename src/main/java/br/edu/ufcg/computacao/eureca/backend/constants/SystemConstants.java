@@ -8,7 +8,7 @@ public class SystemConstants {
     public static final String REENTER_SAME_COURSE = "CANCELADO NOVO INGRESSO MESMO CURSO";
     public static final String REENTER_OTHER_COURSE = "CANCELADO NOVO INGRESSO OUTRO CURSO";
     public static final String FAILED_ALL = "CANCELADO REPROVOU TODAS POR FALTAS";
-    public static final String CANCELLED = "CANCELAMENTO DE MATRICULA";
+    public static final String CANCELLED = "CANCELAMENTO DE MATRICULA ";
     public static final String CANCELLED_BY_DECREE = "CANCELAMENTO P/ DECISAO JUDICIAL";
     public static final String CANCELLED_COURSE_CHANGE = "CANCELAMENTO P/ MUDANCA CURSO";
     public static final String CANCELLED_UPON_REQUEST = "CANCELAMENTO P/ SOLICITACAO ALUNO";
