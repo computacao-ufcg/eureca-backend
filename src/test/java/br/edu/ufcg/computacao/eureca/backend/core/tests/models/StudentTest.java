@@ -58,7 +58,10 @@ public class StudentTest {
         StudentData result = this.student.getStudentData();
 
         // verify
-        Assert.assertEquals(expected, result);
+        Assert.assertEquals(expected.getName(), result.getName());
+        Assert.assertEquals(expected.getBirthDate(), result.getBirthDate());
+        Assert.assertEquals(expected.getEmail(), result.getEmail());
+        Assert.assertEquals(expected.getGender(), result.getGender());
 
     }
 
