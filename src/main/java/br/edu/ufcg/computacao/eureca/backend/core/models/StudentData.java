@@ -4,6 +4,8 @@ import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import org.apache.log4j.Logger;
 
+import java.util.Objects;
+
 public class StudentData {
     private Logger LOGGER = Logger.getLogger(StudentData.class);
 
@@ -473,5 +475,18 @@ public class StudentData {
                 ", enrolledCredits=" + enrolledCredits +
                 ", admissionGrade=" + admissionGrade +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StudentData that = (StudentData) o;
+        return mandatoryHours == that.mandatoryHours && mandatoryCredits == that.mandatoryCredits && electiveHours == that.electiveHours && electiveCredits == that.electiveCredits && complementaryHours == that.complementaryHours && complementaryCredits == that.complementaryCredits && attemptedCredits == that.attemptedCredits && Double.compare(that.gpa, gpa) == 0 && Double.compare(that.mc, mc) == 0 && Double.compare(that.iea, iea) == 0 && completedTerms == that.completedTerms && suspendedTerms == that.suspendedTerms && institutionalTerms == that.institutionalTerms && mobilityTerms == that.mobilityTerms && enrolledCredits == that.enrolledCredits && Double.compare(that.admissionGrade, admissionGrade) == 0 && Objects.equals(name, that.name) && Objects.equals(birthDate, that.birthDate) && Objects.equals(email, that.email) && Objects.equals(gender, that.gender) && Objects.equals(maritalStatus, that.maritalStatus) && Objects.equals(nationality, that.nationality) && Objects.equals(placeOfBirth, that.placeOfBirth) && Objects.equals(race, that.race) && Objects.equals(statusStr, that.statusStr) && status == that.status && Objects.equals(statusTerm, that.statusTerm) && Objects.equals(admissionStr, that.admissionStr) && Objects.equals(admissionTerm, that.admissionTerm) && Objects.equals(affirmativePolicy, that.affirmativePolicy) && Objects.equals(secondarySchool, that.secondarySchool) && Objects.equals(secondarySchoolGraduationYear, that.secondarySchoolGraduationYear) && Objects.equals(curriculum, that.curriculum);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, birthDate, email, gender, maritalStatus, nationality, placeOfBirth, race, statusStr, status, statusTerm, admissionStr, admissionTerm, affirmativePolicy, secondarySchool, secondarySchoolGraduationYear, curriculum, mandatoryHours, mandatoryCredits, electiveHours, electiveCredits, complementaryHours, complementaryCredits, attemptedCredits, gpa, mc, iea, completedTerms, suspendedTerms, institutionalTerms, mobilityTerms, enrolledCredits, admissionGrade);
     }
 }
