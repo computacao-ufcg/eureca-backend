@@ -72,7 +72,7 @@ public class StudentStatisticsTest extends EndpointTest {
         // set up
         Collection<StudentDataResponse> response = getStudentsCsvResponse();
         Mockito.doReturn(response).when(this.facade).getAlumniCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/actives/csv", null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/alumni/csv", null, "");
 
         // exercise
         MvcResult res = this.mockMvc.perform(req).andReturn();
