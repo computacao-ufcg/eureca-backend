@@ -4,8 +4,6 @@ import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import org.apache.log4j.Logger;
 
-import java.util.Objects;
-
 public class StudentData {
     private Logger LOGGER = Logger.getLogger(StudentData.class);
 
