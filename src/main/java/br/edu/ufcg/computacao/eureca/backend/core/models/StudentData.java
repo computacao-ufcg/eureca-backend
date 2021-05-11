@@ -394,14 +394,15 @@ public class StudentData {
             case SystemConstants.TRANSFERRED:
                 return SystemConstants.TRANSFERRED_INDEX;
             default:
+                LOGGER.info(String.format(Messages.UNKNOWN_DROPOUT_REASON_S, this.statusStr));
                 return SystemConstants.UNKNOWN;
         }
     }
 
     private void parseAdmissionStr(String admission) {
-        int termStart = getFirstDigitIndex(admission);
-        this.admissionTerm = admission.substring(termStart, admission.length());
-        this.admissionStr = admission.substring(0, (termStart - 1));
+        int termEnd = admission.length();
+        this.admissionTerm = admission.substring(termEnd - 6, termEnd);
+        this.admissionStr = admission.substring(0, (termEnd - 7));
     }
 
     private void parseStatusStr(String statusStr) {
@@ -419,10 +420,9 @@ public class StudentData {
             int cp = sb.indexOf(")");
             sb.delete(cp, (cp + 1));
             String filteredStatus = sb.toString();
-            int termStart = getFirstDigitIndex(filteredStatus);
             int termEnd = filteredStatus.length();
-            this.statusTerm = filteredStatus.substring(termStart, termEnd);
-            this.statusStr = filteredStatus.substring(0, (termStart - 1));
+            this.statusTerm = filteredStatus.substring(termEnd - 6, termEnd);
+            this.statusStr = filteredStatus.substring(0, (termEnd - 7));
             String alumnusStatus = StudentStatus.ALUMNUS.getValue();
             if (this.statusStr.equals(alumnusStatus)) {
                 this.status = StudentStatus.ALUMNUS;
@@ -430,12 +430,7 @@ public class StudentData {
                 this.status = StudentStatus.DROPOUT;
             }
         }
-    }
-
-    private int getFirstDigitIndex(String admission) {
-        int i = 0;
-        while (!Character.isDigit(admission.charAt(i)) && i < admission.length()) i++;
-        return i;
+        LOGGER.debug(this.status.toString() + " " + this.statusTerm);
     }
 
     @Override

@@ -28,7 +28,7 @@ public class MetricsCalculatorTest {
         this.studentData = new StudentData("x", "x", "x", "x", "x",
                 "x", "x", "x", "Ativo",
                 "VESTIBULAR 2007.2", "x", "x", "x",
-                "x", 1980,132,840,
+                "x", 1980,196,840,
                 56,450,30,5.68,
                 7,1.69,14,1,0,
                 0,0,0);
@@ -47,20 +47,20 @@ public class MetricsCalculatorTest {
     @Test
     public void computeMetricsWithValidStudentTest() {
         // set up
-        Metrics expected = new Metrics(0,0,-1,0,-1,14,14,1.4);
+        Metrics expected = new Metrics(0,0,-1,0,-1,18.5,11,1);
 
         // exercise
         Metrics result = MetricsCalculator.computeMetrics(this.studentData);
 
         // verify
         Assert.assertEquals(expected.getAttemptedCredits(), result.getAttemptedCredits(), 0.1);
-        Assert.assertEquals(expected.getCourseDurationPrediction(), result.getCourseDurationPrediction(), 0.1);
-        Assert.assertEquals(expected.getCost(), result.getCost(), 0.1);
-        Assert.assertEquals(expected.getAverageLoad(), result.getAverageLoad(), 0.1);
-        Assert.assertEquals(expected.getFeasibility(), result.getFeasibility(), 0.1);
+        Assert.assertEquals(expected.getCourseDurationPrediction(), result.getCourseDurationPrediction(), 0);
+        Assert.assertEquals(expected.getCost(), result.getCost(), 0);
+        Assert.assertEquals(expected.getAverageLoad(), result.getAverageLoad(), 0);
+        Assert.assertEquals(expected.getFeasibility(), result.getFeasibility(), 0);
         Assert.assertEquals(expected.getPace(), result.getPace(), 0.1);
         Assert.assertEquals(expected.getRisk(), result.getRisk(), 0.1);
-        Assert.assertEquals(expected.getSuccessRate(), result.getSuccessRate(), 0.1);
+        Assert.assertEquals(expected.getSuccessRate(), result.getSuccessRate(), 0);
     }
 
     // Test case: Calls the computeFeasibility method with valid parameters and tests a successfully return.
@@ -75,7 +75,7 @@ public class MetricsCalculatorTest {
         double result = Whitebox.invokeMethod(this.metricsCalculator, "computeFeasibility", completedTerms, completedCredits);
 
         // verify
-        Assert.assertEquals(expected, result, 0.1);
+        Assert.assertEquals(expected, result, 0);
     }
 
     // Test case: Calls the computeSuccessRate method with valid parameters and tests a successfully return.
@@ -90,7 +90,7 @@ public class MetricsCalculatorTest {
         double result = Whitebox.invokeMethod(this.metricsCalculator, "computeSuccessRate", completedCredits, attemptedCredits);
 
         // verify
-        Assert.assertEquals(expected, result, 0.1);
+        Assert.assertEquals(expected, result, 0);
     }
 
     // Test case: Calls the computeAverageLoad method with valid parameters and tests a successfully return.
@@ -105,7 +105,7 @@ public class MetricsCalculatorTest {
         double result = Whitebox.invokeMethod(this.metricsCalculator, "computeAverageLoad", completedTerms, attemptedCredits);
 
         // verify
-        Assert.assertEquals(expected, result, 0.1);
+        Assert.assertEquals(expected, result, 0);
     }
 
     // Test case: Calls the computeCost method with valid parameters and tests a successfully return.
@@ -121,14 +121,14 @@ public class MetricsCalculatorTest {
         double result = Whitebox.invokeMethod(this.metricsCalculator, "computeCost", completedTerms, completedCredits, attemptedCredits);
 
         // verify
-        Assert.assertEquals(expected, result, 0.1);
+        Assert.assertEquals(expected, result, 0);
     }
 
     // Test case: Calls the computePace method with valid parameters and tests a successfully return.
     @Test
     public void computePaceTest() throws Exception {
         // set up
-        double expected = 14;
+        double expected = 18.5;
         int completedTerms = this.studentData.getCompletedTerms();
         int completedCredits = this.studentData.getCompletedCredits();
 
@@ -143,7 +143,7 @@ public class MetricsCalculatorTest {
     @Test
     public void computeCourseDurationPredictionTest() throws Exception {
         // set up
-        int expected = 14;
+        int expected = 11;
         int completedTerms = this.studentData.getCompletedTerms();
         int completedCredits = this.studentData.getCompletedCredits();
 
@@ -158,7 +158,7 @@ public class MetricsCalculatorTest {
     @Test
     public void computeRiskTest() throws Exception {
         // set up
-        double expected = 1.4;
+        double expected = 1;
         int completedTerms = this.studentData.getCompletedTerms();
         int completedCredits = this.studentData.getCompletedCredits();
 
@@ -173,10 +173,10 @@ public class MetricsCalculatorTest {
     @Test
     public void computeRiskClassTest() {
         // set up
-        RiskClass expected = RiskClass.UNFEASIBLE;
+        RiskClass expected = RiskClass.LOW;
 
         // exercise
-        RiskClass result = MetricsCalculator.computeRiskClass(1.4);
+        RiskClass result = MetricsCalculator.computeRiskClass(1);
 
         Assert.assertEquals(expected, result);
     }
