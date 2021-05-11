@@ -1,6 +1,5 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-import br.edu.ufcg.computacao.eureca.backend.constants.Glossary;
 import br.edu.ufcg.computacao.eureca.backend.constants.GlossaryFields;
 
 public class StudentsSummaryResponse {

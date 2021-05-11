@@ -16,4 +16,5 @@ public class Messages {
     public static final String SOMETHING_WENT_WRONG = "Something went wrong.";
     public static final String UNABLE_TO_CLOSE_FILE_S = "Unable to close file: %s.";
     public static final String UNABLE_TO_FIND_CLASS_S = "Unable to find plugin class: %s.";
+    public static final String UNKNOWN_DROPOUT_REASON_S = "Unknown dropout reason: %s.";
 }
