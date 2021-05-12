@@ -1,8 +1,8 @@
 FROM openjdk:8
 
-ARG EURECA_COMMON_BRANCH="develop"
-ARG EURECA_AS_BRANCH="develop"
-ARG EURECA_BACKEND_BRANCH="develop"
+ARG EURECA_COMMON_BRANCH="deploy"
+ARG EURECA_AS_BRANCH="deploy"
+ARG EURECA_BACKEND_BRANCH="deploy"
 
 # Install.
 RUN \
@@ -37,3 +37,6 @@ RUN \
   (cd eureca-backend && git checkout $EURECA_BACKEND_BRANCH && mvn install -Dmaven.test.skip=true)
 
 WORKDIR /root/eureca-backend
+
+CMD \
+  mvn spring-boot:run -X > log.out 2> log.err
