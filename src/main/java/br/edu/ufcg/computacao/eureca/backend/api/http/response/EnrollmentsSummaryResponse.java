@@ -1,5 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
+import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
+
 public class EnrollmentsSummaryResponse {
     private int subjects;
     private TermCount max;
