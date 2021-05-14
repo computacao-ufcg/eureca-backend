@@ -1,17 +1,20 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
+import br.edu.ufcg.computacao.eureca.backend.core.models.MetricSummary;
+import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
+
 public class TeachersSummaryResponse {
 
-    private MetricsSummary failedDueToAbsences;
-    private MetricsSummary failedDueToGrade;
-    private MetricsSummary failedDueToCanceling;
-    private MetricsSummary success;
+    private MetricSummary failedDueToAbsences;
+    private MetricSummary failedDueToGrade;
+    private MetricSummary failedDueToCanceling;
+    private MetricSummary success;
     private TermCount min;
     private TermCount max;
     private int total;
 
-    public TeachersSummaryResponse(MetricsSummary failedDueToAbsences, MetricsSummary failedDueToGrade, MetricsSummary failedDueToCanceling,
-                                   MetricsSummary success, TermCount min, TermCount max, int total) {
+    public TeachersSummaryResponse(MetricSummary failedDueToAbsences, MetricSummary failedDueToGrade, MetricSummary failedDueToCanceling,
+                                   MetricSummary success, TermCount min, TermCount max, int total) {
         this.failedDueToAbsences = failedDueToAbsences;
         this.failedDueToGrade = failedDueToGrade;
         this.failedDueToCanceling = failedDueToCanceling;
@@ -21,19 +24,19 @@ public class TeachersSummaryResponse {
         this.total = total;
     }
 
-    public MetricsSummary getFailedDueToAbsences() {
+    public MetricSummary getFailedDueToAbsences() {
         return failedDueToAbsences;
     }
 
-    public MetricsSummary getFailedDueToGrade() {
+    public MetricSummary getFailedDueToGrade() {
         return failedDueToGrade;
     }
 
-    public MetricsSummary getFailedDueToCanceling() {
+    public MetricSummary getFailedDueToCanceling() {
         return failedDueToCanceling;
     }
 
-    public MetricsSummary getSuccess() {
+    public MetricSummary getSuccess() {
         return success;
     }
 

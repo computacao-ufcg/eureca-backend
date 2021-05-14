@@ -26,12 +26,16 @@ public class ApplicationFacade {
     private StudentsStatisticsController studentsStatisticsController;
     private StudentsDataFetcher studentsDataFetcher;
     private SubjectsStatisticsController subjectsStatisticsController;
+    private EnrollmentsStatisticsController enrollmentsStatisticsController;
+    private TeacherStatisticsController teacherStatisticsController;
     private static ApplicationFacade instance;
 
     private ApplicationFacade() {
         this.studentsStatisticsController = new StudentsStatisticsController();
         this.studentsDataFetcher = new StudentsDataFetcher();
         this.subjectsStatisticsController = new SubjectsStatisticsController();
+        this.enrollmentsStatisticsController = new EnrollmentsStatisticsController();
+        this.teacherStatisticsController = new TeacherStatisticsController();
     }
 
     public static ApplicationFacade getInstance() {
@@ -116,12 +120,14 @@ public class ApplicationFacade {
 
     public TeachersSummaryResponse getTeachersStatistics(String token, String from, String to, String lang)
             throws EurecaException {
-        return null;
+        authenticateAndAuthorize(token, EurecaOperation.GET_TEACHERS_STATISTICS);
+        return this.teacherStatisticsController.getTeachersStatistics();
     }
 
     public EnrollmentsSummaryResponse getEnrollmentsStatistics(String token, String from, String to, String lang)
             throws EurecaException {
-        return null;
+        authenticateAndAuthorize(token, EurecaOperation.GET_ENROLLMENTS_STATISTICS);
+        return this.enrollmentsStatisticsController.getEnrollmentsStatistics();
     }
 
     public String getPublicKey() throws EurecaException {
