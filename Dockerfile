@@ -1,5 +1,9 @@
 FROM openjdk:8
 
+ARG EURECA_COMMON_BRANCH
+ARG EURECA_AS_BRANCH
+ARG EURECA_BACKEND_BRANCH
+
 # Install.
 RUN \
   sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list && \
@@ -37,7 +41,7 @@ RUN \
     (cd eureca-common && common_build_number=$(git rev-parse --short 'HEAD') && \
     cd ../eureca-as && as_build_number=$(git rev-parse --short 'HEAD') && \
     cd ../eureca-backend && backend_build_number=$(git rev-parse --short 'HEAD') && \
-    echo "build_number=alumni-$alumni_build_number-eureca-$backend_build_number-as-$as_build_number-common-$common_build_number" > build)
+    echo "build_number=eureca-$backend_build_number-as-$as_build_number-common-$common_build_number" > build)
 
 WORKDIR /root/eureca-backend
 
