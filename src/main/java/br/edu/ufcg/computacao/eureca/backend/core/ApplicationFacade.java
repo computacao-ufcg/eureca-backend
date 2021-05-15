@@ -151,11 +151,4 @@ public class ApplicationFacade {
         this.authorizationPlugin.isAuthorized(requester, operation);
         return requester;
     }
-
-    public String getVersionNumber() {
-        String buildNumber = null;
-        buildNumber = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.BUILD_NUMBER_KEY,
-                    ConfigurationPropertyDefaults.BUILD_NUMBER);
-        return SystemConstants.API_VERSION_NUMBER + "-" + buildNumber;
-    }
 }
