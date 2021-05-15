@@ -111,23 +111,22 @@ public class ApplicationFacade {
         return response;
     }
 
-    public SubjectsSummaryResponse getSubjectsStatistics(String token, String from, String to, String language)
+    public SubjectSummaryResponse getSubjectsStatistics(String token, String from, String to, String language)
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_STATISTICS);
-        //return this.subjectsStatisticsController.getSubjectsStatistics(from, to, lang);
-        return null;
+        return this.subjectsStatisticsController.getSubjectStatisticsMock();
     }
 
     public TeachersSummaryResponse getTeachersStatistics(String token, String from, String to, String lang)
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_TEACHERS_STATISTICS);
-        return this.teacherStatisticsController.getTeachersStatistics();
+        return this.teacherStatisticsController.getTeachersStatisticsMock();
     }
 
     public EnrollmentsSummaryResponse getEnrollmentsStatistics(String token, String from, String to, String lang)
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ENROLLMENTS_STATISTICS);
-        return this.enrollmentsStatisticsController.getEnrollmentsStatistics();
+        return this.enrollmentsStatisticsController.getEnrollmentsStatisticsMock();
     }
 
     public String getPublicKey() throws EurecaException {

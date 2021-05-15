@@ -1,7 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.CommonKeys;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsSummaryResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectSummaryResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsSummaryResponseOld;
 import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
@@ -25,7 +26,7 @@ public class SubjectsStatistics {
     private static final Logger LOGGER = Logger.getLogger(SubjectsStatistics.class);
 
     @RequestMapping(value = "summary", method = RequestMethod.GET)
-    public ResponseEntity<SubjectsSummaryResponse> getStudentsSummary(
+    public ResponseEntity<SubjectSummaryResponse> getStudentsSummary(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)
@@ -35,7 +36,7 @@ public class SubjectsStatistics {
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
-            SubjectsSummaryResponse summary = ApplicationFacade.getInstance().getSubjectsStatistics(token, from, to, lang);
+            SubjectSummaryResponse summary = ApplicationFacade.getInstance().getSubjectsStatistics(token, from, to, lang);
             return new ResponseEntity<>(summary, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
