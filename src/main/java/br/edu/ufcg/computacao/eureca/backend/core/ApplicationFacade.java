@@ -134,7 +134,13 @@ public class ApplicationFacade {
 
     private RSAPublicKey getAsPublicKey() throws EurecaException {
         if (this.asPublicKey == null) {
-            this.asPublicKey = EurecaAsPublicKeyHolder.getInstance().getAsPublicKey();
+            try {
+                this.asPublicKey = EurecaAsPublicKeyHolder.getInstance().getAsPublicKey();
+            } catch (EurecaException e) {
+                LOGGER.info(Messages.COULD_NOT_FETCH_AS_PUBLIC_KEY);
+                this.asPublicKey = null;
+                throw e;
+            }
         }
         return this.asPublicKey;
     }

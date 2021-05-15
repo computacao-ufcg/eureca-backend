@@ -3,6 +3,7 @@ package br.edu.ufcg.computacao.eureca.backend.constants;
 public class Messages {
     public static final String ADD_TABLE_S = "Add table: %s.";
     public static final Object ALL_SET = "All services have been initialized.";
+    public static final String COULD_NOT_FETCH_AS_PUBLIC_KEY = "Could not fetch Authentication Service public key.";
     public static final String DATA_S = "Data: [%s].";
     public static final String ERROR_READING_CONFIGURATION_FILE = "Error reading configuration file.";
     public static final String INDEX_ACTIVE_S = "Indexing active student: %s.";
@@ -16,5 +17,4 @@ public class Messages {
     public static final String SOMETHING_WENT_WRONG = "Something went wrong.";
     public static final String UNABLE_TO_CLOSE_FILE_S = "Unable to close file: %s.";
     public static final String UNABLE_TO_FIND_CLASS_S = "Unable to find plugin class: %s.";
-    public static final String UNKNOWN_DROPOUT_REASON_S = "Unknown dropout reason: %s.";
 }
