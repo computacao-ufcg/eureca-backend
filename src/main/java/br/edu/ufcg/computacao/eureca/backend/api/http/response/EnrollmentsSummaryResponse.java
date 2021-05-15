@@ -3,6 +3,9 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
 
 public class EnrollmentsSummaryResponse {
+    private String curriculum;
+    private String from;
+    private String to;
     private int subjects;
     private TermCount max;
     private TermCount min ;
@@ -11,7 +14,10 @@ public class EnrollmentsSummaryResponse {
     private double averageEnrollmentsPerClass;
     private double averageEnrollmentsPerPeriod;
 
-    public EnrollmentsSummaryResponse(int subjects, TermCount max, TermCount min, double averageClassesPerDiscipline, double averageClassesPerPeriod, double averageEnrollmentsPerClass, double averageEnrollmentsPerPeriod) {
+    public EnrollmentsSummaryResponse(String curriculum, String from, String to, int subjects, TermCount max, TermCount min, double averageClassesPerDiscipline, double averageClassesPerPeriod, double averageEnrollmentsPerClass, double averageEnrollmentsPerPeriod) {
+        this.curriculum = curriculum;
+        this.from = from;
+        this.to = to;
         this.subjects = subjects;
         this.max = max;
         this.min = min;
@@ -23,6 +29,30 @@ public class EnrollmentsSummaryResponse {
 
     public int getSubjects() {
         return subjects;
+    }
+
+    public String getCurriculum() {
+        return curriculum;
+    }
+
+    public void setCurriculum(String curriculum) {
+        this.curriculum = curriculum;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
     }
 
     public TermCount getMax() {
@@ -52,7 +82,10 @@ public class EnrollmentsSummaryResponse {
     @Override
     public String toString() {
         return "EnrollmentsSummaryResponse{" +
-                "subjects=" + subjects +
+                "curriculum='" + curriculum + '\'' +
+                ", from='" + from + '\'' +
+                ", to='" + to + '\'' +
+                ", subjects=" + subjects +
                 ", max=" + max +
                 ", min=" + min +
                 ", averageClassesPerDiscipline=" + averageClassesPerDiscipline +

@@ -4,7 +4,9 @@ import br.edu.ufcg.computacao.eureca.backend.core.models.MetricSummary;
 import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
 
 public class TeachersSummaryResponse {
-
+    private String curriculum;
+    private String from;
+    private String to;
     private MetricSummary failedDueToAbsences;
     private MetricSummary failedDueToGrade;
     private MetricSummary failedDueToCanceling;
@@ -13,8 +15,11 @@ public class TeachersSummaryResponse {
     private TermCount max;
     private int total;
 
-    public TeachersSummaryResponse(MetricSummary failedDueToAbsences, MetricSummary failedDueToGrade, MetricSummary failedDueToCanceling,
+    public TeachersSummaryResponse(String curriculum, String from, String to, MetricSummary failedDueToAbsences, MetricSummary failedDueToGrade, MetricSummary failedDueToCanceling,
                                    MetricSummary success, TermCount min, TermCount max, int total) {
+        this.curriculum = curriculum;
+        this.from = from;
+        this.to = to;
         this.failedDueToAbsences = failedDueToAbsences;
         this.failedDueToGrade = failedDueToGrade;
         this.failedDueToCanceling = failedDueToCanceling;
@@ -22,6 +27,30 @@ public class TeachersSummaryResponse {
         this.min = min;
         this.max = max;
         this.total = total;
+    }
+
+    public String getCurriculum() {
+        return curriculum;
+    }
+
+    public void setCurriculum(String curriculum) {
+        this.curriculum = curriculum;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
     }
 
     public MetricSummary getFailedDueToAbsences() {
@@ -55,7 +84,10 @@ public class TeachersSummaryResponse {
     @Override
     public String toString() {
         return "TeachersSummaryResponse{" +
-                "failedDueToAbsences=" + failedDueToAbsences +
+                "curriculum='" + curriculum + '\'' +
+                ", from='" + from + '\'' +
+                ", to='" + to + '\'' +
+                ", failedDueToAbsences=" + failedDueToAbsences +
                 ", failedDueToGrade=" + failedDueToGrade +
                 ", failedDueToCanceling=" + failedDueToCanceling +
                 ", success=" + success +
