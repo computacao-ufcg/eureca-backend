@@ -142,5 +142,15 @@ public class StudentStatisticsTest extends EndpointTest {
         Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
     }
 
+    @Test
+    public void getStudentStatisticsTest() throws Exception {
+        StudentsSummaryResponse response = new StudentsSummaryResponse(null, null, null, null);
+        Mockito.doReturn(response).when(this.facade).getStudentsStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
 
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/summary", null, "");
+        MvcResult res = this.mockMvc.perform(req).andReturn();
+
+        Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
+        Assert.assertEquals("{\"activesSummary\":null,\"alumniSummary\":null,\"delayedSummary\":null,\"dropoutsSummary\":null,\"glossary\":null}", res.getResponse().getContentAsString());
+    }
 }
