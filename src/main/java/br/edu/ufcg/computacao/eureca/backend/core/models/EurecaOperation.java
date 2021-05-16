@@ -11,7 +11,9 @@ public enum EurecaOperation {
     GET_DELAYED("getDelayed"),
     GET_DELAYED_CSV("getDelayedCSV"),
     GET_STUDENTS_STATISTICS("getStudentsStatistics"),
-    GET_SUBJECTS_STATISTICS("getSubjectsStatistics");
+    GET_SUBJECTS_STATISTICS("getSubjectsStatistics"),
+    GET_TEACHERS_STATISTICS("getTeachersStatistics"),
+    GET_ENROLLMENTS_STATISTICS("getEnrollmentsStatistics");
 
     private String value;
 
