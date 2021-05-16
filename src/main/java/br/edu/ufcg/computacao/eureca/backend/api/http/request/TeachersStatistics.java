@@ -35,6 +35,7 @@ public class TeachersStatistics {
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
+            LOGGER.info(Messages.RECEIVING_GET_TEACHERS_STATISTICS);
             TeachersSummaryResponse summary = ApplicationFacade.getInstance().getTeachersStatistics(token, from, to, lang);
             return new ResponseEntity<>(summary, HttpStatus.OK);
         } catch (EurecaException e) {
