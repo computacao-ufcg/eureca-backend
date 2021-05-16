@@ -2,17 +2,17 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import java.util.Collection;
 
-public class SubjectsSummaryResponse {
+public class SubjectsSummaryResponseOld {
     private String term;
     private String code;
     private String name;
     private Collection<EnrollmentSummary> enrollments;
     private EnrollmentSummary summary;
 
-    public SubjectsSummaryResponse() {
+    public SubjectsSummaryResponseOld() {
     }
 
-    public SubjectsSummaryResponse(String term, String code, String name, Collection<EnrollmentSummary> enrollments) {
+    public SubjectsSummaryResponseOld(String term, String code, String name, Collection<EnrollmentSummary> enrollments) {
         this.term = term;
         this.code = code;
         this.name = name;

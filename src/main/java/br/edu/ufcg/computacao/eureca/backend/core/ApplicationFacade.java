@@ -26,12 +26,16 @@ public class ApplicationFacade {
     private StudentsStatisticsController studentsStatisticsController;
     private StudentsDataFetcher studentsDataFetcher;
     private SubjectsStatisticsController subjectsStatisticsController;
+    private EnrollmentsStatisticsController enrollmentsStatisticsController;
+    private TeacherStatisticsController teacherStatisticsController;
     private static ApplicationFacade instance;
 
     private ApplicationFacade() {
         this.studentsStatisticsController = new StudentsStatisticsController();
         this.studentsDataFetcher = new StudentsDataFetcher();
         this.subjectsStatisticsController = new SubjectsStatisticsController();
+        this.enrollmentsStatisticsController = new EnrollmentsStatisticsController();
+        this.teacherStatisticsController = new TeacherStatisticsController();
     }
 
     public static ApplicationFacade getInstance() {
@@ -107,21 +111,22 @@ public class ApplicationFacade {
         return response;
     }
 
-    public SubjectsSummaryResponse getSubjectsStatistics(String token, String from, String to, String language)
+    public SubjectSummaryResponse getSubjectsStatistics(String token, String from, String to, String language)
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_STATISTICS);
-        //return this.subjectsStatisticsController.getSubjectsStatistics(from, to, lang);
-        return null;
+        return this.subjectsStatisticsController.getSubjectStatisticsMock();
     }
 
     public TeachersSummaryResponse getTeachersStatistics(String token, String from, String to, String lang)
             throws EurecaException {
-        return null;
+        authenticateAndAuthorize(token, EurecaOperation.GET_TEACHERS_STATISTICS);
+        return this.teacherStatisticsController.getTeachersStatisticsMock();
     }
 
     public EnrollmentsSummaryResponse getEnrollmentsStatistics(String token, String from, String to, String lang)
             throws EurecaException {
-        return null;
+        authenticateAndAuthorize(token, EurecaOperation.GET_ENROLLMENTS_STATISTICS);
+        return this.enrollmentsStatisticsController.getEnrollmentsStatisticsMock();
     }
 
     public String getPublicKey() throws EurecaException {
