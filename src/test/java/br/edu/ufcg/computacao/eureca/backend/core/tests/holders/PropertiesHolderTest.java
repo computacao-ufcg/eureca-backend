@@ -13,10 +13,10 @@ public class PropertiesHolderTest {
     // instance of the Properties object.
     private Properties properties;
 
-    // instance of the BuildNumberHolder object.
+    // instance of the PropertiesHolder object.
     private PropertiesHolder instance;
 
-    // creation of a base BuildNumberHolder object that will be used in the tests.
+    // creation of a base PropertiesHolder object that will be used in the tests.
     @Before
     public void setUp() throws EurecaException {
         instance = PropertiesHolder.getInstance();

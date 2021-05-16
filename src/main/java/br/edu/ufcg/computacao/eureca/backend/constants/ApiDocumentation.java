@@ -36,7 +36,7 @@ public class ApiDocumentation {
     }
 
     public class Token {
-        public static final String AUTHENTICATION_TOKEN = "'TokenResponse' gerado pelo serviço de autenticação.";
+        public static final String AUTHENTICATION_TOKEN = "'Token' gerado pelo serviço de autenticação.";
     }
 
     public static class PublicKey {
