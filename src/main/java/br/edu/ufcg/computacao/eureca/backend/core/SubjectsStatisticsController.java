@@ -7,10 +7,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.models.MetricSummary;
 import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectStatisticsItem;
 import org.apache.log4j.Logger;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -49,5 +46,15 @@ public class SubjectsStatisticsController {
         SubjectStatisticsItem complementary = new SubjectStatisticsItem(450, 30, 10, metrics, metrics, metrics, metrics, metrics, metrics);
         SubjectSummaryResponse summary = new SubjectSummaryResponse("2017", "1980.1", "2020.1", mandatory, optional, elective, complementary);
         return summary;
+    }
+
+    public Collection<SubjectsSummaryItemResponse> getSubjectsStatisticsCSV() {
+        List<SubjectsSummaryItemResponse> response = new ArrayList<>();
+        response.add(new SubjectsSummaryItemResponse("eda", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2"));
+        response.add(new SubjectsSummaryItemResponse("leda", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2"));
+        response.add(new SubjectsSummaryItemResponse("sistemas operacionais", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2"));
+        response.add(new SubjectsSummaryItemResponse("redes", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2"));
+        response.add(new SubjectsSummaryItemResponse("logica", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2"));
+        return response;
     }
 }
