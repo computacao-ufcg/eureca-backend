@@ -123,10 +123,25 @@ public class ApplicationFacade {
         return this.teacherStatisticsController.getTeachersStatisticsMock();
     }
 
+    public Collection<TeachersSummaryItemResponse> getTeachersStatisticsCSV(String token, String from, String to, String lang) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_TEACHERS_STATISTICS_CSV);
+        return this.teacherStatisticsController.getTeacherStatisticsCSV();
+    }
+
     public EnrollmentsSummaryResponse getEnrollmentsStatistics(String token, String from, String to, String lang)
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ENROLLMENTS_STATISTICS);
         return this.enrollmentsStatisticsController.getEnrollmentsStatisticsMock();
+    }
+
+    public Collection<EnrollmentsSummaryItemResponse> getEnrollmentsStatisticsCSV(String token, String from, String to, String lang) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_ENROLLMENTS_STATISTICS_CSV);
+        return this.enrollmentsStatisticsController.getEnrollmentsStatisticsCSV();
+    }
+
+    public Collection<SubjectsSummaryItemResponse> getSubjectsStatisticsCSV(String token, String from, String to, String lang) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_STATISTICS_CSV);
+        return this.subjectsStatisticsController.getSubjectsStatisticsCSV();
     }
 
     public String getPublicKey() throws EurecaException {

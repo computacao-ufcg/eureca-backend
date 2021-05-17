@@ -1,6 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.CommonKeys;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.TeachersSummaryItemResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.TeachersSummaryResponse;
 import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
@@ -14,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+
 @CrossOrigin
 @RestController
 @RequestMapping(value = TeachersStatistics.ENDPOINT)
@@ -25,7 +28,7 @@ public class TeachersStatistics {
     private static final Logger LOGGER = Logger.getLogger(TeachersStatistics.class);
 
     @RequestMapping(value = "summary", method = RequestMethod.GET)
-    public ResponseEntity<TeachersSummaryResponse> getStudentsSummary(
+    public ResponseEntity<TeachersSummaryResponse> getTeachersSummary(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)
@@ -37,6 +40,25 @@ public class TeachersStatistics {
         try {
             TeachersSummaryResponse summary = ApplicationFacade.getInstance().getTeachersStatistics(token, from, to, lang);
             return new ResponseEntity<>(summary, HttpStatus.OK);
+        } catch (EurecaException e) {
+            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
+            throw e;
+        }
+    }
+
+    @RequestMapping(value = "summary/csv", method = RequestMethod.GET)
+    public ResponseEntity<Collection<TeachersSummaryItemResponse>> getTeachersSummaryCSV(
+            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+            @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
+            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
+            @ApiParam(value = ApiDocumentation.Statistics.LANGUAGE)
+            @RequestParam(required = false, value = "language", defaultValue = SystemConstants.PORTUGUESE) String lang,
+            @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
+    ) throws EurecaException {
+        try {
+            Collection<TeachersSummaryItemResponse> teachers = ApplicationFacade.getInstance().getTeachersStatisticsCSV(token, from, to, lang);
+            return new ResponseEntity<>(teachers, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
             throw e;
