@@ -1,6 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.core;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
+import br.edu.ufcg.computacao.eureca.backend.constants.PortugueseGlossary;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.MetricSummary;
@@ -34,9 +35,9 @@ public class TeacherStatisticsController {
 
     public Collection<TeachersSummaryItemResponse> getTeacherStatisticsCSV() {
         List<TeachersSummaryItemResponse> response = new ArrayList<>();
-        response.add(new TeachersSummaryItemResponse("fubica", 0.12, 0.03, 0.01, 75, "2010.1", "2012.2"));
-        response.add(new TeachersSummaryItemResponse("joao arthur", 0.11, 0.08, 0.01, 120, "2010.1", "2012.2"));
-        response.add(new TeachersSummaryItemResponse("massoni", 0.09, 0.01, 0.01, 80, "2010.1", "2012.2"));
+        response.add(new TeachersSummaryItemResponse("fubica", 0.12, 0.03, 0.01, 75, "2010.1", "2012.2", new PortugueseGlossary()));
+        response.add(new TeachersSummaryItemResponse("joao arthur", 0.11, 0.08, 0.01, 120, "2010.1", "2012.2", new PortugueseGlossary()));
+        response.add(new TeachersSummaryItemResponse("massoni", 0.09, 0.01, 0.01, 80, "2010.1", "2012.2", new PortugueseGlossary()));
         return response;
     }
 }

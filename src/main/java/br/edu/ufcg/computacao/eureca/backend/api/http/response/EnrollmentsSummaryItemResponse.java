@@ -1,5 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
+import br.edu.ufcg.computacao.eureca.backend.constants.Glossary;
+
 import java.util.Objects;
 
 public class EnrollmentsSummaryItemResponse {
@@ -10,15 +12,17 @@ public class EnrollmentsSummaryItemResponse {
     private int totalClasses;
     private String from;
     private String to;
+    private Glossary glossary;
 
     public EnrollmentsSummaryItemResponse(String discipline, int totalEnrollments, double averageEnrollmentsPerClass,
-                                          int totalClasses, String from, String to) {
+                                          int totalClasses, String from, String to, Glossary glossary) {
         this.discipline = discipline;
         this.totalEnrollments = totalEnrollments;
         this.averageEnrollmentsPerClass = averageEnrollmentsPerClass;
         this.totalClasses = totalClasses;
         this.from = from;
         this.to = to;
+        this.glossary = glossary;
     }
 
     public String getDiscipline() {
@@ -45,6 +49,10 @@ public class EnrollmentsSummaryItemResponse {
         return to;
     }
 
+    public Glossary getGlossary() {
+        return glossary;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -67,6 +75,7 @@ public class EnrollmentsSummaryItemResponse {
                 ", totalClasses=" + totalClasses +
                 ", from='" + from + '\'' +
                 ", to='" + to + '\'' +
+                ", glossary='" + glossary + '\'' +
                 '}';
     }
 }
