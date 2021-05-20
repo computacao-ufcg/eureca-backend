@@ -1,6 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.core;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
+import br.edu.ufcg.computacao.eureca.backend.constants.PortugueseGlossary;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.MetricSummary;
@@ -50,11 +51,11 @@ public class SubjectsStatisticsController {
 
     public Collection<SubjectsSummaryItemResponse> getSubjectsStatisticsCSV() {
         List<SubjectsSummaryItemResponse> response = new ArrayList<>();
-        response.add(new SubjectsSummaryItemResponse("eda", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2"));
-        response.add(new SubjectsSummaryItemResponse("leda", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2"));
-        response.add(new SubjectsSummaryItemResponse("sistemas operacionais", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2"));
-        response.add(new SubjectsSummaryItemResponse("redes", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2"));
-        response.add(new SubjectsSummaryItemResponse("logica", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2"));
+        response.add(new SubjectsSummaryItemResponse("eda", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2", new PortugueseGlossary()));
+        response.add(new SubjectsSummaryItemResponse("leda", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2", new PortugueseGlossary()));
+        response.add(new SubjectsSummaryItemResponse("sistemas operacionais", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2", new PortugueseGlossary()));
+        response.add(new SubjectsSummaryItemResponse("redes", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2", new PortugueseGlossary()));
+        response.add(new SubjectsSummaryItemResponse("logica", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2", new PortugueseGlossary()));
         return response;
     }
 }

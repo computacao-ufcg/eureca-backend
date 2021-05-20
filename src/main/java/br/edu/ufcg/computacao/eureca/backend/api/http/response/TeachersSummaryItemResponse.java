@@ -1,5 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
+import br.edu.ufcg.computacao.eureca.backend.constants.Glossary;
 import br.edu.ufcg.computacao.eureca.backend.core.models.MetricSummary;
 import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
 
@@ -13,9 +14,10 @@ public class TeachersSummaryItemResponse {
     private int totalEnrollments;
     private String from;
     private String to;
+    private Glossary glossary;
 
     public TeachersSummaryItemResponse(String teacherName, double averageFailDueToGrade, double averageFailDueToAbsences,
-                                       double lockingRate, int totalEnrollments, String from, String to) {
+                                       double lockingRate, int totalEnrollments, String from, String to, Glossary glossary) {
         this.teacherName = teacherName;
         this.averageFailDueToGrade = averageFailDueToGrade;
         this.averageFailDueToAbsences = averageFailDueToAbsences;
@@ -23,6 +25,7 @@ public class TeachersSummaryItemResponse {
         this.totalEnrollments = totalEnrollments;
         this.from = from;
         this.to = to;
+        this.glossary = glossary;
     }
 
     public String getTeacherName() {
@@ -53,6 +56,10 @@ public class TeachersSummaryItemResponse {
         return to;
     }
 
+    public Glossary getGlossary() {
+        return glossary;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -76,6 +83,7 @@ public class TeachersSummaryItemResponse {
                 ", totalEnrollments=" + totalEnrollments +
                 ", from='" + from + '\'' +
                 ", to='" + to + '\'' +
+                ", glossary='" + glossary + '\'' +
                 '}';
     }
 }

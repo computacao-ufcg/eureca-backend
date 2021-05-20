@@ -1,5 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
+import br.edu.ufcg.computacao.eureca.backend.constants.Glossary;
+
 import java.util.Objects;
 
 public class SubjectsSummaryItemResponse {
@@ -13,10 +15,11 @@ public class SubjectsSummaryItemResponse {
     private double relativeRetention;
     private String from;
     private String to;
+    private Glossary glossary;
 
     public SubjectsSummaryItemResponse(String name, double averageSuccess, double averageFailDueToGrade,
                                        double averageFailDueToAbsences, double lockingRate, double absoluteRetention,
-                                       double relativeRetention, String from, String to) {
+                                       double relativeRetention, String from, String to, Glossary glossary) {
         this.name = name;
         this.averageSuccess = averageSuccess;
         this.averageFailDueToGrade = averageFailDueToGrade;
@@ -26,6 +29,7 @@ public class SubjectsSummaryItemResponse {
         this.relativeRetention = relativeRetention;
         this.from = from;
         this.to = to;
+        this.glossary = glossary;
     }
 
     public String getName() {
@@ -64,6 +68,10 @@ public class SubjectsSummaryItemResponse {
         return to;
     }
 
+    public Glossary getGlossary() {
+        return glossary;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -89,6 +97,7 @@ public class SubjectsSummaryItemResponse {
                 ", relativeRetention=" + relativeRetention +
                 ", from='" + from + '\'' +
                 ", to='" + to + '\'' +
+                ", glossary='" + glossary + '\'' +
                 '}';
     }
 }
