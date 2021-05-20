@@ -1,5 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
+import br.edu.ufcg.computacao.eureca.backend.constants.TeachersGlossaryFields;
 import br.edu.ufcg.computacao.eureca.backend.core.models.MetricSummary;
 import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
 
@@ -14,6 +15,7 @@ public class TeachersSummaryResponse {
     private TermCount min;
     private TermCount max;
     private int total;
+    private TeachersGlossaryFields glossary;
 
     public TeachersSummaryResponse(String curriculum, String from, String to, MetricSummary failedDueToAbsences, MetricSummary failedDueToGrade, MetricSummary failedDueToCanceling,
                                    MetricSummary success, TermCount min, TermCount max, int total) {
@@ -79,6 +81,14 @@ public class TeachersSummaryResponse {
 
     public int getTotal() {
         return total;
+    }
+
+    public TeachersGlossaryFields getGlossary() {
+        return glossary;
+    }
+
+    public void setGlossary(TeachersGlossaryFields glossary) {
+        this.glossary = glossary;
     }
 
     @Override
