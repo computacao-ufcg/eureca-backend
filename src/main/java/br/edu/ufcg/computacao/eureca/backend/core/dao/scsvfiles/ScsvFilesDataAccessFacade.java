@@ -52,10 +52,10 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     @Override
     public Collection<ActivesPerTermSummary> getActivesPerTermSummary(String from, String to) {
         Collection<ActivesPerTermSummary> terms = new TreeSet<>();
-        Map<String, Collection<CpfRegistration>> index = indexesHolder.getActiveByAdmissionTerm();
-        Map<CpfRegistration, StudentData> studentsMap = mapsHolder.getMap("students");
+        Map<String, Collection<CpfRegistrationKey>> index = indexesHolder.getActiveByAdmissionTerm();
+        Map<CpfRegistrationKey, StudentData> studentsMap = mapsHolder.getMap("students");
 
-        for (Map.Entry<String, Collection<CpfRegistration>> entry : index.entrySet()) {
+        for (Map.Entry<String, Collection<CpfRegistrationKey>> entry : index.entrySet()) {
             String term = entry.getKey();
             if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
                 RiskClassCountSummary riskClassCount = getRiskClassCountSummary(entry.getValue(), studentsMap);
@@ -69,17 +69,17 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     @Override
     public Collection<AlumniPerTermSummary> getAlumniPerTermSummary(String from, String to) {
         Collection<AlumniPerTermSummary> terms = new TreeSet<>();
-        Map<String, Collection<CpfRegistration>> map = indexesHolder.getAlumniByGraduationTerm();
-        Map<CpfRegistration, StudentData> studentsMap = mapsHolder.getMap("students");
-        for (Map.Entry<String, Collection<CpfRegistration>> entry : map.entrySet()) {
+        Map<String, Collection<CpfRegistrationKey>> map = indexesHolder.getAlumniByGraduationTerm();
+        Map<CpfRegistrationKey, StudentData> studentsMap = mapsHolder.getMap("students");
+        for (Map.Entry<String, Collection<CpfRegistrationKey>> entry : map.entrySet()) {
             String term = entry.getKey();
             if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
-                Collection<CpfRegistration> studentIds = entry.getValue();
+                Collection<CpfRegistrationKey> studentIds = entry.getValue();
                 int termAlumniCount = studentIds.size();
                 double aggregateGPA = 0.0;
                 double aggregateTermsCount = 0.0;
                 double aggregateCost = 0.0;
-                for (CpfRegistration id : studentIds) {
+                for (CpfRegistrationKey id : studentIds) {
                     StudentData alumnus = studentsMap.get(id);
                     aggregateGPA += alumnus.getGpa();
                     aggregateTermsCount += alumnus.getCompletedTerms();
@@ -104,14 +104,14 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     @Override
     public Collection<DropoutPerTermSummary> getDropoutsPerTermSummary(String from, String to) {
         Collection<DropoutPerTermSummary> dropoutSummaryResponses = new TreeSet<>();
-        Map<String, Collection<CpfRegistration>> dropouts = this.indexesHolder.getDropoutByDropoutTerm();
-        Map<CpfRegistration, StudentData> studentsMap = this.mapsHolder.getMap("students");
+        Map<String, Collection<CpfRegistrationKey>> dropouts = this.indexesHolder.getDropoutByDropoutTerm();
+        Map<CpfRegistrationKey, StudentData> studentsMap = this.mapsHolder.getMap("students");
         dropouts.forEach((k, v) -> {
             if (k.compareTo(from) >= 0 && k.compareTo(to) <= 0) {
                 int dropoutsCount[] = new int[SystemConstants.DROPOUT_TYPES_COUNT];
                 double aggregateTermsCount = 0.0;
                 double aggregateCost = 0.0;
-                for (CpfRegistration id : v) {
+                for (CpfRegistrationKey id : v) {
                     StudentData dropout = studentsMap.get(id);
                     dropoutsCount[dropout.getStatusIndex()]++;
                     aggregateTermsCount += dropout.getCompletedTerms();
@@ -130,10 +130,10 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     @Override
     public Collection<DelayedPerTermSummary> getDelayedPerTermSummary(String from, String to) {
         Collection<DelayedPerTermSummary> terms = new TreeSet<>();
-        Map<String, Collection<CpfRegistration>> index = indexesHolder.getActiveByAdmissionTerm();
-        Map<CpfRegistration, StudentData> studentsMap = mapsHolder.getMap("students");
+        Map<String, Collection<CpfRegistrationKey>> index = indexesHolder.getActiveByAdmissionTerm();
+        Map<CpfRegistrationKey, StudentData> studentsMap = mapsHolder.getMap("students");
 
-        for (Map.Entry<String, Collection<CpfRegistration>> entry : index.entrySet()) {
+        for (Map.Entry<String, Collection<CpfRegistrationKey>> entry : index.entrySet()) {
             String term = entry.getKey();
             if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
                 Collection<Student> delayed = new TreeSet<>();
@@ -154,11 +154,11 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         String parsedFrom = "1" + from.substring(2,4) + from.substring(5,6) + "00000";
         String parsedTo = "1" + to.substring(2,4) + to.substring(5,6) + "99999";
         Collection<AlumniDigestResponse> alumniBasicData = new TreeSet<>();
-        Collection<CpfRegistration> alumni = this.indexesHolder.getAlumni();
-        Map<CpfRegistration, StudentData> studentsMap = this.mapsHolder.getMap("students");
-        for (CpfRegistration item : alumni) {
-            if (new Registration(item.getRegistration()).compareTo(new Registration(parsedFrom)) >= 0 &&
-                    new Registration(item.getRegistration()).compareTo(new Registration(parsedTo)) <= 0) {
+        Collection<CpfRegistrationKey> alumni = this.indexesHolder.getAlumni();
+        Map<CpfRegistrationKey, StudentData> studentsMap = this.mapsHolder.getMap("students");
+        for (CpfRegistrationKey item : alumni) {
+            if (new RegistrationKey(item.getRegistration()).compareTo(new RegistrationKey(parsedFrom)) >= 0 &&
+                    new RegistrationKey(item.getRegistration()).compareTo(new RegistrationKey(parsedTo)) <= 0) {
                 StudentData alumnus = studentsMap.get(item);
                 AlumniDigestResponse basicData = new AlumniDigestResponse(item.getRegistration(), alumnus.getName(),
                         2, 1, alumnus.getAdmissionTerm(), alumnus.getStatusTerm());
@@ -169,17 +169,17 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     private void setAttemptedCredits() {
-        Map<Registration, Integer> attemptsSummary = new HashMap<>();
-        Map<RegistrationCodeTerm, Subject> enrollments = this.mapsHolder.getMap("enrollments");
+        Map<RegistrationKey, Integer> attemptsSummary = new HashMap<>();
+        Map<RegistrationCodeTerm, EnrollmentData> enrollments = this.mapsHolder.getMap("enrollments");
         enrollments.forEach((k, v) -> {
             if (!v.getStatus().equals(SystemConstants.EM_CURSO)) {
-                Integer currentCount = attemptsSummary.get(new Registration(k.getRegistration()));
+                Integer currentCount = attemptsSummary.get(new RegistrationKey(k.getRegistration()));
                 if (currentCount == null) {
                     currentCount = v.getCredits();
                 } else {
                     currentCount += v.getCredits();
                 }
-                attemptsSummary.put(new Registration(k.getRegistration()), currentCount);
+                attemptsSummary.put(new RegistrationKey(k.getRegistration()), currentCount);
             }
         });
         attemptsSummary.forEach((k, v) -> {
@@ -193,15 +193,15 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
     @Override
     public Student getStudent(String registration) {
-        Map<String, CpfRegistration> registrationMap = this.indexesHolder.getRegistrationMap();
-        Map<CpfRegistration, StudentData> studentsMap = this.mapsHolder.getMap("students");
-        CpfRegistration key = registrationMap.get(registration);
+        Map<String, CpfRegistrationKey> registrationMap = this.indexesHolder.getRegistrationMap();
+        Map<CpfRegistrationKey, StudentData> studentsMap = this.mapsHolder.getMap("students");
+        CpfRegistrationKey key = registrationMap.get(registration);
         StudentData studentData = studentsMap.get(key);
         return new Student(key, studentData);
     }
 
     private void updateStudent(Student student) {
-        Map<CpfRegistration, StudentData> studentsMap = this.mapsHolder.getMap("students");
+        Map<CpfRegistrationKey, StudentData> studentsMap = this.mapsHolder.getMap("students");
         studentsMap.replace(student.getId(), student.getStudentData());
     }
 
@@ -242,7 +242,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         }
     }
 
-    private RiskClassCountSummary getRiskClassCountSummary(Collection<CpfRegistration> studentIds, Map<CpfRegistration,
+    private RiskClassCountSummary getRiskClassCountSummary(Collection<CpfRegistrationKey> studentIds, Map<CpfRegistrationKey,
             StudentData> studentsMap) {
         int inaccurate = 0;
         int safe = 0;
@@ -251,7 +251,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         int high = 0;
         int unfeasible = 0;
         int notApplicable = 0;
-        for (CpfRegistration id : studentIds) {
+        for (CpfRegistrationKey id : studentIds) {
             Student student = new Student(id, studentsMap.get(id));
             RiskClass riskClass = student.computeRiskClass();
             switch (riskClass) {

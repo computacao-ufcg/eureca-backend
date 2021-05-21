@@ -331,6 +331,6 @@ public class StudentDataResponse implements Comparable {
     @Override
     public int compareTo(Object o) {
         StudentDataResponse other = (StudentDataResponse) o;
-        return (new Registration(this.getRegistration())).compareTo((new Registration(other.getRegistration())));
+        return (new RegistrationKey(this.getRegistration())).compareTo((new RegistrationKey(other.getRegistration())));
     }
 }

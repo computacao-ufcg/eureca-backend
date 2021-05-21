@@ -1,20 +1,20 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
-public class CpfRegistration {
-    String nationalId;
-    String registration;
+public class CpfRegistrationKey {
+    private String nationalId;
+    private String registration;
 
-    public CpfRegistration(String nationalId, String registration) {
+    public CpfRegistrationKey(String nationalId, String registration) {
         this.nationalId = nationalId;
         this.registration = registration;
     }
 
-    public CpfRegistration(CpfRegistration key) {
+    public CpfRegistrationKey(CpfRegistrationKey key) {
         this.nationalId = key.getNationalId();
         this.registration = key.getRegistration();
     }
 
-    public CpfRegistration() {}
+    public CpfRegistrationKey() {}
 
     public String getNationalId() {
         return nationalId;
@@ -46,7 +46,7 @@ public class CpfRegistration {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        CpfRegistration other = (CpfRegistration) obj;
+        CpfRegistrationKey other = (CpfRegistrationKey) obj;
         if (this.registration == null) {
             if (other.getRegistration() != null) return false;
         } else if (this.nationalId == null) {
