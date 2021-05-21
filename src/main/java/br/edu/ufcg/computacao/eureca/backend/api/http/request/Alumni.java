@@ -38,6 +38,7 @@ public class Alumni {
             @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
         try {
+            LOGGER.info(Messages.RECEIVING_GET_ALUMNI);
             Collection<AlumniDigestResponse> alumniBasicData = ApplicationFacade.getInstance().getAlumniBasicData(token, from, to);
             return new ResponseEntity<>(alumniBasicData, HttpStatus.OK);
         } catch (EurecaException e) {

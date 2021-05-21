@@ -39,6 +39,7 @@ public class StudentsStatistics {
             throws EurecaException {
 
         try {
+            LOGGER.info(Messages.RECEIVING_GET_STUDENTS_STATISTICS);
             ActivesSummaryResponse ret = ApplicationFacade.getInstance().getActiveSummary(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
