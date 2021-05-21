@@ -139,7 +139,13 @@ public class ApplicationFacade {
 
     private RSAPublicKey getAsPublicKey() throws EurecaException {
         if (this.asPublicKey == null) {
-            this.asPublicKey = EurecaAsPublicKeyHolder.getInstance().getAsPublicKey();
+            try {
+                this.asPublicKey = EurecaAsPublicKeyHolder.getInstance().getAsPublicKey();
+            } catch (EurecaException e) {
+                LOGGER.info(Messages.COULD_NOT_FETCH_AS_PUBLIC_KEY);
+                this.asPublicKey = null;
+                throw e;
+            }
         }
         return this.asPublicKey;
     }
@@ -149,12 +155,5 @@ public class ApplicationFacade {
         SystemUser requester = AuthenticationUtil.authenticate(keyRSA, token);
         this.authorizationPlugin.isAuthorized(requester, operation);
         return requester;
-    }
-
-    public String getVersionNumber() {
-        String buildNumber = null;
-        buildNumber = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.BUILD_NUMBER_KEY,
-                    ConfigurationPropertyDefaults.BUILD_NUMBER);
-        return SystemConstants.API_VERSION_NUMBER + "-" + buildNumber;
     }
 }

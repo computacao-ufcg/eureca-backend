@@ -3,7 +3,7 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 import io.swagger.annotations.ApiModelProperty;
 
 public class VersionResponse {
-    @ApiModelProperty(example = "v.2.0.0-ms-cd46c62-common-4e0d74e")
+    @ApiModelProperty(example = "1.0.0-eureca-b2a2f14-as-3fc96f0-common-06d8761")
     private String version;
 
     public VersionResponse() {
