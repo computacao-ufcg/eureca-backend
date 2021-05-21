@@ -1,5 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
+import br.edu.ufcg.computacao.eureca.backend.constants.EnrollmentsGlossaryFields;
 import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
 
 public class EnrollmentsSummaryResponse {
@@ -13,6 +14,7 @@ public class EnrollmentsSummaryResponse {
     private double averageClassesPerPeriod;
     private double averageEnrollmentsPerClass;
     private double averageEnrollmentsPerPeriod;
+    private EnrollmentsGlossaryFields glossary;
 
     public EnrollmentsSummaryResponse(String curriculum, String from, String to, int subjects, TermCount max, TermCount min, double averageClassesPerDiscipline, double averageClassesPerPeriod, double averageEnrollmentsPerClass, double averageEnrollmentsPerPeriod) {
         this.curriculum = curriculum;
@@ -77,6 +79,14 @@ public class EnrollmentsSummaryResponse {
 
     public double getAverageEnrollmentsPerPeriod() {
         return averageEnrollmentsPerPeriod;
+    }
+
+    public EnrollmentsGlossaryFields getGlossary() {
+        return glossary;
+    }
+
+    public void setGlossary(EnrollmentsGlossaryFields glossary) {
+        this.glossary = glossary;
     }
 
     @Override
