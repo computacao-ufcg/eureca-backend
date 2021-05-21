@@ -1,7 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
 public class TermCount {
-
     private int count;
     private String term;
 

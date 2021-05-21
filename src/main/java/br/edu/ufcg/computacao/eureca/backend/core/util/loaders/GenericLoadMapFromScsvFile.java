@@ -54,10 +54,12 @@ public class GenericLoadMapFromScsvFile<T extends EurecaMapKey, V extends Eureca
         BufferedReader csvReader = new BufferedReader(new FileReader(numbersFilePath));
         String row = csvReader.readLine();
         csvReader.close();
-        String[] numberFields = row.split(";");
         Set<String> numberFieldsSet = new TreeSet<>();
-        for (int i = 0; i < numberFields.length; i++) {
-            numberFieldsSet.add(numberFields[i]);
+        if (row != null) {
+            String[] numberFields = row.split(";");
+            for (int i = 0; i < numberFields.length; i++) {
+                numberFieldsSet.add(numberFields[i]);
+            }
         }
         return numberFieldsSet;
     }

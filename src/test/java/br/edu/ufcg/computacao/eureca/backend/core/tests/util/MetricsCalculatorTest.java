@@ -199,7 +199,7 @@ public class MetricsCalculatorTest {
     public void computeMetricsSummaryTest() {
         // set up
         List<Student> students = new ArrayList<>();
-        CpfRegistration cpfRegistration = new CpfRegistration("","");
+        CpfRegistrationKey cpfRegistration = new CpfRegistrationKey("","");
         Student student = new Student(cpfRegistration, this.studentData);
         students.add(student);
 

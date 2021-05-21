@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-import br.edu.ufcg.computacao.eureca.backend.core.models.Registration;
+import br.edu.ufcg.computacao.eureca.backend.core.models.RegistrationKey;
 
 public class AlumniDigestResponse implements Comparable {
     private String registration;
@@ -71,6 +71,6 @@ public class AlumniDigestResponse implements Comparable {
     @Override
     public int compareTo(Object o) {
         AlumniDigestResponse other = (AlumniDigestResponse) o;
-        return (new Registration(this.getRegistration())).compareTo((new Registration(other.getRegistration())));
+        return (new RegistrationKey(this.getRegistration())).compareTo((new RegistrationKey(other.getRegistration())));
     }
 }

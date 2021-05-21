@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.tests.models;
 
-import br.edu.ufcg.computacao.eureca.backend.core.models.CpfRegistration;
+import br.edu.ufcg.computacao.eureca.backend.core.models.CpfRegistrationKey;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
@@ -33,10 +33,10 @@ public class StudentTest {
     @Test
     public void getIdTest() {
         // set up
-        CpfRegistration expected = new CpfRegistration("nationalID","registration1");
+        CpfRegistrationKey expected = new CpfRegistrationKey("nationalID","registration1");
 
         // exercise
-        CpfRegistration result = this.student.getId();
+        CpfRegistrationKey result = this.student.getId();
 
         // verify
         Assert.assertEquals(expected, result);
@@ -103,7 +103,7 @@ public class StudentTest {
                                   double iea, int completedTerms, int suspendedTerms, int institutionalTerms,
                                   int mobilityTerms, int enrolledCredits, double admissionGrade) {
 
-        CpfRegistration cpfRegistration = new CpfRegistration(nationalId,registration);
+        CpfRegistrationKey cpfRegistration = new CpfRegistrationKey(nationalId,registration);
         StudentData studentData = new StudentData("x", "x", "x", "x", "x",
                 "x", "x", "x", "Ativo",
                 "VESTIBULAR 2007.2", "x", "x", "x",

@@ -3,15 +3,15 @@ package br.edu.ufcg.computacao.eureca.backend.core.models;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 
 public class Student implements Comparable {
-    private CpfRegistration id;
+    private CpfRegistrationKey id;
     private StudentData data;
 
-    public Student(CpfRegistration id, StudentData data) {
+    public Student(CpfRegistrationKey id, StudentData data) {
         this.id = id;
         this.data = data;
     }
 
-    public CpfRegistration getId() {
+    public CpfRegistrationKey getId() {
         return id;
     }
 
@@ -27,7 +27,7 @@ public class Student implements Comparable {
     @Override
     public int compareTo(Object o) {
         Student other = (Student) o;
-        return (new Registration(this.getId().getRegistration())).
-                compareTo((new Registration(other.getId().getRegistration())));
+        return (new RegistrationKey(this.getId().getRegistration())).
+                compareTo((new RegistrationKey(other.getId().getRegistration())));
     }
 }
