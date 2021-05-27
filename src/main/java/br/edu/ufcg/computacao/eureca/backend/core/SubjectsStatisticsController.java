@@ -1,6 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.core;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectSummaryResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsSummaryItemResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsSummaryResponseOld;
 import br.edu.ufcg.computacao.eureca.backend.constants.PortugueseGlossary;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;

@@ -1,7 +1,5 @@
 package br.edu.ufcg.computacao.eureca.backend.constants;
 
-import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
-
 public class EnrollmentsGlossaryFields {
     Field subjects;
     Field max;

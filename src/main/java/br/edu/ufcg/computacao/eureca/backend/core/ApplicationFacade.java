@@ -5,7 +5,6 @@ import br.edu.ufcg.computacao.eureca.as.core.models.SystemUser;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.constants.*;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EurecaAsPublicKeyHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.holders.PropertiesHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.EurecaOperation;
 import br.edu.ufcg.computacao.eureca.backend.core.plugins.AuthorizationPlugin;
 import br.edu.ufcg.computacao.eureca.common.exceptions.ConfigurationErrorException;
@@ -15,7 +14,6 @@ import br.edu.ufcg.computacao.eureca.common.util.ServiceAsymmetricKeysHolder;
 import org.apache.log4j.Logger;
 
 import java.security.GeneralSecurityException;
-
 import java.security.interfaces.RSAPublicKey;
 import java.util.Collection;
 
@@ -137,6 +135,11 @@ public class ApplicationFacade {
         }
         response.setGlossary(glossaryFields);
         return response;
+    }
+
+    public Collection<TeachersSummaryItemResponse> getTeachersStatisticsCSV(String token, String from, String to, String language) throws EurecaException {
+        authenticateAndAuthorize(token, null);
+        return this.teacherStatisticsController.getTeacherStatisticsCSV();
     }
 
     public EnrollmentsSummaryResponse getEnrollmentsStatistics(String token, String from, String to, String language)
