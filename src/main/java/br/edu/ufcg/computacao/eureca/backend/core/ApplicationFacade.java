@@ -18,7 +18,6 @@ import br.edu.ufcg.computacao.eureca.common.util.ServiceAsymmetricKeysHolder;
 import org.apache.log4j.Logger;
 
 import java.security.GeneralSecurityException;
-
 import java.security.interfaces.RSAPublicKey;
 import java.util.Collection;
 
@@ -142,9 +141,9 @@ public class ApplicationFacade {
         return response;
     }
 
-    public Collection<TeachersSummaryItemResponse> getTeachersStatisticsCSV(String token, String from, String to,
-                                                                            String lang) throws EurecaException {
-        return null;
+    public Collection<TeachersSummaryItemResponse> getTeachersStatisticsCSV(String token, String from, String to, String language) throws EurecaException {
+        authenticateAndAuthorize(token, null);
+        return this.teacherStatisticsController.getTeacherStatisticsCSV();
     }
 
     public EnrollmentsSummaryResponse getEnrollmentsStatistics(String token, String from, String to, String language)
