@@ -10,7 +10,7 @@ public class SubjectsSummaryItemResponse {
     private double averageSuccess;
     private double averageFailDueToGrade;
     private double averageFailDueToAbsences;
-    private double lockingRate;
+    private double suspendedRate;
     private double absoluteRetention;
     private double relativeRetention;
     private String from;
@@ -18,13 +18,13 @@ public class SubjectsSummaryItemResponse {
     private Glossary glossary;
 
     public SubjectsSummaryItemResponse(String name, double averageSuccess, double averageFailDueToGrade,
-                                       double averageFailDueToAbsences, double lockingRate, double absoluteRetention,
+                                       double averageFailDueToAbsences, double suspendedRate, double absoluteRetention,
                                        double relativeRetention, String from, String to, Glossary glossary) {
         this.name = name;
         this.averageSuccess = averageSuccess;
         this.averageFailDueToGrade = averageFailDueToGrade;
         this.averageFailDueToAbsences = averageFailDueToAbsences;
-        this.lockingRate = lockingRate;
+        this.suspendedRate = suspendedRate;
         this.absoluteRetention = absoluteRetention;
         this.relativeRetention = relativeRetention;
         this.from = from;
@@ -48,8 +48,8 @@ public class SubjectsSummaryItemResponse {
         return averageFailDueToAbsences;
     }
 
-    public double getLockingRate() {
-        return lockingRate;
+    public double getSuspendedRate() {
+        return suspendedRate;
     }
 
     public double getAbsoluteRetention() {
@@ -92,7 +92,7 @@ public class SubjectsSummaryItemResponse {
                 ", averageSuccess=" + averageSuccess +
                 ", averageFailDueToGrade=" + averageFailDueToGrade +
                 ", averageFailDueToAbsences=" + averageFailDueToAbsences +
-                ", lockingRate=" + lockingRate +
+                ", lockingRate=" + suspendedRate +
                 ", absoluteRetention=" + absoluteRetention +
                 ", relativeRetention=" + relativeRetention +
                 ", from='" + from + '\'' +

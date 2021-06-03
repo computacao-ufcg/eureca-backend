@@ -8,7 +8,7 @@ public class TeachersSummaryItemResponse {
     private String teacherName;
     private double averageFailDueToGrade;
     private double averageFailDueToAbsences;
-    private double lockingRate;
+    private double suspendedRate;
     private double successRate;
     private int totalEnrollments;
     private String from;
@@ -16,11 +16,11 @@ public class TeachersSummaryItemResponse {
     private Glossary glossary;
 
     public TeachersSummaryItemResponse(String teacherName, double averageFailDueToGrade, double averageFailDueToAbsences,
-                                       double lockingRate, double successRate, int totalEnrollments, String from, String to, Glossary glossary) {
+                                       double suspendedRate, double successRate, int totalEnrollments, String from, String to, Glossary glossary) {
         this.teacherName = teacherName;
         this.averageFailDueToGrade = averageFailDueToGrade;
         this.averageFailDueToAbsences = averageFailDueToAbsences;
-        this.lockingRate = lockingRate;
+        this.suspendedRate = suspendedRate;
         this.successRate = successRate;
         this.totalEnrollments = totalEnrollments;
         this.from = from;
@@ -40,8 +40,8 @@ public class TeachersSummaryItemResponse {
         return averageFailDueToAbsences;
     }
 
-    public double getLockingRate() {
-        return lockingRate;
+    public double getSuspendedRate() {
+        return suspendedRate;
     }
 
     public double getSuccessRate() {
@@ -83,7 +83,7 @@ public class TeachersSummaryItemResponse {
                 "teacherName='" + teacherName + '\'' +
                 ", averageFailDueToGrade=" + averageFailDueToGrade +
                 ", averageFailDueToAbsences=" + averageFailDueToAbsences +
-                ", lockingRate=" + lockingRate +
+                ", lockingRate=" + suspendedRate +
                 ", successRate=" + successRate +
                 ", totalEnrollments=" + totalEnrollments +
                 ", from='" + from + '\'' +
