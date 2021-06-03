@@ -4,8 +4,11 @@ import br.edu.ufcg.computacao.eureca.as.core.AuthenticationUtil;
 import br.edu.ufcg.computacao.eureca.as.core.models.SystemUser;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.constants.*;
+import br.edu.ufcg.computacao.eureca.backend.core.controllers.EnrollmentsStatisticsController;
+import br.edu.ufcg.computacao.eureca.backend.core.controllers.StudentsStatisticsController;
+import br.edu.ufcg.computacao.eureca.backend.core.controllers.SubjectsStatisticsController;
+import br.edu.ufcg.computacao.eureca.backend.core.controllers.TeacherStatisticsController;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EurecaAsPublicKeyHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.holders.PropertiesHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.EurecaOperation;
 import br.edu.ufcg.computacao.eureca.backend.core.plugins.AuthorizationPlugin;
 import br.edu.ufcg.computacao.eureca.common.exceptions.ConfigurationErrorException;
@@ -105,7 +108,7 @@ public class ApplicationFacade {
         switch(language) {
             case SystemConstants.PORTUGUESE:
             default:
-                glossaryFields = new PortugueseGlossary().getGlossary();
+                glossaryFields = new PortugueseStudentsGlossary().getGlossary();
         }
         response.setGlossary(glossaryFields);
         return response;
@@ -133,10 +136,15 @@ public class ApplicationFacade {
         switch(language) {
             case SystemConstants.PORTUGUESE:
             default:
-                glossaryFields = new PortugueseTeacherGlossary().getGlossary();
+                glossaryFields = new PortugueseTeachersGlossary().getGlossary();
         }
         response.setGlossary(glossaryFields);
         return response;
+    }
+
+    public Collection<TeachersSummaryItemResponse> getTeachersStatisticsCSV(String token, String from, String to,
+                                                                            String lang) throws EurecaException {
+        return null;
     }
 
     public EnrollmentsSummaryResponse getEnrollmentsStatistics(String token, String from, String to, String language)

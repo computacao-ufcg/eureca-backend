@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.constants;
 
-public class PortugueseGlossary implements Glossary {
+public class PortugueseStudentsGlossary implements Glossary {
     public GlossaryFields getGlossary() {
         Field active = new Field("Ativo", "Discente regularmente matriculado.");
         Field delayed = new Field("Retido", "Discente com risco de evadir. Esses são os discentes na classe de risco 'Alto' ou 'Inviável'.");

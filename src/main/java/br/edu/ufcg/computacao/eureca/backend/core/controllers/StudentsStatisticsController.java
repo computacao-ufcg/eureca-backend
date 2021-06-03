@@ -1,4 +1,4 @@
-package br.edu.ufcg.computacao.eureca.backend.core;
+package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
@@ -51,9 +51,6 @@ public class StudentsStatisticsController {
         Collection<AlumniPerTermSummary> alumni = this.dataAccessFacade.getAlumniPerTermSummary(from, to);
         Collection<DropoutPerTermSummary> dropouts = this.dataAccessFacade.getDropoutsPerTermSummary(from, to);
         Collection<Student> delayed = this.dataAccessFacade.getDelayed(from, to);
-
-        int alumniCount = this.dataAccessFacade.getAlumni(from, to).size();
-        int activesCount = actives.size();
 
         ActivesSummary activesSummary = this.getActivesSummary(actives);
         AlumniSummary alumniSummary = this.getAlumniSummary(alumni);
