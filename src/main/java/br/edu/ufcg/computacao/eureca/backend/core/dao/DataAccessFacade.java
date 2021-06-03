@@ -25,4 +25,6 @@ public interface DataAccessFacade {
     Collection<AlumniDigestResponse> getAlumniPerStudentSummary(String from, String to);
 
     Student getStudent(String registration);
+
+    Collection<EnrollmentsPerTermSummary> getEnrollmentsPerTerm(String curriculum);
 }
