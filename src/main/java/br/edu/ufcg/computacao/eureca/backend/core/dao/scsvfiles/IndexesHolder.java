@@ -1,9 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
-import br.edu.ufcg.computacao.eureca.backend.core.models.CpfRegistrationKey;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
-import br.edu.ufcg.computacao.eureca.backend.core.models.StudentData;
+import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
+import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import org.apache.log4j.Logger;
 
 import java.util.*;
@@ -12,6 +11,7 @@ public class IndexesHolder {
     private Logger LOGGER = Logger.getLogger(IndexesHolder.class);
 
     private MapsHolder mapsHolder;
+    // Student indexes
     private Map<String, CpfRegistrationKey> registrationMap;
     private List<CpfRegistrationKey> actives;
     private Map<String, Collection<CpfRegistrationKey>> activeByAdmissionTerm;
@@ -23,6 +23,9 @@ public class IndexesHolder {
     private Map<String, Collection<CpfRegistrationKey>> dropoutByLeaveTerm;
     private Map<String, Collection<CpfRegistrationKey>> dropoutByReasonAndAdmissionTerm;
     private Map<String, Collection<CpfRegistrationKey>> dropoutByReasonAndLeaveTerm;
+    // Enrollment indexes
+    private Map<String, Map<String, Map<String, Map<String, ClassEnrollments>>>> enrollmentsPerCurriculumPerSubjectPerTermPerClass;
+    private Map<String, TreeSet<String>> termsPerCurriculum;
 
     public IndexesHolder(MapsHolder mapsHolder) {
         this.mapsHolder = mapsHolder;
@@ -70,6 +73,11 @@ public class IndexesHolder {
     }
 
     private void buildIndexes() {
+        buildStudentIndexes();
+        buildEnrollmentIndexes();
+    }
+
+    private void buildStudentIndexes() {
         this.registrationMap = new HashMap<>();
         this.actives = new ArrayList<>();
         this.activeByAdmissionTerm = new HashMap<>();
@@ -133,6 +141,81 @@ public class IndexesHolder {
         });
     }
 
+    private void buildEnrollmentIndexes() {
+        this.enrollmentsPerCurriculumPerSubjectPerTermPerClass = new HashMap<>();
+        this.termsPerCurriculum = new HashMap<>();
+
+        Map<CpfRegistrationKey, StudentData> studentsMap = this.mapsHolder.getMap("students");
+        Map<RegistrationCodeTermKey, EnrollmentData> mapEnrollments = this.mapsHolder.getMap("enrollments");
+        mapEnrollments.forEach((k, v) -> {
+            CpfRegistrationKey key = registrationMap.get(k.getRegistration());
+            String curriculum = studentsMap.get(key).getCurriculum();
+
+            TreeSet<String> terms = this.termsPerCurriculum.get(curriculum);
+            if (terms == null) terms = new TreeSet<>();
+            terms.add(k.getTerm());
+            this.termsPerCurriculum.put(curriculum, terms);
+
+            ClassEnrollments classEnrollments = new ClassEnrollments();
+            Map<String, ClassEnrollments> enrollementsPerClass = new HashMap<>();
+            Map<String, Map<String, ClassEnrollments>> enrollmentsPerTermPerClass = new HashMap<>();
+            Map<String, Map<String, Map<String, ClassEnrollments>>> enrollmentsPerSubjectPerTermPerClass =
+                    this.enrollmentsPerCurriculumPerSubjectPerTermPerClass.get(curriculum);
+
+            if (enrollmentsPerSubjectPerTermPerClass != null) {
+                enrollmentsPerTermPerClass = enrollmentsPerSubjectPerTermPerClass.get(k.getCode());
+                if (enrollmentsPerTermPerClass != null) {
+                    enrollementsPerClass = enrollmentsPerTermPerClass.get(k.getTerm());
+                    if (enrollementsPerClass != null) {
+                        classEnrollments = enrollementsPerClass.get(v.getClassId());
+                        if (classEnrollments == null) {
+                            enrollementsPerClass.put(v.getClassId(), classEnrollments);
+                        }
+                    } else {
+                        enrollementsPerClass.put(v.getClassId(), classEnrollments);
+                    }
+                } else {
+                    enrollementsPerClass.put(v.getClassId(), classEnrollments);
+                    enrollmentsPerTermPerClass.put(k.getTerm(), enrollementsPerClass);
+                    enrollmentsPerSubjectPerTermPerClass.put(k.getCode(), enrollmentsPerTermPerClass);
+                }
+            } else {
+                this.enrollmentsPerCurriculumPerSubjectPerTermPerClass = new HashMap<>();
+                enrollementsPerClass.put(v.getClassId(), classEnrollments);
+                enrollmentsPerTermPerClass.put(k.getTerm(), enrollementsPerClass);
+                enrollmentsPerSubjectPerTermPerClass.put(k.getCode(), enrollmentsPerTermPerClass);
+                this.enrollmentsPerCurriculumPerSubjectPerTermPerClass.put(curriculum, enrollmentsPerSubjectPerTermPerClass);
+            }
+            addEnrolment(classEnrollments, k.getRegistration(), v.getStatus());
+        });
+    }
+
+    private void addEnrolment(ClassEnrollments classEnrollments, String registration, String status) {
+        switch(status) {
+            case SystemConstants.STATUS_SUCCEEDED:
+                classEnrollments.getSuccess().add(registration);
+                break;
+            case SystemConstants.STATUS_EXEMPTED:
+                classEnrollments.getExempted().add(registration);
+                break;
+            case SystemConstants.STATUS_ONGOING:
+                classEnrollments.getOngoing().add(registration);
+                break;
+            case SystemConstants.STATUS_FAILED_DUE_GRADE:
+                classEnrollments.getFailedDueToGrade().add(registration);
+                break;
+            case SystemConstants.STATUS_FAILED_DUE_ABSENCE:
+                classEnrollments.getFailedDueToAbsence().add(registration);
+                break;
+            case SystemConstants.STATUS_SUSPENDED:
+                classEnrollments.getSuspended().add(registration);
+                break;
+            default:
+                classEnrollments.getCancelled().add(registration);
+                break;
+        }
+    }
+
     public Collection<Student> getAllActives() {
         Collection<Student> allActives = new ArrayList<>();
         Map<CpfRegistrationKey, StudentData> mapStudents = this.mapsHolder.getMap("students");
@@ -158,5 +241,13 @@ public class IndexesHolder {
             allDropouts.add(new Student(k, mapStudents.get(k)));
         });
         return allDropouts;
+    }
+
+    public Map<String, Map<String, Map<String, ClassEnrollments>>> getEnrollmentsPerSubjectPerTermPerClass(String curriculum) {
+        return enrollmentsPerCurriculumPerSubjectPerTermPerClass.get(curriculum);
+    }
+
+    public TreeSet<String> getTermsPerCurriculum(String curriculum) {
+        return termsPerCurriculum.get(curriculum);
     }
 }

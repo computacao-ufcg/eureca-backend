@@ -7,10 +7,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 import org.apache.log4j.Logger;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ScsvFilesDataAccessFacade implements DataAccessFacade {
@@ -170,7 +167,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
     private void setAttemptedCredits() {
         Map<RegistrationKey, Integer> attemptsSummary = new HashMap<>();
-        Map<RegistrationCodeTerm, EnrollmentData> enrollments = this.mapsHolder.getMap("enrollments");
+        Map<RegistrationCodeTermKey, EnrollmentData> enrollments = this.mapsHolder.getMap("enrollments");
         enrollments.forEach((k, v) -> {
             if (!v.getStatus().equals(SystemConstants.EM_CURSO)) {
                 Integer currentCount = attemptsSummary.get(new RegistrationKey(k.getRegistration()));
@@ -198,6 +195,95 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         CpfRegistrationKey key = registrationMap.get(registration);
         StudentData studentData = studentsMap.get(key);
         return new Student(key, studentData);
+    }
+
+    @Override
+    public CurriculumData getCurriculum(String course, String code) {
+        Map<CurriculumKey, CurriculumData> curriculumMap = this.mapsHolder.getMap("curriculum");
+        return curriculumMap.get(new CurriculumKey(course, code));
+    }
+
+    @Override
+    public SubjectData getSubject(String subjectCode) {
+        Map<SubjectKey, SubjectData> subjectMap = this.mapsHolder.getMap("subjects");
+        return subjectMap.get(new SubjectKey(subjectCode));
+    }
+
+    @Override
+    public EnrollmentStatistics getStatisticsSucceeded(String curriculumCode, String subjectCode) {
+        return getStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_SUCCEEDED);
+    }
+
+    @Override
+    public EnrollmentStatistics getStatisticsExempted(String curriculumCode, String subjectCode) {
+        return getStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_EXEMPTED);
+    }
+    @Override
+    public EnrollmentStatistics getStatisticsOngoing(String curriculumCode, String subjectCode) {
+        return getStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_ONGOING);
+    }
+    @Override
+    public EnrollmentStatistics getStatisticsFailedDueToGrade(String curriculumCode, String subjectCode) {
+        return getStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_FAILED_DUE_GRADE);
+    }
+    @Override
+    public EnrollmentStatistics getStatisticsFailedDueToAbsences(String curriculumCode, String subjectCode) {
+        return getStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_FAILED_DUE_ABSENCE);
+    }
+    @Override
+    public EnrollmentStatistics getStatisticsSuspended(String curriculumCode, String subjectCode) {
+        return getStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_SUSPENDED);
+    }
+    @Override
+    public EnrollmentStatistics getStatisticsCancelled(String curriculumCode, String subjectCode) {
+        return getStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_CANCELLED);
+    }
+
+    @Override
+    public TreeSet<String> getTerms(String curriculum) {
+        return this.indexesHolder.getTermsPerCurriculum(curriculum);
+    }
+
+    public EnrollmentStatistics getStatistics(String curriculumCode, String subjectCode, String status) {
+        final int[] min = {Integer.MAX_VALUE};
+        final int[] max = {0};
+        final int[] total = {0};
+        Map<String, Map<String, Map<String, ClassEnrollments>>> allEnrollments =
+                this.indexesHolder.getEnrollmentsPerSubjectPerTermPerClass(curriculumCode);
+        if (allEnrollments != null) {
+            Map<String, Map<String, ClassEnrollments>> enrollments = allEnrollments.get(subjectCode);
+            if (enrollments != null) {
+                enrollments.forEach((term, classes) -> {
+                    classes.forEach((classId, classEnrollments) -> {
+                        int numberOfEnrollments = getClassEnrollmentsPerStatus(classEnrollments, status);
+                        if (min[0] > numberOfEnrollments) min[0] = numberOfEnrollments;
+                        if (max[0] < numberOfEnrollments) max[0] = numberOfEnrollments;
+                        total[0] += numberOfEnrollments;
+                    });
+                });
+            }
+        }
+        EnrollmentStatistics ret = new EnrollmentStatistics(min[0], max[0], total[0]);
+        return ret;
+    }
+
+    private int getClassEnrollmentsPerStatus(ClassEnrollments classEnrollments, String status) {
+        switch(status) {
+            case SystemConstants.STATUS_SUCCEEDED:
+                return classEnrollments.getNumberSucess();
+            case SystemConstants.STATUS_EXEMPTED:
+                return classEnrollments.getNumberExempted();
+            case SystemConstants.STATUS_ONGOING:
+                return classEnrollments.getNumberOngoing();
+            case SystemConstants.STATUS_FAILED_DUE_GRADE:
+                return classEnrollments.getNumberFailedDueToGrade();
+            case SystemConstants.STATUS_FAILED_DUE_ABSENCE:
+                return classEnrollments.getNumberFailedDueToAbsence();
+            case SystemConstants.STATUS_SUSPENDED:
+                return classEnrollments.getNumberSuspended();
+            default:
+                return classEnrollments.getNumberCancelled();
+        }
     }
 
     private void updateStudent(Student student) {

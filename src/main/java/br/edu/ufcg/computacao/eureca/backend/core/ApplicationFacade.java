@@ -116,7 +116,7 @@ public class ApplicationFacade {
     public SubjectSummaryResponse getSubjectsStatistics(String token, String from, String to, String language)
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_STATISTICS);
-        SubjectSummaryResponse response = this.subjectsStatisticsController.getSubjectStatisticsMock();
+        SubjectSummaryResponse response = this.subjectsStatisticsController.getSubjectStatistics();
         SubjectsGlossaryFields glossaryFields = null;
         switch(language) {
             case SystemConstants.PORTUGUESE:

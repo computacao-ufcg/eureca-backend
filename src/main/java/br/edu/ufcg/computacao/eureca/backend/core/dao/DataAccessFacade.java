@@ -1,9 +1,10 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
+import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 
 import java.util.Collection;
+import java.util.TreeSet;
 
 public interface DataAccessFacade {
     Collection<Student> getActives(String from, String to);
@@ -25,4 +26,24 @@ public interface DataAccessFacade {
     Collection<AlumniDigestResponse> getAlumniPerStudentSummary(String from, String to);
 
     Student getStudent(String registration);
+
+    CurriculumData getCurriculum(String course, String curriculumCode);
+
+    SubjectData getSubject(String subjectCode);
+
+    EnrollmentStatistics getStatisticsSucceeded(String curriculumCode, String subjectCode);
+
+    EnrollmentStatistics getStatisticsExempted(String curriculumCode, String subjectCode);
+
+    EnrollmentStatistics getStatisticsOngoing(String curriculumCode, String subjectCode);
+
+    EnrollmentStatistics getStatisticsFailedDueToGrade(String curriculumCode, String subjectCode);
+
+    EnrollmentStatistics getStatisticsFailedDueToAbsences(String curriculumCode, String subjectCode);
+
+    EnrollmentStatistics getStatisticsSuspended(String curriculumCode, String subjectCode);
+
+    EnrollmentStatistics getStatisticsCancelled(String curriculumCode, String subjectCode);
+
+    TreeSet<String> getTerms(String curriculumCode);
 }
