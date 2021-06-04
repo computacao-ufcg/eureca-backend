@@ -2,18 +2,18 @@ package br.edu.ufcg.computacao.eureca.backend.core.models;
 
 import java.util.Objects;
 
-public class RegistrationCodeTerm {
+public class RegistrationCodeTermKey {
     private String registration;
     private String code;
     private String term;
 
-    public RegistrationCodeTerm(String registration, String code, String term) {
+    public RegistrationCodeTermKey(String registration, String code, String term) {
         this.registration = registration;
         this.code = code;
         this.term = term;
     }
 
-    public RegistrationCodeTerm() {
+    public RegistrationCodeTermKey() {
     }
 
     public String getRegistration() {
@@ -44,7 +44,7 @@ public class RegistrationCodeTerm {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RegistrationCodeTerm that = (RegistrationCodeTerm) o;
+        RegistrationCodeTermKey that = (RegistrationCodeTermKey) o;
         return Objects.equals(getRegistration(), that.getRegistration()) &&
                 Objects.equals(getCode(), that.getCode()) &&
                 Objects.equals(getTerm(), that.getTerm());

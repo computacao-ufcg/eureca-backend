@@ -1,7 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectSummaryResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsSummaryResponseOld;
 import br.edu.ufcg.computacao.eureca.backend.core.models.MetricSummary;
 import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectStatisticsItem;
 import org.junit.Assert;

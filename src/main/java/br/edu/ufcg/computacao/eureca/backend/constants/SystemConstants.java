@@ -32,4 +32,11 @@ public class SystemConstants {
     public static final String LAST_POSSIBLE_TERM = "2049.9";
     public static final String EM_CURSO = "Em Curso";
     public static final String PORTUGUESE = "PORTUGUESE";
+    public static final String STATUS_SUCCEEDED = "Aprovado";
+    public static final String STATUS_CANCELLED = "Cancelado";
+    public static final String STATUS_EXEMPTED = "Dispensa";
+    public static final String STATUS_ONGOING = "Em Curso";
+    public static final String STATUS_FAILED_DUE_GRADE = "Reprovado";
+    public static final String STATUS_FAILED_DUE_ABSENCE = "Reprovado por Falta";
+    public static final String STATUS_SUSPENDED = "Trancado";
 }
