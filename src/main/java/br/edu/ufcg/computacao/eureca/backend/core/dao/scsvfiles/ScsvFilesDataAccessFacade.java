@@ -20,7 +20,6 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     public ScsvFilesDataAccessFacade(String mapsListFile) {
         this.mapsHolder = new MapsHolder(mapsListFile);
         this.indexesHolder = new IndexesHolder(this.mapsHolder);
-        setAttemptedCredits();
     }
 
     @Override
@@ -177,29 +176,6 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return alumniBasicData;
     }
 
-    private void setAttemptedCredits() {
-        Map<Registration, Integer> attemptsSummary = new HashMap<>();
-        Map<RegistrationCodeTermKey, EnrollmentData> enrollments = this.mapsHolder.getMap("enrollments");
-        enrollments.forEach((k, v) -> {
-            if (!v.getStatus().equals(SystemConstants.EM_CURSO)) {
-                Integer currentCount = attemptsSummary.get(k.getRegistration());
-                if (currentCount == null) {
-                    currentCount = v.getCredits();
-                } else {
-                    currentCount += v.getCredits();
-                }
-                attemptsSummary.put(new Registration(k.getRegistration()), currentCount);
-            }
-        });
-        attemptsSummary.forEach((k, v) -> {
-            Student student = getStudent(k.getRegistration());
-            if (student != null) {
-                student.setAttemptedCredits(v.intValue());
-                updateStudent(new NationalIdRegistrationKey(student), new StudentData(student));
-            }
-        });
-    }
-
     @Override
     public Student getStudent(String registration) {
         Map<String, NationalIdRegistrationKey> registrationMap = this.indexesHolder.getRegistrationMap();
@@ -305,11 +281,6 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             default:
                 return classEnrollments.getNumberCancelled();
         }
-    }
-
-    private void updateStudent(NationalIdRegistrationKey studentKey, StudentData student) {
-        Map<NationalIdRegistrationKey, StudentData> studentsMap = this.mapsHolder.getMap("students");
-        studentsMap.replace(studentKey, student);
     }
 
     private Collection<Student> getFilteredStudents(StudentClassification status, String from, String to) {
