@@ -7,6 +7,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Natio
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.RegistrationCodeTermKey;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
 import br.edu.ufcg.computacao.eureca.backend.core.models.ClassEnrollments;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Registration;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import org.apache.log4j.Logger;
 
@@ -16,6 +17,9 @@ public class IndexesHolder {
     private Logger LOGGER = Logger.getLogger(IndexesHolder.class);
 
     private MapsHolder mapsHolder;
+    // Map instances
+    private Map<NationalIdRegistrationKey, StudentData> studentsMap;
+    private Map<RegistrationCodeTermKey, EnrollmentData> enrollmentsMap;
     // Student indexes
     private Map<String, NationalIdRegistrationKey> registrationMap;
     private List<NationalIdRegistrationKey> actives;
@@ -35,6 +39,8 @@ public class IndexesHolder {
 
     public IndexesHolder(MapsHolder mapsHolder) {
         this.mapsHolder = mapsHolder;
+        this.studentsMap = this.mapsHolder.getMap("students");
+        this.enrollmentsMap = this.mapsHolder.getMap("enrollments");
         buildIndexes();
     }
 
@@ -95,8 +101,7 @@ public class IndexesHolder {
         this.dropoutByLeaveTerm = new HashMap<>();
         this.dropoutByReasonAndAdmissionTerm = new HashMap<>();
         this.dropoutByReasonAndLeaveTerm = new HashMap<>();
-        Map<NationalIdRegistrationKey, StudentData> mapStudents = this.mapsHolder.getMap("students");
-        mapStudents.forEach((k, v) -> {
+        this.studentsMap.forEach((k, v) -> {
             this.registrationMap.put(k.getRegistration(), k);
             if (v.isActive()) {
                 LOGGER.debug(String.format(Messages.INDEX_ACTIVE_S, v.getName()));
@@ -151,12 +156,11 @@ public class IndexesHolder {
         this.enrollmentsPerCurriculumPerSubjectPerTermPerClass = new HashMap<>();
         this.termsPerCurriculum = new HashMap<>();
         this.numberOfClasses = new HashMap<>();
+        Map<Registration, Integer> attemptsSummary = new HashMap<>();
 
-        Map<NationalIdRegistrationKey, StudentData> studentsMap = this.mapsHolder.getMap("students");
-        Map<RegistrationCodeTermKey, EnrollmentData> mapEnrollments = this.mapsHolder.getMap("enrollments");
-        mapEnrollments.forEach((k, v) -> {
+        this.enrollmentsMap.forEach((k, v) -> {
             NationalIdRegistrationKey key = registrationMap.get(k.getRegistration());
-            String curriculum = studentsMap.get(key).getCurriculum();
+            String curriculum = getStudentCurriculum(key);
 
             TreeSet<String> terms = this.termsPerCurriculum.get(curriculum);
             if (terms == null) terms = new TreeSet<>();
@@ -192,6 +196,27 @@ public class IndexesHolder {
             enrollmentsPerTermPerClass.put(k.getTerm(), enrollementsPerClass);
             enrollmentsPerSubjectPerTermPerClass.put(k.getCode(), enrollmentsPerTermPerClass);
             this.enrollmentsPerCurriculumPerSubjectPerTermPerClass.put(curriculum, enrollmentsPerSubjectPerTermPerClass);
+
+            if (!v.getStatus().equals(SystemConstants.EM_CURSO)) {
+                Integer currentCount = attemptsSummary.get(k.getRegistration());
+                if (currentCount == null) {
+                    currentCount = v.getCredits();
+                } else {
+                    currentCount += v.getCredits();
+                }
+                attemptsSummary.put(new Registration(k.getRegistration()), currentCount);
+            }
+        });
+//        this.numberOfClasses.forEach((k,v) -> {
+//            System.out.println(String.format("%s: %d", k, v.intValue()));
+//        });
+        attemptsSummary.forEach((k, v) -> {
+            NationalIdRegistrationKey key = registrationMap.get(k.getRegistration());
+            StudentData student = getStudent(key);
+            if (student != null) {
+                student.setAttemptedCredits(v.intValue());
+                updateStudent(key, student);
+            }
         });
     }
 
@@ -219,6 +244,18 @@ public class IndexesHolder {
                 classEnrollments.getCancelled().add(registration);
                 break;
         }
+    }
+
+    private StudentData getStudent(NationalIdRegistrationKey key) {
+        return this.studentsMap.get(key);
+    }
+
+    private void updateStudent(NationalIdRegistrationKey studentKey, StudentData student) {
+        this.studentsMap.replace(studentKey, student);
+    }
+
+    private String getStudentCurriculum(NationalIdRegistrationKey key) {
+        return this.studentsMap.get(key).getCurriculum();
     }
 
     public Collection<Student> getAllActives() {
