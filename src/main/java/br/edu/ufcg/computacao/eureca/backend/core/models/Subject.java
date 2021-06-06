@@ -1,17 +1,24 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
-public class SubjectData {
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class Subject {
+    private String code;
     private String academicUnit;
     private String type;
     private int credits;
     private int hours;
     private String name;
     private String equivalentCodes;
+    private Collection<String> equivalentCodesList;
     private String idealTerm;
     private String preRequirements;
+    private Collection<String> preRequirementsList;
 
-    public SubjectData(String academicUnit, String type, int credits, int hours, String name, String equivalentCodes,
-                       String idealTerm, String preRequirements) {
+    public Subject(String code, String academicUnit, String type, int credits, int hours, String name,
+                   String equivalentCodes, String idealTerm, String preRequirements) {
+        this.code = code;
         this.academicUnit = academicUnit;
         this.type = type;
         this.credits = credits;
@@ -22,7 +29,12 @@ public class SubjectData {
         this.preRequirements = preRequirements;
     }
 
-    public SubjectData() {
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getAcademicUnit() {
@@ -87,5 +99,43 @@ public class SubjectData {
 
     public void setPreRequirements(String preRequirements) {
         this.preRequirements = preRequirements;
+    }
+
+    public Collection<String> getEquivalentCodesList() {
+        if (equivalentCodesList == null) {
+            equivalentCodesList = extractStrList(equivalentCodes);
+        }
+        return equivalentCodesList;
+    }
+
+    public Collection<String> getPreRequirementsList() {
+        if (preRequirementsList == null) {
+            preRequirementsList = extractStrList(preRequirements);
+        }
+        return preRequirementsList;
+    }
+
+    private Collection<String> extractStrList(String subjectsStr) {
+        String creditsArray[] = subjectsStr.split(",");
+        ArrayList<String> ret = new ArrayList<>();
+        for (int i =0; i < creditsArray.length; i++) {
+            ret.add(creditsArray[i]);
+        }
+        return ret;
+    }
+
+    @Override
+    public String toString() {
+        return "Subject{" +
+                "code='" + code + '\'' +
+                ", academicUnit='" + academicUnit + '\'' +
+                ", type='" + type + '\'' +
+                ", credits=" + credits +
+                ", hours=" + hours +
+                ", name='" + name + '\'' +
+                ", equivalentCodes='" + equivalentCodes + '\'' +
+                ", idealTerm='" + idealTerm + '\'' +
+                ", preRequirements='" + preRequirements + '\'' +
+                '}';
     }
 }

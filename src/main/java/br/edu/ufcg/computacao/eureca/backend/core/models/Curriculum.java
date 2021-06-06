@@ -1,11 +1,11 @@
-package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
-
-import br.edu.ufcg.computacao.eureca.backend.core.models.Curriculum;
+package br.edu.ufcg.computacao.eureca.backend.core.models;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class CurriculumData implements EurecaMapValue {
+public class Curriculum {
+    private String course;
+    private String code;
     private String idealMandatoryCredits;
     private Collection<Integer> idealMandatoryCreditsList;
     private String idealOptionalCredits;
@@ -35,13 +35,15 @@ public class CurriculumData implements EurecaMapValue {
     private String complementaryActivities;
     private Collection<String> complementaryActivitiesList;
 
-    public CurriculumData(String idealMandatoryCredits, String idealOptionalCredits, String idealElectiveCredits,
-                          String idealComplementaryCredits, int minMandatoryCreditsNeeded, int minOptionalCreditsNeeded,
-                          int minElectiveCreditsNeeded, int minComplementaryCreditsNeeded, int minActivitiesNeeded,
-                          int minNumberOfTerms, int maxNumberOfTerms, int minNumberOfEnrolledCredits,
-                          int maxNumberOfEnrolledCredits, int exceptionalAdditionalEnrolledCredits,
-                          String mandatorySubjects, String optionalSubjects, String electiveSubjects,
-                          String complementarySubjects, String complementaryActivities) {
+    public Curriculum(String course, String code, String idealMandatoryCredits, String idealOptionalCredits,
+                      String idealElectiveCredits, String idealComplementaryCredits, int minMandatoryCreditsNeeded,
+                      int minOptionalCreditsNeeded, int minElectiveCreditsNeeded, int minComplementaryCreditsNeeded,
+                      int minActivitiesNeeded, int minNumberOfTerms, int maxNumberOfTerms, int minNumberOfEnrolledCredits,
+                      int maxNumberOfEnrolledCredits, int exceptionalAdditionalEnrolledCredits,
+                      String mandatorySubjects, String optionalSubjects, String electiveSubjects,
+                      String complementarySubjects, String complementaryActivities) {
+        this.course = course;
+        this.code = code;
         this.idealMandatoryCredits = idealMandatoryCredits;
         this.idealOptionalCredits = idealOptionalCredits;
         this.idealElectiveCredits = idealElectiveCredits;
@@ -72,7 +74,23 @@ public class CurriculumData implements EurecaMapValue {
         this.complementaryActivitiesList = null;
     }
 
-    public CurriculumData() {
+    public Curriculum() {
+    }
+
+    public String getCourse() {
+        return course;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getIdealMandatoryCredits() {
@@ -290,15 +308,6 @@ public class CurriculumData implements EurecaMapValue {
         return complementaryActivitiesList;
     }
 
-    public Curriculum getCurriculum(CurriculumKey key) {
-        return new Curriculum(key.getCourse(), key.getCode(), getIdealMandatoryCredits(), getIdealOptionalCredits(),
-                getIdealElectiveCredits(), getIdealComplementaryCredits(), getMinMandatoryCreditsNeeded(),
-                getMinOptionalCreditsNeeded(), getMinElectiveCreditsNeeded(), getMinComplementaryCreditsNeeded(),
-                getMinActivitiesNeeded(), getMinNumberOfTerms(), getMaxNumberOfTerms(), getMinNumberOfEnrolledCredits(),
-                getMaxNumberOfEnrolledCredits(), getExceptionalAdditionalEnrolledCredits(), getMandatorySubjects(),
-                getOptionalSubjects(), getElectiveSubjects(), getComplementarySubjects(), getComplementaryActivities());
-    }
-
     private Collection<Integer> extractIntegerList(String idealCreditsStr) {
         String creditsArray[] = idealCreditsStr.split(",");
         ArrayList<Integer> ret = new ArrayList<>();
@@ -315,5 +324,32 @@ public class CurriculumData implements EurecaMapValue {
             ret.add(creditsArray[i]);
         }
         return ret;
+    }
+
+    @Override
+    public String toString() {
+        return "Curriculum{" +
+                "course='" + course + '\'' +
+                ", code='" + code + '\'' +
+                ", idealMandatoryCredits='" + idealMandatoryCredits + '\'' +
+                ", idealOptionalCredits='" + idealOptionalCredits + '\'' +
+                ", idealElectiveCredits='" + idealElectiveCredits + '\'' +
+                ", idealComplementaryCredits='" + idealComplementaryCredits + '\'' +
+                ", minMandatoryCreditsNeeded=" + minMandatoryCreditsNeeded +
+                ", minOptionalCreditsNeeded=" + minOptionalCreditsNeeded +
+                ", minElectiveCreditsNeeded=" + minElectiveCreditsNeeded +
+                ", minComplementaryCreditsNeeded=" + minComplementaryCreditsNeeded +
+                ", minActivitiesNeeded=" + minActivitiesNeeded +
+                ", minNumberOfTerms=" + minNumberOfTerms +
+                ", maxNumberOfTerms=" + maxNumberOfTerms +
+                ", minNumberOfEnrolledCredits=" + minNumberOfEnrolledCredits +
+                ", maxNumberOfEnrolledCredits=" + maxNumberOfEnrolledCredits +
+                ", exceptionalAdditionalEnrolledCredits=" + exceptionalAdditionalEnrolledCredits +
+                ", mandatorySubjects='" + mandatorySubjects + '\'' +
+                ", optionalSubjects='" + optionalSubjects + '\'' +
+                ", electiveSubjects='" + electiveSubjects + '\'' +
+                ", complementarySubjects='" + complementarySubjects + '\'' +
+                ", complementaryActivities='" + complementaryActivities + '\'' +
+                '}';
     }
 }

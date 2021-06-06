@@ -1,8 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
 public class SubjectStatisticsItem {
-    private int hours;
-    private int credits;
     private int disciplines;
     private MetricSummary failedDueToAbsences;
     private MetricSummary failedDueToGrade;
@@ -11,11 +9,9 @@ public class SubjectStatisticsItem {
     private MetricSummary relativeRetention;
     private MetricSummary absoluteRetention;
 
-    public SubjectStatisticsItem(int hours, int credits, int disciplines, MetricSummary failedDueToAbsences,
+    public SubjectStatisticsItem(int disciplines, MetricSummary failedDueToAbsences,
                                  MetricSummary failedDueToGrade, MetricSummary failedDueToCanceling, MetricSummary success, MetricSummary relativeRetention,
                                  MetricSummary absoluteRetention) {
-        this.hours = hours;
-        this.credits = credits;
         this.disciplines = disciplines;
         this.failedDueToAbsences = failedDueToAbsences;
         this.failedDueToGrade = failedDueToGrade;
@@ -23,22 +19,6 @@ public class SubjectStatisticsItem {
         this.success = success;
         this.relativeRetention = relativeRetention;
         this.absoluteRetention = absoluteRetention;
-    }
-
-    public int getHours() {
-        return hours;
-    }
-
-    public void setHours(int hours) {
-        this.hours = hours;
-    }
-
-    public int getCredits() {
-        return credits;
-    }
-
-    public void setCredits(int credits) {
-        this.credits = credits;
     }
 
     public int getDisciplines() {
@@ -96,6 +76,4 @@ public class SubjectStatisticsItem {
     public void setAbsoluteRetention(MetricSummary absoluteRetention) {
         this.absoluteRetention = absoluteRetention;
     }
-
-
 }
