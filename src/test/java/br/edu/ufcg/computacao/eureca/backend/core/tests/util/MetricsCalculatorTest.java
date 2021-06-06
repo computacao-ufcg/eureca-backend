@@ -2,8 +2,13 @@ package br.edu.ufcg.computacao.eureca.backend.core.tests.util;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.MetricsSummary;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
-import br.edu.ufcg.computacao.eureca.backend.core.models.*;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.NationalIdRegistrationKey;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
+import br.edu.ufcg.computacao.eureca.backend.core.models.CostClass;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Metrics;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
+import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 import org.junit.Assert;
 import org.junit.Before;
@@ -50,7 +55,11 @@ public class MetricsCalculatorTest {
         Metrics expected = new Metrics(0,0,-1,0,-1,18.5,11,1);
 
         // exercise
-        Metrics result = MetricsCalculator.computeMetrics(this.studentData);
+        int attemptedCredits = this.studentData.getAttemptedCredits();
+        int termsAccounted = this.studentData.getCompletedTerms() + this.studentData.getInstitutionalTerms() + this.studentData.getInstitutionalTerms();
+        int completedCredits = this.studentData.getCompletedCredits();
+
+        Metrics result = MetricsCalculator.computeMetrics(attemptedCredits, termsAccounted, completedCredits);
 
         // verify
         Assert.assertEquals(expected.getAttemptedCredits(), result.getAttemptedCredits(), 0.1);
@@ -199,8 +208,8 @@ public class MetricsCalculatorTest {
     public void computeMetricsSummaryTest() {
         // set up
         List<Student> students = new ArrayList<>();
-        CpfRegistrationKey cpfRegistration = new CpfRegistrationKey("","");
-        Student student = new Student(cpfRegistration, this.studentData);
+        NationalIdRegistrationKey cpfRegistration = new NationalIdRegistrationKey("","");
+        Student student = this.studentData.createStudent(cpfRegistration);
         students.add(student);
 
         // exercise

@@ -27,9 +27,9 @@ public interface DataAccessFacade {
 
     Student getStudent(String registration);
 
-    CurriculumData getCurriculum(String course, String curriculumCode);
+    Curriculum getCurriculum(String course, String curriculumCode);
 
-    SubjectData getSubject(String subjectCode);
+    Subject getSubject(String subjectCode);
 
     EnrollmentStatistics getStatisticsSucceeded(String curriculumCode, String subjectCode);
 
@@ -45,5 +45,7 @@ public interface DataAccessFacade {
 
     EnrollmentStatistics getStatisticsCancelled(String curriculumCode, String subjectCode);
 
-    TreeSet<String> getTerms(String curriculumCode);
+    TreeSet<String> getTermsForCurriculum(String curriculumCode);
+
+    int getNumberOfClassesPerSubject(String curriculumCode, String subjectCode);
 }

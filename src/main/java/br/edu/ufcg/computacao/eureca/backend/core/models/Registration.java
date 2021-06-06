@@ -2,14 +2,14 @@ package br.edu.ufcg.computacao.eureca.backend.core.models;
 
 import java.util.Objects;
 
-public class RegistrationKey implements Comparable {
-    private String registration;
+public class Registration implements Comparable {
+    String registration;
 
-    public RegistrationKey(String registration) {
+    public Registration(String registration) {
         this.registration = registration;
     }
 
-    public RegistrationKey() {}
+    public Registration() {}
 
     public String getRegistration() {
         return registration;
@@ -23,7 +23,7 @@ public class RegistrationKey implements Comparable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RegistrationKey that = (RegistrationKey) o;
+        Registration that = (Registration) o;
         return Objects.equals(getRegistration(), that.getRegistration());
     }
 
@@ -39,7 +39,7 @@ public class RegistrationKey implements Comparable {
 
     @Override
     public int compareTo(Object o) {
-        RegistrationKey other = (RegistrationKey) o;
+        Registration other = (Registration) o;
         String parsedRegistration = getParsedRegistration(this.getRegistration());
         String otherParsedRegistration = getParsedRegistration(other.getRegistration());
         return parsedRegistration.compareTo(otherParsedRegistration);

@@ -36,30 +36,30 @@ public class StudentDataResponse implements Comparable {
     private RiskClass riskClass;
     private CostClass costClass;
 
-    public StudentDataResponse(String registration, StudentData studentData) {
-        this.registration = registration;
-        this.name = studentData.getName();
-        this.gender = studentData.getGender();
-        this.maritalStatus = studentData.getMaritalStatus();
-        this.curriculum = studentData.getCurriculum();
-        this.affirmativePolicy = studentData.getAffirmativePolicy();
-        this.admissionType = studentData.getAdmissionStr();
-        this.admissionTerm = studentData.getAdmissionTerm();
-        this.statusStr = studentData.getStatusStr();
-        this.statusTerm = studentData.getStatusTerm();
-        this.entryGrade = studentData.getAdmissionGrade();
-        this.gpa = studentData.getGpa();
-        this.iea = studentData.getIea();
-        this.mc = studentData.getMc();
-        this.mandatoryCredits = studentData.getMandatoryCredits();
-        this.complementaryCredits = studentData.getComplementaryCredits();
-        this.electiveCredits = studentData.getElectiveCredits();
-        this.completedTerms = studentData.getCompletedTerms();
-        this.attemptedCredits = studentData.getAttemptedCredits();
-        this.institutionalEnrollments = studentData.getInstitutionalTerms();
-        this.mobilityTerms = studentData.getMobilityTerms();
-        this.suspendedTerms = studentData.getSuspendedTerms();
-        Metrics metrics = MetricsCalculator.computeMetrics(studentData);
+    public StudentDataResponse(Student student) {
+        this.registration = student.getRegistration().toString();
+        this.name = student.getName();
+        this.gender = student.getGender();
+        this.maritalStatus = student.getMaritalStatus();
+        this.curriculum = student.getCurriculum();
+        this.affirmativePolicy = student.getAffirmativePolicy();
+        this.admissionType = student.getAdmissionStr();
+        this.admissionTerm = student.getAdmissionTerm();
+        this.statusStr = student.getStatusStr();
+        this.statusTerm = student.getStatusTerm();
+        this.entryGrade = student.getAdmissionGrade();
+        this.gpa = student.getGpa();
+        this.iea = student.getIea();
+        this.mc = student.getMc();
+        this.mandatoryCredits = student.getMandatoryCredits();
+        this.complementaryCredits = student.getComplementaryCredits();
+        this.electiveCredits = student.getElectiveCredits();
+        this.completedTerms = student.getCompletedTerms();
+        this.attemptedCredits = student.getAttemptedCredits();
+        this.institutionalEnrollments = student.getInstitutionalTerms();
+        this.mobilityTerms = student.getMobilityTerms();
+        this.suspendedTerms = student.getSuspendedTerms();
+        Metrics metrics = MetricsCalculator.computeMetrics(student);
         this.feasibility = metrics.getFeasibility();
         this.successRate = metrics.getSuccessRate();
         this.averageLoad = metrics.getAverageLoad();
@@ -67,7 +67,7 @@ public class StudentDataResponse implements Comparable {
         this.pace = metrics.getPace();
         this.courseDurationPrediction = metrics.getCourseDurationPrediction();
         this.risk = metrics.getRisk();
-        if (studentData.isActive()) {
+        if (student.isActive()) {
             this.riskClass = MetricsCalculator.computeRiskClass(metrics.getRisk());
         } else {
             this.riskClass = RiskClass.NOT_APPLICABLE;
@@ -331,6 +331,6 @@ public class StudentDataResponse implements Comparable {
     @Override
     public int compareTo(Object o) {
         StudentDataResponse other = (StudentDataResponse) o;
-        return (new RegistrationKey(this.getRegistration())).compareTo((new RegistrationKey(other.getRegistration())));
+        return (new Registration(this.getRegistration())).compareTo((new Registration(other.getRegistration())));
     }
 }

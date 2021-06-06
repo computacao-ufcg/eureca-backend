@@ -2,7 +2,12 @@ package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
-import br.edu.ufcg.computacao.eureca.backend.core.models.*;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.EnrollmentData;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.NationalIdRegistrationKey;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.RegistrationCodeTermKey;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
+import br.edu.ufcg.computacao.eureca.backend.core.models.ClassEnrollments;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import org.apache.log4j.Logger;
 
 import java.util.*;
@@ -12,63 +17,64 @@ public class IndexesHolder {
 
     private MapsHolder mapsHolder;
     // Student indexes
-    private Map<String, CpfRegistrationKey> registrationMap;
-    private List<CpfRegistrationKey> actives;
-    private Map<String, Collection<CpfRegistrationKey>> activeByAdmissionTerm;
-    private List<CpfRegistrationKey> alumni;
-    private Map<String, Collection<CpfRegistrationKey>> alumniByAdmissionTerm;
-    private Map<String, Collection<CpfRegistrationKey>> alumniByGraduationTerm;
-    private List<CpfRegistrationKey> dropouts;
-    private Map<String, Collection<CpfRegistrationKey>> dropoutByAdmissionTerm;
-    private Map<String, Collection<CpfRegistrationKey>> dropoutByLeaveTerm;
-    private Map<String, Collection<CpfRegistrationKey>> dropoutByReasonAndAdmissionTerm;
-    private Map<String, Collection<CpfRegistrationKey>> dropoutByReasonAndLeaveTerm;
+    private Map<String, NationalIdRegistrationKey> registrationMap;
+    private List<NationalIdRegistrationKey> actives;
+    private Map<String, Collection<NationalIdRegistrationKey>> activeByAdmissionTerm;
+    private List<NationalIdRegistrationKey> alumni;
+    private Map<String, Collection<NationalIdRegistrationKey>> alumniByAdmissionTerm;
+    private Map<String, Collection<NationalIdRegistrationKey>> alumniByGraduationTerm;
+    private List<NationalIdRegistrationKey> dropouts;
+    private Map<String, Collection<NationalIdRegistrationKey>> dropoutByAdmissionTerm;
+    private Map<String, Collection<NationalIdRegistrationKey>> dropoutByLeaveTerm;
+    private Map<String, Collection<NationalIdRegistrationKey>> dropoutByReasonAndAdmissionTerm;
+    private Map<String, Collection<NationalIdRegistrationKey>> dropoutByReasonAndLeaveTerm;
     // Enrollment indexes
     private Map<String, Map<String, Map<String, Map<String, ClassEnrollments>>>> enrollmentsPerCurriculumPerSubjectPerTermPerClass;
     private Map<String, TreeSet<String>> termsPerCurriculum;
+    private Map<String, Integer> numberOfClasses;
 
     public IndexesHolder(MapsHolder mapsHolder) {
         this.mapsHolder = mapsHolder;
         buildIndexes();
     }
 
-    public Map<String, CpfRegistrationKey> getRegistrationMap() {
+    public Map<String, NationalIdRegistrationKey> getRegistrationMap() {
         return registrationMap;
     }
 
-    public Map<String, Collection<CpfRegistrationKey>> getActiveByAdmissionTerm() {
+    public Map<String, Collection<NationalIdRegistrationKey>> getActiveByAdmissionTerm() {
         return activeByAdmissionTerm;
     }
 
-    public List<CpfRegistrationKey> getAlumni() {
+    public List<NationalIdRegistrationKey> getAlumni() {
         return alumni;
     }
 
-    public Map<String, Collection<CpfRegistrationKey>> getAlumniByAdmissionTerm() {
+    public Map<String, Collection<NationalIdRegistrationKey>> getAlumniByAdmissionTerm() {
         return alumniByAdmissionTerm;
     }
 
-    public Map<String, Collection<CpfRegistrationKey>> getAlumniByGraduationTerm() {
+    public Map<String, Collection<NationalIdRegistrationKey>> getAlumniByGraduationTerm() {
         return alumniByGraduationTerm;
     }
 
-    public List<CpfRegistrationKey> getDropouts() {
+    public List<NationalIdRegistrationKey> getDropouts() {
         return dropouts;
     }
 
-    public Map<String, Collection<CpfRegistrationKey>> getDropoutByAdmissionTerm() {
+    public Map<String, Collection<NationalIdRegistrationKey>> getDropoutByAdmissionTerm() {
         return dropoutByAdmissionTerm;
     }
 
-    public Map<String, Collection<CpfRegistrationKey>> getDropoutByDropoutTerm() {
+    public Map<String, Collection<NationalIdRegistrationKey>> getDropoutByDropoutTerm() {
         return dropoutByLeaveTerm;
     }
 
-    public Map<String, Collection<CpfRegistrationKey>> getDropoutByReasonAndAdmissionTerm() {
+    public Map<String, Collection<NationalIdRegistrationKey>> getDropoutByReasonAndAdmissionTerm() {
         return dropoutByReasonAndAdmissionTerm;
     }
 
-    public Map<String, Collection<CpfRegistrationKey>> getDropoutByReasonAndLeaveTerm() {
+    public Map<String, Collection<NationalIdRegistrationKey>> getDropoutByReasonAndLeaveTerm() {
         return dropoutByReasonAndLeaveTerm;
     }
 
@@ -89,14 +95,14 @@ public class IndexesHolder {
         this.dropoutByLeaveTerm = new HashMap<>();
         this.dropoutByReasonAndAdmissionTerm = new HashMap<>();
         this.dropoutByReasonAndLeaveTerm = new HashMap<>();
-        Map<CpfRegistrationKey, StudentData> mapStudents = this.mapsHolder.getMap("students");
+        Map<NationalIdRegistrationKey, StudentData> mapStudents = this.mapsHolder.getMap("students");
         mapStudents.forEach((k, v) -> {
             this.registrationMap.put(k.getRegistration(), k);
             if (v.isActive()) {
                 LOGGER.debug(String.format(Messages.INDEX_ACTIVE_S, v.getName()));
                 this.actives.add(k);
                 String admissionTerm = v.getAdmissionTerm();
-                Collection<CpfRegistrationKey> list = this.activeByAdmissionTerm.get(admissionTerm);
+                Collection<NationalIdRegistrationKey> list = this.activeByAdmissionTerm.get(admissionTerm);
                 if (list == null) list = new ArrayList<>();
                 list.add(k);
                 this.activeByAdmissionTerm.put(admissionTerm, list);
@@ -106,11 +112,11 @@ public class IndexesHolder {
                 this.alumni.add(k);
                 String admissionTerm = v.getAdmissionTerm();
                 String graduationTerm = v.getStatusTerm();
-                Collection<CpfRegistrationKey> listAdmissionTerm = this.alumniByAdmissionTerm.get(admissionTerm);
+                Collection<NationalIdRegistrationKey> listAdmissionTerm = this.alumniByAdmissionTerm.get(admissionTerm);
                 if (listAdmissionTerm == null) listAdmissionTerm = new ArrayList<>();
                 listAdmissionTerm.add(k);
                 this.alumniByAdmissionTerm.put(admissionTerm, listAdmissionTerm);
-                Collection<CpfRegistrationKey> listGraduationTerm = this.alumniByGraduationTerm.get(graduationTerm);
+                Collection<NationalIdRegistrationKey> listGraduationTerm = this.alumniByGraduationTerm.get(graduationTerm);
                 if (listGraduationTerm == null) listGraduationTerm = new ArrayList<>();
                 listGraduationTerm.add(k);
                 this.alumniByGraduationTerm.put(graduationTerm, listGraduationTerm);
@@ -121,19 +127,19 @@ public class IndexesHolder {
                 String admissionTerm = v.getAdmissionTerm();
                 String leaveTerm = v.getStatusTerm();
                 String reason = v.getStatusStr();
-                Collection<CpfRegistrationKey> listAdmissionTerm = this.dropoutByAdmissionTerm.get(admissionTerm);
+                Collection<NationalIdRegistrationKey> listAdmissionTerm = this.dropoutByAdmissionTerm.get(admissionTerm);
                 if (listAdmissionTerm == null) listAdmissionTerm = new ArrayList<>();
                 listAdmissionTerm.add(k);
                 this.dropoutByAdmissionTerm.put(admissionTerm, listAdmissionTerm);
-                Collection<CpfRegistrationKey> listLeaveTerm = this.dropoutByLeaveTerm.get(leaveTerm);
+                Collection<NationalIdRegistrationKey> listLeaveTerm = this.dropoutByLeaveTerm.get(leaveTerm);
                 if (listLeaveTerm == null) listLeaveTerm = new ArrayList<>();
                 listLeaveTerm.add(k);
                 this.dropoutByLeaveTerm.put(leaveTerm, listLeaveTerm);
-                Collection <CpfRegistrationKey> listReasonAndAdmissionTerm = this.dropoutByReasonAndAdmissionTerm.get((reason+admissionTerm));
+                Collection <NationalIdRegistrationKey> listReasonAndAdmissionTerm = this.dropoutByReasonAndAdmissionTerm.get((reason+admissionTerm));
                 if (listReasonAndAdmissionTerm == null) listReasonAndAdmissionTerm = new ArrayList<>();
                 listReasonAndAdmissionTerm.add(k);
                 this.dropoutByReasonAndAdmissionTerm.put((reason+admissionTerm), listReasonAndAdmissionTerm);
-                Collection<CpfRegistrationKey> listReasonAndLeaveTerm = this.dropoutByReasonAndLeaveTerm.get((reason+leaveTerm));
+                Collection<NationalIdRegistrationKey> listReasonAndLeaveTerm = this.dropoutByReasonAndLeaveTerm.get((reason+leaveTerm));
                 if (listReasonAndLeaveTerm == null) listReasonAndLeaveTerm = new ArrayList<>();
                 listReasonAndLeaveTerm.add(k);
                 this.dropoutByReasonAndLeaveTerm.put((reason+leaveTerm), listReasonAndLeaveTerm);
@@ -144,11 +150,12 @@ public class IndexesHolder {
     private void buildEnrollmentIndexes() {
         this.enrollmentsPerCurriculumPerSubjectPerTermPerClass = new HashMap<>();
         this.termsPerCurriculum = new HashMap<>();
+        this.numberOfClasses = new HashMap<>();
 
-        Map<CpfRegistrationKey, StudentData> studentsMap = this.mapsHolder.getMap("students");
+        Map<NationalIdRegistrationKey, StudentData> studentsMap = this.mapsHolder.getMap("students");
         Map<RegistrationCodeTermKey, EnrollmentData> mapEnrollments = this.mapsHolder.getMap("enrollments");
         mapEnrollments.forEach((k, v) -> {
-            CpfRegistrationKey key = registrationMap.get(k.getRegistration());
+            NationalIdRegistrationKey key = registrationMap.get(k.getRegistration());
             String curriculum = studentsMap.get(key).getCurriculum();
 
             TreeSet<String> terms = this.termsPerCurriculum.get(curriculum);
@@ -156,37 +163,35 @@ public class IndexesHolder {
             terms.add(k.getTerm());
             this.termsPerCurriculum.put(curriculum, terms);
 
-            ClassEnrollments classEnrollments = new ClassEnrollments();
-            Map<String, ClassEnrollments> enrollementsPerClass = new HashMap<>();
-            Map<String, Map<String, ClassEnrollments>> enrollmentsPerTermPerClass = new HashMap<>();
             Map<String, Map<String, Map<String, ClassEnrollments>>> enrollmentsPerSubjectPerTermPerClass =
                     this.enrollmentsPerCurriculumPerSubjectPerTermPerClass.get(curriculum);
-
-            if (enrollmentsPerSubjectPerTermPerClass != null) {
-                enrollmentsPerTermPerClass = enrollmentsPerSubjectPerTermPerClass.get(k.getCode());
-                if (enrollmentsPerTermPerClass != null) {
-                    enrollementsPerClass = enrollmentsPerTermPerClass.get(k.getTerm());
-                    if (enrollementsPerClass != null) {
-                        classEnrollments = enrollementsPerClass.get(v.getClassId());
-                        if (classEnrollments == null) {
-                            enrollementsPerClass.put(v.getClassId(), classEnrollments);
-                        }
-                    } else {
-                        enrollementsPerClass.put(v.getClassId(), classEnrollments);
-                    }
-                } else {
-                    enrollementsPerClass.put(v.getClassId(), classEnrollments);
-                    enrollmentsPerTermPerClass.put(k.getTerm(), enrollementsPerClass);
-                    enrollmentsPerSubjectPerTermPerClass.put(k.getCode(), enrollmentsPerTermPerClass);
+            if (enrollmentsPerSubjectPerTermPerClass == null) {
+                enrollmentsPerSubjectPerTermPerClass = new HashMap<>();
+            }
+            Map<String, Map<String, ClassEnrollments>> enrollmentsPerTermPerClass =
+                    enrollmentsPerSubjectPerTermPerClass.get(k.getCode());
+            if (enrollmentsPerTermPerClass == null) {
+                enrollmentsPerTermPerClass = new HashMap<>();
+            }
+            Map<String, ClassEnrollments> enrollementsPerClass = enrollmentsPerTermPerClass.get(k.getTerm());
+            if (enrollementsPerClass == null) {
+                enrollementsPerClass = new HashMap<>();
+            }
+            ClassEnrollments classEnrollments = enrollementsPerClass.get(v.getClassId());
+            if (classEnrollments == null) {
+                classEnrollments = new ClassEnrollments();
+                Integer classes = this.numberOfClasses.get(curriculum + ":" + k.getCode());
+                if (classes == null) {
+                    classes = new Integer(0);
                 }
-            } else {
-                this.enrollmentsPerCurriculumPerSubjectPerTermPerClass = new HashMap<>();
-                enrollementsPerClass.put(v.getClassId(), classEnrollments);
-                enrollmentsPerTermPerClass.put(k.getTerm(), enrollementsPerClass);
-                enrollmentsPerSubjectPerTermPerClass.put(k.getCode(), enrollmentsPerTermPerClass);
-                this.enrollmentsPerCurriculumPerSubjectPerTermPerClass.put(curriculum, enrollmentsPerSubjectPerTermPerClass);
+                classes++;
+                this.numberOfClasses.put(curriculum + ":" + k.getCode(), classes);
             }
             addEnrolment(classEnrollments, k.getRegistration(), v.getStatus());
+            enrollementsPerClass.put(v.getClassId(), classEnrollments);
+            enrollmentsPerTermPerClass.put(k.getTerm(), enrollementsPerClass);
+            enrollmentsPerSubjectPerTermPerClass.put(k.getCode(), enrollmentsPerTermPerClass);
+            this.enrollmentsPerCurriculumPerSubjectPerTermPerClass.put(curriculum, enrollmentsPerSubjectPerTermPerClass);
         });
     }
 
@@ -218,27 +223,27 @@ public class IndexesHolder {
 
     public Collection<Student> getAllActives() {
         Collection<Student> allActives = new ArrayList<>();
-        Map<CpfRegistrationKey, StudentData> mapStudents = this.mapsHolder.getMap("students");
+        Map<NationalIdRegistrationKey, StudentData> mapStudents = this.mapsHolder.getMap("students");
         this.actives.forEach(k -> {
-            allActives.add(new Student(k, mapStudents.get(k)));
+            allActives.add(mapStudents.get(k).createStudent(k));
         });
         return allActives;
     }
 
     public Collection<Student> getAllAlumni() {
         Collection<Student> allAlumni = new ArrayList<>();
-        Map<CpfRegistrationKey, StudentData> mapStudents = this.mapsHolder.getMap("students");
+        Map<NationalIdRegistrationKey, StudentData> mapStudents = this.mapsHolder.getMap("students");
         this.alumni.forEach(k -> {
-            allAlumni.add(new Student(k, mapStudents.get(k)));
+            allAlumni.add(mapStudents.get(k).createStudent(k));
         });
         return allAlumni;
     }
 
     public Collection<Student> getAllDropouts() {
         Collection<Student> allDropouts = new ArrayList<>();
-        Map<CpfRegistrationKey, StudentData> mapStudents = this.mapsHolder.getMap("students");
+        Map<NationalIdRegistrationKey, StudentData> mapStudents = this.mapsHolder.getMap("students");
         this.dropouts.forEach(k -> {
-            allDropouts.add(new Student(k, mapStudents.get(k)));
+            allDropouts.add(mapStudents.get(k).createStudent(k));
         });
         return allDropouts;
     }
@@ -249,5 +254,10 @@ public class IndexesHolder {
 
     public TreeSet<String> getTermsPerCurriculum(String curriculum) {
         return termsPerCurriculum.get(curriculum);
+    }
+
+    public int getNumberOfClassesPerSubject(String curriculum, String subject) {
+        Integer ret = this.numberOfClasses.get(curriculum + ":" + subject);
+        return (ret == null ? 0 : ret.intValue());
     }
 }

@@ -2,7 +2,6 @@ package br.edu.ufcg.computacao.eureca.backend.core.util;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.MetricsSummary;
 import br.edu.ufcg.computacao.eureca.backend.constants.Curriculum;
-import br.edu.ufcg.computacao.eureca.backend.core.models.StudentData;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 
 import org.apache.log4j.Logger;
@@ -12,11 +11,19 @@ import java.util.Collection;
 public class MetricsCalculator {
     private Logger LOGGER = Logger.getLogger(MetricsCalculator.class);
 
-    public static Metrics computeMetrics(StudentData student) {
+    public static Metrics computeMetrics(int attemptedCredits, int termsAccounted, int completedCredits) {
+        return doComputeMetrics(attemptedCredits, termsAccounted, completedCredits);
+    }
+
+    public static Metrics computeMetrics(Student student) {
+        int attemptedCredits = student.getAttemptedCredits();
+        int termsAccounted = student.getCompletedTerms() + student.getInstitutionalTerms() + student.getInstitutionalTerms();
+        int completedCredits = student.getCompletedCredits();
+        return doComputeMetrics(attemptedCredits, termsAccounted, completedCredits);
+    }
+
+    private static Metrics doComputeMetrics(int attemptedCredits, int termsAccounted, int completedCredits) {
         try {
-            int attemptedCredits = student.getAttemptedCredits();
-            int termsAccounted = student.getCompletedTerms() + student.getInstitutionalTerms() + student.getInstitutionalTerms();
-            int completedCredits = student.getCompletedCredits();
             double feasibility = computeFeasibility(termsAccounted, completedCredits);
             double successRate = computeSuccessRate(completedCredits, attemptedCredits);
             double averageLoad = computeAverageLoad(termsAccounted, attemptedCredits);
@@ -138,8 +145,8 @@ public class MetricsCalculator {
         double aggregateRisk = 0.0;
         double v;
         for (Student item : students) {
-            aggregateTerms += item.getStudentData().getCompletedTerms();
-            Metrics studentMetrics = MetricsCalculator.computeMetrics(item.getStudentData());
+            aggregateTerms += item.getCompletedTerms();
+            Metrics studentMetrics = MetricsCalculator.computeMetrics(item);
             aggregateAttemptedCredits += studentMetrics.getAttemptedCredits();
             aggregateFeasibility += ((v = studentMetrics.getFeasibility()) == -1.0 ? 0.0 : v);
             aggregateSuccessRate += ((v = studentMetrics.getSuccessRate()) == -1.0 ? 0.0 : v);

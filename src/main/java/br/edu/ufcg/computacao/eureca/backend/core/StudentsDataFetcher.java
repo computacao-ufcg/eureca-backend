@@ -4,9 +4,7 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.AlumniDigestRespo
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.StudentDataResponse;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Metrics;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
-import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 import org.apache.log4j.Logger;
 
 import java.util.Collection;
@@ -25,8 +23,7 @@ public class StudentsDataFetcher {
         Collection<StudentDataResponse> activeStudentsData = new TreeSet<>();
         Collection<Student> actives = this.dataAccessFacade.getActives(from, to);
         actives.forEach(item -> {
-            StudentDataResponse studentDataResponse = new StudentDataResponse(item.getId().getRegistration(),
-                    item.getStudentData());
+            StudentDataResponse studentDataResponse = new StudentDataResponse(item);
             activeStudentsData.add(studentDataResponse);
         });
         return activeStudentsData;
@@ -36,8 +33,7 @@ public class StudentsDataFetcher {
         Collection<StudentDataResponse> alumniData = new TreeSet<>();
         Collection<Student> actives = this.dataAccessFacade.getAlumni(from, to);
         actives.forEach(item -> {
-            StudentDataResponse studentDataResponse = new StudentDataResponse(item.getId().getRegistration(),
-                    item.getStudentData());
+            StudentDataResponse studentDataResponse = new StudentDataResponse(item);
             alumniData.add(studentDataResponse);
         });
         return alumniData;
@@ -47,8 +43,7 @@ public class StudentsDataFetcher {
         Collection<StudentDataResponse> dropoutsData = new TreeSet<>();
         Collection<Student> dropouts = this.dataAccessFacade.getDropouts(from, to);
         dropouts.forEach(item -> {
-            StudentDataResponse studentDataResponse = new StudentDataResponse(item.getId().getRegistration(),
-                    item.getStudentData());
+            StudentDataResponse studentDataResponse = new StudentDataResponse(item);
             dropoutsData.add(studentDataResponse);
         });
         return dropoutsData;
@@ -58,8 +53,7 @@ public class StudentsDataFetcher {
         Collection<StudentDataResponse> delayedData = new TreeSet<>();
         Collection<Student> delayed = this.dataAccessFacade.getDelayed(from, to);
         delayed.forEach(item -> {
-            StudentDataResponse studentDataResponse = new StudentDataResponse(item.getId().getRegistration(),
-                    item.getStudentData());
+            StudentDataResponse studentDataResponse = new StudentDataResponse(item);
             delayedData.add(studentDataResponse);
         });
         return delayedData;
@@ -68,5 +62,4 @@ public class StudentsDataFetcher {
     public Collection<AlumniDigestResponse> getAlumniPerStudentSummary(String from, String to) {
         return this.dataAccessFacade.getAlumniPerStudentSummary(from, to);
     }
-
 }

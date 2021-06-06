@@ -9,6 +9,7 @@ public class Messages {
     public static final String INDEX_ACTIVE_S = "Indexing active student: %s.";
     public static final String INDEX_ALUMNUS_S = "Indexing alumnus student: %s.";
     public static final String INDEX_DROPOUT_S = "Indexing dropout student: %s.";
+    public static final String INEXISTENT_CURRICULUM_S_S = "Could not find curriculum [%s] for course [%s].";
     public static final String INSERTING_S_S = "Inserting %s : %s.";
     public static final String KEY_S = "Key: [%s].";
     public static final String LOADING_TABLE_S_FROM_S = "Loading table %s from file %s.";

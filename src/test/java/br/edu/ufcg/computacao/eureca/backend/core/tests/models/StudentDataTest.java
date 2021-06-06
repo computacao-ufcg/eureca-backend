@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.tests.models;
 
-import br.edu.ufcg.computacao.eureca.backend.core.models.StudentData;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
 import br.edu.ufcg.computacao.eureca.backend.core.models.StudentStatus;
 import org.junit.Assert;
 import org.junit.Before;
