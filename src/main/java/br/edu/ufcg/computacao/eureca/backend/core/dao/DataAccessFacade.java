@@ -29,21 +29,23 @@ public interface DataAccessFacade {
 
     Curriculum getCurriculum(String course, String curriculumCode);
 
-    Subject getSubject(String subjectCode);
+    Subject getSubject(String curriculumCode, String subjectCode);
 
-    EnrollmentStatistics getStatisticsSucceeded(String curriculumCode, String subjectCode);
+    MetricStatistics getSucceededStatistics(String curriculumCode, String subjectCode);
 
-    EnrollmentStatistics getStatisticsExempted(String curriculumCode, String subjectCode);
+    MetricStatistics getExemptedStatistics(String curriculumCode, String subjectCode);
 
-    EnrollmentStatistics getStatisticsOngoing(String curriculumCode, String subjectCode);
+    MetricStatistics getOngoingStatistics(String curriculumCode, String subjectCode);
 
-    EnrollmentStatistics getStatisticsFailedDueToGrade(String curriculumCode, String subjectCode);
+    MetricStatistics getFailedDueToGradeStatistics(String curriculumCode, String subjectCode);
 
-    EnrollmentStatistics getStatisticsFailedDueToAbsences(String curriculumCode, String subjectCode);
+    MetricStatistics getFailedDueToAbsencesStatistics(String curriculumCode, String subjectCode);
 
-    EnrollmentStatistics getStatisticsSuspended(String curriculumCode, String subjectCode);
+    MetricStatistics getSuspendedStatistics(String curriculumCode, String subjectCode);
 
-    EnrollmentStatistics getStatisticsCancelled(String curriculumCode, String subjectCode);
+    MetricStatistics getCancelledStatistics(String curriculumCode, String subjectCode);
+
+    int getRetention(String curriculumCode, String item);
 
     TreeSet<String> getTermsForCurriculum(String curriculumCode);
 

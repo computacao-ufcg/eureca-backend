@@ -2,13 +2,11 @@ package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.EnrollmentData;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.NationalIdRegistrationKey;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.RegistrationCodeTermKey;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.models.ClassEnrollments;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Registration;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
+import br.edu.ufcg.computacao.eureca.backend.core.models.StudentCurriculum;
 import org.apache.log4j.Logger;
 
 import java.util.*;
@@ -20,6 +18,7 @@ public class IndexesHolder {
     // Map instances
     private Map<NationalIdRegistrationKey, StudentData> studentsMap;
     private Map<RegistrationCodeTermKey, EnrollmentData> enrollmentsMap;
+    private Map<SubjectKey, SubjectData> subjectsMap;
     // Student indexes
     private Map<String, NationalIdRegistrationKey> registrationMap;
     private List<NationalIdRegistrationKey> actives;
@@ -36,11 +35,14 @@ public class IndexesHolder {
     private Map<String, Map<String, Map<String, Map<String, ClassEnrollments>>>> enrollmentsPerCurriculumPerSubjectPerTermPerClass;
     private Map<String, TreeSet<String>> termsPerCurriculum;
     private Map<String, Integer> numberOfClasses;
+    // Subject indexes
+    private Map<NationalIdRegistrationKey, StudentCurriculum> studentCurriculumMap;
 
     public IndexesHolder(MapsHolder mapsHolder) {
         this.mapsHolder = mapsHolder;
         this.studentsMap = this.mapsHolder.getMap("students");
         this.enrollmentsMap = this.mapsHolder.getMap("enrollments");
+        this.subjectsMap = this.mapsHolder.getMap("subjects");
         buildIndexes();
     }
 
@@ -87,6 +89,7 @@ public class IndexesHolder {
     private void buildIndexes() {
         buildStudentIndexes();
         buildEnrollmentIndexes();
+        buildSubjectIndexes();
     }
 
     private void buildStudentIndexes() {
@@ -101,6 +104,8 @@ public class IndexesHolder {
         this.dropoutByLeaveTerm = new HashMap<>();
         this.dropoutByReasonAndAdmissionTerm = new HashMap<>();
         this.dropoutByReasonAndLeaveTerm = new HashMap<>();
+        this.studentCurriculumMap = new HashMap<>();
+
         this.studentsMap.forEach((k, v) -> {
             this.registrationMap.put(k.getRegistration(), k);
             if (v.isActive()) {
@@ -111,6 +116,7 @@ public class IndexesHolder {
                 if (list == null) list = new ArrayList<>();
                 list.add(k);
                 this.activeByAdmissionTerm.put(admissionTerm, list);
+                this.studentCurriculumMap.put(k, new StudentCurriculum(v.getCompletedTerms() + 1));
             }
             if (v.isAlumnus()) { // graduated
                 LOGGER.debug(String.format(Messages.INDEX_ALUMNUS_S, v.getName()));
@@ -158,13 +164,13 @@ public class IndexesHolder {
         this.numberOfClasses = new HashMap<>();
         Map<Registration, Integer> attemptsSummary = new HashMap<>();
 
-        this.enrollmentsMap.forEach((k, v) -> {
-            NationalIdRegistrationKey key = registrationMap.get(k.getRegistration());
-            String curriculum = getStudentCurriculum(key);
+        this.enrollmentsMap.forEach((enrollmentKey, enrollmentData) -> {
+            NationalIdRegistrationKey studentId = registrationMap.get(enrollmentKey.getRegistration());
+            String curriculum = getStudentCurriculum(studentId);
 
             TreeSet<String> terms = this.termsPerCurriculum.get(curriculum);
             if (terms == null) terms = new TreeSet<>();
-            terms.add(k.getTerm());
+            terms.add(enrollmentKey.getTerm());
             this.termsPerCurriculum.put(curriculum, terms);
 
             Map<String, Map<String, Map<String, ClassEnrollments>>> enrollmentsPerSubjectPerTermPerClass =
@@ -173,43 +179,40 @@ public class IndexesHolder {
                 enrollmentsPerSubjectPerTermPerClass = new HashMap<>();
             }
             Map<String, Map<String, ClassEnrollments>> enrollmentsPerTermPerClass =
-                    enrollmentsPerSubjectPerTermPerClass.get(k.getCode());
+                    enrollmentsPerSubjectPerTermPerClass.get(enrollmentKey.getCode());
             if (enrollmentsPerTermPerClass == null) {
                 enrollmentsPerTermPerClass = new HashMap<>();
             }
-            Map<String, ClassEnrollments> enrollementsPerClass = enrollmentsPerTermPerClass.get(k.getTerm());
+            Map<String, ClassEnrollments> enrollementsPerClass = enrollmentsPerTermPerClass.get(enrollmentKey.getTerm());
             if (enrollementsPerClass == null) {
                 enrollementsPerClass = new HashMap<>();
             }
-            ClassEnrollments classEnrollments = enrollementsPerClass.get(v.getClassId());
+            ClassEnrollments classEnrollments = enrollementsPerClass.get(enrollmentData.getClassId());
             if (classEnrollments == null) {
                 classEnrollments = new ClassEnrollments();
-                Integer classes = this.numberOfClasses.get(curriculum + ":" + k.getCode());
+                Integer classes = this.numberOfClasses.get(curriculum + ":" + enrollmentKey.getCode());
                 if (classes == null) {
                     classes = new Integer(0);
                 }
                 classes++;
-                this.numberOfClasses.put(curriculum + ":" + k.getCode(), classes);
+                this.numberOfClasses.put(curriculum + ":" + enrollmentKey.getCode(), classes);
             }
-            addEnrolment(classEnrollments, k.getRegistration(), v.getStatus());
-            enrollementsPerClass.put(v.getClassId(), classEnrollments);
-            enrollmentsPerTermPerClass.put(k.getTerm(), enrollementsPerClass);
-            enrollmentsPerSubjectPerTermPerClass.put(k.getCode(), enrollmentsPerTermPerClass);
+            addEnrolment(classEnrollments, studentId, (curriculum + ":" + enrollmentKey.getCode()), enrollmentData.getStatus());
+            enrollementsPerClass.put(enrollmentData.getClassId(), classEnrollments);
+            enrollmentsPerTermPerClass.put(enrollmentKey.getTerm(), enrollementsPerClass);
+            enrollmentsPerSubjectPerTermPerClass.put(enrollmentKey.getCode(), enrollmentsPerTermPerClass);
             this.enrollmentsPerCurriculumPerSubjectPerTermPerClass.put(curriculum, enrollmentsPerSubjectPerTermPerClass);
 
-            if (!v.getStatus().equals(SystemConstants.EM_CURSO)) {
-                Integer currentCount = attemptsSummary.get(k.getRegistration());
+            if (!enrollmentData.getStatus().equals(SystemConstants.EM_CURSO)) {
+                Integer currentCount = attemptsSummary.get(enrollmentKey.getRegistration());
                 if (currentCount == null) {
-                    currentCount = v.getCredits();
+                    currentCount = enrollmentData.getCredits();
                 } else {
-                    currentCount += v.getCredits();
+                    currentCount += enrollmentData.getCredits();
                 }
-                attemptsSummary.put(new Registration(k.getRegistration()), currentCount);
+                attemptsSummary.put(new Registration(enrollmentKey.getRegistration()), currentCount);
             }
         });
-//        this.numberOfClasses.forEach((k,v) -> {
-//            System.out.println(String.format("%s: %d", k, v.intValue()));
-//        });
         attemptsSummary.forEach((k, v) -> {
             NationalIdRegistrationKey key = registrationMap.get(k.getRegistration());
             StudentData student = getStudent(key);
@@ -220,30 +223,72 @@ public class IndexesHolder {
         });
     }
 
-    private void addEnrolment(ClassEnrollments classEnrollments, String registration, String status) {
+    private void buildSubjectIndexes() {
+        this.subjectsMap.forEach((subjectKey, subjectData) -> {
+            this.actives.forEach(student -> {
+                StudentCurriculum curriculum = this.studentCurriculumMap.get(student);
+                if (subjectData.getIdealTerm() <= curriculum.getCurrentTerm()) {
+                    boolean completed = curriculum.hasCompleted(subjectKey, subjectData);
+                    boolean disabled = curriculum.getDisabled().contains((subjectKey.getCurriculumCode() + ":" + subjectKey.getSubjectCode()));
+                    if (!completed && !disabled) {
+                        if (isEnabled(curriculum, subjectKey, subjectData)) {
+                            curriculum.getEnabled().add((subjectKey.getCurriculumCode() + ":" + subjectKey.getSubjectCode()));
+                        } else {
+                            curriculum.getDisabled().add((subjectKey.getCurriculumCode() + ":" + subjectKey.getSubjectCode()));
+                        }
+                    }
+                }
+            });
+        });
+    }
+
+    private boolean isEnabled(StudentCurriculum curriculum, SubjectKey k, SubjectData v) {
+        for (String subjectCode : v.getPreRequirementsList()) {
+            SubjectKey preRequirementKey = new SubjectKey(k.getCurriculumCode(), subjectCode);
+            SubjectData preRequirementData = this.subjectsMap.get(preRequirementKey);
+            if (!curriculum.hasCompleted(preRequirementKey, preRequirementData)) return false;
+        }
+        return true;
+    }
+
+    private void addEnrolment(ClassEnrollments classEnrollments, NationalIdRegistrationKey studentId, String subjectCode,
+                              String status) {
+        StudentCurriculum curriculum;
         switch(status) {
             case SystemConstants.STATUS_SUCCEEDED:
-                classEnrollments.getSuccess().add(registration);
+                classEnrollments.getSuccess().add(studentId.getRegistration());
+                if ((curriculum = retrieveCurriculum(studentId)) != null) curriculum.getCompleted().add(subjectCode);
                 break;
             case SystemConstants.STATUS_EXEMPTED:
-                classEnrollments.getExempted().add(registration);
+                classEnrollments.getExempted().add(studentId.getRegistration());
+                if ((curriculum = retrieveCurriculum(studentId)) != null) curriculum.getCompleted().add(subjectCode);
                 break;
             case SystemConstants.STATUS_ONGOING:
-                classEnrollments.getOngoing().add(registration);
+                classEnrollments.getOngoing().add(studentId.getRegistration());
+                if ((curriculum = retrieveCurriculum(studentId)) != null) curriculum.getDisabled().add(subjectCode);
                 break;
             case SystemConstants.STATUS_FAILED_DUE_GRADE:
-                classEnrollments.getFailedDueToGrade().add(registration);
+                classEnrollments.getFailedDueToGrade().add(studentId.getRegistration());
                 break;
             case SystemConstants.STATUS_FAILED_DUE_ABSENCE:
-                classEnrollments.getFailedDueToAbsence().add(registration);
+                classEnrollments.getFailedDueToAbsence().add(studentId.getRegistration());
                 break;
             case SystemConstants.STATUS_SUSPENDED:
-                classEnrollments.getSuspended().add(registration);
+                classEnrollments.getSuspended().add(studentId.getRegistration());
                 break;
             default:
-                classEnrollments.getCancelled().add(registration);
+                classEnrollments.getCancelled().add(studentId.getRegistration());
                 break;
         }
+    }
+
+    private StudentCurriculum retrieveCurriculum(NationalIdRegistrationKey studentId) {
+        StudentCurriculum curriculum = null;
+        StudentData student = this.studentsMap.get(studentId);
+        if (student.isActive()) {
+            curriculum = this.studentCurriculumMap.get(studentId);
+        }
+        return curriculum;
     }
 
     private StudentData getStudent(NationalIdRegistrationKey key) {
@@ -287,6 +332,15 @@ public class IndexesHolder {
 
     public Map<String, Map<String, Map<String, ClassEnrollments>>> getEnrollmentsPerSubjectPerTermPerClass(String curriculum) {
         return enrollmentsPerCurriculumPerSubjectPerTermPerClass.get(curriculum);
+    }
+
+    public int getRetention(String curriculumCode, String subjectCode) {
+        int retention = 0;
+        for (NationalIdRegistrationKey active : this.actives) {
+            StudentCurriculum studentCurriculum = this.studentCurriculumMap.get(active);
+            if (studentCurriculum.getEnabled().contains(curriculumCode + ":" + subjectCode)) retention++;
+        }
+        return retention;
     }
 
     public TreeSet<String> getTermsPerCurriculum(String curriculum) {

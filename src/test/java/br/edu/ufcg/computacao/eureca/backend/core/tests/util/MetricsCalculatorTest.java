@@ -6,7 +6,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Natio
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.CostClass;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Metrics;
+import br.edu.ufcg.computacao.eureca.backend.core.models.StudentMetrics;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
@@ -52,14 +52,14 @@ public class MetricsCalculatorTest {
     @Test
     public void computeMetricsWithValidStudentTest() {
         // set up
-        Metrics expected = new Metrics(0,0,-1,0,-1,18.5,11,1);
+        StudentMetrics expected = new StudentMetrics(0,0,-1,0,-1,18.5,11,1);
 
         // exercise
         int attemptedCredits = this.studentData.getAttemptedCredits();
         int termsAccounted = this.studentData.getCompletedTerms() + this.studentData.getInstitutionalTerms() + this.studentData.getInstitutionalTerms();
         int completedCredits = this.studentData.getCompletedCredits();
 
-        Metrics result = MetricsCalculator.computeMetrics(attemptedCredits, termsAccounted, completedCredits);
+        StudentMetrics result = MetricsCalculator.computeMetrics(attemptedCredits, termsAccounted, completedCredits);
 
         // verify
         Assert.assertEquals(expected.getAttemptedCredits(), result.getAttemptedCredits(), 0.1);

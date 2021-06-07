@@ -1,11 +1,11 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
-public class EnrollmentStatistics {
+public class MetricStatistics {
     private int min;
     private int max;
     private int total;
 
-    public EnrollmentStatistics(int min, int max, int total) {
+    public MetricStatistics(int min, int max, int total) {
         this.min = min;
         this.max = max;
         this.total = total;

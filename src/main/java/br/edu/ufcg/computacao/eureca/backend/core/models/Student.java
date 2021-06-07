@@ -382,7 +382,7 @@ public class Student implements Comparable {
     }
 
     public RiskClass computeRiskClass() {
-        Metrics studentMetrics = MetricsCalculator.computeMetrics(this);
+        StudentMetrics studentMetrics = MetricsCalculator.computeMetrics(this);
         return MetricsCalculator.computeRiskClass(studentMetrics.getRisk());
     }
 

@@ -1,17 +1,17 @@
 package br.edu.ufcg.computacao.eureca.backend.core.tests.models;
 
-import br.edu.ufcg.computacao.eureca.backend.core.models.Metrics;
+import br.edu.ufcg.computacao.eureca.backend.core.models.StudentMetrics;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class MetricsTest {
 
-    private Metrics metrics;
+    private StudentMetrics metrics;
 
     @Before
     public void setUp() {
-        this.metrics = new Metrics(1,1,1,1,
+        this.metrics = new StudentMetrics(1,1,1,1,
                 1,1,1,1);
     }
 
@@ -32,7 +32,7 @@ public class MetricsTest {
     @Test
     public void getNullAttemptedCreditsTest() {
         // set up
-        Metrics metrics = new Metrics(0,1,1,1,
+        StudentMetrics metrics = new StudentMetrics(0,1,1,1,
                 1,1,1,1);
         int expected = 0;
 

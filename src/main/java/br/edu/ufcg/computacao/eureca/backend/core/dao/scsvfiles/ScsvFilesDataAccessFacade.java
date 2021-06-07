@@ -194,41 +194,46 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Subject getSubject(String subjectCode) {
+    public Subject getSubject(String curriculumCode, String subjectCode) {
         Map<SubjectKey, SubjectData> subjectMap = this.mapsHolder.getMap("subjects");
-        SubjectKey key = new SubjectKey(subjectCode);
+        SubjectKey key = new SubjectKey(curriculumCode, subjectCode);
         SubjectData subjectData = subjectMap.get(key);
         return subjectData.createSubject(key);
     }
 
     @Override
-    public EnrollmentStatistics getStatisticsSucceeded(String curriculumCode, String subjectCode) {
-        return getStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_SUCCEEDED);
+    public MetricStatistics getSucceededStatistics(String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_SUCCEEDED);
     }
 
     @Override
-    public EnrollmentStatistics getStatisticsExempted(String curriculumCode, String subjectCode) {
-        return getStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_EXEMPTED);
+    public MetricStatistics getExemptedStatistics(String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_EXEMPTED);
     }
     @Override
-    public EnrollmentStatistics getStatisticsOngoing(String curriculumCode, String subjectCode) {
-        return getStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_ONGOING);
+    public MetricStatistics getOngoingStatistics(String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_ONGOING);
     }
     @Override
-    public EnrollmentStatistics getStatisticsFailedDueToGrade(String curriculumCode, String subjectCode) {
-        return getStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_FAILED_DUE_GRADE);
+    public MetricStatistics getFailedDueToGradeStatistics(String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_FAILED_DUE_GRADE);
     }
     @Override
-    public EnrollmentStatistics getStatisticsFailedDueToAbsences(String curriculumCode, String subjectCode) {
-        return getStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_FAILED_DUE_ABSENCE);
+    public MetricStatistics getFailedDueToAbsencesStatistics(String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_FAILED_DUE_ABSENCE);
     }
     @Override
-    public EnrollmentStatistics getStatisticsSuspended(String curriculumCode, String subjectCode) {
-        return getStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_SUSPENDED);
+    public MetricStatistics getSuspendedStatistics(String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_SUSPENDED);
     }
     @Override
-    public EnrollmentStatistics getStatisticsCancelled(String curriculumCode, String subjectCode) {
-        return getStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_CANCELLED);
+    public MetricStatistics getCancelledStatistics(String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_CANCELLED);
+    }
+
+    @Override
+    public int getRetention(String curriculumCode, String subjectCode) {
+        return this.indexesHolder.getRetention(curriculumCode, subjectCode);
     }
 
     @Override
@@ -241,7 +246,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return this.indexesHolder.getNumberOfClassesPerSubject(curriculumCode, subjectCode);
     }
 
-    public EnrollmentStatistics getStatistics(String curriculumCode, String subjectCode, String status) {
+    public MetricStatistics getEnrollmentsStatistics(String curriculumCode, String subjectCode, String status) {
         final int[] min = {Integer.MAX_VALUE};
         final int[] max = {0};
         final int[] total = {0};
@@ -260,7 +265,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                 });
             }
         }
-        EnrollmentStatistics ret = new EnrollmentStatistics(min[0], max[0], total[0]);
+        MetricStatistics ret = new MetricStatistics(min[0], max[0], total[0]);
         return ret;
     }
 

@@ -13,12 +13,12 @@ public class SubjectData implements EurecaMapValue {
     private String name;
     private String equivalentCodes;
     private Collection<String> equivalentCodesList;
-    private String idealTerm;
+    private int idealTerm;
     private String preRequirements;
     private Collection<String> preRequirementsList;
 
     public SubjectData(String academicUnit, String type, int credits, int hours, String name, String equivalentCodes,
-                       String idealTerm, String preRequirements) {
+                       int idealTerm, String preRequirements) {
         this.academicUnit = academicUnit;
         this.type = type;
         this.credits = credits;
@@ -82,11 +82,11 @@ public class SubjectData implements EurecaMapValue {
         this.equivalentCodes = equivalentCodes;
     }
 
-    public String getIdealTerm() {
+    public int getIdealTerm() {
         return idealTerm;
     }
 
-    public void setIdealTerm(String idealTerm) {
+    public void setIdealTerm(int idealTerm) {
         this.idealTerm = idealTerm;
     }
 
@@ -106,8 +106,8 @@ public class SubjectData implements EurecaMapValue {
     }
 
     public Subject createSubject(SubjectKey key) {
-        return new Subject(key.getCode(), getAcademicUnit(), getType(), getCredits(), getHours(), getName(),
-                getEquivalentCodes(), getIdealTerm(), getPreRequirements());
+        return new Subject(key.getCurriculumCode(), key.getSubjectCode(), getAcademicUnit(), getType(), getCredits(),
+                getHours(), getName(), getEquivalentCodes(), getIdealTerm(), getPreRequirements());
     }
 
     public Collection<String> getPreRequirementsList() {
@@ -118,11 +118,28 @@ public class SubjectData implements EurecaMapValue {
     }
 
     private Collection<String> extractStrList(String subjectsStr) {
-        String creditsArray[] = subjectsStr.split(",");
         ArrayList<String> ret = new ArrayList<>();
+        if (subjectsStr.equals("")) return ret;
+        String creditsArray[] = subjectsStr.split(",");
         for (int i =0; i < creditsArray.length; i++) {
             ret.add(creditsArray[i]);
         }
         return ret;
+    }
+
+    @Override
+    public String toString() {
+        return "SubjectData{" +
+                "academicUnit='" + academicUnit + '\'' +
+                ", type='" + type + '\'' +
+                ", credits=" + credits +
+                ", hours=" + hours +
+                ", name='" + name + '\'' +
+                ", equivalentCodes='" + equivalentCodes + '\'' +
+                ", equivalentCodesList=" + getEquivalentCodesList() +
+                ", idealTerm='" + idealTerm + '\'' +
+                ", preRequirements='" + preRequirements + '\'' +
+                ", preRequirementsList=" + getPreRequirementsList() +
+                '}';
     }
 }

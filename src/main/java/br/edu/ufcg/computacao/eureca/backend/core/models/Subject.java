@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class Subject {
-    private String code;
+    private String curriculumCode;
+    private String subjectCode;
     private String academicUnit;
     private String type;
     private int credits;
@@ -12,13 +13,14 @@ public class Subject {
     private String name;
     private String equivalentCodes;
     private Collection<String> equivalentCodesList;
-    private String idealTerm;
+    private int idealTerm;
     private String preRequirements;
     private Collection<String> preRequirementsList;
 
-    public Subject(String code, String academicUnit, String type, int credits, int hours, String name,
-                   String equivalentCodes, String idealTerm, String preRequirements) {
-        this.code = code;
+    public Subject(String curriculumCode, String subjectCode, String academicUnit, String type, int credits, int hours,
+                   String name, String equivalentCodes, int idealTerm, String preRequirements) {
+        this.curriculumCode = curriculumCode;
+        this.subjectCode = subjectCode;
         this.academicUnit = academicUnit;
         this.type = type;
         this.credits = credits;
@@ -29,12 +31,20 @@ public class Subject {
         this.preRequirements = preRequirements;
     }
 
-    public String getCode() {
-        return code;
+    public String getCurriculumCode() {
+        return curriculumCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCurriculumCode(String curriculumCode) {
+        this.curriculumCode = curriculumCode;
+    }
+
+    public String getSubjectCode() {
+        return subjectCode;
+    }
+
+    public void setSubjectCode(String subjectCode) {
+        this.subjectCode = subjectCode;
     }
 
     public String getAcademicUnit() {
@@ -85,11 +95,11 @@ public class Subject {
         this.equivalentCodes = equivalentCodes;
     }
 
-    public String getIdealTerm() {
+    public int getIdealTerm() {
         return idealTerm;
     }
 
-    public void setIdealTerm(String idealTerm) {
+    public void setIdealTerm(int idealTerm) {
         this.idealTerm = idealTerm;
     }
 
@@ -116,8 +126,9 @@ public class Subject {
     }
 
     private Collection<String> extractStrList(String subjectsStr) {
-        String creditsArray[] = subjectsStr.split(",");
         ArrayList<String> ret = new ArrayList<>();
+        if (subjectsStr.equals("")) return ret;
+        String creditsArray[] = subjectsStr.split(",");
         for (int i =0; i < creditsArray.length; i++) {
             ret.add(creditsArray[i]);
         }
@@ -127,15 +138,18 @@ public class Subject {
     @Override
     public String toString() {
         return "Subject{" +
-                "code='" + code + '\'' +
+                "curriculumCode='" + curriculumCode + '\'' +
+                ", subjectCode='" + subjectCode + '\'' +
                 ", academicUnit='" + academicUnit + '\'' +
                 ", type='" + type + '\'' +
                 ", credits=" + credits +
                 ", hours=" + hours +
                 ", name='" + name + '\'' +
                 ", equivalentCodes='" + equivalentCodes + '\'' +
+                ", equivalentCodesList=" + equivalentCodesList +
                 ", idealTerm='" + idealTerm + '\'' +
                 ", preRequirements='" + preRequirements + '\'' +
+                ", preRequirementsList=" + preRequirementsList +
                 '}';
     }
 }
