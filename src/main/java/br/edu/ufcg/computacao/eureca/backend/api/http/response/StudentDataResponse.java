@@ -59,7 +59,7 @@ public class StudentDataResponse implements Comparable {
         this.institutionalEnrollments = student.getInstitutionalTerms();
         this.mobilityTerms = student.getMobilityTerms();
         this.suspendedTerms = student.getSuspendedTerms();
-        Metrics metrics = MetricsCalculator.computeMetrics(student);
+        StudentMetrics metrics = MetricsCalculator.computeMetrics(student);
         this.feasibility = metrics.getFeasibility();
         this.successRate = metrics.getSuccessRate();
         this.averageLoad = metrics.getAverageLoad();

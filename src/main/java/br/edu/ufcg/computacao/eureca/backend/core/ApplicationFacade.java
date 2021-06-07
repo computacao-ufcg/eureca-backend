@@ -170,6 +170,11 @@ public class ApplicationFacade {
         return this.subjectsStatisticsController.getSubjectsStatisticsCSV();
     }
 
+    public Collection<SubjectsRetentionResponse> getSubjectsRetention(String token, String from, String to, String lang) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_RETENTION);
+        return this.subjectsStatisticsController.getSubjectsRetention();
+    }
+
     public String getPublicKey() throws EurecaException {
         try {
             return CryptoUtil.toBase64(ServiceAsymmetricKeysHolder.getInstance().getPublicKey());

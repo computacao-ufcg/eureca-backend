@@ -318,8 +318,9 @@ public class Curriculum {
     }
 
     private Collection<String> extractStrList(String subjectsStr) {
-        String creditsArray[] = subjectsStr.split(",");
         ArrayList<String> ret = new ArrayList<>();
+        if (subjectsStr.equals("")) return ret;
+        String creditsArray[] = subjectsStr.split(",");
         for (int i =0; i < creditsArray.length; i++) {
             ret.add(creditsArray[i]);
         }
