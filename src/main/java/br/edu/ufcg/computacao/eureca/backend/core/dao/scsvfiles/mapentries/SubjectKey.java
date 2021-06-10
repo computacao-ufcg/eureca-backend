@@ -2,16 +2,26 @@ package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
 
 import java.util.Objects;
 
-public class SubjectKey implements EurecaMapKey {
+public class SubjectKey implements EurecaMapKey, Comparable {
+    private String courseCode;
     private String curriculumCode;
     private String subjectCode;
 
-    public SubjectKey(String curriculumCode, String subjectCode) {
+    public SubjectKey(String courseCode, String curriculumCode, String subjectCode) {
+        this.courseCode = courseCode;
         this.curriculumCode = curriculumCode;
         this.subjectCode = subjectCode;
     }
 
     public SubjectKey() {
+    }
+
+    public String getCourseCode() {
+        return courseCode;
+    }
+
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
     }
 
     public String getCurriculumCode() {
@@ -35,7 +45,8 @@ public class SubjectKey implements EurecaMapKey {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SubjectKey that = (SubjectKey) o;
-        return getCurriculumCode().equals(that.getCurriculumCode()) &&
+        return getCourseCode().equals(that.getCourseCode()) &&
+                getCurriculumCode().equals(that.getCurriculumCode()) &&
                 getSubjectCode().equals(that.getSubjectCode());
     }
 
@@ -47,8 +58,16 @@ public class SubjectKey implements EurecaMapKey {
     @Override
     public String toString() {
         return "SubjectKey{" +
-                "curriculumCode='" + curriculumCode + '\'' +
+                "courseCode='" + courseCode + '\'' +
+                ", curriculumCode='" + curriculumCode + '\'' +
                 ", subjectCode='" + subjectCode + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        SubjectKey other = (SubjectKey) o;
+        String otherValue = other.getCourseCode() + other.getCurriculumCode() + other.getSubjectCode();
+        return (courseCode + curriculumCode + subjectCode).compareTo(otherValue);
     }
 }

@@ -27,27 +27,29 @@ public interface DataAccessFacade {
 
     Student getStudent(String registration);
 
-    Curriculum getCurriculum(String course, String curriculumCode);
+    Curriculum getCurriculum(String courseCode, String curriculumCode);
 
-    Subject getSubject(String curriculumCode, String subjectCode);
+    Subject getSubject(String courseCode, String curriculumCode, String subjectCode);
 
-    MetricStatistics getSucceededStatistics(String curriculumCode, String subjectCode);
+    MetricStatistics getSucceededStatistics(String courseCode, String curriculumCode, String subjectCode);
 
-    MetricStatistics getExemptedStatistics(String curriculumCode, String subjectCode);
+    MetricStatistics getExemptedStatistics(String courseCode, String curriculumCode, String subjectCode);
 
-    MetricStatistics getOngoingStatistics(String curriculumCode, String subjectCode);
+    MetricStatistics getOngoingStatistics(String courseCode, String curriculumCode, String subjectCode);
 
-    MetricStatistics getFailedDueToGradeStatistics(String curriculumCode, String subjectCode);
+    MetricStatistics getFailedDueToGradeStatistics(String courseCode, String curriculumCode, String subjectCode);
 
-    MetricStatistics getFailedDueToAbsencesStatistics(String curriculumCode, String subjectCode);
+    MetricStatistics getFailedDueToAbsencesStatistics(String courseCode, String curriculumCode, String subjectCode);
 
-    MetricStatistics getSuspendedStatistics(String curriculumCode, String subjectCode);
+    MetricStatistics getSuspendedStatistics(String courseCode, String curriculumCode, String subjectCode);
 
-    MetricStatistics getCancelledStatistics(String curriculumCode, String subjectCode);
+    MetricStatistics getCancelledStatistics(String courseCode, String curriculumCode, String subjectCode);
 
-    int getRetention(String curriculumCode, String item);
+    int getRetentionCount(String courseCode, String curriculumCode, String subjectCode);
 
-    TreeSet<String> getTermsForCurriculum(String curriculumCode);
+    Collection<SubjectsRetentionResponse> getRetention(String courseCode, String curriculumCode, String subjectCode);
 
-    int getNumberOfClassesPerSubject(String curriculumCode, String subjectCode);
+    TreeSet<String> getTermsForCurriculum(String courseCode, String curriculumCode);
+
+    int getNumberOfClassesPerSubject(String courseCode, String curriculumCode, String subjectCode);
 }

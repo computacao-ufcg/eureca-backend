@@ -30,7 +30,6 @@ public class SystemConstants {
     public static final int UNKNOWN = 11;
     public static final String FIRST_POSSIBLE_TERM = "1950.0";
     public static final String LAST_POSSIBLE_TERM = "2049.9";
-    public static final String EM_CURSO = "Em Curso";
     public static final String PORTUGUESE = "PORTUGUESE";
     public static final String STATUS_SUCCEEDED = "Aprovado";
     public static final String STATUS_CANCELLED = "Cancelado";

@@ -52,7 +52,7 @@ public class TestUtils {
         StudentData mockedStudentData = new StudentData("x", "x", "x", "x", "x",
                 "x", "x", "x", "Ativo",
                 "VESTIBULAR 2007.2", "x", "x", "x",
-                "x",0,120,0,
+                "x", "x",0,120,0,
                 58,0,26,5.68,
                 7,1.69,14,1,0,
                 0,0,0);

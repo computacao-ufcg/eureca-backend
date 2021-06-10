@@ -44,7 +44,7 @@ public class Main implements ApplicationRunner {
             DataAccessFacadeHolder.getInstance().setDataAccessFacade(dataAccessFacade);
 
             // Setting environment variables
-            EnvironmentVariables environmentVariables = new EnvironmentVariables("1401", "2017");
+            EnvironmentVariables environmentVariables = new EnvironmentVariables("14102100", "2017");
             EnviromentVariablesHolder.getInstance().setEnvironmentVariables(environmentVariables);
             // Setting up Application facade
             ApplicationFacade applicationFacade = ApplicationFacade.getInstance();

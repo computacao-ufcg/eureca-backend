@@ -1,6 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsRetentionResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsRetentionSummaryResponse;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.PortugueseStudentsGlossary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectSummaryResponse;
@@ -39,16 +40,16 @@ public class SubjectsStatisticsController {
         if (curriculum == null) {
             throw new InvalidParameterException(String.format(Messages.INEXISTENT_CURRICULUM_S_S, code, course));
         }
-        SubjectSummaryResponse summary = getSubjectStatisticsSummary(code, curriculum);
+        SubjectSummaryResponse summary = getSubjectStatisticsSummary(course, code, curriculum);
         return summary;
     }
 
-    private SubjectSummaryResponse getSubjectStatisticsSummary(String curriculumCode, Curriculum curriculum) {
-        SubjectStatisticsItem mandatory = buildSummary(curriculumCode, curriculum.getMandatorySubjectsList());
-        SubjectStatisticsItem optional = buildSummary(curriculumCode, curriculum.getOptionalSubjectsList());
-        SubjectStatisticsItem elective = buildSummary(curriculumCode, curriculum.getElectiveSubjectsList());
-        SubjectStatisticsItem complementary = buildSummary(curriculumCode, curriculum.getComplementarySubjectsList());
-        TreeSet<String> terms = this.dataAccessFacade.getTermsForCurriculum(curriculumCode);
+    private SubjectSummaryResponse getSubjectStatisticsSummary(String courseCode, String curriculumCode, Curriculum curriculum) {
+        SubjectStatisticsItem mandatory = buildSummary(courseCode, curriculumCode, curriculum.getMandatorySubjectsList());
+        SubjectStatisticsItem optional = buildSummary(courseCode, curriculumCode, curriculum.getOptionalSubjectsList());
+        SubjectStatisticsItem elective = buildSummary(courseCode, curriculumCode, curriculum.getElectiveSubjectsList());
+        SubjectStatisticsItem complementary = buildSummary(courseCode, curriculumCode, curriculum.getComplementarySubjectsList());
+        TreeSet<String> terms = this.dataAccessFacade.getTermsForCurriculum(courseCode, curriculumCode);
         String from = terms.first();
         String to = terms.last();
         SubjectSummaryResponse ret = new SubjectSummaryResponse(curriculumCode, from, to, mandatory, optional,
@@ -56,7 +57,7 @@ public class SubjectsStatisticsController {
         return ret;
     }
 
-    private SubjectStatisticsItem buildSummary(String curriculumCode, Collection<String> subjects) {
+    private SubjectStatisticsItem buildSummary(String courseCode, String curriculumCode, Collection<String> subjects) {
         int minFailedDueToAbsences = Integer.MAX_VALUE;
         int maxFailedDueToAbsences = 0;
         int totalFailedDueToAbsences = 0;
@@ -78,29 +79,29 @@ public class SubjectsStatisticsController {
         int totalNumberOfClasses = 0;
 
         for(String subjectCode : subjects) {
-            totalNumberOfClasses += this.dataAccessFacade.getNumberOfClassesPerSubject(curriculumCode, subjectCode);
-            Subject subject = this.dataAccessFacade.getSubject(curriculumCode, subjectCode);
-            MetricStatistics failedDueToAbsences = this.dataAccessFacade.getFailedDueToAbsencesStatistics(curriculumCode, subjectCode);
+            totalNumberOfClasses += this.dataAccessFacade.getNumberOfClassesPerSubject(courseCode, curriculumCode, subjectCode);
+            Subject subject = this.dataAccessFacade.getSubject(courseCode, curriculumCode, subjectCode);
+            MetricStatistics failedDueToAbsences = this.dataAccessFacade.getFailedDueToAbsencesStatistics(courseCode, curriculumCode, subjectCode);
             if (minFailedDueToAbsences > failedDueToAbsences.getMin()) minFailedDueToAbsences = failedDueToAbsences.getMin();
             if (maxFailedDueToAbsences < failedDueToAbsences.getMax()) maxFailedDueToAbsences = failedDueToAbsences.getMax();
             totalFailedDueToAbsences += failedDueToAbsences.getTotal();
-            MetricStatistics failedDueToGrade = this.dataAccessFacade.getFailedDueToGradeStatistics(curriculumCode, subjectCode);
+            MetricStatistics failedDueToGrade = this.dataAccessFacade.getFailedDueToGradeStatistics(courseCode, curriculumCode, subjectCode);
             if (minFailedDueToGrade > failedDueToGrade.getMin()) minFailedDueToGrade = failedDueToGrade.getMin();
             if (maxFailedDueToGrade < failedDueToGrade.getMax()) maxFailedDueToGrade = failedDueToGrade.getMax();
             totalFailedDueToGrade += failedDueToGrade.getTotal();
-            MetricStatistics suspended = this.dataAccessFacade.getSuspendedStatistics(curriculumCode, subjectCode);
+            MetricStatistics suspended = this.dataAccessFacade.getSuspendedStatistics(courseCode, curriculumCode, subjectCode);
             if (minSuspended > suspended.getMin()) minSuspended = suspended.getMin();
             if (maxSuspended < suspended.getMax()) maxSuspended = suspended.getMax();
             totalSuspended += suspended.getTotal();
-            MetricStatistics succeeded = this.dataAccessFacade.getSucceededStatistics(curriculumCode, subjectCode);
+            MetricStatistics succeeded = this.dataAccessFacade.getSucceededStatistics(courseCode, curriculumCode, subjectCode);
             if (minSucceeded > succeeded.getMin()) minSucceeded = succeeded.getMin();
             if (maxSucceeded < succeeded.getMax()) maxSucceeded = succeeded.getMax();
             totalSucceeded += succeeded.getTotal();
-            MetricStatistics exempted = this.dataAccessFacade.getExemptedStatistics(curriculumCode, subjectCode);
+            MetricStatistics exempted = this.dataAccessFacade.getExemptedStatistics(courseCode, curriculumCode, subjectCode);
             if (minExempted > exempted.getMin()) minExempted = exempted.getMin();
             if (maxExempted < exempted.getMax()) maxExempted = exempted.getMax();
             totalExempted += exempted.getTotal();
-            int retention = this.dataAccessFacade.getRetention(curriculumCode, subjectCode);
+            int retention = this.dataAccessFacade.getRetentionCount(courseCode, curriculumCode, subjectCode);
             if (minRetention > retention) minRetention = retention;
             if (maxRetention < retention) maxRetention = retention;
             totalRetention += retention;
@@ -133,7 +134,26 @@ public class SubjectsStatisticsController {
         return response;
     }
 
-    public Collection<SubjectsRetentionResponse> getSubjectsRetention() throws InvalidParameterException {
+    public Collection<SubjectsRetentionSummaryResponse> getSubjectsRetention(String lang) throws InvalidParameterException {
+        String course = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
+        String code = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
+        Curriculum curriculum = this.dataAccessFacade.getCurriculum(course, code);
+        if (curriculum == null) {
+            throw new InvalidParameterException(String.format(Messages.INEXISTENT_CURRICULUM_S_S, code, course));
+        }
+        Collection<SubjectsRetentionSummaryResponse> subjectsRetention = new TreeSet<>();
+        for (String subjectCode : curriculum.getMandatorySubjectsList()) {
+            int retention = this.dataAccessFacade.getRetentionCount(curriculum.getCourse(), curriculum.getCode(), subjectCode);
+            Subject subject = this.dataAccessFacade.getSubject(curriculum.getCourse(), curriculum.getCode(), subjectCode);
+            SubjectsRetentionSummaryResponse retentionResponse = new
+                    SubjectsRetentionSummaryResponse(curriculum.getCourse(), curriculum.getCode(),
+                    subjectCode, subject.getName(), retention);
+            subjectsRetention.add(retentionResponse);
+        }
+        return subjectsRetention;
+    }
+
+    public Collection<SubjectsRetentionResponse> getSubjectsRetentionCSV(String lang) throws InvalidParameterException {
         String course = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
         String code = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
         Curriculum curriculum = this.dataAccessFacade.getCurriculum(course, code);
@@ -142,11 +162,11 @@ public class SubjectsStatisticsController {
         }
         Collection<SubjectsRetentionResponse> subjectsRetention = new TreeSet<>();
         for (String subjectCode : curriculum.getMandatorySubjectsList()) {
-            int retention = this.dataAccessFacade.getRetention(curriculum.getCode(), subjectCode);
-            Subject subject = this.dataAccessFacade.getSubject(curriculum.getCode(), subjectCode);
-            SubjectsRetentionResponse retentionResponse = new SubjectsRetentionResponse(curriculum.getCode(),
-                    subjectCode, subject.getName(), retention);
-            subjectsRetention.add(retentionResponse);
+            Collection<SubjectsRetentionResponse> retentionResponses =
+                    this.dataAccessFacade.getRetention(curriculum.getCourse(), curriculum.getCode(), subjectCode);
+            retentionResponses.forEach(response -> {
+                subjectsRetention.add(response);
+            });
         }
         return subjectsRetention;
     }

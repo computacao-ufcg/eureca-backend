@@ -1,5 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.constants;
 
+import java.util.Locale;
+
 public class Messages {
     public static final String ADD_TABLE_S = "Add table: %s.";
     public static final String ALL_SET = "All services have been initialized.";
@@ -22,4 +24,5 @@ public class Messages {
     public static final String RECEIVING_GET_STUDENTS_STATISTICS = "Received get students statistics.";
     public static final String RECEIVING_GET_SUBJECTS_STATISTICS = "Received get subjects statistics.";
     public static final String RECEIVING_GET_TEACHERS_STATISTICS = "Received get teachers.";
+    public static final String STUDENT_S_DISABLED_FOR_SUBJECT_S = "Student %s is not enabled to enroll in subject %s.";
 }
