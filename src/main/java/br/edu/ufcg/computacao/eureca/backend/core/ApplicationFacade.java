@@ -170,9 +170,14 @@ public class ApplicationFacade {
         return this.subjectsStatisticsController.getSubjectsStatisticsCSV();
     }
 
-    public Collection<SubjectsRetentionResponse> getSubjectsRetention(String token, String from, String to, String lang) throws EurecaException {
+    public Collection<SubjectsRetentionSummaryResponse> getSubjectsRetention(String token, String lang) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_RETENTION);
-        return this.subjectsStatisticsController.getSubjectsRetention();
+        return this.subjectsStatisticsController.getSubjectsRetention(lang);
+    }
+
+    public Collection<SubjectsRetentionResponse> getSubjectsRetentionCSV(String token, String lang) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_RETENTION);
+        return this.subjectsStatisticsController.getSubjectsRetentionCSV(lang);
     }
 
     public String getPublicKey() throws EurecaException {

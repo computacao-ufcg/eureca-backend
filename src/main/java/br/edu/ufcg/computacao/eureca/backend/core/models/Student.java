@@ -21,6 +21,7 @@ public class Student implements Comparable {
     private String affirmativePolicy;
     private String secondarySchool;
     private String secondarySchoolGraduationYear;
+    private String course;
     private String curriculum;
     private int mandatoryHours;
     private int mandatoryCredits;
@@ -43,7 +44,7 @@ public class Student implements Comparable {
                    String maritalStatus, String nationality, String placeOfBirth, String race, String statusStr,
                    StudentStatus status, String statusTerm, String admissionStr, String admissionTerm,
                    String affirmativePolicy, String secondarySchool, String secondarySchoolGraduationYear,
-                   String curriculum, int mandatoryHours, int mandatoryCredits, int electiveHours,
+                   String course, String curriculum, int mandatoryHours, int mandatoryCredits, int electiveHours,
                    int electiveCredits, int complementaryHours, int complementaryCredits, int attemptedCredits,
                    double gpa, double mc, double iea, int completedTerms, int suspendedTerms, int institutionalTerms,
                    int mobilityTerms, int enrolledCredits, double admissionGrade) {
@@ -65,6 +66,7 @@ public class Student implements Comparable {
         this.affirmativePolicy = affirmativePolicy;
         this.secondarySchool = secondarySchool;
         this.secondarySchoolGraduationYear = secondarySchoolGraduationYear;
+        this.course = course;
         this.curriculum = curriculum;
         this.mandatoryHours = mandatoryHours;
         this.mandatoryCredits = mandatoryCredits;
@@ -226,6 +228,14 @@ public class Student implements Comparable {
 
     public void setSecondarySchoolGraduationYear(String secondarySchoolGraduationYear) {
         this.secondarySchoolGraduationYear = secondarySchoolGraduationYear;
+    }
+
+    public String getCourse() {
+        return course;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
     }
 
     public String getCurriculum() {
@@ -413,6 +423,7 @@ public class Student implements Comparable {
                 ", affirmativePolicy='" + affirmativePolicy + '\'' +
                 ", secondarySchool='" + secondarySchool + '\'' +
                 ", secondarySchoolGraduationYear='" + secondarySchoolGraduationYear + '\'' +
+                ", course='" + course + '\'' +
                 ", curriculum='" + curriculum + '\'' +
                 ", mandatoryHours=" + mandatoryHours +
                 ", mandatoryCredits=" + mandatoryCredits +

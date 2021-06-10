@@ -1,6 +1,5 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.SubjectData;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.SubjectKey;
 
 import java.util.Collection;
@@ -8,15 +7,19 @@ import java.util.TreeSet;
 
 public class StudentCurriculum {
     private int currentTerm;
-    private Collection<String> completed;
-    private Collection<String> enabled;
-    private Collection<String> disabled;
+    private int accumulatedCredits;
+    private Collection<SubjectKey> completed;
+    private Collection<SubjectKey> enabled;
+    private Collection<SubjectKey> disabled;
+    private Collection<SubjectKey> adequate;
 
-    public StudentCurriculum(int currentTerm) {
+    public StudentCurriculum(int currentTerm, int accumulatedCredits) {
         this.currentTerm = currentTerm;
+        this.accumulatedCredits = accumulatedCredits;
         this.completed = new TreeSet<>();
         this.enabled = new TreeSet<>();
         this.disabled = new TreeSet<>();
+        this.adequate = new TreeSet<>();
     }
 
     public int getCurrentTerm() {
@@ -27,38 +30,43 @@ public class StudentCurriculum {
         this.currentTerm = currentTerm;
     }
 
-    public Collection<String> getCompleted() {
+    public int getAccumulatedCredits() {
+        return accumulatedCredits;
+    }
+
+    public void setAccumulatedCredits(int accumulatedCredits) {
+        this.accumulatedCredits = accumulatedCredits;
+    }
+
+    public Collection<SubjectKey> getCompleted() {
         return completed;
     }
 
-    public void setCompleted(Collection<String> completed) {
+    public void setCompleted(Collection<SubjectKey> completed) {
         this.completed = completed;
     }
 
-    public Collection<String> getEnabled() {
+    public Collection<SubjectKey> getEnabled() {
         return enabled;
     }
 
-    public void setEnabled(Collection<String> enabled) {
+    public void setEnabled(Collection<SubjectKey> enabled) {
         this.enabled = enabled;
     }
 
-    public Collection<String> getDisabled() {
+    public Collection<SubjectKey> getDisabled() {
         return disabled;
     }
 
-    public void setDisabled(Collection<String> disabled) {
+    public void setDisabled(Collection<SubjectKey> disabled) {
         this.disabled = disabled;
     }
 
-    public boolean hasCompleted(SubjectKey k, SubjectData v) {
-        if (this.completed.contains((k.getCurriculumCode() + ":" + k.getSubjectCode()))) return true;
-        for (String subjectCode : v.getEquivalentCodesList()) {
-            if (this.completed.contains((k.getCurriculumCode() + ":" + subjectCode))) {
-                this.completed.add((k.getCurriculumCode() + ":" + k.getSubjectCode()));
-                return true;
-            }
-        }
-        return false;
+    public Collection<SubjectKey> getAdequate() {
+        return adequate;
+    }
+
+    public void setAdequate(Collection<SubjectKey> adequate) {
+        this.adequate = adequate;
     }
 }

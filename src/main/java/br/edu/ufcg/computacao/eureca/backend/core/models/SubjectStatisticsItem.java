@@ -5,20 +5,20 @@ public class SubjectStatisticsItem {
     private MetricSummary failedDueToAbsences;
     private MetricSummary failedDueToGrade;
     private MetricSummary failedDueToCanceling;
-    private MetricSummary success;
-    private MetricSummary relativeRetention;
-    private MetricSummary absoluteRetention;
+    private MetricSummary succeeded;
+    private MetricSummary exempted;
+    private MetricSummary retention;
 
     public SubjectStatisticsItem(int disciplines, MetricSummary failedDueToAbsences,
-                                 MetricSummary failedDueToGrade, MetricSummary failedDueToCanceling, MetricSummary success, MetricSummary relativeRetention,
-                                 MetricSummary absoluteRetention) {
+                                 MetricSummary failedDueToGrade, MetricSummary failedDueToCanceling, MetricSummary succeeded, MetricSummary exempted,
+                                 MetricSummary retention) {
         this.disciplines = disciplines;
         this.failedDueToAbsences = failedDueToAbsences;
         this.failedDueToGrade = failedDueToGrade;
         this.failedDueToCanceling = failedDueToCanceling;
-        this.success = success;
-        this.relativeRetention = relativeRetention;
-        this.absoluteRetention = absoluteRetention;
+        this.succeeded = succeeded;
+        this.exempted = exempted;
+        this.retention = retention;
     }
 
     public int getDisciplines() {
@@ -53,27 +53,27 @@ public class SubjectStatisticsItem {
         this.failedDueToCanceling = failedDueToCanceling;
     }
 
-    public MetricSummary getSuccess() {
-        return success;
+    public MetricSummary getSucceeded() {
+        return succeeded;
     }
 
-    public void setSuccess(MetricSummary success) {
-        this.success = success;
+    public void setSucceeded(MetricSummary succeeded) {
+        this.succeeded = succeeded;
     }
 
-    public MetricSummary getRelativeRetention() {
-        return relativeRetention;
+    public MetricSummary getExempted() {
+        return exempted;
     }
 
-    public void setRelativeRetention(MetricSummary relativeRetention) {
-        this.relativeRetention = relativeRetention;
+    public void setExempted(MetricSummary exempted) {
+        this.exempted = exempted;
     }
 
-    public MetricSummary getAbsoluteRetention() {
-        return absoluteRetention;
+    public MetricSummary getRetention() {
+        return retention;
     }
 
-    public void setAbsoluteRetention(MetricSummary absoluteRetention) {
-        this.absoluteRetention = absoluteRetention;
+    public void setRetention(MetricSummary retention) {
+        this.retention = retention;
     }
 }

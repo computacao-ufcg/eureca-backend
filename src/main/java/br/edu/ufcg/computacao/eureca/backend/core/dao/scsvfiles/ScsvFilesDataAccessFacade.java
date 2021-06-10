@@ -194,66 +194,73 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Subject getSubject(String curriculumCode, String subjectCode) {
+    public Subject getSubject(String courseCode, String curriculumCode, String subjectCode) {
         Map<SubjectKey, SubjectData> subjectMap = this.mapsHolder.getMap("subjects");
-        SubjectKey key = new SubjectKey(curriculumCode, subjectCode);
+        SubjectKey key = new SubjectKey(courseCode, curriculumCode, subjectCode);
         SubjectData subjectData = subjectMap.get(key);
         return subjectData.createSubject(key);
     }
 
     @Override
-    public MetricStatistics getSucceededStatistics(String curriculumCode, String subjectCode) {
-        return getEnrollmentsStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_SUCCEEDED);
+    public MetricStatistics getSucceededStatistics(String courseCode, String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_SUCCEEDED);
     }
 
     @Override
-    public MetricStatistics getExemptedStatistics(String curriculumCode, String subjectCode) {
-        return getEnrollmentsStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_EXEMPTED);
+    public MetricStatistics getExemptedStatistics(String courseCode, String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_EXEMPTED);
     }
     @Override
-    public MetricStatistics getOngoingStatistics(String curriculumCode, String subjectCode) {
-        return getEnrollmentsStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_ONGOING);
+    public MetricStatistics getOngoingStatistics(String courseCode, String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_ONGOING);
     }
     @Override
-    public MetricStatistics getFailedDueToGradeStatistics(String curriculumCode, String subjectCode) {
-        return getEnrollmentsStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_FAILED_DUE_GRADE);
+    public MetricStatistics getFailedDueToGradeStatistics(String courseCode, String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_FAILED_DUE_GRADE);
     }
     @Override
-    public MetricStatistics getFailedDueToAbsencesStatistics(String curriculumCode, String subjectCode) {
-        return getEnrollmentsStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_FAILED_DUE_ABSENCE);
+    public MetricStatistics getFailedDueToAbsencesStatistics(String courseCode, String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_FAILED_DUE_ABSENCE);
     }
     @Override
-    public MetricStatistics getSuspendedStatistics(String curriculumCode, String subjectCode) {
-        return getEnrollmentsStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_SUSPENDED);
+    public MetricStatistics getSuspendedStatistics(String courseCode, String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_SUSPENDED);
     }
     @Override
-    public MetricStatistics getCancelledStatistics(String curriculumCode, String subjectCode) {
-        return getEnrollmentsStatistics(curriculumCode, subjectCode, SystemConstants.STATUS_CANCELLED);
+    public MetricStatistics getCancelledStatistics(String courseCode, String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_CANCELLED);
     }
 
     @Override
-    public int getRetention(String curriculumCode, String subjectCode) {
-        return this.indexesHolder.getRetention(curriculumCode, subjectCode);
+    public int getRetentionCount(String courseCode, String curriculumCode, String subjectCode) {
+        return this.indexesHolder.getRetentionCount(courseCode, curriculumCode, subjectCode);
     }
 
     @Override
-    public TreeSet<String> getTermsForCurriculum(String curriculum) {
-        return this.indexesHolder.getTermsPerCurriculum(curriculum);
+    public Collection<SubjectsRetentionResponse> getRetention(String courseCode, String curriculumCode, String subjectCode) {
+        return this.indexesHolder.getRetention(courseCode, curriculumCode, subjectCode);
     }
 
     @Override
-    public int getNumberOfClassesPerSubject(String curriculumCode, String subjectCode) {
-        return this.indexesHolder.getNumberOfClassesPerSubject(curriculumCode, subjectCode);
+    public TreeSet<String> getTermsForCurriculum(String courseCode, String curriculum) {
+        return this.indexesHolder.getTermsPerCurriculum(courseCode, curriculum);
     }
 
-    public MetricStatistics getEnrollmentsStatistics(String curriculumCode, String subjectCode, String status) {
+    @Override
+    public int getNumberOfClassesPerSubject(String courseCode, String curriculumCode, String subjectCode) {
+        return this.indexesHolder.getNumberOfClassesPerSubject(courseCode, curriculumCode, subjectCode);
+    }
+
+    public MetricStatistics getEnrollmentsStatistics(String courseCode, String curriculumCode, String subjectCode,
+                                                     String status) {
         final int[] min = {Integer.MAX_VALUE};
         final int[] max = {0};
         final int[] total = {0};
-        Map<String, Map<String, Map<String, ClassEnrollments>>> allEnrollments =
-                this.indexesHolder.getEnrollmentsPerSubjectPerTermPerClass(curriculumCode);
+        Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> allEnrollments =
+                this.indexesHolder.getEnrollmentsPerSubjectPerTermPerClass(courseCode, curriculumCode);
+        SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
         if (allEnrollments != null) {
-            Map<String, Map<String, ClassEnrollments>> enrollments = allEnrollments.get(subjectCode);
+            Map<String, Map<String, ClassEnrollments>> enrollments = allEnrollments.get(subjectKey);
             if (enrollments != null) {
                 enrollments.forEach((term, classes) -> {
                     classes.forEach((classId, classEnrollments) -> {

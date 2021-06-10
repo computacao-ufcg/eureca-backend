@@ -7,13 +7,15 @@ import java.util.Collection;
 
 public class CurriculumData implements EurecaMapValue {
     private String idealMandatoryCredits;
-    private Collection<Integer> idealMandatoryCreditsList;
+    private ArrayList<Integer> idealMandatoryCreditsList;
     private String idealOptionalCredits;
-    private Collection<Integer> idealOptionalCreditsList;
+    private ArrayList<Integer> idealOptionalCreditsList;
     private String idealElectiveCredits;
-    private Collection<Integer> idealElectiveCreditsList;
+    private ArrayList<Integer> idealElectiveCreditsList;
     private String idealComplementaryCredits;
-    private Collection<Integer> idealComplementaryCreditsList;
+    private ArrayList<Integer> idealComplementaryCreditsList;
+    private String expectedMinAccumulatedCredits;
+    private ArrayList<Integer> expectedMinAccumulatedCreditsList;
     private int minMandatoryCreditsNeeded;
     private int minOptionalCreditsNeeded;
     private int minElectiveCreditsNeeded;
@@ -36,7 +38,8 @@ public class CurriculumData implements EurecaMapValue {
     private Collection<String> complementaryActivitiesList;
 
     public CurriculumData(String idealMandatoryCredits, String idealOptionalCredits, String idealElectiveCredits,
-                          String idealComplementaryCredits, int minMandatoryCreditsNeeded, int minOptionalCreditsNeeded,
+                          String idealComplementaryCredits, String expectedMinAccumulatedCredits,
+                          int minMandatoryCreditsNeeded, int minOptionalCreditsNeeded,
                           int minElectiveCreditsNeeded, int minComplementaryCreditsNeeded, int minActivitiesNeeded,
                           int minNumberOfTerms, int maxNumberOfTerms, int minNumberOfEnrolledCredits,
                           int maxNumberOfEnrolledCredits, int exceptionalAdditionalEnrolledCredits,
@@ -46,6 +49,7 @@ public class CurriculumData implements EurecaMapValue {
         this.idealOptionalCredits = idealOptionalCredits;
         this.idealElectiveCredits = idealElectiveCredits;
         this.idealComplementaryCredits = idealComplementaryCredits;
+        this.expectedMinAccumulatedCredits = expectedMinAccumulatedCredits;
         this.minMandatoryCreditsNeeded = minMandatoryCreditsNeeded;
         this.minOptionalCreditsNeeded = minOptionalCreditsNeeded;
         this.minElectiveCreditsNeeded = minElectiveCreditsNeeded;
@@ -61,10 +65,11 @@ public class CurriculumData implements EurecaMapValue {
         this.electiveSubjects = electiveSubjects;
         this.complementarySubjects = complementarySubjects;
         this.complementaryActivities = complementaryActivities;
-        this.idealMandatoryCreditsList = null;
-        this.idealOptionalCreditsList = null;
-        this.idealElectiveCreditsList = null;
-        this.idealComplementaryCreditsList = null;
+        this.idealMandatoryCreditsList = extractIntegerList(idealMandatoryCredits);
+        this.idealOptionalCreditsList = extractIntegerList(idealOptionalCredits);
+        this.idealElectiveCreditsList = extractIntegerList(idealElectiveCredits);
+        this.idealComplementaryCreditsList = extractIntegerList(idealComplementaryCredits);
+        this.expectedMinAccumulatedCreditsList = extractIntegerList(expectedMinAccumulatedCredits);
         this.mandatorySubjectsList = null;
         this.optionalSubjectsList = null;
         this.electiveSubjectsList = null;
@@ -227,32 +232,47 @@ public class CurriculumData implements EurecaMapValue {
         this.complementaryActivities = complementaryActivities;
     }
 
-    public Collection<Integer> getIdealMandatoryCreditsList() {
+    public String getExpectedMinAccumulatedCredits() {
+        return expectedMinAccumulatedCredits;
+    }
+
+    public void setExpectedMinAccumulatedCredits(String expectedMinAccumulatedCredits) {
+        this.expectedMinAccumulatedCredits = expectedMinAccumulatedCredits;
+    }
+
+    public int getIdealMandatoryCreditsList(int index) {
         if (idealMandatoryCreditsList == null) {
-            idealOptionalCreditsList = extractIntegerList(idealMandatoryCredits);
+            idealMandatoryCreditsList = extractIntegerList(this.idealMandatoryCredits);
         }
-        return idealMandatoryCreditsList;
+        return idealMandatoryCreditsList.get(index - 1).intValue();
     }
 
-    public Collection<Integer> getIdealOptionalCreditsList() {
+    public int getIdealOptionalCreditsList(int index) {
         if (idealOptionalCreditsList == null) {
-            idealOptionalCreditsList = extractIntegerList(idealOptionalCredits);
+            idealOptionalCreditsList = extractIntegerList(this.idealOptionalCredits);
         }
-        return idealOptionalCreditsList;
+        return idealOptionalCreditsList.get(index - 1).intValue();
     }
 
-    public Collection<Integer> getIdealElectiveCreditsList() {
+    public int getIdealElectiveCreditsList(int index) {
         if (idealElectiveCreditsList == null) {
-            idealElectiveCreditsList = extractIntegerList(idealElectiveCredits);
+            idealElectiveCreditsList = extractIntegerList(this.idealElectiveCredits);
         }
-        return idealElectiveCreditsList;
+        return idealElectiveCreditsList.get(index - 1).intValue();
     }
 
-    public Collection<Integer> getIdealComplementaryCreditsList() {
+    public int getIdealComplementaryCreditsList(int index) {
         if (idealComplementaryCreditsList == null) {
-            idealComplementaryCreditsList = extractIntegerList(idealComplementaryCredits);
+            idealComplementaryCreditsList = extractIntegerList(this.idealComplementaryCredits);
         }
-        return idealComplementaryCreditsList;
+        return idealComplementaryCreditsList.get(index - 1).intValue();
+    }
+
+    public int getExpectedMinAccumulatedCreditsList(int index) {
+        if (expectedMinAccumulatedCreditsList == null) {
+            expectedMinAccumulatedCreditsList = extractIntegerList(this.expectedMinAccumulatedCredits);
+        }
+        return expectedMinAccumulatedCreditsList.get(index - 1).intValue();
     }
 
     public Collection<String> getMandatorySubjectsList() {
@@ -299,11 +319,11 @@ public class CurriculumData implements EurecaMapValue {
                 getOptionalSubjects(), getElectiveSubjects(), getComplementarySubjects(), getComplementaryActivities());
     }
 
-    private Collection<Integer> extractIntegerList(String idealCreditsStr) {
+    private ArrayList<Integer> extractIntegerList(String idealCreditsStr) {
         String creditsArray[] = idealCreditsStr.split(",");
         ArrayList<Integer> ret = new ArrayList<>();
-        for (int i =0; i < creditsArray.length; i++) {
-            ret.add(new Integer(creditsArray[i]));
+        for (int i = 0; i < creditsArray.length; i++) {
+            ret.add(i, new Integer(creditsArray[i]));
         }
         return ret;
     }
