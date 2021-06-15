@@ -202,33 +202,33 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public MetricStatistics getSucceededStatistics(String courseCode, String curriculumCode, String subjectCode) {
-        return getEnrollmentsStatistics(courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_SUCCEEDED);
+    public MetricStatistics getSucceededStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_SUCCEEDED);
     }
 
     @Override
-    public MetricStatistics getExemptedStatistics(String courseCode, String curriculumCode, String subjectCode) {
-        return getEnrollmentsStatistics(courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_EXEMPTED);
+    public MetricStatistics getExemptedStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_EXEMPTED);
     }
     @Override
-    public MetricStatistics getOngoingStatistics(String courseCode, String curriculumCode, String subjectCode) {
-        return getEnrollmentsStatistics(courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_ONGOING);
+    public MetricStatistics getOngoingStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_ONGOING);
     }
     @Override
-    public MetricStatistics getFailedDueToGradeStatistics(String courseCode, String curriculumCode, String subjectCode) {
-        return getEnrollmentsStatistics(courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_FAILED_DUE_GRADE);
+    public MetricStatistics getFailedDueToGradeStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_FAILED_DUE_GRADE);
     }
     @Override
-    public MetricStatistics getFailedDueToAbsencesStatistics(String courseCode, String curriculumCode, String subjectCode) {
-        return getEnrollmentsStatistics(courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_FAILED_DUE_ABSENCE);
+    public MetricStatistics getFailedDueToAbsencesStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_FAILED_DUE_ABSENCE);
     }
     @Override
-    public MetricStatistics getSuspendedStatistics(String courseCode, String curriculumCode, String subjectCode) {
-        return getEnrollmentsStatistics(courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_SUSPENDED);
+    public MetricStatistics getSuspendedStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_SUSPENDED);
     }
     @Override
-    public MetricStatistics getCancelledStatistics(String courseCode, String curriculumCode, String subjectCode) {
-        return getEnrollmentsStatistics(courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_CANCELLED);
+    public MetricStatistics getCancelledStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_CANCELLED);
     }
 
     @Override
@@ -247,12 +247,12 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public int getNumberOfClassesPerSubject(String courseCode, String curriculumCode, String subjectCode) {
-        return this.indexesHolder.getNumberOfClassesPerSubject(courseCode, curriculumCode, subjectCode);
+    public int getNumberOfClassesPerSubject(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
+        return this.indexesHolder.getNumberOfClassesPerSubject(from, to, courseCode, curriculumCode, subjectCode);
     }
 
-    public MetricStatistics getEnrollmentsStatistics(String courseCode, String curriculumCode, String subjectCode,
-                                                     String status) {
+    public MetricStatistics getEnrollmentsStatistics(String from, String to, String courseCode, String curriculumCode,
+                                                     String subjectCode, String status) {
         final int[] min = {Integer.MAX_VALUE};
         final int[] max = {0};
         final int[] total = {0};
@@ -263,12 +263,14 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             Map<String, Map<String, ClassEnrollments>> enrollments = allEnrollments.get(subjectKey);
             if (enrollments != null) {
                 enrollments.forEach((term, classes) -> {
-                    classes.forEach((classId, classEnrollments) -> {
-                        int numberOfEnrollments = getClassEnrollmentsPerStatus(classEnrollments, status);
-                        if (min[0] > numberOfEnrollments) min[0] = numberOfEnrollments;
-                        if (max[0] < numberOfEnrollments) max[0] = numberOfEnrollments;
-                        total[0] += numberOfEnrollments;
-                    });
+                    if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
+                        classes.forEach((classId, classEnrollments) -> {
+                            int numberOfEnrollments = getClassEnrollmentsPerStatus(classEnrollments, status);
+                            if (min[0] > numberOfEnrollments) min[0] = numberOfEnrollments;
+                            if (max[0] < numberOfEnrollments) max[0] = numberOfEnrollments;
+                            total[0] += numberOfEnrollments;
+                        });
+                    }
                 });
             }
         }

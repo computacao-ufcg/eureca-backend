@@ -34,7 +34,7 @@ public class SubjectStatisticsTest extends EndpointTest {
         SubjectStatisticsItem optional = new SubjectStatisticsItem(10, metrics, metrics, metrics, metrics, metrics, metrics);
         SubjectStatisticsItem elective = new SubjectStatisticsItem(15,metrics, metrics, metrics, metrics, metrics, metrics);
         SubjectStatisticsItem complementary = new SubjectStatisticsItem(10, metrics, metrics, metrics, metrics, metrics, metrics);
-        SubjectSummaryResponse summary = new SubjectSummaryResponse("2017", "1980.1", "2020.1", mandatory, optional, elective, complementary);
+        SubjectSummaryResponse summary = new SubjectSummaryResponse("14102100", "2017", "1980.1", "2020.1", mandatory, optional, elective, complementary);
         return summary;
     }
 }

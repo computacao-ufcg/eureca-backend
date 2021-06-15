@@ -36,7 +36,7 @@ public class IndexesHolder {
     // Enrollment indexes
     private Map<CurriculumKey, Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>>> enrollmentsPerCurriculumPerSubjectPerTermPerClass;
     private Map<CurriculumKey, TreeSet<String>> termsPerCurriculum;
-    private Map<SubjectKey, Integer> numberOfClasses;
+    private Map<SubjectKey, Map<String, Collection<String>>> classesPerSubjectPerTerm;
     // Subject indexes
     private Map<NationalIdRegistrationKey, StudentCurriculum> studentCurriculumMap;
 
@@ -165,7 +165,7 @@ public class IndexesHolder {
     private void buildEnrollmentIndexes() {
         this.enrollmentsPerCurriculumPerSubjectPerTermPerClass = new HashMap<>();
         this.termsPerCurriculum = new HashMap<>();
-        this.numberOfClasses = new HashMap<>();
+        this.classesPerSubjectPerTerm = new HashMap<>();
         Map<Registration, Integer> attemptsSummary = new HashMap<>();
 
         this.enrollmentsMap.forEach((enrollmentKey, enrollmentData) -> {
@@ -198,18 +198,25 @@ public class IndexesHolder {
             ClassEnrollments classEnrollments = enrollementsPerClass.get(enrollmentData.getClassId());
             if (classEnrollments == null) {
                 classEnrollments = new ClassEnrollments();
-                Integer classes = this.numberOfClasses.get(subjectKey);
-                if (classes == null) {
-                    classes = 0;
-                }
-                classes++;
-                this.numberOfClasses.put(subjectKey, classes);
             }
             addEnrolment(classEnrollments, studentId, subjectKey, enrollmentData.getStatus());
             enrollementsPerClass.put(enrollmentData.getClassId(), classEnrollments);
             enrollmentsPerTermPerClass.put(enrollmentKey.getTerm(), enrollementsPerClass);
             enrollmentsPerSubjectPerTermPerClass.put(subjectKey, enrollmentsPerTermPerClass);
             this.enrollmentsPerCurriculumPerSubjectPerTermPerClass.put(curriculumKey, enrollmentsPerSubjectPerTermPerClass);
+
+            Map<String, Collection<String>> classesPerTerm = this.classesPerSubjectPerTerm.get(subjectKey);
+            if (classesPerTerm == null) {
+                classesPerTerm = new HashMap<>();
+            }
+            Collection<String> classes = classesPerTerm.get(enrollmentKey.getTerm());
+            if (classes == null) {
+                classes = new TreeSet<>();
+            }
+            classes.add(enrollmentData.getClassId());
+            classesPerTerm.put(enrollmentKey.getTerm(), classes);
+            this.classesPerSubjectPerTerm.put(subjectKey, classesPerTerm);
+            LOGGER.debug(String.format("inserting: (%s, %s, %s) %d", enrollmentKey.getCode(), enrollmentKey.getTerm(), enrollmentData.getClassId(), classes.size()));
 
             if (!enrollmentData.getStatus().equals(SystemConstants.STATUS_ONGOING) &&
                     !enrollmentData.getStatus().equals(SystemConstants.STATUS_CANCELLED)) {
@@ -372,7 +379,16 @@ public class IndexesHolder {
         int retention = 0;
         for (NationalIdRegistrationKey active : this.actives) {
             StudentCurriculum studentCurriculum = this.studentCurriculumMap.get(active);
-            if (studentCurriculum.getEnabled().contains(new SubjectKey(courseCode, curriculumCode, subjectCode))) retention++;
+            SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
+            if (studentCurriculum.getEnabled().contains(subjectKey)) {
+                StudentData studentData = this.studentsMap.get(active);
+                CurriculumKey curriculumKey = new CurriculumKey(studentData.getCourse(), studentData.getCurriculum());
+                CurriculumData curriculumData = this.curriculumMap.get(curriculumKey);
+                SubjectData subjectData = this.subjectsMap.get(subjectKey);
+                if (isAdequate(studentCurriculum, curriculumData, subjectData.getIdealTerm())) {
+                    retention++;
+                }
+            }
         }
         return retention;
     }
@@ -404,8 +420,17 @@ public class IndexesHolder {
         return termsPerCurriculum.get(new CurriculumKey(courseCode, curriculumCode));
     }
 
-    public int getNumberOfClassesPerSubject(String courseCode, String curriculumCode, String subjectCode) {
-        Integer ret = this.numberOfClasses.get(new SubjectKey(courseCode, curriculumCode, subjectCode));
-        return (ret == null ? 0 : ret.intValue());
+    public int getNumberOfClassesPerSubject(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
+        Map<String, Collection<String>> classesPerTerm = this.classesPerSubjectPerTerm.get(new SubjectKey(courseCode, curriculumCode, subjectCode));
+        int ret = 0;
+        if (classesPerTerm != null) {
+            for (String term : classesPerTerm.keySet()) {
+                if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
+                    ret += classesPerTerm.get(term).size();
+                    LOGGER.debug(String.format("adding: (%s, %s) %d", subjectCode, term, ret));
+                }
+            }
+        }
+        return ret;
     }
 }
