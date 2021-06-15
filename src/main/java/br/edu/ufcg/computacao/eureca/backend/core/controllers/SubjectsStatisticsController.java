@@ -33,31 +33,39 @@ public class SubjectsStatisticsController {
                 .collect(Collectors.toCollection(TreeSet::new));
     }
 
-    public SubjectSummaryResponse getSubjectStatistics() throws InvalidParameterException {
+    public SubjectSummaryResponse getSubjectStatistics(String from, String to) throws InvalidParameterException {
         String course = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
         String code = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
         Curriculum curriculum = this.dataAccessFacade.getCurriculum(course, code);
         if (curriculum == null) {
             throw new InvalidParameterException(String.format(Messages.INEXISTENT_CURRICULUM_S_S, code, course));
         }
-        SubjectSummaryResponse summary = getSubjectStatisticsSummary(course, code, curriculum);
+        SubjectSummaryResponse summary = getSubjectStatisticsSummary(from, to, course, code, curriculum);
         return summary;
     }
 
-    private SubjectSummaryResponse getSubjectStatisticsSummary(String courseCode, String curriculumCode, Curriculum curriculum) {
-        SubjectStatisticsItem mandatory = buildSummary(courseCode, curriculumCode, curriculum.getMandatorySubjectsList());
-        SubjectStatisticsItem optional = buildSummary(courseCode, curriculumCode, curriculum.getOptionalSubjectsList());
-        SubjectStatisticsItem elective = buildSummary(courseCode, curriculumCode, curriculum.getElectiveSubjectsList());
-        SubjectStatisticsItem complementary = buildSummary(courseCode, curriculumCode, curriculum.getComplementarySubjectsList());
+    private SubjectSummaryResponse getSubjectStatisticsSummary(String from, String to, String courseCode,
+                                                               String curriculumCode, Curriculum curriculum) {
+        SubjectStatisticsItem mandatory = buildSummary(from, to, courseCode, curriculumCode,
+                curriculum.getMandatorySubjectsList());
+        SubjectStatisticsItem optional = buildSummary(from, to, courseCode, curriculumCode,
+                curriculum.getOptionalSubjectsList());
+        SubjectStatisticsItem elective = buildSummary(from, to, courseCode, curriculumCode,
+                curriculum.getElectiveSubjectsList());
+        SubjectStatisticsItem complementary = buildSummary(from, to, courseCode, curriculumCode,
+                curriculum.getComplementarySubjectsList());
         TreeSet<String> terms = this.dataAccessFacade.getTermsForCurriculum(courseCode, curriculumCode);
-        String from = terms.first();
-        String to = terms.last();
-        SubjectSummaryResponse ret = new SubjectSummaryResponse(curriculumCode, from, to, mandatory, optional,
-                elective, complementary);
+        String first = terms.first();
+        String last = terms.last();
+        from = (from.compareTo(first) < 0 ? first : from);
+        to = (to.compareTo(last) < 0 ? to : last);
+        SubjectSummaryResponse ret = new SubjectSummaryResponse(courseCode, curriculumCode, from, to, mandatory,
+                optional, elective, complementary);
         return ret;
     }
 
-    private SubjectStatisticsItem buildSummary(String courseCode, String curriculumCode, Collection<String> subjects) {
+    private SubjectStatisticsItem buildSummary(String from, String to, String courseCode, String curriculumCode,
+                                               Collection<String> subjects) {
         int minFailedDueToAbsences = Integer.MAX_VALUE;
         int maxFailedDueToAbsences = 0;
         int totalFailedDueToAbsences = 0;
@@ -79,25 +87,25 @@ public class SubjectsStatisticsController {
         int totalNumberOfClasses = 0;
 
         for(String subjectCode : subjects) {
-            totalNumberOfClasses += this.dataAccessFacade.getNumberOfClassesPerSubject(courseCode, curriculumCode, subjectCode);
+            totalNumberOfClasses += this.dataAccessFacade.getNumberOfClassesPerSubject(from, to, courseCode, curriculumCode, subjectCode);
             Subject subject = this.dataAccessFacade.getSubject(courseCode, curriculumCode, subjectCode);
-            MetricStatistics failedDueToAbsences = this.dataAccessFacade.getFailedDueToAbsencesStatistics(courseCode, curriculumCode, subjectCode);
+            MetricStatistics failedDueToAbsences = this.dataAccessFacade.getFailedDueToAbsencesStatistics(from, to, courseCode, curriculumCode, subjectCode);
             if (minFailedDueToAbsences > failedDueToAbsences.getMin()) minFailedDueToAbsences = failedDueToAbsences.getMin();
             if (maxFailedDueToAbsences < failedDueToAbsences.getMax()) maxFailedDueToAbsences = failedDueToAbsences.getMax();
             totalFailedDueToAbsences += failedDueToAbsences.getTotal();
-            MetricStatistics failedDueToGrade = this.dataAccessFacade.getFailedDueToGradeStatistics(courseCode, curriculumCode, subjectCode);
+            MetricStatistics failedDueToGrade = this.dataAccessFacade.getFailedDueToGradeStatistics(from, to, courseCode, curriculumCode, subjectCode);
             if (minFailedDueToGrade > failedDueToGrade.getMin()) minFailedDueToGrade = failedDueToGrade.getMin();
             if (maxFailedDueToGrade < failedDueToGrade.getMax()) maxFailedDueToGrade = failedDueToGrade.getMax();
             totalFailedDueToGrade += failedDueToGrade.getTotal();
-            MetricStatistics suspended = this.dataAccessFacade.getSuspendedStatistics(courseCode, curriculumCode, subjectCode);
+            MetricStatistics suspended = this.dataAccessFacade.getSuspendedStatistics(from, to, courseCode, curriculumCode, subjectCode);
             if (minSuspended > suspended.getMin()) minSuspended = suspended.getMin();
             if (maxSuspended < suspended.getMax()) maxSuspended = suspended.getMax();
             totalSuspended += suspended.getTotal();
-            MetricStatistics succeeded = this.dataAccessFacade.getSucceededStatistics(courseCode, curriculumCode, subjectCode);
+            MetricStatistics succeeded = this.dataAccessFacade.getSucceededStatistics(from, to, courseCode, curriculumCode, subjectCode);
             if (minSucceeded > succeeded.getMin()) minSucceeded = succeeded.getMin();
             if (maxSucceeded < succeeded.getMax()) maxSucceeded = succeeded.getMax();
             totalSucceeded += succeeded.getTotal();
-            MetricStatistics exempted = this.dataAccessFacade.getExemptedStatistics(courseCode, curriculumCode, subjectCode);
+            MetricStatistics exempted = this.dataAccessFacade.getExemptedStatistics(from, to, courseCode, curriculumCode, subjectCode);
             if (minExempted > exempted.getMin()) minExempted = exempted.getMin();
             if (maxExempted < exempted.getMax()) maxExempted = exempted.getMax();
             totalExempted += exempted.getTotal();

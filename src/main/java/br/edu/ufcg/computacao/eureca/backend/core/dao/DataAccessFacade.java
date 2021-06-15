@@ -31,19 +31,19 @@ public interface DataAccessFacade {
 
     Subject getSubject(String courseCode, String curriculumCode, String subjectCode);
 
-    MetricStatistics getSucceededStatistics(String courseCode, String curriculumCode, String subjectCode);
+    MetricStatistics getSucceededStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode);
 
-    MetricStatistics getExemptedStatistics(String courseCode, String curriculumCode, String subjectCode);
+    MetricStatistics getExemptedStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode);
 
-    MetricStatistics getOngoingStatistics(String courseCode, String curriculumCode, String subjectCode);
+    MetricStatistics getOngoingStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode);
 
-    MetricStatistics getFailedDueToGradeStatistics(String courseCode, String curriculumCode, String subjectCode);
+    MetricStatistics getFailedDueToGradeStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode);
 
-    MetricStatistics getFailedDueToAbsencesStatistics(String courseCode, String curriculumCode, String subjectCode);
+    MetricStatistics getFailedDueToAbsencesStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode);
 
-    MetricStatistics getSuspendedStatistics(String courseCode, String curriculumCode, String subjectCode);
+    MetricStatistics getSuspendedStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode);
 
-    MetricStatistics getCancelledStatistics(String courseCode, String curriculumCode, String subjectCode);
+    MetricStatistics getCancelledStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode);
 
     int getRetentionCount(String courseCode, String curriculumCode, String subjectCode);
 
@@ -51,5 +51,5 @@ public interface DataAccessFacade {
 
     TreeSet<String> getTermsForCurriculum(String courseCode, String curriculumCode);
 
-    int getNumberOfClassesPerSubject(String courseCode, String curriculumCode, String subjectCode);
+    int getNumberOfClassesPerSubject(String from, String to, String courseCode, String curriculumCode, String subjectCode);
 }
