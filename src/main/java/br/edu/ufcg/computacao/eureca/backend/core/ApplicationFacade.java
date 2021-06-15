@@ -103,7 +103,7 @@ public class ApplicationFacade {
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_STATISTICS);
         StudentsSummaryResponse response = this.studentsStatisticsController.getStudentsSummaryResponse(from, to);
-        GlossaryFields glossaryFields = null;
+        StudentsGlossaryFields glossaryFields = null;
         switch(language) {
             case SystemConstants.PORTUGUESE:
             default:

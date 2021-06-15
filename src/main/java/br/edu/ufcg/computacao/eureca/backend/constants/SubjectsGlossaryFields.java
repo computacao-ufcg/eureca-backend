@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.constants;
 
-public class SubjectsGlossaryFields {
+public class SubjectsGlossaryFields extends GlossaryFields {
     Field mandatory;
     Field optional;
     Field elective;

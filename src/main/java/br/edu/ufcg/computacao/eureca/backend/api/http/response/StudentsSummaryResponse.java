@@ -1,13 +1,13 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-import br.edu.ufcg.computacao.eureca.backend.constants.GlossaryFields;
+import br.edu.ufcg.computacao.eureca.backend.constants.StudentsGlossaryFields;
 
 public class StudentsSummaryResponse {
     private ActivesSummary activesSummary;
     private AlumniSummary alumniSummary;
     private DelayedSummary delayedSummary;
     private DropoutsSummary dropoutsSummary;
-    private GlossaryFields glossary;
+    private StudentsGlossaryFields glossary;
 
     public StudentsSummaryResponse(ActivesSummary activesSummary, AlumniSummary alumniSummary,
                                    DelayedSummary delayedSummary, DropoutsSummary dropoutsSummary) {
@@ -49,11 +49,11 @@ public class StudentsSummaryResponse {
         this.dropoutsSummary = dropoutsSummary;
     }
 
-    public GlossaryFields getGlossary() {
+    public StudentsGlossaryFields getGlossary() {
         return glossary;
     }
 
-    public void setGlossary(GlossaryFields glossary) {
+    public void setGlossary(StudentsGlossaryFields glossary) {
         this.glossary = glossary;
     }
 }
