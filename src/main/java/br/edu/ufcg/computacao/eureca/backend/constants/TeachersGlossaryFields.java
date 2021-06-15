@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.constants;
 
-public class TeachersGlossaryFields {
+public class TeachersGlossaryFields extends GlossaryFields {
     Field failedDueToAbsences;
     Field failedDueToGrade;
     Field failedDueToCanceling;

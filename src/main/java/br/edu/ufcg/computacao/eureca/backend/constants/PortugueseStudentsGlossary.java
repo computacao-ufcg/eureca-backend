@@ -1,7 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.constants;
 
 public class PortugueseStudentsGlossary implements Glossary {
-    public GlossaryFields getGlossary() {
+    public StudentsGlossaryFields getGlossary() {
         Field active = new Field("Ativo", "Discente regularmente matriculado.");
         Field delayed = new Field("Retido", "Discente com risco de evadir. Esses são os discentes na classe de risco 'Alto' ou 'Inviável'.");
         Field dropout = new Field("Evadido", "Discente que foi desvinculado antes de graduar.");
@@ -40,7 +40,7 @@ public class PortugueseStudentsGlossary implements Glossary {
         Field abandonCount = new Field("Abandonos", "Número de discentes que abandonaram o curso.");
         Field transferCount = new Field("Transferências", "Número de discentes que foram transferidos.");
 
-        return new GlossaryFields(active, delayed, dropout, alumnus, averageRisk, averageLoad, successRate,
+        return new StudentsGlossaryFields(active, delayed, dropout, alumnus, averageRisk, averageLoad, successRate,
                 predictedGraduation, averageCost, averageTime, minimumAlumni, maximumAlumni, averageAlumni,
                 averageGpa, rejoinCount, canceledCount, abandonCount, transferCount);
     }
