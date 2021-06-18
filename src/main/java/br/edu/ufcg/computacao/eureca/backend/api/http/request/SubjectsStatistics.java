@@ -2,9 +2,6 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.CommonKeys;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectSummaryResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsRetentionResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsRetentionSummaryResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsSummaryItemResponse;
 import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
@@ -17,12 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
-
 @CrossOrigin
 @RestController
 @RequestMapping(value = SubjectsStatistics.ENDPOINT)
-@Api(description = ApiDocumentation.Statistics.API)
+@Api(description = ApiDocumentation.SubjectStatistics.API)
 public class SubjectsStatistics {
 
     protected static final String ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "statistics/subjects";
@@ -35,7 +30,7 @@ public class SubjectsStatistics {
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
-            @ApiParam(value = ApiDocumentation.Statistics.LANGUAGE)
+            @ApiParam(value = ApiDocumentation.StudentStatistics.LANGUAGE)
             @RequestParam(required = false, value = "language", defaultValue = SystemConstants.PORTUGUESE) String lang,
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {

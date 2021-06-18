@@ -20,7 +20,7 @@ import java.util.Collection;
 @CrossOrigin
 @RestController
 @RequestMapping(value = TeachersStatistics.ENDPOINT)
-@Api(description = ApiDocumentation.Statistics.API)
+@Api(description = ApiDocumentation.TeachersStatistics.API)
 public class TeachersStatistics {
 
     protected static final String ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "statistics/teachers";
@@ -33,7 +33,7 @@ public class TeachersStatistics {
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
-            @ApiParam(value = ApiDocumentation.Statistics.LANGUAGE)
+            @ApiParam(value = ApiDocumentation.StudentStatistics.LANGUAGE)
             @RequestParam(required = false, value = "language", defaultValue = SystemConstants.PORTUGUESE) String lang,
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
@@ -53,7 +53,7 @@ public class TeachersStatistics {
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
-            @ApiParam(value = ApiDocumentation.Statistics.LANGUAGE)
+            @ApiParam(value = ApiDocumentation.StudentStatistics.LANGUAGE)
             @RequestParam(required = false, value = "language", defaultValue = SystemConstants.PORTUGUESE) String lang,
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {

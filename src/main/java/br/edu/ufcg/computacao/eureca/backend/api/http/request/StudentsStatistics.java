@@ -20,7 +20,7 @@ import java.util.Collection;
 @CrossOrigin
 @RestController
 @RequestMapping(value = StudentsStatistics.ENDPOINT)
-@Api(description = ApiDocumentation.Statistics.API)
+@Api(description = ApiDocumentation.StudentStatistics.API)
 public class StudentsStatistics {
 
     protected static final String ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "statistics/students";
@@ -28,7 +28,7 @@ public class StudentsStatistics {
     private static final Logger LOGGER = Logger.getLogger(StudentsStatistics.class);
 
     @RequestMapping(value = "actives", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.Statistics.GET_ACTIVES)
+    @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_ACTIVES)
     public ResponseEntity<ActivesSummaryResponse> getActives(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
@@ -49,7 +49,7 @@ public class StudentsStatistics {
     }
 
     @RequestMapping(value = "actives/csv", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.Statistics.GET_ACTIVES_CSV)
+    @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_ACTIVES_CSV)
     public ResponseEntity<Collection<StudentDataResponse>> getActivesCSV(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
@@ -69,7 +69,7 @@ public class StudentsStatistics {
     }
 
     @RequestMapping(value = "alumni", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.Statistics.GET_ALUMNI)
+    @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_ALUMNI)
     public ResponseEntity<AlumniSummaryResponse> getAlumni(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
@@ -89,7 +89,7 @@ public class StudentsStatistics {
     }
 
     @RequestMapping(value = "alumni/csv", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.Statistics.GET_ALUMNI_CSV)
+    @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_ALUMNI_CSV)
     public ResponseEntity<Collection<StudentDataResponse>> getAlumniCSV(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
@@ -109,7 +109,7 @@ public class StudentsStatistics {
     }
 
     @RequestMapping(value = "dropouts", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.Statistics.GET_DROPOUT)
+    @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_DROPOUT)
     public ResponseEntity<DropoutsSummaryResponse> getDropouts(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
@@ -129,7 +129,7 @@ public class StudentsStatistics {
     }
 
     @RequestMapping(value = "dropouts/csv", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.Statistics.GET_DROPOUT_CSV)
+    @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_DROPOUT_CSV)
     public ResponseEntity<Collection<StudentDataResponse>> getDropoutsCSV(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
@@ -149,7 +149,7 @@ public class StudentsStatistics {
     }
 
     @RequestMapping(value = "delayed", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.Statistics.GET_DELAYED)
+    @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_DELAYED)
     public ResponseEntity<DelayedSummaryResponse> getDelayed(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
@@ -169,7 +169,7 @@ public class StudentsStatistics {
     }
 
     @RequestMapping(value = "delayed/csv", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.Statistics.GET_DELAYED_CSV)
+    @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_DELAYED_CSV)
     public ResponseEntity<Collection<StudentDataResponse>> getDelayedCSV(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
@@ -189,12 +189,13 @@ public class StudentsStatistics {
     }
 
     @RequestMapping(value = "summary", method = RequestMethod.GET)
+    @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_STUDENTS_SUMMARY)
     public ResponseEntity<StudentsSummaryResponse> getStudentsSummary(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
-            @ApiParam(value = ApiDocumentation.Statistics.LANGUAGE)
+            @ApiParam(value = ApiDocumentation.StudentStatistics.LANGUAGE)
             @RequestParam(required = false, value = "language", defaultValue = SystemConstants.PORTUGUESE) String lang,
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
