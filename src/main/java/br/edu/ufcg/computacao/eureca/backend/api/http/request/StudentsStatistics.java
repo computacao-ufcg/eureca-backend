@@ -195,7 +195,7 @@ public class StudentsStatistics {
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
-            @ApiParam(value = ApiDocumentation.StudentStatistics.LANGUAGE)
+            @ApiParam(value = ApiDocumentation.Statistics.LANGUAGE)
             @RequestParam(required = false, value = "language", defaultValue = SystemConstants.PORTUGUESE) String lang,
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {

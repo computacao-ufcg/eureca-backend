@@ -8,6 +8,7 @@ import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.ApplicationFacade;
 import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -25,12 +26,13 @@ public class SubjectsStatistics {
     private static final Logger LOGGER = Logger.getLogger(SubjectsStatistics.class);
 
     @RequestMapping(value = "summary", method = RequestMethod.GET)
+    @ApiOperation(value = ApiDocumentation.SubjectStatistics.GET_SUBJECTS)
     public ResponseEntity<SubjectSummaryResponse> getSubjectsSummary(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
-            @ApiParam(value = ApiDocumentation.StudentStatistics.LANGUAGE)
+            @ApiParam(value = ApiDocumentation.Statistics.LANGUAGE)
             @RequestParam(required = false, value = "language", defaultValue = SystemConstants.PORTUGUESE) String lang,
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {

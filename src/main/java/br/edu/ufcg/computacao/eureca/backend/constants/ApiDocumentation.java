@@ -60,20 +60,24 @@ public class ApiDocumentation {
         public static final String GET_DELAYED = "Retorna um sumário dos dados dos discentes atrasados.";
         public static final String GET_DELAYED_CSV = "Retorna os dados completos dos discentes retidos.";
         public static final String GET_STUDENTS_SUMMARY = "Retornar um sumário geral dos dados dos discentes.";
-        public static final String LANGUAGE = "Língua";
     }
 
     public static class Statistics {
         public static final String FROM = "Período inicial";
         public static final String TO = "Período final";
+        public static final String LANGUAGE = "Língua";
     }
 
     public static class EnrollmentsStatistics {
         public static final String API = "Estatísticas de matrículas.";
+        public static final String GET_ENROLLMENTS = "Retorna um sumário dos dados das matrículas.";
+        public static final String GET_ENROLLMENTS_CSV = "Retorna os dados completos das matrículas do curso.";
     }
 
     public static class TeachersStatistics {
         public static final String API = "Estatísticas dos docentes.";
+        public static final String GET_TEACHERS = "Retorna um sumário dos dados dos docentes.";
+        public static final String GET_TEACHERS_CSV = "Retorna os dados completos dos docentes.";
     }
 
     public static class SubjectStatistics {
