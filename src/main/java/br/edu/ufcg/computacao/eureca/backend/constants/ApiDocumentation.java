@@ -49,8 +49,8 @@ public class ApiDocumentation {
         public static final String GET_AVAILABLE_CURRICULUMS = "Retorna uma lista com os possíveis currículos para o curso.";
     }
 
-    public class Statistics {
-        public static final String API = "Estatísticas.";
+    public static class StudentStatistics {
+        public static final String API = "Estatísticas dos discentes.";
         public static final String GET_ACTIVES = "Retorna um sumário dos dados dos discentes ativos.";
         public static final String GET_ACTIVES_CSV = "Retorna os dados completos dos discentes ativos.";
         public static final String GET_ALUMNI = "Retorna um sumário dos dados dos egressos.";
@@ -59,9 +59,25 @@ public class ApiDocumentation {
         public static final String GET_DROPOUT_CSV = "Retorna os dados completos dos discentes evadidos.";
         public static final String GET_DELAYED = "Retorna um sumário dos dados dos discentes atrasados.";
         public static final String GET_DELAYED_CSV = "Retorna os dados completos dos discentes retidos.";
-        public static final String GET_SUBJECTS = "Retorna um sumário dos dados das disciplinas.";
+        public static final String GET_STUDENTS_SUMMARY = "Retornar um sumário geral dos dados dos discentes.";
+        public static final String LANGUAGE = "Língua";
+    }
+
+    public static class Statistics {
         public static final String FROM = "Período inicial";
         public static final String TO = "Período final";
-        public static final String LANGUAGE = "Língua";
+    }
+
+    public static class EnrollmentsStatistics {
+        public static final String API = "Estatísticas de matrículas.";
+    }
+
+    public static class TeachersStatistics {
+        public static final String API = "Estatísticas dos docentes.";
+    }
+
+    public static class SubjectStatistics {
+        public static final String API = "Estatísicas de disciplinas.";
+        public static final String GET_SUBJECTS = "Retorna um sumário dos dados das disciplinas.";
     }
 }
