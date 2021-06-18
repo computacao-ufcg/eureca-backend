@@ -1,9 +1,12 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
+import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.ApplicationFacade;
 import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +20,11 @@ import java.util.Collection;
 @CrossOrigin
 @RestController
 @RequestMapping(value = Curriculum.ENDPOINT)
+@Api(description = ApiDocumentation.Curriculum.API)
 public class Curriculum {
     private Logger LOGGER = Logger.getLogger(Curriculum.class);
 
-    public static final String ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "curriculums";
-
+    @ApiOperation(value = ApiDocumentation.Curriculum.GET_AVAILABLE_CURRICULUMS)
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Collection<String>> getAvailableCurriculums() throws EurecaException {
         try {
@@ -32,4 +35,6 @@ public class Curriculum {
             throw e;
         }
     }
+
+    public static final String ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "curriculums";
 }
