@@ -77,7 +77,7 @@ public class ApiDocumentation {
     }
 
     public static class SubjectStatistics {
-        public static final String API = "Estatísicas de disciplinas.";
+        public static final String API = "Estatísticas de disciplinas.";
         public static final String GET_SUBJECTS = "Retorna um sumário dos dados das disciplinas.";
     }
 }
