@@ -2,7 +2,6 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.AlumniGlossaryFields;
 import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
-import br.edu.ufcg.computacao.eureca.backend.constants.TeachersGlossaryFields;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Collection;
