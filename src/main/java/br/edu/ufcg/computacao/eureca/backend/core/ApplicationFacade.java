@@ -59,9 +59,17 @@ public class ApplicationFacade {
         return this.studentsDataFetcher.getActiveCSV(from, to);
     }
 
-    public AlumniSummaryResponse getAlumniSummary(String token, String from, String to) throws EurecaException {
+    public AlumniSummaryResponse getAlumniSummary(String token, String from, String to, String language) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI);
-        return this.studentsStatisticsController.getAlumniSummaryResponse(from, to);
+        AlumniSummaryResponse response = this.studentsStatisticsController.getAlumniSummaryResponse(from, to);
+        AlumniGlossaryFields glossaryFields = null;
+        switch(language) {
+            case SystemConstants.PORTUGUESE:
+            default:
+                glossaryFields = new PortugueseAlumniGlossary().getGlossary();
+        }
+        response.setGlossary(glossaryFields);
+        return response;
     }
 
     public Collection<StudentDataResponse> getAlumniCSV(String token, String from, String to) throws EurecaException {

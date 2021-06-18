@@ -55,7 +55,7 @@ public class StudentStatisticsTest extends EndpointTest {
     public void testGetAlumni() throws Exception {
         // set up
         AlumniSummaryResponse response = getAlumniSummaryResponse();
-        Mockito.doReturn(response).when(this.facade).getAlumniSummary(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.doReturn(response).when(this.facade).getAlumniSummary(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/alumni", null, "");
 
         // exercise
