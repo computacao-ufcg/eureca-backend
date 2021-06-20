@@ -370,6 +370,10 @@ public class IndexesHolder {
         return allDropouts;
     }
 
+    public Collection<EnrollmentData> getAllEnrollments() {
+        return this.enrollmentsMap.values();
+    }
+
     public Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>>
                             getEnrollmentsPerSubjectPerTermPerClass(String courseCode, String curriculumCode) {
         return enrollmentsPerCurriculumPerSubjectPerTermPerClass.get(new CurriculumKey(courseCode, curriculumCode));

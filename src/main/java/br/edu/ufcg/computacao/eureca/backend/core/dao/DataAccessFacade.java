@@ -1,6 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.EnrollmentData;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 
 import java.util.Collection;
@@ -14,6 +15,8 @@ public interface DataAccessFacade {
     Collection<Student> getDropouts(String from, String to);
 
     Collection<Student> getDelayed(String from, String to);
+
+    Collection<EnrollmentData> getEnrollments(String from, String to);
 
     Collection<ActivesPerTermSummary> getActivesPerTermSummary(String from, String to);
 
