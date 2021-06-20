@@ -48,6 +48,19 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
+    public Collection<EnrollmentData> getEnrollments(String from, String to) {
+        Collection<EnrollmentData> enrollments = this.indexesHolder.getAllEnrollments();
+        return this.getFilteredEnrollments(from, to, enrollments);
+    }
+
+    private Collection<EnrollmentData> getFilteredEnrollments(String from, String to, Collection<EnrollmentData> enrollments) {
+        return enrollments
+                .stream()
+                .filter(enrollmentData -> enrollmentData.getTerm().equals(from))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Collection<ActivesPerTermSummary> getActivesPerTermSummary(String from, String to) {
         Collection<ActivesPerTermSummary> terms = new TreeSet<>();
         Map<String, Collection<NationalIdRegistrationKey>> index = indexesHolder.getActiveByAdmissionTerm();
