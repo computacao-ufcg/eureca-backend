@@ -9,25 +9,25 @@ public class AlumniSummary {
     private double averageCost;
     private CostClass costClass;
     private double averageGpa;
-    private double averageDegreeCount;
-    private int maxDegreeCount;
-    private int minDegreeCount;
-    private String maxDegreeCountTerm;
-    private String minDegreeCountTerm;
+    private double averageAlumniCount;
+    private int maxAlumniCount;
+    private int minAlumniCount;
+    private String maxAlumniCountTerm;
+    private String minAlumniCountTerm;
 
     public AlumniSummary(int alumniCount, double averageTermsCount, double averageCost, double averageGpa,
-                         double averageDegreeCount, int maxDegreeCount, int minDegreeCount, String maxDegreeCountTerm,
-                         String minDegreeCountTerm) {
+                         double averageAlumniCount, int maxAlumniCount, int minAlumniCount, String maxAlumniCountTerm,
+                         String minAlumniCountTerm) {
         this.alumniCount = alumniCount;
         this.averageTermsCount = averageTermsCount;
         this.averageCost = averageCost;
         this.costClass = MetricsCalculator.computeCostClass(this.averageCost);
         this.averageGpa = averageGpa;
-        this.averageDegreeCount = averageDegreeCount;
-        this.maxDegreeCount = maxDegreeCount;
-        this.minDegreeCount = minDegreeCount;
-        this.maxDegreeCountTerm = maxDegreeCountTerm;
-        this.minDegreeCountTerm = minDegreeCountTerm;
+        this.averageAlumniCount = averageAlumniCount;
+        this.maxAlumniCount = maxAlumniCount;
+        this.minAlumniCount = minAlumniCount;
+        this.maxAlumniCountTerm = maxAlumniCountTerm;
+        this.minAlumniCountTerm = minAlumniCountTerm;
     }
 
     public double getAverageTermsCount() {
@@ -62,44 +62,44 @@ public class AlumniSummary {
         this.averageGpa = averageGpa;
     }
 
-    public int getMaxDegreeCount() {
-        return maxDegreeCount;
+    public int getMaxAlumniCount() {
+        return maxAlumniCount;
     }
 
-    public void setMaxDegreeCount(int maxDegreeCount) {
-        this.maxDegreeCount = maxDegreeCount;
+    public void setMaxAlumniCount(int maxAlumniCount) {
+        this.maxAlumniCount = maxAlumniCount;
     }
 
-    public double getAverageDegreeCount() {
-        return averageDegreeCount;
+    public double getAverageAlumniCount() {
+        return averageAlumniCount;
     }
 
-    public void setAverageDegreeCount(double averageDegreeCount) {
-        this.averageDegreeCount = averageDegreeCount;
+    public void setAverageAlumniCount(double averageAlumniCount) {
+        this.averageAlumniCount = averageAlumniCount;
     }
 
-    public int getMinDegreeCount() {
-        return minDegreeCount;
+    public int getMinAlumniCount() {
+        return minAlumniCount;
     }
 
-    public void setMinDegreeCount(int minDegreeCount) {
-        this.minDegreeCount = minDegreeCount;
+    public void setMinAlumniCount(int minAlumniCount) {
+        this.minAlumniCount = minAlumniCount;
     }
 
-    public String getMaxDegreeCountTerm() {
-        return maxDegreeCountTerm;
+    public String getMaxAlumniCountTerm() {
+        return maxAlumniCountTerm;
     }
 
-    public void setMaxDegreeCountTerm(String maxDegreeCountTerm) {
-        this.maxDegreeCountTerm = maxDegreeCountTerm;
+    public void setMaxAlumniCountTerm(String maxAlumniCountTerm) {
+        this.maxAlumniCountTerm = maxAlumniCountTerm;
     }
 
-    public String getMinDegreeCountTerm() {
-        return minDegreeCountTerm;
+    public String getMinAlumniCountTerm() {
+        return minAlumniCountTerm;
     }
 
-    public void setMinDegreeCountTerm(String minDegreeCountTerm) {
-        this.minDegreeCountTerm = minDegreeCountTerm;
+    public void setMinAlumniCountTerm(String minAlumniCountTerm) {
+        this.minAlumniCountTerm = minAlumniCountTerm;
     }
 
     public int getAlumniCount() {
