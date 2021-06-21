@@ -4,13 +4,11 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsRetention
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
-import br.edu.ufcg.computacao.eureca.backend.core.models.ClassEnrollments;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Registration;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
-import br.edu.ufcg.computacao.eureca.backend.core.models.StudentCurriculum;
+import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import org.apache.log4j.Logger;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class IndexesHolder {
     private final Logger LOGGER = Logger.getLogger(IndexesHolder.class);
@@ -370,8 +368,15 @@ public class IndexesHolder {
         return allDropouts;
     }
 
-    public Collection<EnrollmentData> getAllEnrollments() {
-        return this.enrollmentsMap.values();
+    public Collection<Enrollment> getAllEnrollments() {
+        Collection<Enrollment> enrollments = new ArrayList<>();
+        for (Map.Entry<RegistrationCodeTermKey, EnrollmentData> entry : this.enrollmentsMap.entrySet()) {
+            RegistrationCodeTermKey key = entry.getKey();
+            EnrollmentData data = entry.getValue();
+            Enrollment enrollment = data.createEnrollment(key);
+            enrollments.add(enrollment);
+        }
+        return enrollments;
     }
 
     public Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>>

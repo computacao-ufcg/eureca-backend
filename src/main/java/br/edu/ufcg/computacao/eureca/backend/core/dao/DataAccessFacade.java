@@ -16,7 +16,7 @@ public interface DataAccessFacade {
 
     Collection<Student> getDelayed(String from, String to);
 
-    Collection<EnrollmentData> getEnrollments(String from, String to);
+    Collection<Enrollment> getEnrollments(String from, String to, String courseCode, String curriculumCode);
 
     Collection<ActivesPerTermSummary> getActivesPerTermSummary(String from, String to);
 
