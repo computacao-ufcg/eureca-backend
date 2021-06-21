@@ -2,27 +2,23 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.CommonKeys;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectSummaryResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsRetentionResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsRetentionSummaryResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsSummaryItemResponse;
 import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.ApplicationFacade;
 import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
-
 @CrossOrigin
 @RestController
 @RequestMapping(value = SubjectsStatistics.ENDPOINT)
-@Api(description = ApiDocumentation.Statistics.API)
+@Api(description = ApiDocumentation.SubjectStatistics.API)
 public class SubjectsStatistics {
 
     protected static final String ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "statistics/subjects";
@@ -30,6 +26,7 @@ public class SubjectsStatistics {
     private static final Logger LOGGER = Logger.getLogger(SubjectsStatistics.class);
 
     @RequestMapping(value = "summary", method = RequestMethod.GET)
+    @ApiOperation(value = ApiDocumentation.SubjectStatistics.GET_SUBJECTS)
     public ResponseEntity<SubjectSummaryResponse> getSubjectsSummary(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,

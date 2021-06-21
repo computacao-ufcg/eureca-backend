@@ -8,11 +8,14 @@ import br.edu.ufcg.computacao.eureca.backend.core.controllers.EnrollmentsStatist
 import br.edu.ufcg.computacao.eureca.backend.core.controllers.StudentsStatisticsController;
 import br.edu.ufcg.computacao.eureca.backend.core.controllers.SubjectsStatisticsController;
 import br.edu.ufcg.computacao.eureca.backend.core.controllers.TeacherStatisticsController;
+import br.edu.ufcg.computacao.eureca.backend.core.holders.CurriculumsHolder;
+import br.edu.ufcg.computacao.eureca.backend.core.holders.EnviromentVariablesHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EurecaAsPublicKeyHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.EurecaOperation;
 import br.edu.ufcg.computacao.eureca.backend.core.plugins.AuthorizationPlugin;
 import br.edu.ufcg.computacao.eureca.common.exceptions.ConfigurationErrorException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
+import br.edu.ufcg.computacao.eureca.common.exceptions.FatalErrorException;
 import br.edu.ufcg.computacao.eureca.common.util.CryptoUtil;
 import br.edu.ufcg.computacao.eureca.common.util.ServiceAsymmetricKeysHolder;
 import org.apache.log4j.Logger;
@@ -194,6 +197,15 @@ public class ApplicationFacade {
         } catch (GeneralSecurityException e) {
             throw new ConfigurationErrorException(e.getMessage());
         }
+    }
+
+    public Collection<String> getAvailableCurriculums() throws EurecaException {
+        String courseCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
+        Collection<String> availableCurriculums = CurriculumsHolder.getInstance().getAvailableCurriculums(courseCode);
+        if (availableCurriculums == null) {
+            throw new FatalErrorException("Curso não cadastrado!");
+        }
+        return availableCurriculums;
     }
 
     private RSAPublicKey getAsPublicKey() throws EurecaException {

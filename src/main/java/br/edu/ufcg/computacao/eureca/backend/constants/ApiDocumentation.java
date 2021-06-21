@@ -44,8 +44,13 @@ public class ApiDocumentation {
         public static final String GET_PUBLICKEY = "Retorna a chave pública do serviço.";
     }
 
-    public class Statistics {
-        public static final String API = "Estatísticas.";
+    public static class Curriculum {
+        public static final String API = "Currículos disponíveis.";
+        public static final String GET_AVAILABLE_CURRICULUMS = "Retorna uma lista com os possíveis currículos para o curso.";
+    }
+
+    public static class StudentStatistics {
+        public static final String API = "Estatísticas dos discentes.";
         public static final String GET_ACTIVES = "Retorna um sumário dos dados dos discentes ativos.";
         public static final String GET_ACTIVES_CSV = "Retorna os dados completos dos discentes ativos.";
         public static final String GET_ALUMNI = "Retorna um sumário dos dados dos egressos.";
@@ -54,9 +59,29 @@ public class ApiDocumentation {
         public static final String GET_DROPOUT_CSV = "Retorna os dados completos dos discentes evadidos.";
         public static final String GET_DELAYED = "Retorna um sumário dos dados dos discentes atrasados.";
         public static final String GET_DELAYED_CSV = "Retorna os dados completos dos discentes retidos.";
-        public static final String GET_SUBJECTS = "Retorna um sumário dos dados das disciplinas.";
+        public static final String GET_STUDENTS_SUMMARY = "Retornar um sumário geral dos dados dos discentes.";
+    }
+
+    public static class Statistics {
         public static final String FROM = "Período inicial";
         public static final String TO = "Período final";
         public static final String LANGUAGE = "Língua";
+    }
+
+    public static class EnrollmentsStatistics {
+        public static final String API = "Estatísticas de matrículas.";
+        public static final String GET_ENROLLMENTS = "Retorna um sumário dos dados das matrículas.";
+        public static final String GET_ENROLLMENTS_CSV = "Retorna os dados completos das matrículas do curso.";
+    }
+
+    public static class TeachersStatistics {
+        public static final String API = "Estatísticas dos docentes.";
+        public static final String GET_TEACHERS = "Retorna um sumário dos dados dos docentes.";
+        public static final String GET_TEACHERS_CSV = "Retorna os dados completos dos docentes.";
+    }
+
+    public static class SubjectStatistics {
+        public static final String API = "Estatísticas de disciplinas.";
+        public static final String GET_SUBJECTS = "Retorna um sumário dos dados das disciplinas.";
     }
 }

@@ -9,6 +9,7 @@ import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.ApplicationFacade;
 import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ import java.util.Collection;
 @CrossOrigin
 @RestController
 @RequestMapping(value = EnrollmentsStatistics.ENDPOINT)
-@Api(description = ApiDocumentation.Statistics.API)
+@Api(description = ApiDocumentation.EnrollmentsStatistics.API)
 public class EnrollmentsStatistics {
 
     protected static final String ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "statistics/enrollments";
@@ -28,6 +29,7 @@ public class EnrollmentsStatistics {
     private static final Logger LOGGER = Logger.getLogger(EnrollmentsStatistics.class);
 
     @RequestMapping(value = "summary", method = RequestMethod.GET)
+    @ApiOperation(value = ApiDocumentation.EnrollmentsStatistics.GET_ENROLLMENTS)
     public ResponseEntity<EnrollmentsSummaryResponse> getEnrollmentsSummary(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
@@ -48,6 +50,7 @@ public class EnrollmentsStatistics {
     }
 
     @RequestMapping(value = "summary/csv", method = RequestMethod.GET)
+    @ApiOperation(value = ApiDocumentation.EnrollmentsStatistics.GET_ENROLLMENTS_CSV)
     public ResponseEntity<Collection<EnrollmentsSummaryItemResponse>> getEnrollmentsSummaryCSV(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
