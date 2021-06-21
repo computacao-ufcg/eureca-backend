@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.constants;
 
-public class PortugueseTeacherGlossary {
+public class PortugueseTeachersGlossary implements Glossary {
 
     public TeachersGlossaryFields getGlossary() {
         Field failedDueToAbsences =  new Field("Reprovações por falta", "");

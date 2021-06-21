@@ -1,11 +1,11 @@
-package br.edu.ufcg.computacao.eureca.backend.core.models;
+package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
+
+import br.edu.ufcg.computacao.eureca.backend.core.models.Subject;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class Subject {
-    private String curriculumCode;
-    private String subjectCode;
+public class SubjectData implements EurecaMapValue {
     private String academicUnit;
     private String type;
     private int credits;
@@ -17,10 +17,8 @@ public class Subject {
     private String preRequirements;
     private Collection<String> preRequirementsList;
 
-    public Subject(String curriculumCode, String subjectCode, String academicUnit, String type, int credits, int hours,
-                   String name, String equivalentCodes, int idealTerm, String preRequirements) {
-        this.curriculumCode = curriculumCode;
-        this.subjectCode = subjectCode;
+    public SubjectData(String academicUnit, String type, int credits, int hours, String name, String equivalentCodes,
+                       int idealTerm, String preRequirements) {
         this.academicUnit = academicUnit;
         this.type = type;
         this.credits = credits;
@@ -29,22 +27,11 @@ public class Subject {
         this.equivalentCodes = equivalentCodes;
         this.idealTerm = idealTerm;
         this.preRequirements = preRequirements;
+        this.equivalentCodesList = null;
+        this.preRequirementsList = null;
     }
 
-    public String getCurriculumCode() {
-        return curriculumCode;
-    }
-
-    public void setCurriculumCode(String curriculumCode) {
-        this.curriculumCode = curriculumCode;
-    }
-
-    public String getSubjectCode() {
-        return subjectCode;
-    }
-
-    public void setSubjectCode(String subjectCode) {
-        this.subjectCode = subjectCode;
+    public SubjectData() {
     }
 
     public String getAcademicUnit() {
@@ -118,6 +105,11 @@ public class Subject {
         return equivalentCodesList;
     }
 
+    public Subject createSubject(SubjectKey key) {
+        return new Subject(key.getCurriculumCode(), key.getSubjectCode(), getAcademicUnit(), getType(), getCredits(),
+                getHours(), getName(), getEquivalentCodes(), getIdealTerm(), getPreRequirements());
+    }
+
     public Collection<String> getPreRequirementsList() {
         if (preRequirementsList == null) {
             preRequirementsList = extractStrList(preRequirements);
@@ -137,19 +129,17 @@ public class Subject {
 
     @Override
     public String toString() {
-        return "Subject{" +
-                "curriculumCode='" + curriculumCode + '\'' +
-                ", subjectCode='" + subjectCode + '\'' +
-                ", academicUnit='" + academicUnit + '\'' +
+        return "SubjectData{" +
+                "academicUnit='" + academicUnit + '\'' +
                 ", type='" + type + '\'' +
                 ", credits=" + credits +
                 ", hours=" + hours +
                 ", name='" + name + '\'' +
                 ", equivalentCodes='" + equivalentCodes + '\'' +
-                ", equivalentCodesList=" + equivalentCodesList +
+                ", equivalentCodesList=" + getEquivalentCodesList() +
                 ", idealTerm='" + idealTerm + '\'' +
                 ", preRequirements='" + preRequirements + '\'' +
-                ", preRequirementsList=" + preRequirementsList +
+                ", preRequirementsList=" + getPreRequirementsList() +
                 '}';
     }
 }

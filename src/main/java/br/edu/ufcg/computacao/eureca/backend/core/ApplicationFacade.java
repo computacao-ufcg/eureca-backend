@@ -4,6 +4,10 @@ import br.edu.ufcg.computacao.eureca.as.core.AuthenticationUtil;
 import br.edu.ufcg.computacao.eureca.as.core.models.SystemUser;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.constants.*;
+import br.edu.ufcg.computacao.eureca.backend.core.controllers.EnrollmentsStatisticsController;
+import br.edu.ufcg.computacao.eureca.backend.core.controllers.StudentsStatisticsController;
+import br.edu.ufcg.computacao.eureca.backend.core.controllers.SubjectsStatisticsController;
+import br.edu.ufcg.computacao.eureca.backend.core.controllers.TeacherStatisticsController;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EurecaAsPublicKeyHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.EurecaOperation;
 import br.edu.ufcg.computacao.eureca.backend.core.plugins.AuthorizationPlugin;
@@ -99,11 +103,11 @@ public class ApplicationFacade {
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_STATISTICS);
         StudentsSummaryResponse response = this.studentsStatisticsController.getStudentsSummaryResponse(from, to);
-        GlossaryFields glossaryFields = null;
+        StudentsGlossaryFields glossaryFields = null;
         switch(language) {
             case SystemConstants.PORTUGUESE:
             default:
-                glossaryFields = new PortugueseGlossary().getGlossary();
+                glossaryFields = new PortugueseStudentsGlossary().getGlossary();
         }
         response.setGlossary(glossaryFields);
         return response;
@@ -112,7 +116,7 @@ public class ApplicationFacade {
     public SubjectSummaryResponse getSubjectsStatistics(String token, String from, String to, String language)
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_STATISTICS);
-        SubjectSummaryResponse response = this.subjectsStatisticsController.getSubjectStatisticsMock();
+        SubjectSummaryResponse response = this.subjectsStatisticsController.getSubjectStatistics(from, to);
         SubjectsGlossaryFields glossaryFields = null;
         switch(language) {
             case SystemConstants.PORTUGUESE:
@@ -131,7 +135,7 @@ public class ApplicationFacade {
         switch(language) {
             case SystemConstants.PORTUGUESE:
             default:
-                glossaryFields = new PortugueseTeacherGlossary().getGlossary();
+                glossaryFields = new PortugueseTeachersGlossary().getGlossary();
         }
         response.setGlossary(glossaryFields);
         return response;
@@ -164,6 +168,16 @@ public class ApplicationFacade {
     public Collection<SubjectsSummaryItemResponse> getSubjectsStatisticsCSV(String token, String from, String to, String lang) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_STATISTICS_CSV);
         return this.subjectsStatisticsController.getSubjectsStatisticsCSV();
+    }
+
+    public Collection<SubjectsRetentionSummaryResponse> getSubjectsRetention(String token, String lang) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_RETENTION);
+        return this.subjectsStatisticsController.getSubjectsRetention(lang);
+    }
+
+    public Collection<SubjectsRetentionResponse> getSubjectsRetentionCSV(String token, String lang) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_RETENTION);
+        return this.subjectsStatisticsController.getSubjectsRetentionCSV(lang);
     }
 
     public String getPublicKey() throws EurecaException {

@@ -1,7 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectSummaryResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsSummaryResponseOld;
 import br.edu.ufcg.computacao.eureca.backend.core.models.MetricSummary;
 import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectStatisticsItem;
 import org.junit.Assert;
@@ -31,11 +30,11 @@ public class SubjectStatisticsTest extends EndpointTest {
 
     private SubjectSummaryResponse getSubjectStatisticsMock() {
         MetricSummary metrics = new MetricSummary(20, 30, 25);
-        SubjectStatisticsItem mandatory = new SubjectStatisticsItem(1980, 196, 30,metrics,metrics, metrics, metrics, metrics, metrics);
-        SubjectStatisticsItem optional = new SubjectStatisticsItem(400, 50, 10, metrics, metrics, metrics, metrics, metrics, metrics);
-        SubjectStatisticsItem elective = new SubjectStatisticsItem(840, 56,15,metrics, metrics, metrics, metrics, metrics, metrics);
-        SubjectStatisticsItem complementary = new SubjectStatisticsItem(450, 30, 10, metrics, metrics, metrics, metrics, metrics, metrics);
-        SubjectSummaryResponse summary = new SubjectSummaryResponse("2017", "1980.1", "2020.1", mandatory, optional, elective, complementary);
+        SubjectStatisticsItem mandatory = new SubjectStatisticsItem(30,metrics,metrics, metrics, metrics, metrics, metrics);
+        SubjectStatisticsItem optional = new SubjectStatisticsItem(10, metrics, metrics, metrics, metrics, metrics, metrics);
+        SubjectStatisticsItem elective = new SubjectStatisticsItem(15,metrics, metrics, metrics, metrics, metrics, metrics);
+        SubjectStatisticsItem complementary = new SubjectStatisticsItem(10, metrics, metrics, metrics, metrics, metrics, metrics);
+        SubjectSummaryResponse summary = new SubjectSummaryResponse("14102100", "2017", "1980.1", "2020.1", mandatory, optional, elective, complementary);
         return summary;
     }
 }

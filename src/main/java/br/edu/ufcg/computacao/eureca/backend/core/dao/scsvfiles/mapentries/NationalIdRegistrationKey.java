@@ -1,20 +1,27 @@
-package br.edu.ufcg.computacao.eureca.backend.core.models;
+package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
 
-public class CpfRegistration {
-    String nationalId;
-    String registration;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 
-    public CpfRegistration(String nationalId, String registration) {
+public class NationalIdRegistrationKey implements EurecaMapKey {
+    private String nationalId;
+    private String registration;
+
+    public NationalIdRegistrationKey(String nationalId, String registration) {
         this.nationalId = nationalId;
         this.registration = registration;
     }
 
-    public CpfRegistration(CpfRegistration key) {
+    public NationalIdRegistrationKey(NationalIdRegistrationKey key) {
         this.nationalId = key.getNationalId();
         this.registration = key.getRegistration();
     }
 
-    public CpfRegistration() {}
+    public NationalIdRegistrationKey(Student student) {
+        this.nationalId = student.getNationalId();
+        this.registration = student.getRegistration().getRegistration();
+    }
+
+    public NationalIdRegistrationKey() {}
 
     public String getNationalId() {
         return nationalId;
@@ -46,13 +53,13 @@ public class CpfRegistration {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        CpfRegistration other = (CpfRegistration) obj;
+        NationalIdRegistrationKey other = (NationalIdRegistrationKey) obj;
         if (this.registration == null) {
             if (other.getRegistration() != null) return false;
         } else if (this.nationalId == null) {
             if (other.getNationalId() != null) return false;
         } else if (!this.nationalId.equals(other.getNationalId()) ||
-                    !this.registration.equals(other.getRegistration())) return false;
+                !this.registration.equals(other.getRegistration())) return false;
         return true;
     }
 

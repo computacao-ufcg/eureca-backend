@@ -1,44 +1,24 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
 public class SubjectStatisticsItem {
-    private int hours;
-    private int credits;
     private int disciplines;
     private MetricSummary failedDueToAbsences;
     private MetricSummary failedDueToGrade;
     private MetricSummary failedDueToCanceling;
-    private MetricSummary success;
-    private MetricSummary relativeRetention;
-    private MetricSummary absoluteRetention;
+    private MetricSummary succeeded;
+    private MetricSummary exempted;
+    private MetricSummary retention;
 
-    public SubjectStatisticsItem(int hours, int credits, int disciplines, MetricSummary failedDueToAbsences,
-                                 MetricSummary failedDueToGrade, MetricSummary failedDueToCanceling, MetricSummary success, MetricSummary relativeRetention,
-                                 MetricSummary absoluteRetention) {
-        this.hours = hours;
-        this.credits = credits;
+    public SubjectStatisticsItem(int disciplines, MetricSummary failedDueToAbsences,
+                                 MetricSummary failedDueToGrade, MetricSummary failedDueToCanceling, MetricSummary succeeded, MetricSummary exempted,
+                                 MetricSummary retention) {
         this.disciplines = disciplines;
         this.failedDueToAbsences = failedDueToAbsences;
         this.failedDueToGrade = failedDueToGrade;
         this.failedDueToCanceling = failedDueToCanceling;
-        this.success = success;
-        this.relativeRetention = relativeRetention;
-        this.absoluteRetention = absoluteRetention;
-    }
-
-    public int getHours() {
-        return hours;
-    }
-
-    public void setHours(int hours) {
-        this.hours = hours;
-    }
-
-    public int getCredits() {
-        return credits;
-    }
-
-    public void setCredits(int credits) {
-        this.credits = credits;
+        this.succeeded = succeeded;
+        this.exempted = exempted;
+        this.retention = retention;
     }
 
     public int getDisciplines() {
@@ -73,29 +53,27 @@ public class SubjectStatisticsItem {
         this.failedDueToCanceling = failedDueToCanceling;
     }
 
-    public MetricSummary getSuccess() {
-        return success;
+    public MetricSummary getSucceeded() {
+        return succeeded;
     }
 
-    public void setSuccess(MetricSummary success) {
-        this.success = success;
+    public void setSucceeded(MetricSummary succeeded) {
+        this.succeeded = succeeded;
     }
 
-    public MetricSummary getRelativeRetention() {
-        return relativeRetention;
+    public MetricSummary getExempted() {
+        return exempted;
     }
 
-    public void setRelativeRetention(MetricSummary relativeRetention) {
-        this.relativeRetention = relativeRetention;
+    public void setExempted(MetricSummary exempted) {
+        this.exempted = exempted;
     }
 
-    public MetricSummary getAbsoluteRetention() {
-        return absoluteRetention;
+    public MetricSummary getRetention() {
+        return retention;
     }
 
-    public void setAbsoluteRetention(MetricSummary absoluteRetention) {
-        this.absoluteRetention = absoluteRetention;
+    public void setRetention(MetricSummary retention) {
+        this.retention = retention;
     }
-
-
 }
