@@ -10,6 +10,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 import org.apache.log4j.Logger;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ScsvFilesDataAccessFacade implements DataAccessFacade {
@@ -48,16 +49,25 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Collection<EnrollmentData> getEnrollments(String from, String to) {
-        Collection<EnrollmentData> enrollments = this.indexesHolder.getAllEnrollments();
-        return this.getFilteredEnrollments(from, to, enrollments);
+    public Collection<Enrollment> getEnrollments(String from, String to, String courseCode, String curriculumCode) {
+        Collection<Enrollment> enrollments = this.indexesHolder.getAllEnrollments();
+        return this.getFilteredEnrollments(from, to, courseCode, curriculumCode, enrollments);
     }
 
-    private Collection<EnrollmentData> getFilteredEnrollments(String from, String to, Collection<EnrollmentData> enrollments) {
+    private Collection<Enrollment> getFilteredEnrollments(String from, String to, String courseCode, String curriculumCode, Collection<Enrollment> enrollments) {
         return enrollments
                 .stream()
-                .filter(enrollmentData -> enrollmentData.getTerm().equals(from))
+                .filter(isFromCourse(courseCode))
+                .filter(range(from, to))
                 .collect(Collectors.toList());
+    }
+
+    private Predicate<Enrollment> isFromCourse(String courseCode) {
+        return enrollment -> enrollment.getCode().equals(courseCode);
+    }
+
+    private Predicate<Enrollment> range(String from, String to) {
+        return enrollment -> enrollment.getTerm().compareTo(from) >= 0 && enrollment.getTerm().compareTo(to) <= 0;
     }
 
     @Override

@@ -6,8 +6,10 @@ import br.edu.ufcg.computacao.eureca.backend.constants.PortugueseStudentsGlossar
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EnviromentVariablesHolder;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Enrollment;
 import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
 import org.apache.log4j.Logger;
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,11 +32,10 @@ public class EnrollmentsStatisticsController {
         return summary;
     }
 
-    public EnrollmentsSummaryResponse getEnrollmentsStatistics() {
+    public EnrollmentsSummaryResponse getEnrollmentsStatistics(String from, String to) {
         String curriculum = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
+        String course = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
 
-        String from;
-        String to;
         int subjects;
         TermCount max;
         TermCount min ;
@@ -42,6 +43,12 @@ public class EnrollmentsStatisticsController {
         double averageClassesPerPeriod;
         double averageEnrollmentsPerClass;
         double averageEnrollmentsPerPeriod;
+
+        Collection<Enrollment> enrollments = this.dataAccessFacade.getEnrollments(from, to, course, curriculum);
+
+        for (Enrollment enrollment : enrollments) {
+
+        }
 
         return null;
     }
