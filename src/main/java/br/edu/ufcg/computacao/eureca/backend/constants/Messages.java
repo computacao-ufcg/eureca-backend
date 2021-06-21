@@ -1,5 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.constants;
 
+import java.util.Locale;
+
 public class Messages {
     public static final String ADD_TABLE_S = "Add table: %s.";
     public static final String ALL_SET = "All services have been initialized.";
@@ -9,6 +11,7 @@ public class Messages {
     public static final String INDEX_ACTIVE_S = "Indexing active student: %s.";
     public static final String INDEX_ALUMNUS_S = "Indexing alumnus student: %s.";
     public static final String INDEX_DROPOUT_S = "Indexing dropout student: %s.";
+    public static final String INEXISTENT_CURRICULUM_S_S = "Could not find curriculum [%s] for course [%s].";
     public static final String INSERTING_S_S = "Inserting %s : %s.";
     public static final String KEY_S = "Key: [%s].";
     public static final String LOADING_TABLE_S_FROM_S = "Loading table %s from file %s.";
@@ -21,4 +24,5 @@ public class Messages {
     public static final String RECEIVING_GET_STUDENTS_STATISTICS = "Received get students statistics.";
     public static final String RECEIVING_GET_SUBJECTS_STATISTICS = "Received get subjects statistics.";
     public static final String RECEIVING_GET_TEACHERS_STATISTICS = "Received get teachers.";
+    public static final String STUDENT_S_DISABLED_FOR_SUBJECT_S = "Student %s is not enabled to enroll in subject %s.";
 }

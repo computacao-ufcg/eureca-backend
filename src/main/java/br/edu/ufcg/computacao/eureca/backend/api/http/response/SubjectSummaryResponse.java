@@ -4,6 +4,7 @@ import br.edu.ufcg.computacao.eureca.backend.constants.SubjectsGlossaryFields;
 import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectStatisticsItem;
 
 public class SubjectSummaryResponse {
+    private String course;
     private String curriculum;
     private String from;
     private String to;
@@ -13,8 +14,10 @@ public class SubjectSummaryResponse {
     private SubjectStatisticsItem complementary;
     private SubjectsGlossaryFields glossary;
 
-    public SubjectSummaryResponse(String curriculum, String from, String to, SubjectStatisticsItem mandatory, SubjectStatisticsItem optional, SubjectStatisticsItem elective,
-                                  SubjectStatisticsItem complementary) {
+    public SubjectSummaryResponse(String course, String curriculum, String from, String to,
+                                  SubjectStatisticsItem mandatory, SubjectStatisticsItem optional,
+                                  SubjectStatisticsItem elective, SubjectStatisticsItem complementary) {
+        this.course = course;
         this.curriculum = curriculum;
         this.from = from;
         this.to = to;
@@ -22,6 +25,14 @@ public class SubjectSummaryResponse {
         this.optional = optional;
         this.elective = elective;
         this.complementary = complementary;
+    }
+
+    public String getCourse() {
+        return course;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
     }
 
     public String getCurriculum() {

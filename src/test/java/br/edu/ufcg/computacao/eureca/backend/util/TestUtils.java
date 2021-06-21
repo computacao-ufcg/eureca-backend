@@ -2,8 +2,9 @@ package br.edu.ufcg.computacao.eureca.backend.util;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.CommonKeys;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Metrics;
-import br.edu.ufcg.computacao.eureca.backend.core.models.StudentData;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.NationalIdRegistrationKey;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
+import br.edu.ufcg.computacao.eureca.backend.core.models.StudentMetrics;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -51,11 +52,12 @@ public class TestUtils {
         StudentData mockedStudentData = new StudentData("x", "x", "x", "x", "x",
                 "x", "x", "x", "Ativo",
                 "VESTIBULAR 2007.2", "x", "x", "x",
-                "x",0,120,0,
+                "x", "x",0,120,0,
                 58,0,26,5.68,
                 7,1.69,14,1,0,
                 0,0,0);
-        StudentDataResponse mockedStudentDataResponse = new StudentDataResponse("fake-registration", mockedStudentData);
+        StudentDataResponse mockedStudentDataResponse = new StudentDataResponse(mockedStudentData.
+                createStudent(new NationalIdRegistrationKey("fake-national-id", "fake-registration")));
         return Arrays.asList(mockedStudentDataResponse);
     }
 
@@ -93,7 +95,7 @@ public class TestUtils {
     }
 
     public static DelayedSummaryResponse getDelayedSummaryResponse() {
-        Metrics metrics = new Metrics(0,0,0,
+        StudentMetrics metrics = new StudentMetrics(0,0,0,
                 0,0,0,0,0);
         MetricsSummary metricsSummary = new MetricsSummary(0, metrics);
         DelayedPerTermSummary delayedPerTermSummary = new DelayedPerTermSummary("", metricsSummary);

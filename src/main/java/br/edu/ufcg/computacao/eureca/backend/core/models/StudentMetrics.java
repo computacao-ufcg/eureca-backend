@@ -1,8 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
-import br.edu.ufcg.computacao.eureca.backend.constants.Curriculum;
-
-public class Metrics {
+public class StudentMetrics {
     private double attemptedCredits;
     private double feasibility;
     private double successRate;
@@ -12,8 +10,8 @@ public class Metrics {
     private double courseDurationPrediction;
     private double risk;
 
-    public Metrics(double attemptedCredits, double feasibility, double successRate, double averageLoad, double cost,
-                   double pace, double courseDurationPrediction, double risk) {
+    public StudentMetrics(double attemptedCredits, double feasibility, double successRate, double averageLoad, double cost,
+                          double pace, double courseDurationPrediction, double risk) {
         this.attemptedCredits = attemptedCredits;
         this.feasibility = feasibility;
         this.successRate = successRate;

@@ -16,7 +16,8 @@ public class TeachersSummaryItemResponse {
     private Glossary glossary;
 
     public TeachersSummaryItemResponse(String teacherName, double averageFailDueToGrade, double averageFailDueToAbsences,
-                                       double suspendedRate, double successRate, int totalEnrollments, String from, String to, Glossary glossary) {
+                                       double suspendedRate, double successRate, int totalEnrollments, String from, String to,
+                                       Glossary glossary) {
         this.teacherName = teacherName;
         this.averageFailDueToGrade = averageFailDueToGrade;
         this.averageFailDueToAbsences = averageFailDueToAbsences;

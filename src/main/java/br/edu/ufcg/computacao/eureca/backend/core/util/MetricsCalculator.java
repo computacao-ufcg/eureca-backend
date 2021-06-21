@@ -2,7 +2,6 @@ package br.edu.ufcg.computacao.eureca.backend.core.util;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.MetricsSummary;
 import br.edu.ufcg.computacao.eureca.backend.constants.Curriculum;
-import br.edu.ufcg.computacao.eureca.backend.core.models.StudentData;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 
 import org.apache.log4j.Logger;
@@ -12,11 +11,19 @@ import java.util.Collection;
 public class MetricsCalculator {
     private Logger LOGGER = Logger.getLogger(MetricsCalculator.class);
 
-    public static Metrics computeMetrics(StudentData student) {
+    public static StudentMetrics computeMetrics(int attemptedCredits, int termsAccounted, int completedCredits) {
+        return doComputeMetrics(attemptedCredits, termsAccounted, completedCredits);
+    }
+
+    public static StudentMetrics computeMetrics(Student student) {
+        int attemptedCredits = student.getAttemptedCredits();
+        int termsAccounted = student.getCompletedTerms() + student.getInstitutionalTerms() + student.getInstitutionalTerms();
+        int completedCredits = student.getCompletedCredits();
+        return doComputeMetrics(attemptedCredits, termsAccounted, completedCredits);
+    }
+
+    private static StudentMetrics doComputeMetrics(int attemptedCredits, int termsAccounted, int completedCredits) {
         try {
-            int attemptedCredits = student.getAttemptedCredits();
-            int termsAccounted = student.getCompletedTerms() + student.getInstitutionalTerms() + student.getInstitutionalTerms();
-            int completedCredits = student.getCompletedCredits();
             double feasibility = computeFeasibility(termsAccounted, completedCredits);
             double successRate = computeSuccessRate(completedCredits, attemptedCredits);
             double averageLoad = computeAverageLoad(termsAccounted, attemptedCredits);
@@ -24,7 +31,7 @@ public class MetricsCalculator {
             double pace = computePace(termsAccounted, completedCredits);
             int courseDurationPrediction = computeCourseDurationPrediction(termsAccounted, completedCredits);
             double risk = computeRisk(termsAccounted, completedCredits);
-            return new Metrics(attemptedCredits, feasibility, successRate, averageLoad, cost, pace,
+            return new StudentMetrics(attemptedCredits, feasibility, successRate, averageLoad, cost, pace,
                     courseDurationPrediction, risk);
         } catch (Exception e) {
             e.printStackTrace();
@@ -138,8 +145,8 @@ public class MetricsCalculator {
         double aggregateRisk = 0.0;
         double v;
         for (Student item : students) {
-            aggregateTerms += item.getStudentData().getCompletedTerms();
-            Metrics studentMetrics = MetricsCalculator.computeMetrics(item.getStudentData());
+            aggregateTerms += item.getCompletedTerms();
+            StudentMetrics studentMetrics = MetricsCalculator.computeMetrics(item);
             aggregateAttemptedCredits += studentMetrics.getAttemptedCredits();
             aggregateFeasibility += ((v = studentMetrics.getFeasibility()) == -1.0 ? 0.0 : v);
             aggregateSuccessRate += ((v = studentMetrics.getSuccessRate()) == -1.0 ? 0.0 : v);
@@ -149,7 +156,7 @@ public class MetricsCalculator {
             aggregateCourseDurationPrediction += ((v = studentMetrics.getCourseDurationPrediction()) == -1.0 ? 0.0 : v);
             aggregateRisk += ((v = studentMetrics.getRisk()) == -1.0 ? 0.0 : v);
         }
-        Metrics metricsSummary = new Metrics(aggregateAttemptedCredits/size,
+        StudentMetrics metricsSummary = new StudentMetrics(aggregateAttemptedCredits/size,
                 aggregateFeasibility/size, aggregateSuccessRate/size, aggregateLoad/size,
                 aggregateCost/size, aggregatePace/size,
                 aggregateCourseDurationPrediction/size,aggregateRisk/size);
