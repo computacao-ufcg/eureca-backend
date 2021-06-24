@@ -151,8 +151,8 @@ public class ApplicationFacade {
 
     public EnrollmentsSummaryResponse getEnrollmentsStatistics(String token, String from, String to, String language)
             throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_ENROLLMENTS_STATISTICS);
-        EnrollmentsSummaryResponse response = this.enrollmentsStatisticsController.getEnrollmentsStatisticsMock();
+//        authenticateAndAuthorize(token, EurecaOperation.GET_ENROLLMENTS_STATISTICS);
+        EnrollmentsSummaryResponse response = this.enrollmentsStatisticsController.getEnrollmentsStatistics(from, to);
         EnrollmentsGlossaryFields glossaryFields = null;
         switch(language) {
             case SystemConstants.PORTUGUESE:
@@ -165,7 +165,7 @@ public class ApplicationFacade {
 
     public Collection<EnrollmentsSummaryItemResponse> getEnrollmentsStatisticsCSV(String token, String from, String to, String lang) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ENROLLMENTS_STATISTICS_CSV);
-        return this.enrollmentsStatisticsController.getEnrollmentsStatisticsCSV();
+        return this.enrollmentsStatisticsController.getEnrollmentsStatisticsCSV(from, to);
     }
 
     public Collection<SubjectsSummaryItemResponse> getSubjectsStatisticsCSV(String token, String from, String to, String lang) throws EurecaException {
