@@ -1,7 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.constants;
 
-public class PortugueseEnrollmentsGlossary {
+public class PortugueseEnrollmentsGlossary implements Glossary {
 
+    @Override
     public EnrollmentsGlossaryFields getGlossary() {
         Field subjects = new Field("Disciplinas", "");
         Field max = new Field("Número máximo", "");
