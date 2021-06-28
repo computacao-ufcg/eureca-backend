@@ -1,7 +1,9 @@
 package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.EnrollmentsCSVResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.EnrollmentsSummaryItemResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.EnrollmentsSummaryResponse;
+import br.edu.ufcg.computacao.eureca.backend.constants.PortugueseEnrollmentsGlossary;
 import br.edu.ufcg.computacao.eureca.backend.constants.PortugueseStudentsGlossary;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.SubjectKey;
@@ -9,6 +11,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EnviromentVariablesHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.ClassEnrollments;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Enrollment;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Subject;
 import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
 import org.apache.log4j.Logger;
 
@@ -83,18 +86,41 @@ public class EnrollmentsStatisticsController {
         return new EnrollmentsSummaryResponse(curriculum, from, to, subjects, max, min, avgClassesPerSubject, avgClassesPerPeriod, avgEnrollmentsPerClass, avgEnrollmentsPerPeriod);
     }
 
-    public Collection<EnrollmentsSummaryItemResponse> getEnrollmentsStatisticsCSV(String from, String to) {
+    public EnrollmentsCSVResponse getEnrollmentsStatisticsCSV(String from, String to) {
         String course = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
         String curriculum = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
 
-        Collection<Enrollment> enrollments = this.dataAccessFacade.getEnrollments(from, to, course, curriculum);
-
         List<EnrollmentsSummaryItemResponse> response = new ArrayList<>();
-        response.add(new EnrollmentsSummaryItemResponse("eda", 120, 120, 1, "2018.1", "2020.1", new PortugueseStudentsGlossary()));
-        response.add(new EnrollmentsSummaryItemResponse("leda", 120, 60, 2, "2018.1", "2020.1", new PortugueseStudentsGlossary()));
-        response.add(new EnrollmentsSummaryItemResponse("sistemas operacionais", 100, 33.3, 3, "2013.1", "2019.2", new PortugueseStudentsGlossary()));
-        response.add(new EnrollmentsSummaryItemResponse("redes", 80, 40, 2, "2018.1", "2020.1", new PortugueseStudentsGlossary()));
-        response.add(new EnrollmentsSummaryItemResponse("logica", 110, 65, 2, "2018.1", "2020.1", new PortugueseStudentsGlossary()));
-        return response;
+        Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> enrollmentsPerTermPerSubject = this.dataAccessFacade.getEnrollmentsPerTermPerSubject(from, to, course, curriculum);
+
+        for (Map.Entry<SubjectKey, Map<String, Map<String, ClassEnrollments>>> entry : enrollmentsPerTermPerSubject.entrySet()) {
+            SubjectKey subjectKey = entry.getKey();
+            // arranjar alguma forma de mapear o codigo da disciplina ao nome dela
+            String discipline = subjectKey.getSubjectCode();
+            int totalClasses = 0;
+            int totalEnrollments = 0;
+            TreeSet<String> terms = new TreeSet<>();
+            Map<String, Map<String, ClassEnrollments>> enrollmentsPerTermPerClass = entry.getValue();
+
+            for (Map.Entry<String, Map<String, ClassEnrollments>> entry2 : enrollmentsPerTermPerClass.entrySet()) {
+                String term = entry2.getKey();
+                terms.add(term);
+
+                Map<String, ClassEnrollments> enrollmentsPerClass = entry2.getValue();
+
+                totalClasses += enrollmentsPerTermPerClass.values().size();
+                for (ClassEnrollments enrollments : enrollmentsPerClass.values()) {
+                    totalEnrollments += enrollments.getNumberOfEnrolleds();
+                }
+            }
+
+            double averageEnrollmentsPerClass = (double) totalEnrollments / totalClasses;
+            from = terms.first();
+            to = terms.last();
+
+            response.add(new EnrollmentsSummaryItemResponse(discipline, totalEnrollments, averageEnrollmentsPerClass, totalClasses, from, to));
+        }
+
+        return new EnrollmentsCSVResponse(response);
     }
 }

@@ -50,50 +50,12 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
     @Override
     public Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> getEnrollmentsPerTermPerSubject(String from, String to, String courseCode, String curriculumCode) {
-        Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> enrollmentsPerSubjectPerTermPerClass = this.indexesHolder.getEnrollmentsPerSubjectPerTermPerClass(courseCode, curriculumCode);
-
-        Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> filteredEnrollments = new HashMap<>();
-        for (Map.Entry<SubjectKey, Map<String, Map<String, ClassEnrollments>>> entry : enrollmentsPerSubjectPerTermPerClass.entrySet()) {
-            SubjectKey subjectKey = entry.getKey();
-            String course = subjectKey.getCourseCode();
-            String curriculum = subjectKey.getCurriculumCode();
-
-            if (course.equals(courseCode) && curriculum.equals(curriculumCode)) {
-                Map<String, Map<String, ClassEnrollments>> enrollmentsPerTermPerClass = entry.getValue();
-
-                for (Map.Entry<String, Map<String, ClassEnrollments>> entry2 : enrollmentsPerTermPerClass.entrySet()) {
-                    String term = entry2.getKey();
-
-                    if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
-                        filteredEnrollments.put(subjectKey, enrollmentsPerTermPerClass);
-                    }
-                }
-            }
-        }
-
-        return filteredEnrollments;
+        return this.indexesHolder.getEnrollmentsPerSubjectPerTermPerClass(from, to);
     }
 
     @Override
     public Collection<Enrollment> getEnrollments(String from, String to, String courseCode, String curriculumCode) {
-        Collection<Enrollment> enrollments = this.indexesHolder.getAllEnrollments();
-        return this.getFilteredEnrollments(from, to, courseCode, curriculumCode, enrollments);
-    }
-
-    private Collection<Enrollment> getFilteredEnrollments(String from, String to, String courseCode, String curriculumCode, Collection<Enrollment> enrollments) {
-        return enrollments
-                .stream()
-                .filter(isFromCourse(courseCode))
-                .filter(range(from, to))
-                .collect(Collectors.toList());
-    }
-
-    private Predicate<Enrollment> isFromCourse(String courseCode) {
-        return enrollment -> enrollment.getCode().equals(courseCode);
-    }
-
-    private Predicate<Enrollment> range(String from, String to) {
-        return enrollment -> enrollment.getTerm().compareTo(from) >= 0 && enrollment.getTerm().compareTo(to) <= 0;
+        return this.indexesHolder.getAllEnrollments(from, to);
     }
 
     @Override
