@@ -95,7 +95,7 @@ public class EnrollmentsStatisticsController {
 
         for (Map.Entry<SubjectKey, Map<String, Map<String, ClassEnrollments>>> entry : enrollmentsPerTermPerSubject.entrySet()) {
             SubjectKey subjectKey = entry.getKey();
-            // arranjar alguma forma de mapear o codigo da disciplina ao nome dela
+            // TODO: 28/06/2021  arranjar alguma forma de mapear o codigo da disciplina ao seu nome
             String discipline = subjectKey.getSubjectCode();
             int totalClasses = 0;
             int totalEnrollments = 0;
