@@ -1,9 +1,11 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.SubjectKey;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.TreeSet;
 
 public interface DataAccessFacade {
