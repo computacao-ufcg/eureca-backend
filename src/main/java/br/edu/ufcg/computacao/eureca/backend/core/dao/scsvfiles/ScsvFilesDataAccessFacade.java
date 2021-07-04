@@ -10,6 +10,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 import org.apache.log4j.Logger;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ScsvFilesDataAccessFacade implements DataAccessFacade {
@@ -45,6 +46,16 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                         item.computeRiskClass().equals(RiskClass.HIGH) ||
                         item.computeRiskClass().equals(RiskClass.UNFEASIBLE))
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> getEnrollmentsPerTermPerSubject(String from, String to, String courseCode, String curriculumCode) {
+        return this.indexesHolder.getEnrollmentsPerSubjectPerTermPerClass(from, to);
+    }
+
+    @Override
+    public Collection<Enrollment> getEnrollments(String from, String to, String courseCode, String curriculumCode) {
+        return this.indexesHolder.getAllEnrollments(from, to);
     }
 
     @Override
