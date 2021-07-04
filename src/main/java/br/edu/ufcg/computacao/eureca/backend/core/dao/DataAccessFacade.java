@@ -1,9 +1,12 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.EnrollmentData;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.SubjectKey;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.TreeSet;
 
 public interface DataAccessFacade {
@@ -14,6 +17,8 @@ public interface DataAccessFacade {
     Collection<Student> getDropouts(String from, String to);
 
     Collection<Student> getDelayed(String from, String to);
+
+    Collection<Enrollment> getEnrollments(String from, String to, String courseCode, String curriculumCode);
 
     Collection<ActivesPerTermSummary> getActivesPerTermSummary(String from, String to);
 
@@ -52,4 +57,6 @@ public interface DataAccessFacade {
     TreeSet<String> getTermsForCurriculum(String courseCode, String curriculumCode);
 
     int getNumberOfClassesPerSubject(String from, String to, String courseCode, String curriculumCode, String subjectCode);
+
+    Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> getEnrollmentsPerTermPerSubject(String from, String to, String courseCode, String curriculumCode);
 }
