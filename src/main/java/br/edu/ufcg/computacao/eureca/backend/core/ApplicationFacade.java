@@ -13,6 +13,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.holders.EnviromentVariablesHol
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EurecaAsPublicKeyHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.EurecaOperation;
 import br.edu.ufcg.computacao.eureca.backend.core.models.GlossaryType;
+import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectType;
 import br.edu.ufcg.computacao.eureca.backend.core.plugins.AuthorizationPlugin;
 import br.edu.ufcg.computacao.eureca.backend.core.util.GlossaryFactory;
 import br.edu.ufcg.computacao.eureca.common.exceptions.ConfigurationErrorException;
@@ -121,13 +122,28 @@ public class ApplicationFacade {
         return response;
     }
 
-    public SubjectSummaryResponse getSubjectsStatistics(String token, String from, String to, String language)
+    public SubjectSummaryResponse getSubjectsStatisticsSummary(String token, String from, String to, String language)
             throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_STATISTICS);
-        SubjectSummaryResponse response = this.subjectsStatisticsController.getSubjectStatistics(from, to);
+        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_STATISTICS_SUMMARY);
+        SubjectSummaryResponse response = this.subjectsStatisticsController.getSubjectStatisticsSummary(from, to);
         SubjectsGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.SUBJECT);
         response.setGlossary(glossaryFields);
         return response;
+    }
+
+    public Collection<SubjectsSummaryItemResponse> getSubjectsStatisticsCSV(String token, String from, String to, String lang) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_STATISTICS_CSV);
+        return this.subjectsStatisticsController.getSubjectsStatisticsCSV();
+    }
+
+    public SubjectPerTermSummaryResponse getMandatorySubjectSummary(String token, String from, String to) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_MANDATORY_STATISTICS);
+        SubjectPerTermSummaryResponse response = this.subjectsStatisticsController.getSubjectsStatistics(from, to, SubjectType.MANDATORY);
+        return response;
+    }
+
+    public Collection<SubjectDataResponse> getSubjectsCSV(String token, String from, String to) throws EurecaException {
+        return null;
     }
 
     public TeachersSummaryResponse getTeachersStatistics(String token, String from, String to, String language)
@@ -156,21 +172,6 @@ public class ApplicationFacade {
     public Collection<EnrollmentsSummaryItemResponse> getEnrollmentsStatisticsCSV(String token, String from, String to, String lang) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ENROLLMENTS_STATISTICS_CSV);
         return this.enrollmentsStatisticsController.getEnrollmentsStatisticsCSV();
-    }
-
-    public Collection<SubjectsSummaryItemResponse> getSubjectsStatisticsCSV(String token, String from, String to, String lang) throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_STATISTICS_CSV);
-        return this.subjectsStatisticsController.getSubjectsStatisticsCSV();
-    }
-
-    public Collection<SubjectsRetentionSummaryResponse> getSubjectsRetention(String token, String lang) throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_RETENTION);
-        return this.subjectsStatisticsController.getSubjectsRetention(lang);
-    }
-
-    public Collection<SubjectsRetentionResponse> getSubjectsRetentionCSV(String token, String lang) throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_RETENTION);
-        return this.subjectsStatisticsController.getSubjectsRetentionCSV(lang);
     }
 
     public String getPublicKey() throws EurecaException {

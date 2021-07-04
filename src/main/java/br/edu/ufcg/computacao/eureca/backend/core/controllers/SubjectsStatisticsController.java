@@ -1,11 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsRetentionResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsRetentionSummaryResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.PortugueseStudentsGlossary;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectSummaryResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsSummaryItemResponse;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EnviromentVariablesHolder;
@@ -26,14 +23,7 @@ public class SubjectsStatisticsController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
-    private <T> Collection<String> getSliderLabel(Collection<T> terms, Function<T, String> function) {
-        return terms
-                .stream()
-                .map(function)
-                .collect(Collectors.toCollection(TreeSet::new));
-    }
-
-    public SubjectSummaryResponse getSubjectStatistics(String from, String to) throws InvalidParameterException {
+    public SubjectSummaryResponse getSubjectStatisticsSummary(String from, String to) throws InvalidParameterException {
         String course = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
         String code = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
         Curriculum curriculum = this.dataAccessFacade.getCurriculum(course, code);
@@ -44,15 +34,67 @@ public class SubjectsStatisticsController {
         return summary;
     }
 
+    public SubjectPerTermSummaryResponse getSubjectsStatistics(String from, String to, SubjectType subjectType) throws InvalidParameterException {
+        String courseCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
+        String curriculumCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
+        Collection<String> curriculumTerms = this.dataAccessFacade.getTermsForCurriculum(courseCode, curriculumCode);
+        Curriculum curriculum = this.dataAccessFacade.getCurriculum(courseCode, curriculumCode);
+        if (curriculum == null) {
+            throw new InvalidParameterException(String.format(Messages.INEXISTENT_CURRICULUM_S_S, curriculumCode, courseCode));
+        }
+        Collection<String> subjects = null;
+        switch (subjectType) {
+            case MANDATORY:
+                subjects = curriculum.getMandatorySubjectsList();
+                break;
+            case OPTIONAL:
+                subjects = curriculum.getOptionalSubjectsList();
+                break;
+            case ELECTIVE:
+                subjects = curriculum.getElectiveSubjectsList();
+                break;
+            case COMPLEMENTARY:
+                subjects = curriculum.getComplementarySubjectsList();
+                break;
+        }
+        for (String term : curriculumTerms) {
+            if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
+                int subjectCount = 0;
+                for (String subjectCode : subjects) {
+                    MetricStatistics statistics = this.dataAccessFacade.
+                            getSucceededStatistics(term, term, courseCode, curriculumCode, subjectCode);
+                }
+            }
+        }
+        return null;
+    }
+
+    public Collection<SubjectsSummaryItemResponse> getSubjectsStatisticsCSV() {
+        List<SubjectsSummaryItemResponse> response = new ArrayList<>();
+        response.add(new SubjectsSummaryItemResponse("eda", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2", new PortugueseStudentsGlossary()));
+        response.add(new SubjectsSummaryItemResponse("leda", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2", new PortugueseStudentsGlossary()));
+        response.add(new SubjectsSummaryItemResponse("sistemas operacionais", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2", new PortugueseStudentsGlossary()));
+        response.add(new SubjectsSummaryItemResponse("redes", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2", new PortugueseStudentsGlossary()));
+        response.add(new SubjectsSummaryItemResponse("logica", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2", new PortugueseStudentsGlossary()));
+        return response;
+    }
+
+    private <T> Collection<String> getSliderLabel(Collection<T> terms, Function<T, String> function) {
+        return terms
+                .stream()
+                .map(function)
+                .collect(Collectors.toCollection(TreeSet::new));
+    }
+
     private SubjectSummaryResponse getSubjectStatisticsSummary(String from, String to, String courseCode,
                                                                String curriculumCode, Curriculum curriculum) {
-        SubjectStatisticsItem mandatory = buildSummary(from, to, courseCode, curriculumCode,
+        SubjectsStatisticsSummary mandatory = buildSummary(from, to, courseCode, curriculumCode,
                 curriculum.getMandatorySubjectsList());
-        SubjectStatisticsItem optional = buildSummary(from, to, courseCode, curriculumCode,
+        SubjectsStatisticsSummary optional = buildSummary(from, to, courseCode, curriculumCode,
                 curriculum.getOptionalSubjectsList());
-        SubjectStatisticsItem elective = buildSummary(from, to, courseCode, curriculumCode,
+        SubjectsStatisticsSummary elective = buildSummary(from, to, courseCode, curriculumCode,
                 curriculum.getElectiveSubjectsList());
-        SubjectStatisticsItem complementary = buildSummary(from, to, courseCode, curriculumCode,
+        SubjectsStatisticsSummary complementary = buildSummary(from, to, courseCode, curriculumCode,
                 curriculum.getComplementarySubjectsList());
         TreeSet<String> terms = this.dataAccessFacade.getTermsForCurriculum(courseCode, curriculumCode);
         String first = terms.first();
@@ -64,8 +106,8 @@ public class SubjectsStatisticsController {
         return ret;
     }
 
-    private SubjectStatisticsItem buildSummary(String from, String to, String courseCode, String curriculumCode,
-                                               Collection<String> subjects) {
+    private SubjectsStatisticsSummary buildSummary(String from, String to, String courseCode, String curriculumCode,
+                                                   Collection<String> subjects) {
         int minFailedDueToAbsences = Integer.MAX_VALUE;
         int maxFailedDueToAbsences = 0;
         int totalFailedDueToAbsences = 0;
@@ -126,20 +168,10 @@ public class SubjectsStatisticsController {
                 (1.0*totalExempted)/totalNumberOfClasses);
         MetricSummary retentionSummary = new MetricSummary(minRetention, maxRetention,
                 (1.0*totalRetention)/totalNumberOfClasses);
-        SubjectStatisticsItem ret = new SubjectStatisticsItem(subjects.size(),
+        SubjectsStatisticsSummary ret = new SubjectsStatisticsSummary(subjects.size(),
                 failedDueToAbsencesSummary, failedDueToGradeSummary, suspendedSummary, succeededSummary,
                 exemptedSummary, retentionSummary);
         return ret;
-    }
-
-    public Collection<SubjectsSummaryItemResponse> getSubjectsStatisticsCSV() {
-        List<SubjectsSummaryItemResponse> response = new ArrayList<>();
-        response.add(new SubjectsSummaryItemResponse("eda", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2", new PortugueseStudentsGlossary()));
-        response.add(new SubjectsSummaryItemResponse("leda", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2", new PortugueseStudentsGlossary()));
-        response.add(new SubjectsSummaryItemResponse("sistemas operacionais", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2", new PortugueseStudentsGlossary()));
-        response.add(new SubjectsSummaryItemResponse("redes", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2", new PortugueseStudentsGlossary()));
-        response.add(new SubjectsSummaryItemResponse("logica", 0.827, 0.12, 0.09, 0.04, 30, 0.2, "2017.2", "2019.2", new PortugueseStudentsGlossary()));
-        return response;
     }
 
     public Collection<SubjectsRetentionSummaryResponse> getSubjectsRetention(String lang) throws InvalidParameterException {

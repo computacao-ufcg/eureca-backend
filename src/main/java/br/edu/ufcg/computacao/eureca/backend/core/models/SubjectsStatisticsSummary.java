@@ -1,7 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
-public class SubjectStatisticsItem {
-    private int disciplines;
+public class SubjectsStatisticsSummary {
+    private int subjectsCount;
     private MetricSummary failedDueToAbsences;
     private MetricSummary failedDueToGrade;
     private MetricSummary failedDueToCanceling;
@@ -9,10 +9,10 @@ public class SubjectStatisticsItem {
     private MetricSummary exempted;
     private MetricSummary retention;
 
-    public SubjectStatisticsItem(int disciplines, MetricSummary failedDueToAbsences,
-                                 MetricSummary failedDueToGrade, MetricSummary failedDueToCanceling, MetricSummary succeeded, MetricSummary exempted,
-                                 MetricSummary retention) {
-        this.disciplines = disciplines;
+    public SubjectsStatisticsSummary(int subjectsCount, MetricSummary failedDueToAbsences,
+                                     MetricSummary failedDueToGrade, MetricSummary failedDueToCanceling, MetricSummary succeeded, MetricSummary exempted,
+                                     MetricSummary retention) {
+        this.subjectsCount = subjectsCount;
         this.failedDueToAbsences = failedDueToAbsences;
         this.failedDueToGrade = failedDueToGrade;
         this.failedDueToCanceling = failedDueToCanceling;
@@ -21,12 +21,12 @@ public class SubjectStatisticsItem {
         this.retention = retention;
     }
 
-    public int getDisciplines() {
-        return disciplines;
+    public int getSubjectsCount() {
+        return subjectsCount;
     }
 
-    public void setDisciplines(int disciplines) {
-        this.disciplines = disciplines;
+    public void setSubjectsCount(int subjectsCount) {
+        this.subjectsCount = subjectsCount;
     }
 
     public MetricSummary getFailedDueToAbsences() {
