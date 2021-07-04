@@ -15,10 +15,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 public class GenericLoadMapFromScsvFile<T extends EurecaMapKey, V extends EurecaMapValue> implements MapLoader {
     private final Logger LOGGER = Logger.getLogger(GenericLoadMapFromScsvFile.class);
@@ -57,9 +54,7 @@ public class GenericLoadMapFromScsvFile<T extends EurecaMapKey, V extends Eureca
         Set<String> numberFieldsSet = new TreeSet<>();
         if (row != null) {
             String[] numberFields = row.split(";");
-            for (int i = 0; i < numberFields.length; i++) {
-                numberFieldsSet.add(numberFields[i]);
-            }
+            numberFieldsSet.addAll(Arrays.asList(numberFields));
         }
         return numberFieldsSet;
     }

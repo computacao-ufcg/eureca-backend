@@ -37,15 +37,16 @@ public class Main implements ApplicationRunner {
             // Setting up plugin
             AuthorizationPlugin authorizationPlugin = PluginInstantiator.getAuthorizationPlugin();
 
+            // Setting environment variables
+            EnvironmentVariables environmentVariables = new EnvironmentVariables("14102100", "2017");
+            EnviromentVariablesHolder.getInstance().setEnvironmentVariables(environmentVariables);
+
             // Setting up Data Access facade
             String mapsListFile = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.MAPS_FILE,
                     ConfigurationPropertyDefaults.DEFAULT_MAPS_FILE);
             DataAccessFacade dataAccessFacade = new ScsvFilesDataAccessFacade(mapsListFile);
             DataAccessFacadeHolder.getInstance().setDataAccessFacade(dataAccessFacade);
 
-            // Setting environment variables
-            EnvironmentVariables environmentVariables = new EnvironmentVariables("14102100", "2017");
-            EnviromentVariablesHolder.getInstance().setEnvironmentVariables(environmentVariables);
             // Setting up Application facade
             ApplicationFacade applicationFacade = ApplicationFacade.getInstance();
             applicationFacade.setAuthorizationPlugin(authorizationPlugin);

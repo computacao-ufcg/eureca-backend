@@ -13,8 +13,16 @@ public class TermCount {
         return term;
     }
 
+    public void setTerm(String term) {
+        this.term = term;
+    }
+
     public int getCount() {
         return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     @Override
