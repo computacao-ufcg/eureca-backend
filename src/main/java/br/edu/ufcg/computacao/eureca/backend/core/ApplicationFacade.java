@@ -12,7 +12,9 @@ import br.edu.ufcg.computacao.eureca.backend.core.holders.CurriculumsHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EnviromentVariablesHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EurecaAsPublicKeyHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.EurecaOperation;
+import br.edu.ufcg.computacao.eureca.backend.core.models.GlossaryType;
 import br.edu.ufcg.computacao.eureca.backend.core.plugins.AuthorizationPlugin;
+import br.edu.ufcg.computacao.eureca.backend.core.util.GlossaryFactory;
 import br.edu.ufcg.computacao.eureca.common.exceptions.ConfigurationErrorException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.FatalErrorException;
@@ -66,9 +68,17 @@ public class ApplicationFacade {
         return this.studentsDataFetcher.getActiveCSV(from, to);
     }
 
-    public AlumniSummaryResponse getAlumniSummary(String token, String from, String to) throws EurecaException {
+    public AlumniSummaryResponse getAlumniSummary(String token, String from, String to, String language) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI);
-        return this.studentsStatisticsController.getAlumniSummaryResponse(from, to);
+        AlumniSummaryResponse response = this.studentsStatisticsController.getAlumniSummaryResponse(from, to);
+        AlumniGlossaryFields glossaryFields = null;
+        switch(language) {
+            case SystemConstants.PORTUGUESE:
+            default:
+                glossaryFields = new PortugueseAlumniGlossary().getGlossary();
+        }
+        response.setGlossary(glossaryFields);
+        return response;
     }
 
     public Collection<StudentDataResponse> getAlumniCSV(String token, String from, String to) throws EurecaException {
@@ -106,12 +116,7 @@ public class ApplicationFacade {
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_STATISTICS);
         StudentsSummaryResponse response = this.studentsStatisticsController.getStudentsSummaryResponse(from, to);
-        StudentsGlossaryFields glossaryFields = null;
-        switch(language) {
-            case SystemConstants.PORTUGUESE:
-            default:
-                glossaryFields = new PortugueseStudentsGlossary().getGlossary();
-        }
+        StudentsGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.STUDENT);
         response.setGlossary(glossaryFields);
         return response;
     }
@@ -120,12 +125,7 @@ public class ApplicationFacade {
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_STATISTICS);
         SubjectSummaryResponse response = this.subjectsStatisticsController.getSubjectStatistics(from, to);
-        SubjectsGlossaryFields glossaryFields = null;
-        switch(language) {
-            case SystemConstants.PORTUGUESE:
-            default:
-                glossaryFields = new PortugueseSubjectsGlossary().getGlossary();
-        }
+        SubjectsGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.SUBJECT);
         response.setGlossary(glossaryFields);
         return response;
     }
@@ -134,12 +134,7 @@ public class ApplicationFacade {
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_TEACHERS_STATISTICS);
         TeachersSummaryResponse response = this.teacherStatisticsController.getTeachersStatisticsMock();
-        TeachersGlossaryFields glossaryFields = null;
-        switch(language) {
-            case SystemConstants.PORTUGUESE:
-            default:
-                glossaryFields = new PortugueseTeachersGlossary().getGlossary();
-        }
+        TeachersGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.TEACHER);
         response.setGlossary(glossaryFields);
         return response;
     }
@@ -159,6 +154,7 @@ public class ApplicationFacade {
             default:
                 glossaryFields = new PortugueseEnrollmentsGlossary().getGlossary();
         }
+
         response.setGlossary(glossaryFields);
         return response;
     }

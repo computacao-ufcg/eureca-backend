@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.constants;
 
-public class EnrollmentsGlossaryFields {
+public class EnrollmentsGlossaryFields extends GlossaryFields {
     Field subjects;
     Field max;
     Field min ;
