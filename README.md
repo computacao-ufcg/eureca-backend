@@ -35,7 +35,8 @@ Para fins de padronização no código a tabela a seguir trás termos comuns do 
 | Absences |  Faltas do aluno|  
 | Suspended | Trancado|   
 | Cancelled |  Cancelado|   
-| Transferred |  Transferido|   
+| Transferred |  Transferido|
+| Exempted | Dispensado|  
 | Retention |  Número de matrículas que, de acordo com o percurso mínimo proposto, deveriam já ter cursado uma disciplina, mas ainda não o fizeram.|   
 | Feasibility |  Refere-se à viabilidade da execução curricular do aluno. Quanto mais perto de 1 maior o risco dessa execução ser inexequível.|   
 | Pace |  Ritmo de execução do curso|   
