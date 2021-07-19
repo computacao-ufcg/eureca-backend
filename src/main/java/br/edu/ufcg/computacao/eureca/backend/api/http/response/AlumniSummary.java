@@ -3,7 +3,7 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 import br.edu.ufcg.computacao.eureca.backend.core.models.CostClass;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 
-public class AlumniSummary {
+public class AlumniSummary extends Summary {
     private int alumniCount;
     private double averageTermsCount;
     private double averageCost;
@@ -17,7 +17,8 @@ public class AlumniSummary {
 
     public AlumniSummary(int alumniCount, double averageTermsCount, double averageCost, double averageGpa,
                          double averageAlumniCount, int maxAlumniCount, int minAlumniCount, String maxAlumniCountTerm,
-                         String minAlumniCountTerm) {
+                         String minAlumniCountTerm, String from, String to) {
+        super(from, to);
         this.alumniCount = alumniCount;
         this.averageTermsCount = averageTermsCount;
         this.averageCost = averageCost;

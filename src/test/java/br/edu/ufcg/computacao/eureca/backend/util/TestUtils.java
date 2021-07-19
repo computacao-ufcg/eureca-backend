@@ -40,12 +40,12 @@ public class TestUtils {
     public static ActivesSummaryResponse getActivesSummaryResponse() {
         RiskClassCountSummary riskClassCountSummary = new RiskClassCountSummary(0, 0, 0, 0, 0, 0, 0);
         ActivesPerTermSummary activesPerTerm = new ActivesPerTermSummary("", riskClassCountSummary);
-        return new ActivesSummaryResponse(Arrays.asList("slider", "label"), Arrays.asList(activesPerTerm));
+        return new ActivesSummaryResponse(Arrays.asList(activesPerTerm), "x", "y");
     }
 
     public static AlumniSummaryResponse getAlumniSummaryResponse() {
         AlumniPerTermSummary alumniPerTerm = new AlumniPerTermSummary("x", 10, 5, 4, 1);
-        return new AlumniSummaryResponse(Arrays.asList("slider", "label"), Arrays.asList(alumniPerTerm));
+        return new AlumniSummaryResponse(Arrays.asList(alumniPerTerm), "x", "y");
     }
 
     public static Collection<StudentDataResponse> getStudentsCsvResponse() {
@@ -91,7 +91,7 @@ public class TestUtils {
                 0,0,0,
                 0,0);
         DropoutPerTermSummary dropouts = new DropoutPerTermSummary("", 0, reasonSummary, 0, 0);
-        return new DropoutsSummaryResponse(Arrays.asList("slider", "label"), Arrays.asList(dropouts));
+        return new DropoutsSummaryResponse(Arrays.asList(dropouts), "x", "y");
     }
 
     public static DelayedSummaryResponse getDelayedSummaryResponse() {
@@ -99,6 +99,6 @@ public class TestUtils {
                 0,0,0,0,0);
         MetricsSummary metricsSummary = new MetricsSummary(0, metrics);
         DelayedPerTermSummary delayedPerTermSummary = new DelayedPerTermSummary("", metricsSummary);
-        return new DelayedSummaryResponse(Arrays.asList("slider", "label"), Arrays.asList(delayedPerTermSummary));
+        return new DelayedSummaryResponse(Arrays.asList(delayedPerTermSummary), "x", "y");
     }
 }
