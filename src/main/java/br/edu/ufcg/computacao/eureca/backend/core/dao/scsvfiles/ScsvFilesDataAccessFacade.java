@@ -10,7 +10,6 @@ import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 import org.apache.log4j.Logger;
 
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ScsvFilesDataAccessFacade implements DataAccessFacade {
@@ -193,6 +192,157 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
+    public ActivesSummary getActivesSummary(String from, String to) {
+        Collection<Student> actives = this.getActives(from, to);
+        MetricsSummary summary = MetricsCalculator.computeMetricsSummary(actives);
+        String firstTerm = this.getFirstTermFromStudents(actives);
+        String lastTerm = this.getLastTermFromStudents(actives);
+        return new ActivesSummary(actives.size(), summary, firstTerm, lastTerm);
+    }
+
+    @Override
+    public ActivesSummaryResponse getActivesSummaryResponse(String from, String to) {
+        Collection<ActivesPerTermSummary> activesPerTermSummaries = this.getActivesPerTermSummary(from, to);
+        String firstTerm = this.getFirstTermFromSummaries(activesPerTermSummaries);
+        String lastTerm = this.getLastTermFromSummaries(activesPerTermSummaries);
+        return new ActivesSummaryResponse(activesPerTermSummaries, firstTerm, lastTerm);
+    }
+
+    @Override
+    public DelayedSummary getDelayedSummary(String from, String to) {
+        Collection<Student> delayed = this.getDelayed(from, to);
+        MetricsSummary summary = MetricsCalculator.computeMetricsSummary(delayed);
+        String firstTerm = this.getFirstTermFromStudents(delayed);
+        String lastTerm = this.getLastTermFromStudents(delayed);
+        return new DelayedSummary(delayed.size(), summary, firstTerm, lastTerm);
+    }
+
+    @Override
+    public DelayedSummaryResponse getDelayedSummaryResponse(String from, String to) {
+        Collection<DelayedPerTermSummary> delayedPerTermSummaries = this.getDelayedPerTermSummary(from, to);
+        String firstTerm = this.getFirstTermFromSummaries(delayedPerTermSummaries);
+        String lastTerm = this.getLastTermFromSummaries(delayedPerTermSummaries);
+        return new DelayedSummaryResponse(delayedPerTermSummaries, firstTerm, lastTerm);
+    }
+
+    private String getFirstTermFromStudents(Collection<Student> students) {
+        return this.getTermsFromStudents(students).first();
+    }
+
+    private String getLastTermFromStudents(Collection<Student> students) {
+        return this.getTermsFromStudents(students).last();
+    }
+
+    private TreeSet<String> getTermsFromStudents(Collection<Student> students) {
+        return students
+                .stream()
+                .map(Student::getAdmissionTerm)
+                .collect(Collectors.toCollection(TreeSet::new));
+    }
+
+    @Override
+    public AlumniSummary getAlumniSummary(String from, String to) {
+        Collection<AlumniPerTermSummary> alumniPerTermSummaries = this.getAlumniPerTermSummary(from, to);
+
+        double aggregateTerms = 0.0;
+        double aggregateCost = 0.0;
+        double aggregateGPA = 0;
+        int maxAlumniCount = 0;
+        String maxAlumniCountTerm = "";
+        int minAlumniCount = Integer.MAX_VALUE;
+        String minAlumniCountTerm = "";
+        int totalAlumniCount = 0;
+
+        for (AlumniPerTermSummary item : alumniPerTermSummaries) {
+            double averageTerms = item.getAverageTerms();
+            double averageCost = item.getAverageCost();
+            double averageGPA = item.getAverageGpa();
+            int termAlumniCount = item.getAlumniCount();
+            String term = item.getGraduationTerm();
+
+            totalAlumniCount += termAlumniCount;
+            if (termAlumniCount >= maxAlumniCount) {
+                maxAlumniCount = termAlumniCount;
+                maxAlumniCountTerm = term;
+            }
+            if (termAlumniCount <= minAlumniCount) {
+                minAlumniCount = termAlumniCount;
+                minAlumniCountTerm = term;
+            }
+            aggregateTerms += (averageTerms * termAlumniCount);
+            aggregateCost += (averageCost * termAlumniCount);
+            aggregateGPA += (averageGPA * termAlumniCount);
+        }
+
+        String firstTerm = this.getFirstTermFromSummaries(alumniPerTermSummaries);
+        String lastTerm = this.getLastTermFromSummaries(alumniPerTermSummaries);
+
+        return new AlumniSummary(totalAlumniCount, (totalAlumniCount == 0 ? -1.0 : aggregateTerms/totalAlumniCount),
+                (totalAlumniCount == 0 ? -1.0 : aggregateCost/totalAlumniCount),
+                (totalAlumniCount == 0 ? -1.0 : aggregateGPA/totalAlumniCount),
+                (alumniPerTermSummaries.size() == 0 ? -1.0 : (1.0*totalAlumniCount)/alumniPerTermSummaries.size()), maxAlumniCount, minAlumniCount,
+                maxAlumniCountTerm, minAlumniCountTerm, firstTerm, lastTerm);
+    }
+
+    @Override
+    public AlumniSummaryResponse getAlumniSummaryResponse(String from, String to) {
+        Collection<AlumniPerTermSummary> alumniPerTermSummaries = this.getAlumniPerTermSummary(from, to);
+        String firstTerm = this.getFirstTermFromSummaries(alumniPerTermSummaries);
+        String lastTerm = this.getLastTermFromSummaries(alumniPerTermSummaries);
+        return new AlumniSummaryResponse(alumniPerTermSummaries, firstTerm, lastTerm);
+    }
+
+    @Override
+    public DropoutsSummary getDropoutsSummary(String from, String to) {
+        Collection<DropoutPerTermSummary> dropouts = this.getDropoutsPerTermSummary(from, to);
+
+        DropoutReasonSummary aggregateDropouts = new DropoutReasonSummary(0, 0,
+                0, 0, 0, 0, 0,
+                0, 0, 0, 0);
+        double aggregateTermsCount = 0.0;
+        double aggregateCost = 0.0;
+
+        for (DropoutPerTermSummary item : dropouts) {
+            aggregateTermsCount += (item.getAverageTerms() * item.getDropoutCount());
+            aggregateCost += (item.getAverageCost() * item.getDropoutCount());
+            aggregateDropouts.add(item.getReasons());
+        }
+
+        String firstTerm = this.getFirstTermFromSummaries(dropouts);
+        String lastTerm = this.getLastTermFromSummaries(dropouts);
+        int dropoutCount = aggregateDropouts.computeTotalDropouts() - aggregateDropouts.getReenterSameCourse();
+
+        double averageTermsCount = (dropoutCount == 0 ? -1.0 : aggregateTermsCount/dropoutCount);
+        double averageCost = (dropoutCount == 0 ? -1.0 : aggregateCost/dropoutCount);
+        CostClass costClass = MetricsCalculator.computeCostClass(averageCost);
+
+        return new DropoutsSummary(dropoutCount, averageTermsCount, averageCost, costClass, aggregateDropouts, firstTerm, lastTerm);
+    }
+
+    @Override
+    public DropoutsSummaryResponse getDropoutsSummaryResponse(String from, String to) {
+        Collection<DropoutPerTermSummary> dropoutPerTermSummaries = this.getDropoutsPerTermSummary(from, to);
+        String firstTerm = this.getFirstTermFromSummaries(dropoutPerTermSummaries);
+        String lastTerm = this.getLastTermFromSummaries(dropoutPerTermSummaries);
+        return new DropoutsSummaryResponse(dropoutPerTermSummaries, firstTerm, lastTerm);
+    }
+
+    private String getFirstTermFromSummaries(Collection<? extends SummaryPerTerm> summaries) {
+        return this.getTermsFromSummaries(summaries).first();
+    }
+
+    private String getLastTermFromSummaries(Collection<? extends SummaryPerTerm> summaries) {
+        return this.getTermsFromSummaries(summaries).last();
+    }
+
+    private TreeSet<String> getTermsFromSummaries(Collection<? extends SummaryPerTerm> summaryPerTerms) {
+        return summaryPerTerms
+                .stream()
+                .map(SummaryPerTerm::getTerm)
+                .collect(Collectors.toCollection(TreeSet::new));
+    }
+
+    @Override
     public Student getStudent(String registration) {
         Map<String, NationalIdRegistrationKey> registrationMap = this.indexesHolder.getRegistrationMap();
         Map<NationalIdRegistrationKey, StudentData> studentsMap = this.mapsHolder.getMap("students");
@@ -226,22 +376,27 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     public MetricStatistics getExemptedStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
         return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_EXEMPTED);
     }
+
     @Override
     public MetricStatistics getOngoingStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
         return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_ONGOING);
     }
+
     @Override
     public MetricStatistics getFailedDueToGradeStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
         return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_FAILED_DUE_GRADE);
     }
+
     @Override
     public MetricStatistics getFailedDueToAbsencesStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
         return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_FAILED_DUE_ABSENCE);
     }
+
     @Override
     public MetricStatistics getSuspendedStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
         return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_SUSPENDED);
     }
+
     @Override
     public MetricStatistics getCancelledStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
         return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_CANCELLED);

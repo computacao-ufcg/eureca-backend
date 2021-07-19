@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class DropoutPerTermSummary implements Comparable {
+public class DropoutPerTermSummary implements Comparable, SummaryPerTerm {
     private String dropoutTerm;
     private int dropoutCount;
     private DropoutReasonSummary reasons;
@@ -59,5 +59,10 @@ public class DropoutPerTermSummary implements Comparable {
     public int compareTo(Object o) {
         DropoutPerTermSummary other = (DropoutPerTermSummary) o;
         return this.getDropoutTerm().compareTo(other.getDropoutTerm());
+    }
+
+    @Override
+    public String getTerm() {
+        return this.dropoutTerm;
     }
 }
