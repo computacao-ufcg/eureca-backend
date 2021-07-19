@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class DelayedPerTermSummary implements Comparable {
+public class DelayedPerTermSummary implements Comparable, SummaryPerTerm {
     private String admissionTerm;
     private MetricsSummary metricsSummary;
 
@@ -29,5 +29,10 @@ public class DelayedPerTermSummary implements Comparable {
     public int compareTo(Object o) {
         DelayedPerTermSummary other = (DelayedPerTermSummary) o;
         return this.getAdmissionTerm().compareTo(other.getAdmissionTerm());
+    }
+
+    @Override
+    public String getTerm() {
+        return this.admissionTerm;
     }
 }
