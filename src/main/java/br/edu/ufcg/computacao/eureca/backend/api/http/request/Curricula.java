@@ -19,7 +19,7 @@ import java.util.Collection;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = br.edu.ufcg.computacao.eureca.backend.api.http.request.Curricula.ENDPOINT)
+@RequestMapping(value = Curricula.ENDPOINT)
 @Api(description = ApiDocumentation.Curricula.API)
 public class Curricula {
     private Logger LOGGER = Logger.getLogger(Curricula.class);
