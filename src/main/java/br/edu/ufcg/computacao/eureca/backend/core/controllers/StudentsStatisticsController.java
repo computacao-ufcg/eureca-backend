@@ -3,7 +3,11 @@ package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import org.apache.log4j.Logger;
+
+import java.util.Collection;
+import java.util.TreeSet;
 
 public class StudentsStatisticsController {
     private Logger LOGGER = Logger.getLogger(StudentsStatisticsController.class);
@@ -12,10 +16,6 @@ public class StudentsStatisticsController {
 
     public StudentsStatisticsController() {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
-    }
-
-    public Collection<AlumniDigestResponse> getAlumniPerStudentSummary(String from, String to) {
-        return this.dataAccessFacade.getAlumniPerStudentSummary(from, to);
     }
 
     public Collection<StudentDataResponse> getActiveCSV(String from, String to) {

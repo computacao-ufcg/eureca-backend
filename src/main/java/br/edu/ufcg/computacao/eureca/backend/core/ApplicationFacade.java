@@ -26,6 +26,7 @@ public class ApplicationFacade {
     private static final Logger LOGGER = Logger.getLogger(ApplicationFacade.class);
     private RSAPublicKey asPublicKey;
     private AuthorizationPlugin authorizationPlugin;
+    private AlumniController alumniController;
     private CurriculaController curriculaController;
     private StudentsStatisticsController studentsStatisticsController;
     private SubjectsStatisticsController subjectsStatisticsController;
@@ -34,6 +35,7 @@ public class ApplicationFacade {
     private static ApplicationFacade instance;
 
     private ApplicationFacade() {
+        this.alumniController = new AlumniController();
         this.curriculaController = new CurriculaController();
         this.studentsStatisticsController = new StudentsStatisticsController();
         this.subjectsStatisticsController = new SubjectsStatisticsController();
@@ -57,7 +59,7 @@ public class ApplicationFacade {
     public Collection<AlumniDigestResponse> getAlumniBasicData(String token, String from, String to)
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_BASIC_DATA);
-        return this.studentsStatisticsController.getAlumniPerStudentSummary(from, to);
+        return this.alumniController.getAlumniPerStudentSummary(from, to);
     }
 
     public Collection<String> getCurricula() throws EurecaException {
