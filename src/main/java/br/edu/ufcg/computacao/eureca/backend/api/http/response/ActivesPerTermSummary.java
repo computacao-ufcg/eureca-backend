@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class ActivesPerTermSummary implements Comparable {
+public class ActivesPerTermSummary implements Comparable, SummaryPerTerm {
     private String admissionTerm;
     private RiskClassCountSummary riskClassCount;
 
@@ -29,5 +29,10 @@ public class ActivesPerTermSummary implements Comparable {
     public int compareTo(Object o) {
         ActivesPerTermSummary other = (ActivesPerTermSummary) o;
         return this.getAdmissionTerm().compareTo(other.getAdmissionTerm());
+    }
+
+    @Override
+    public String getTerm() {
+        return this.admissionTerm;
     }
 }

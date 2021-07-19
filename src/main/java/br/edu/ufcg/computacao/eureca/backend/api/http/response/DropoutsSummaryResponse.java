@@ -1,33 +1,20 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
-import io.swagger.annotations.ApiModelProperty;
-
 import java.util.Collection;
 
-public class DropoutsSummaryResponse {
-    @ApiModelProperty(position = 0, example = ApiDocumentation.Model.SLIDER_LABEL)
-    private Collection<String> sliderLabel;
-    private Collection<DropoutPerTermSummary> terms;
+public class DropoutsSummaryResponse extends Summary {
+    private Collection<DropoutPerTermSummary> dropoutPerTermSummaries;
 
-    public DropoutsSummaryResponse(Collection<String> sliderLabel, Collection<DropoutPerTermSummary> terms) {
-        this.sliderLabel = sliderLabel;
-        this.terms = terms;
+    public DropoutsSummaryResponse(Collection<DropoutPerTermSummary> dropoutPerTermSummaries, String from, String to) {
+        super(from, to);
+        this.dropoutPerTermSummaries = dropoutPerTermSummaries;
     }
 
-    public Collection<String> getSliderLabel() {
-        return sliderLabel;
+    public Collection<DropoutPerTermSummary> getDropoutPerTermSummaries() {
+        return dropoutPerTermSummaries;
     }
 
-    public void setSliderLabel(Collection<String> sliderLabel) {
-        this.sliderLabel = sliderLabel;
-    }
-
-    public Collection<DropoutPerTermSummary> getTerms() {
-        return terms;
-    }
-
-    public void setTerms(Collection<DropoutPerTermSummary> terms) {
-        this.terms = terms;
+    public void setDropoutPerTermSummaries(Collection<DropoutPerTermSummary> dropoutPerTermSummaries) {
+        this.dropoutPerTermSummaries = dropoutPerTermSummaries;
     }
 }
