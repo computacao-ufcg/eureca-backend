@@ -4,11 +4,7 @@ import br.edu.ufcg.computacao.eureca.as.core.AuthenticationUtil;
 import br.edu.ufcg.computacao.eureca.as.core.models.SystemUser;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.constants.*;
-import br.edu.ufcg.computacao.eureca.backend.core.controllers.EnrollmentsStatisticsController;
-import br.edu.ufcg.computacao.eureca.backend.core.controllers.StudentsStatisticsController;
-import br.edu.ufcg.computacao.eureca.backend.core.controllers.SubjectsStatisticsController;
-import br.edu.ufcg.computacao.eureca.backend.core.controllers.TeacherStatisticsController;
-import br.edu.ufcg.computacao.eureca.backend.core.holders.CurriculumsHolder;
+import br.edu.ufcg.computacao.eureca.backend.core.controllers.*;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EnviromentVariablesHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EurecaAsPublicKeyHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.EurecaOperation;
@@ -18,7 +14,6 @@ import br.edu.ufcg.computacao.eureca.backend.core.plugins.AuthorizationPlugin;
 import br.edu.ufcg.computacao.eureca.backend.core.util.GlossaryFactory;
 import br.edu.ufcg.computacao.eureca.common.exceptions.ConfigurationErrorException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
-import br.edu.ufcg.computacao.eureca.common.exceptions.FatalErrorException;
 import br.edu.ufcg.computacao.eureca.common.util.CryptoUtil;
 import br.edu.ufcg.computacao.eureca.common.util.ServiceAsymmetricKeysHolder;
 import org.apache.log4j.Logger;
@@ -31,16 +26,16 @@ public class ApplicationFacade {
     private static final Logger LOGGER = Logger.getLogger(ApplicationFacade.class);
     private RSAPublicKey asPublicKey;
     private AuthorizationPlugin authorizationPlugin;
+    private CurriculaController curriculaController;
     private StudentsStatisticsController studentsStatisticsController;
-    private StudentsDataFetcher studentsDataFetcher;
     private SubjectsStatisticsController subjectsStatisticsController;
     private EnrollmentsStatisticsController enrollmentsStatisticsController;
     private TeacherStatisticsController teacherStatisticsController;
     private static ApplicationFacade instance;
 
     private ApplicationFacade() {
+        this.curriculaController = new CurriculaController();
         this.studentsStatisticsController = new StudentsStatisticsController();
-        this.studentsDataFetcher = new StudentsDataFetcher();
         this.subjectsStatisticsController = new SubjectsStatisticsController();
         this.enrollmentsStatisticsController = new EnrollmentsStatisticsController();
         this.teacherStatisticsController = new TeacherStatisticsController();
@@ -59,6 +54,17 @@ public class ApplicationFacade {
         this.authorizationPlugin = authorizationPlugin;
     }
 
+    public Collection<AlumniDigestResponse> getAlumniBasicData(String token, String from, String to)
+            throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_BASIC_DATA);
+        return this.studentsStatisticsController.getAlumniPerStudentSummary(from, to);
+    }
+
+    public Collection<String> getCurricula() throws EurecaException {
+        String courseCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
+        return this.curriculaController.getCurricula(courseCode);
+    }
+
     public ActivesSummaryResponse getActiveSummary(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ACTIVES);
         return this.studentsStatisticsController.getActivesSummaryResponse(from, to);
@@ -66,7 +72,7 @@ public class ApplicationFacade {
 
     public Collection<StudentDataResponse> getActiveCSV(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ACTIVES_CSV);
-        return this.studentsDataFetcher.getActiveCSV(from, to);
+        return this.studentsStatisticsController.getActiveCSV(from, to);
     }
 
     public AlumniSummaryResponse getAlumniSummary(String token, String from, String to, String language) throws EurecaException {
@@ -84,7 +90,7 @@ public class ApplicationFacade {
 
     public Collection<StudentDataResponse> getAlumniCSV(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_CSV);
-        return this.studentsDataFetcher.getAlumniCSV(from, to);
+        return this.studentsStatisticsController.getAlumniCSV(from, to);
     }
 
     public DropoutsSummaryResponse getDropoutsSummary(String token, String from, String to) throws EurecaException {
@@ -94,7 +100,7 @@ public class ApplicationFacade {
 
     public Collection<StudentDataResponse> getDropoutsCSV(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DROPOUTS_CSV);
-        return this.studentsDataFetcher.getDropoutsCSV(from, to);
+        return this.studentsStatisticsController.getDropoutsCSV(from, to);
     }
 
     public DelayedSummaryResponse getDelayedSummary(String token, String from, String to) throws EurecaException {
@@ -104,13 +110,7 @@ public class ApplicationFacade {
 
     public Collection<StudentDataResponse> getDelayedCSV(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DELAYED_CSV);
-        return this.studentsDataFetcher.getDelayedCSV(from, to);
-    }
-
-    public Collection<AlumniDigestResponse> getAlumniBasicData(String token, String from, String to)
-            throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_BASIC_DATA);
-        return this.studentsDataFetcher.getAlumniPerStudentSummary(from, to);
+        return this.studentsStatisticsController.getDelayedCSV(from, to);
     }
 
     public StudentsSummaryResponse getStudentsStatistics(String token, String from, String to, String language)
@@ -186,15 +186,6 @@ public class ApplicationFacade {
         } catch (GeneralSecurityException e) {
             throw new ConfigurationErrorException(e.getMessage());
         }
-    }
-
-    public Collection<String> getAvailableCurriculums() throws EurecaException {
-        String courseCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
-        Collection<String> availableCurriculums = CurriculumsHolder.getInstance().getAvailableCurriculums(courseCode);
-        if (availableCurriculums == null) {
-            throw new FatalErrorException("Curso não cadastrado!");
-        }
-        return availableCurriculums;
     }
 
     private RSAPublicKey getAsPublicKey() throws EurecaException {
