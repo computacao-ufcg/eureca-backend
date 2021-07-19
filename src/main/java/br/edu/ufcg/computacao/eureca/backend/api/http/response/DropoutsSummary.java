@@ -2,14 +2,15 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.core.models.CostClass;
 
-public class DropoutsSummary {
+public class DropoutsSummary extends Summary {
     private int dropoutCount;
     private double averageTermsCount;
     private double averageCost;
     private CostClass costClass;
     private DropoutReasonSummary dropouts;
 
-    public DropoutsSummary(int dropoutCount, double averageTermsCount, double averageCost, CostClass costClass, DropoutReasonSummary dropouts) {
+    public DropoutsSummary(int dropoutCount, double averageTermsCount, double averageCost, CostClass costClass, DropoutReasonSummary dropouts, String from, String to) {
+        super(from, to);
         this.dropoutCount = dropoutCount;
         this.averageTermsCount = averageTermsCount;
         this.averageCost = averageCost;

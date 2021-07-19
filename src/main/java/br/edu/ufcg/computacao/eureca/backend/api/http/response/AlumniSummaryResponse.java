@@ -1,36 +1,24 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.AlumniGlossaryFields;
-import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
-import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Collection;
 
-public class AlumniSummaryResponse {
-    @ApiModelProperty(position = 0, example = ApiDocumentation.Model.SLIDER_LABEL)
-    private Collection<String> sliderLabel;
-    private Collection<AlumniPerTermSummary> terms;
+public class AlumniSummaryResponse extends Summary {
+    private Collection<AlumniPerTermSummary> alumniPerTermSummaries;
     private AlumniGlossaryFields glossary;
 
-    public AlumniSummaryResponse(Collection<String> sliderLabel, Collection<AlumniPerTermSummary> terms) {
-        this.sliderLabel = sliderLabel;
-        this.terms = terms;
+    public AlumniSummaryResponse(Collection<AlumniPerTermSummary> alumniPerTermSummaries, String from, String to) {
+        super(from, to);
+        this.alumniPerTermSummaries = alumniPerTermSummaries;
     }
 
-    public Collection<String> getSliderLabel() {
-        return sliderLabel;
+    public Collection<AlumniPerTermSummary> getAlumniPerTermSummaries() {
+        return alumniPerTermSummaries;
     }
 
-    public void setSliderLabel(Collection<String> sliderLabel) {
-        this.sliderLabel = sliderLabel;
-    }
-
-    public Collection<AlumniPerTermSummary> getTerms() {
-        return terms;
-    }
-
-    public void setTerms(Collection<AlumniPerTermSummary> terms) {
-        this.terms = terms;
+    public void setAlumniPerTermSummaries(Collection<AlumniPerTermSummary> alumniPerTermSummaries) {
+        this.alumniPerTermSummaries = alumniPerTermSummaries;
     }
 
     public AlumniGlossaryFields getGlossary() {

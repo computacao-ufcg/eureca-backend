@@ -1,10 +1,11 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class ActivesSummary {
+public class ActivesSummary extends Summary {
     private int activesCount;
     private MetricsSummary average;
 
-    public ActivesSummary(int activesCount, MetricsSummary average) {
+    public ActivesSummary(int activesCount, MetricsSummary average, String from, String to) {
+        super(from, to);
         this.activesCount = activesCount;
         this.average = average;
     }
