@@ -121,6 +121,12 @@ public class EnrollmentsStatisticsController {
             response.add(new EnrollmentsSummaryItemResponse(discipline, totalEnrollments, averageEnrollmentsPerClass, totalClasses, from, to));
         }
 
+        response.sort(compareTotalEnrollments());
+
         return new EnrollmentsCSVResponse(response);
+    }
+
+    private Comparator<EnrollmentsSummaryItemResponse> compareTotalEnrollments() {
+        return (e1, e2) ->  e2.getTotalEnrollments() - e1.getTotalEnrollments();
     }
 }
