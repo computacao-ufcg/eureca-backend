@@ -22,6 +22,50 @@ public class StudentsStatisticsController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
+    public Collection<AlumniDigestResponse> getAlumniPerStudentSummary(String from, String to) {
+        return this.dataAccessFacade.getAlumniPerStudentSummary(from, to);
+    }
+
+    public Collection<StudentDataResponse> getActiveCSV(String from, String to) {
+        Collection<StudentDataResponse> activeStudentsData = new TreeSet<>();
+        Collection<Student> actives = this.dataAccessFacade.getActives(from, to);
+        actives.forEach(item -> {
+            StudentDataResponse studentDataResponse = new StudentDataResponse(item);
+            activeStudentsData.add(studentDataResponse);
+        });
+        return activeStudentsData;
+    }
+
+    public Collection<StudentDataResponse> getAlumniCSV(String from, String to) {
+        Collection<StudentDataResponse> alumniData = new TreeSet<>();
+        Collection<Student> actives = this.dataAccessFacade.getAlumni(from, to);
+        actives.forEach(item -> {
+            StudentDataResponse studentDataResponse = new StudentDataResponse(item);
+            alumniData.add(studentDataResponse);
+        });
+        return alumniData;
+    }
+
+    public Collection<StudentDataResponse> getDropoutsCSV(String from, String to) {
+        Collection<StudentDataResponse> dropoutsData = new TreeSet<>();
+        Collection<Student> dropouts = this.dataAccessFacade.getDropouts(from, to);
+        dropouts.forEach(item -> {
+            StudentDataResponse studentDataResponse = new StudentDataResponse(item);
+            dropoutsData.add(studentDataResponse);
+        });
+        return dropoutsData;
+    }
+
+    public Collection<StudentDataResponse> getDelayedCSV(String from, String to) {
+        Collection<StudentDataResponse> delayedData = new TreeSet<>();
+        Collection<Student> delayed = this.dataAccessFacade.getDelayed(from, to);
+        delayed.forEach(item -> {
+            StudentDataResponse studentDataResponse = new StudentDataResponse(item);
+            delayedData.add(studentDataResponse);
+        });
+        return delayedData;
+    }
+
     public ActivesSummaryResponse getActivesSummaryResponse(String from, String to) {
         Collection<ActivesPerTermSummary> terms = this.dataAccessFacade.getActivesPerTermSummary(from, to);
         Collection<String> sliderLabel = this.getSliderLabel(terms, ActivesPerTermSummary::getAdmissionTerm);

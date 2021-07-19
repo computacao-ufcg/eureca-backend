@@ -329,7 +329,7 @@ public class Curriculum {
 
     @Override
     public String toString() {
-        return "Curriculum{" +
+        return "Curricula{" +
                 "course='" + course + '\'' +
                 ", code='" + code + '\'' +
                 ", idealMandatoryCredits='" + idealMandatoryCredits + '\'' +

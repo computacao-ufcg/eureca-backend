@@ -54,6 +54,11 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
+    public Collection<String> getCurricula(String courseCode) {
+        return this.indexesHolder.getCurricula(courseCode);
+    }
+
+    @Override
     public Collection<Enrollment> getEnrollments(String from, String to, String courseCode, String curriculumCode) {
         return this.indexesHolder.getAllEnrollments(from, to);
     }

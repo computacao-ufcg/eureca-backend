@@ -44,9 +44,9 @@ public class ApiDocumentation {
         public static final String GET_PUBLICKEY = "Retorna a chave pública do serviço.";
     }
 
-    public static class Curriculum {
-        public static final String API = "Currículos disponíveis.";
-        public static final String GET_AVAILABLE_CURRICULUMS = "Retorna uma lista com os possíveis currículos para o curso.";
+    public static class Curricula {
+        public static final String API = "Currículos de cursos.";
+        public static final String GET_CURRICULA = "Retorna uma lista com os currículos do curso corrente.";
     }
 
     public static class StudentStatistics {
