@@ -39,6 +39,8 @@ public class IndexesHolder {
     private Map<SubjectKey, Map<String, Collection<String>>> classesPerSubjectPerTerm;
     // Subject indexes
     private Map<NationalIdRegistrationKey, StudentCurriculum> studentCurriculumMap;
+    // Curricula indexes
+    private Map<String, Collection<String>> courseCurriculaMap;
 
     public IndexesHolder(MapsHolder mapsHolder) {
         this.mapsHolder = mapsHolder;
@@ -97,6 +99,7 @@ public class IndexesHolder {
         buildStudentIndexes();
         buildEnrollmentIndexes();
         buildSubjectIndexes();
+        buildCurriculaIndexes();
     }
 
     private void buildStudentIndexes() {
@@ -273,6 +276,18 @@ public class IndexesHolder {
         });
     }
 
+    private void buildCurriculaIndexes() {
+        this.courseCurriculaMap = new HashMap<>();
+        this.curriculumMap.forEach((k, v) -> {
+            Collection<String> curricula = this.courseCurriculaMap.get(k.getCourse());
+            if (curricula == null) {
+                curricula = new TreeSet<>();
+            }
+            curricula.add(k.getCode());
+            this.courseCurriculaMap.put(k.getCourse(), curricula);
+        });
+    }
+
     private boolean hasCompleted(StudentCurriculum curriculum, SubjectKey subjectKey, SubjectData subjectData) {
         if (curriculum.getCompleted().contains(subjectKey)) return true;
         for (String subjectCode : subjectData.getEquivalentCodesList()) {
@@ -285,6 +300,7 @@ public class IndexesHolder {
         }
         return false;
     }
+
     private boolean isEnabled(StudentCurriculum curriculum, SubjectKey subjectKey, SubjectData subjectData) {
         for (String subjectCode : subjectData.getPreRequirementsList()) {
             SubjectKey preRequirementKey = new SubjectKey(subjectKey.getCourseCode(), subjectKey.getCurriculumCode(),
@@ -347,6 +363,10 @@ public class IndexesHolder {
 
     private void updateStudent(NationalIdRegistrationKey studentKey, StudentData student) {
         this.studentsMap.replace(studentKey, student);
+    }
+
+    public Collection<String> getCurricula(String courseCode) {
+        return this.courseCurriculaMap.get(courseCode);
     }
 
     public Collection<Student> getAllActives() {

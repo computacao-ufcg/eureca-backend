@@ -75,4 +75,6 @@ public interface DataAccessFacade {
     int getNumberOfClassesPerSubject(String from, String to, String courseCode, String curriculumCode, String subjectCode);
 
     Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> getEnrollmentsPerTermPerSubject(String from, String to, String courseCode, String curriculumCode);
+
+    Collection<String> getCurricula(String courseCode);
 }

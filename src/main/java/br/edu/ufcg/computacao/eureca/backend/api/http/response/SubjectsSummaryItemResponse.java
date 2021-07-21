@@ -5,7 +5,6 @@ import br.edu.ufcg.computacao.eureca.backend.constants.Glossary;
 import java.util.Objects;
 
 public class SubjectsSummaryItemResponse {
-
     private String name;
     private double averageSuccess;
     private double averageFailDueToGrade;

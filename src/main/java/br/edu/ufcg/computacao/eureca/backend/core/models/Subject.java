@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class Subject {
+    private String courseCode;
     private String curriculumCode;
     private String subjectCode;
     private String academicUnit;
@@ -17,8 +18,9 @@ public class Subject {
     private String preRequirements;
     private Collection<String> preRequirementsList;
 
-    public Subject(String curriculumCode, String subjectCode, String academicUnit, String type, int credits, int hours,
-                   String name, String equivalentCodes, int idealTerm, String preRequirements) {
+    public Subject(String courseCode, String curriculumCode, String subjectCode, String academicUnit, String type,
+                   int credits, int hours, String name, String equivalentCodes, int idealTerm, String preRequirements) {
+        this.courseCode = courseCode;
         this.curriculumCode = curriculumCode;
         this.subjectCode = subjectCode;
         this.academicUnit = academicUnit;
@@ -29,6 +31,14 @@ public class Subject {
         this.equivalentCodes = equivalentCodes;
         this.idealTerm = idealTerm;
         this.preRequirements = preRequirements;
+    }
+
+    public String getCourseCode() {
+        return courseCode;
+    }
+
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
     }
 
     public String getCurriculumCode() {
@@ -138,6 +148,7 @@ public class Subject {
     @Override
     public String toString() {
         return "Subject{" +
+                "courseCode='" + courseCode + '\'' +
                 "curriculumCode='" + curriculumCode + '\'' +
                 ", subjectCode='" + subjectCode + '\'' +
                 ", academicUnit='" + academicUnit + '\'' +
