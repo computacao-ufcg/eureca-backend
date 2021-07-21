@@ -1,24 +1,26 @@
-package br.edu.ufcg.computacao.eureca.backend.core.models;
+package br.edu.ufcg.computacao.eureca.backend.api.http.response;
+
+import br.edu.ufcg.computacao.eureca.backend.core.models.MetricSummary;
 
 public class SubjectsStatisticsSummary {
     private int subjectsCount;
+    private int enrollmentsCount;
     private MetricSummary failedDueToAbsences;
     private MetricSummary failedDueToGrade;
-    private MetricSummary failedDueToCanceling;
+    private MetricSummary cancelled;
     private MetricSummary succeeded;
     private MetricSummary exempted;
-    private MetricSummary retention;
 
-    public SubjectsStatisticsSummary(int subjectsCount, MetricSummary failedDueToAbsences,
-                                     MetricSummary failedDueToGrade, MetricSummary failedDueToCanceling, MetricSummary succeeded, MetricSummary exempted,
-                                     MetricSummary retention) {
+    public SubjectsStatisticsSummary(int subjectsCount, int enrollmentsCount, MetricSummary failedDueToAbsences,
+                                     MetricSummary failedDueToGrade, MetricSummary cancelled, MetricSummary succeeded,
+                                     MetricSummary exempted) {
         this.subjectsCount = subjectsCount;
+        this.enrollmentsCount = enrollmentsCount;
         this.failedDueToAbsences = failedDueToAbsences;
         this.failedDueToGrade = failedDueToGrade;
-        this.failedDueToCanceling = failedDueToCanceling;
+        this.cancelled = cancelled;
         this.succeeded = succeeded;
         this.exempted = exempted;
-        this.retention = retention;
     }
 
     public int getSubjectsCount() {
@@ -27,6 +29,14 @@ public class SubjectsStatisticsSummary {
 
     public void setSubjectsCount(int subjectsCount) {
         this.subjectsCount = subjectsCount;
+    }
+
+    public int getEnrollmentsCount() {
+        return enrollmentsCount;
+    }
+
+    public void setEnrollmentsCount(int enrollmentsCount) {
+        this.enrollmentsCount = enrollmentsCount;
     }
 
     public MetricSummary getFailedDueToAbsences() {
@@ -45,12 +55,12 @@ public class SubjectsStatisticsSummary {
         this.failedDueToGrade = failedDueToGrade;
     }
 
-    public MetricSummary getFailedDueToCanceling() {
-        return failedDueToCanceling;
+    public MetricSummary getCancelled() {
+        return cancelled;
     }
 
-    public void setFailedDueToCanceling(MetricSummary failedDueToCanceling) {
-        this.failedDueToCanceling = failedDueToCanceling;
+    public void setCancelled(MetricSummary cancelled) {
+        this.cancelled = cancelled;
     }
 
     public MetricSummary getSucceeded() {
@@ -67,13 +77,5 @@ public class SubjectsStatisticsSummary {
 
     public void setExempted(MetricSummary exempted) {
         this.exempted = exempted;
-    }
-
-    public MetricSummary getRetention() {
-        return retention;
-    }
-
-    public void setRetention(MetricSummary retention) {
-        this.retention = retention;
     }
 }

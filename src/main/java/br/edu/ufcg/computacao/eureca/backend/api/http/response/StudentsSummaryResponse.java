@@ -5,15 +5,12 @@ import br.edu.ufcg.computacao.eureca.backend.constants.StudentsGlossaryFields;
 public class StudentsSummaryResponse {
     private ActivesSummary activesSummary;
     private AlumniSummary alumniSummary;
-    private DelayedSummary delayedSummary;
     private DropoutsSummary dropoutsSummary;
     private StudentsGlossaryFields glossary;
 
-    public StudentsSummaryResponse(ActivesSummary activesSummary, AlumniSummary alumniSummary,
-                                   DelayedSummary delayedSummary, DropoutsSummary dropoutsSummary) {
+    public StudentsSummaryResponse(ActivesSummary activesSummary, AlumniSummary alumniSummary, DropoutsSummary dropoutsSummary) {
         this.activesSummary = activesSummary;
         this.alumniSummary = alumniSummary;
-        this.delayedSummary = delayedSummary;
         this.dropoutsSummary = dropoutsSummary;
     }
 
@@ -31,14 +28,6 @@ public class StudentsSummaryResponse {
 
     public void setAlumniSummary(AlumniSummary alumniSummary) {
         this.alumniSummary = alumniSummary;
-    }
-
-    public DelayedSummary getDelayedSummary() {
-        return delayedSummary;
-    }
-
-    public void setDelayedSummary(DelayedSummary delayedSummary) {
-        this.delayedSummary = delayedSummary;
     }
 
     public DropoutsSummary getDropoutsSummary() {

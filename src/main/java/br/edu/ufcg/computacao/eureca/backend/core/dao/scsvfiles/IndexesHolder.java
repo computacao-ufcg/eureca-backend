@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsRetentionResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectRetentionResponse;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
@@ -279,12 +279,12 @@ public class IndexesHolder {
     private void buildCurriculaIndexes() {
         this.courseCurriculaMap = new HashMap<>();
         this.curriculumMap.forEach((k, v) -> {
-            Collection<String> curricula = this.courseCurriculaMap.get(k.getCourse());
-            if (curricula == null) {
-                curricula = new TreeSet<>();
+            Collection<String> curriculumCodes = this.courseCurriculaMap.get(k.getCourse());
+            if (curriculumCodes == null) {
+                curriculumCodes = new TreeSet<>();
             }
-            curricula.add(k.getCode());
-            this.courseCurriculaMap.put(k.getCourse(), curricula);
+            curriculumCodes.add(k.getCode());
+            this.courseCurriculaMap.put(k.getCourse(), curriculumCodes);
         });
     }
 
@@ -407,14 +407,6 @@ public class IndexesHolder {
         return enrollments;
     }
 
-    public Collection<Enrollment> getAllEnrollments(String from, String to) {
-        Collection<Enrollment> enrollments = this.getAllEnrollments();
-        return enrollments
-                .stream()
-                .filter(enrollment -> enrollment.getTerm().compareTo(from) >= 0 && enrollment.getTerm().compareTo(to) <= 0)
-                .collect(Collectors.toList());
-    }
-
     public Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> getEnrollmentsPerSubjectPerTermPerClass(String from, String to) {
         Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> filteredEnrollments = new HashMap<>();
         for (Map.Entry<SubjectKey, Map<String, Map<String, ClassEnrollments>>> entry : this.enrollmentsPerSubjectPerTermPerClass.entrySet()) {
@@ -450,8 +442,8 @@ public class IndexesHolder {
         return retention;
     }
 
-    public Collection<SubjectsRetentionResponse> getRetention(String courseCode, String curriculumCode, String subjectCode) {
-        Collection<SubjectsRetentionResponse> responses = new TreeSet<>();
+    public Collection<SubjectRetentionResponse> getRetention(String courseCode, String curriculumCode, String subjectCode) {
+        Collection<SubjectRetentionResponse> responses = new TreeSet<>();
         SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
         for (NationalIdRegistrationKey active : this.actives) {
             StudentCurriculum studentCurriculum = this.studentCurriculumMap.get(active);
@@ -461,7 +453,7 @@ public class IndexesHolder {
                 SubjectData subject = this.subjectsMap.get(subjectKey);
                 int idealTerm = subject.getIdealTerm();
                 String name = subject.getName();
-                SubjectsRetentionResponse response = new SubjectsRetentionResponse(courseCode, curriculumCode,
+                SubjectRetentionResponse response = new SubjectRetentionResponse(courseCode, curriculumCode,
                         idealTerm, subjectCode, name, active.getRegistration(), student.getAttemptedCredits(),
                         student.getMandatoryCredits(), 0, student.getElectiveCredits(),
                         student.getComplementaryCredits(), student.getCompletedTerms(), student.getSuspendedTerms(),
@@ -489,5 +481,17 @@ public class IndexesHolder {
             }
         }
         return ret;
+    }
+
+    public Map<String, Map<String, ClassEnrollments>> getSubjectMetricsPerTerm(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
+        Map<String, Map<String, ClassEnrollments>> response = new HashMap<>();
+        SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
+        Map<String, Map<String, ClassEnrollments>> classEnrollmentsPerTerm = this.enrollmentsPerSubjectPerTermPerClass.get(subjectKey);
+        for(String term: classEnrollmentsPerTerm.keySet()) {
+            if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
+                response.put(term, classEnrollmentsPerTerm.get(term));
+            }
+        }
+        return response;
     }
 }
