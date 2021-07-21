@@ -476,14 +476,6 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return this.indexesHolder.getNumberOfClassesPerSubject(from, to, courseCode, curriculumCode, subjectCode);
     }
 
-    private Student getStudent(String registration) {
-        Map<String, NationalIdRegistrationKey> registrationMap = this.indexesHolder.getRegistrationMap();
-        Map<NationalIdRegistrationKey, StudentData> studentsMap = this.mapsHolder.getMap("students");
-        NationalIdRegistrationKey key = registrationMap.get(registration);
-        StudentData studentData = studentsMap.get(key);
-        return studentData.createStudent(key);
-    }
-
     private int getRetentionCount(String courseCode, String curriculumCode, String subjectCode) {
         return this.indexesHolder.getRetentionCount(courseCode, curriculumCode, subjectCode);
     }
