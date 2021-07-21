@@ -11,13 +11,16 @@ public enum EurecaOperation {
     GET_DELAYED("getDelayed"),
     GET_DELAYED_CSV("getDelayedCSV"),
     GET_STUDENTS_STATISTICS("getStudentsStatistics"),
-    GET_SUBJECTS_STATISTICS("getSubjectsStatistics"),
+    GET_SUBJECTS_STATISTICS_SUMMARY("getSubjectsStatisticsSummary"),
     GET_SUBJECTS_STATISTICS_CSV("getSubjectsStatisticsCSV"),
+    GET_SUBJECTS_MANDATORY_STATISTICS("getSubjectsMandatoryStatistics"),
+    GET_SUBJECTS_OPTIONAL_STATISTICS("getSubjectsOptionalStatistics"),
+    GET_SUBJECTS_ELECTIVE_STATISTICS("getSubjectsElectiveStatistics"),
+    GET_SUBJECTS_COMPLEMENTARY_STATISTICS("getSubjectsComplementaryStatistics"),
     GET_TEACHERS_STATISTICS("getTeachersStatistics"),
     GET_TEACHERS_STATISTICS_CSV("getTeachersStatisticsCSV"),
     GET_ENROLLMENTS_STATISTICS("getEnrollmentsStatistics"),
-    GET_ENROLLMENTS_STATISTICS_CSV("getEnrollmentsStatisticsCSV"),
-    GET_SUBJECTS_RETENTION("getSubjectsRetention");
+    GET_ENROLLMENTS_STATISTICS_CSV("getEnrollmentsStatisticsCSV");
 
     private String value;
 

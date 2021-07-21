@@ -44,9 +44,9 @@ public class ApiDocumentation {
         public static final String GET_PUBLICKEY = "Retorna a chave pública do serviço.";
     }
 
-    public static class Curriculum {
-        public static final String API = "Currículos disponíveis.";
-        public static final String GET_AVAILABLE_CURRICULUMS = "Retorna uma lista com os possíveis currículos para o curso.";
+    public static class Curricula {
+        public static final String API = "Currículos de cursos.";
+        public static final String GET_CURRICULA = "Retorna uma lista com os currículos do curso corrente.";
     }
 
     public static class StudentStatistics {
@@ -83,5 +83,11 @@ public class ApiDocumentation {
     public static class SubjectStatistics {
         public static final String API = "Estatísticas de disciplinas.";
         public static final String GET_SUBJECTS = "Retorna um sumário dos dados das disciplinas.";
+        public static final String GET_MANDATORY = "Retorna um sumário dos dados das disciplinas obrigatórias do currículo e curso selecionado.";
+        public static final String GET_OPTIONAL = "Retorna um sumário dos dados das disciplinas optativas do currículo e curso selecionado.";
+        public static final String GET_ELECTIVE = "Retorna um sumário dos dados das disciplinas eletivas do currículo e curso selecionado.";
+        public static final String GET_COMPLEMENTARY = "Retorna um sumário dos dados das disciplinas complementares do currículo e curso selecionado.";
+        public static final String GET_SUBJECTS_SUMMARY = "Retorna um sumário geral dos dados das disciplinas do currículo e curso selecionado.";
+        public static final String GET_SUBJECTS_CSV = "Retorna os dados completos das disciplinas do currículo e curso selecionado.";
     }
 }
