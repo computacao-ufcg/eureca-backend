@@ -2,7 +2,7 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import java.util.Collection;
 
-public class ActivesSummaryResponse extends Summary {
+public class ActivesSummaryResponse extends RangeSummary {
     private Collection<ActivesPerTermSummary> activesPerTermSummaries;
 
     public ActivesSummaryResponse(Collection<ActivesPerTermSummary> activesPerTermSummaries, String from, String to) {

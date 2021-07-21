@@ -23,7 +23,7 @@ public class StudentStatisticsTest extends EndpointTest {
     public void testGetActives() throws Exception {
         // set up
         ActivesSummaryResponse response = getActivesSummaryResponse();
-        Mockito.doReturn(response).when(this.facade).getActiveSummary(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.doReturn(response).when(this.facade).getActivesSummary(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/actives", null, "");
 
         // exercise
@@ -39,7 +39,7 @@ public class StudentStatisticsTest extends EndpointTest {
     public void testGetActivesCsv() throws Exception {
         // set up
         Collection<StudentDataResponse> response = getStudentsCsvResponse();
-        Mockito.doReturn(response).when(this.facade).getActiveCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.doReturn(response).when(this.facade).getActivesCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/actives/csv", null, "");
 
         // exercise
@@ -144,13 +144,13 @@ public class StudentStatisticsTest extends EndpointTest {
 
     @Test
     public void getStudentStatisticsTest() throws Exception {
-        StudentsSummaryResponse response = new StudentsSummaryResponse(null, null, null, null);
+        StudentsSummaryResponse response = new StudentsSummaryResponse(null, null, null);
         Mockito.doReturn(response).when(this.facade).getStudentsStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
 
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/summary", null, "");
         MvcResult res = this.mockMvc.perform(req).andReturn();
 
         Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
-        Assert.assertEquals("{\"activesSummary\":null,\"alumniSummary\":null,\"delayedSummary\":null,\"dropoutsSummary\":null,\"glossary\":null}", res.getResponse().getContentAsString());
+        Assert.assertEquals("{\"activesSummary\":null,\"alumniSummary\":null,\"dropoutsSummary\":null,\"glossary\":null}", res.getResponse().getContentAsString());
     }
 }

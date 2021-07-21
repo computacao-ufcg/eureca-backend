@@ -4,7 +4,7 @@ import br.edu.ufcg.computacao.eureca.backend.constants.AlumniGlossaryFields;
 
 import java.util.Collection;
 
-public class AlumniSummaryResponse extends Summary {
+public class AlumniSummaryResponse extends RangeSummary {
     private Collection<AlumniPerTermSummary> alumniPerTermSummaries;
     private AlumniGlossaryFields glossary;
 

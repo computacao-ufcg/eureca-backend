@@ -1,9 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.SubjectsGlossaryFields;
-import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectsStatisticsSummary;
 
-public class SubjectSummaryResponse {
+public class SubjectsSummaryResponse {
     private String course;
     private String curriculum;
     private String from;
@@ -14,9 +13,9 @@ public class SubjectSummaryResponse {
     private SubjectsStatisticsSummary complementary;
     private SubjectsGlossaryFields glossary;
 
-    public SubjectSummaryResponse(String course, String curriculum, String from, String to,
-                                  SubjectsStatisticsSummary mandatory, SubjectsStatisticsSummary optional,
-                                  SubjectsStatisticsSummary elective, SubjectsStatisticsSummary complementary) {
+    public SubjectsSummaryResponse(String course, String curriculum, String from, String to,
+                                   SubjectsStatisticsSummary mandatory, SubjectsStatisticsSummary optional,
+                                   SubjectsStatisticsSummary elective, SubjectsStatisticsSummary complementary) {
         this.course = course;
         this.curriculum = curriculum;
         this.from = from;

@@ -2,7 +2,6 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.CommonKeys;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.EnrollmentsCSVResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.EnrollmentsSummaryItemResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.EnrollmentsSummaryResponse;
 import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
@@ -16,8 +15,6 @@ import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
 
 @CrossOrigin
 @RestController
@@ -62,7 +59,7 @@ public class EnrollmentsStatistics {
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
-            EnrollmentsCSVResponse response = ApplicationFacade.getInstance().getEnrollmentsStatisticsCSV(token, from, to, lang);
+            EnrollmentsCSVResponse response = ApplicationFacade.getInstance().getEnrollmentsCSV(token, from, to, lang);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));

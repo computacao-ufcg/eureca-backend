@@ -11,7 +11,8 @@ public class CurriculaController {
     public CurriculaController() {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
-    public Collection<String> getCurricula(String courseCode) {
-        return this.dataAccessFacade.getCurricula(courseCode);
+
+    public Collection<String> getCurriculumCodes(String courseCode) {
+        return this.dataAccessFacade.getCurriculumCodes(courseCode);
     }
 }

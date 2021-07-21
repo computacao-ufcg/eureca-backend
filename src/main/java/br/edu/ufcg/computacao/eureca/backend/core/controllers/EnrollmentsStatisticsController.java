@@ -86,7 +86,7 @@ public class EnrollmentsStatisticsController {
         return new EnrollmentsSummaryResponse(curriculum, from, to, subjects, max, min, avgClassesPerSubject, avgClassesPerPeriod, avgEnrollmentsPerClass, avgEnrollmentsPerPeriod);
     }
 
-    public EnrollmentsCSVResponse getEnrollmentsStatisticsCSV(String from, String to) {
+    public EnrollmentsCSVResponse getEnrollmentsCSV(String from, String to) {
         String course = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
         String curriculum = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
 
