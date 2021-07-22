@@ -14,7 +14,7 @@ import java.util.TreeSet;
 public class RetentionStatisticsController {
     private Logger LOGGER = Logger.getLogger(RetentionStatisticsController.class);
 
-    private DataAccessFacade dataAccessFacade;
+    private final DataAccessFacade dataAccessFacade;
 
     public RetentionStatisticsController() {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
@@ -49,6 +49,9 @@ public class RetentionStatisticsController {
     public RetentionSummaryResponse getRetentionStatistics(String from, String to) {
         String courseCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
         String curriculumCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
+        // Controllers should make a single call to the data access layer, however in this
+        // case, due to the distinct nature of the data required, it makes sense to split
+        // in two calls.
         DelayedSummary delayedSummary = this.dataAccessFacade.getDelayedSummary(from, to);
         SubjectRetentionSummary subjectRetentionSummary = this.dataAccessFacade.getSubjectRetentionSummary(courseCode, curriculumCode);
         return new RetentionSummaryResponse(delayedSummary, subjectRetentionSummary);

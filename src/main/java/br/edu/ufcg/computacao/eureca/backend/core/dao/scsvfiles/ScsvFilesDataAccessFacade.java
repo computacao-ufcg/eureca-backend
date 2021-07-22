@@ -189,12 +189,11 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public ActivesSummary getActivesSummary(String from, String to) {
-        Collection<Student> actives = this.getActives(from, to);
-        MetricsSummary summary = MetricsCalculator.computeMetricsSummary(actives);
-        String firstTerm = this.getFirstTermFromStudents(actives);
-        String lastTerm = this.getLastTermFromStudents(actives);
-        return new ActivesSummary(actives.size(), summary, firstTerm, lastTerm);
+    public StudentsSummaryResponse getStudentsStatistics(String from, String to) {
+        ActivesSummary activesSummary = getActivesSummary(from, to);
+        AlumniSummary alumniSummary = getAlumniSummary(from, to);
+        DropoutsSummary dropoutSummary = getDropoutsSummary(from, to);
+        return new StudentsSummaryResponse(activesSummary, alumniSummary, dropoutSummary);
     }
 
     @Override
@@ -206,82 +205,11 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public AlumniSummary getAlumniSummary(String from, String to) {
-        Collection<AlumniPerTermSummary> alumniPerTermSummaries = this.getAlumniPerTermSummary(from, to);
-
-        double aggregateTerms = 0.0;
-        double aggregateCost = 0.0;
-        double aggregateGPA = 0;
-        int maxAlumniCount = 0;
-        String maxAlumniCountTerm = "";
-        int minAlumniCount = Integer.MAX_VALUE;
-        String minAlumniCountTerm = "";
-        int totalAlumniCount = 0;
-
-        for (AlumniPerTermSummary item : alumniPerTermSummaries) {
-            double averageTerms = item.getAverageTerms();
-            double averageCost = item.getAverageCost();
-            double averageGPA = item.getAverageGpa();
-            int termAlumniCount = item.getAlumniCount();
-            String term = item.getGraduationTerm();
-
-            totalAlumniCount += termAlumniCount;
-            if (termAlumniCount >= maxAlumniCount) {
-                maxAlumniCount = termAlumniCount;
-                maxAlumniCountTerm = term;
-            }
-            if (termAlumniCount <= minAlumniCount) {
-                minAlumniCount = termAlumniCount;
-                minAlumniCountTerm = term;
-            }
-            aggregateTerms += (averageTerms * termAlumniCount);
-            aggregateCost += (averageCost * termAlumniCount);
-            aggregateGPA += (averageGPA * termAlumniCount);
-        }
-
-        String firstTerm = this.getFirstTermFromSummaries(alumniPerTermSummaries);
-        String lastTerm = this.getLastTermFromSummaries(alumniPerTermSummaries);
-
-        return new AlumniSummary(totalAlumniCount, (totalAlumniCount == 0 ? -1.0 : aggregateTerms/totalAlumniCount),
-                (totalAlumniCount == 0 ? -1.0 : aggregateCost/totalAlumniCount),
-                (totalAlumniCount == 0 ? -1.0 : aggregateGPA/totalAlumniCount),
-                (alumniPerTermSummaries.size() == 0 ? -1.0 : (1.0*totalAlumniCount)/alumniPerTermSummaries.size()), maxAlumniCount, minAlumniCount,
-                maxAlumniCountTerm, minAlumniCountTerm, firstTerm, lastTerm);
-    }
-
-    @Override
     public AlumniSummaryResponse getAlumniSummaryResponse(String from, String to) {
         Collection<AlumniPerTermSummary> alumniPerTermSummaries = this.getAlumniPerTermSummary(from, to);
         String firstTerm = this.getFirstTermFromSummaries(alumniPerTermSummaries);
         String lastTerm = this.getLastTermFromSummaries(alumniPerTermSummaries);
         return new AlumniSummaryResponse(alumniPerTermSummaries, firstTerm, lastTerm);
-    }
-
-    @Override
-    public DropoutsSummary getDropoutsSummary(String from, String to) {
-        Collection<DropoutPerTermSummary> dropouts = this.getDropoutsPerTermSummary(from, to);
-
-        DropoutReasonSummary aggregateDropouts = new DropoutReasonSummary(0, 0,
-                0, 0, 0, 0, 0,
-                0, 0, 0, 0);
-        double aggregateTermsCount = 0.0;
-        double aggregateCost = 0.0;
-
-        for (DropoutPerTermSummary item : dropouts) {
-            aggregateTermsCount += (item.getAverageTerms() * item.getDropoutCount());
-            aggregateCost += (item.getAverageCost() * item.getDropoutCount());
-            aggregateDropouts.add(item.getReasons());
-        }
-
-        String firstTerm = this.getFirstTermFromSummaries(dropouts);
-        String lastTerm = this.getLastTermFromSummaries(dropouts);
-        int dropoutCount = aggregateDropouts.computeTotalDropouts() - aggregateDropouts.getReenterSameCourse();
-
-        double averageTermsCount = (dropoutCount == 0 ? -1.0 : aggregateTermsCount/dropoutCount);
-        double averageCost = (dropoutCount == 0 ? -1.0 : aggregateCost/dropoutCount);
-        CostClass costClass = MetricsCalculator.computeCostClass(averageCost);
-
-        return new DropoutsSummary(dropoutCount, averageTermsCount, averageCost, costClass, aggregateDropouts, firstTerm, lastTerm);
     }
 
     @Override
@@ -474,6 +402,83 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     @Override
     public int getNumberOfClassesPerSubject(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
         return this.indexesHolder.getNumberOfClassesPerSubject(from, to, courseCode, curriculumCode, subjectCode);
+    }
+
+    private ActivesSummary getActivesSummary(String from, String to) {
+        Collection<Student> actives = this.getActives(from, to);
+        MetricsSummary summary = MetricsCalculator.computeMetricsSummary(actives);
+        String firstTerm = this.getFirstTermFromStudents(actives);
+        String lastTerm = this.getLastTermFromStudents(actives);
+        return new ActivesSummary(actives.size(), summary, firstTerm, lastTerm);
+    }
+
+    private AlumniSummary getAlumniSummary(String from, String to) {
+        Collection<AlumniPerTermSummary> alumniPerTermSummaries = this.getAlumniPerTermSummary(from, to);
+
+        double aggregateTerms = 0.0;
+        double aggregateCost = 0.0;
+        double aggregateGPA = 0;
+        int maxAlumniCount = 0;
+        String maxAlumniCountTerm = "";
+        int minAlumniCount = Integer.MAX_VALUE;
+        String minAlumniCountTerm = "";
+        int totalAlumniCount = 0;
+
+        for (AlumniPerTermSummary item : alumniPerTermSummaries) {
+            double averageTerms = item.getAverageTerms();
+            double averageCost = item.getAverageCost();
+            double averageGPA = item.getAverageGpa();
+            int termAlumniCount = item.getAlumniCount();
+            String term = item.getGraduationTerm();
+
+            totalAlumniCount += termAlumniCount;
+            if (termAlumniCount >= maxAlumniCount) {
+                maxAlumniCount = termAlumniCount;
+                maxAlumniCountTerm = term;
+            }
+            if (termAlumniCount <= minAlumniCount) {
+                minAlumniCount = termAlumniCount;
+                minAlumniCountTerm = term;
+            }
+            aggregateTerms += (averageTerms * termAlumniCount);
+            aggregateCost += (averageCost * termAlumniCount);
+            aggregateGPA += (averageGPA * termAlumniCount);
+        }
+
+        String firstTerm = this.getFirstTermFromSummaries(alumniPerTermSummaries);
+        String lastTerm = this.getLastTermFromSummaries(alumniPerTermSummaries);
+
+        return new AlumniSummary(totalAlumniCount, (totalAlumniCount == 0 ? -1.0 : aggregateTerms/totalAlumniCount),
+                (totalAlumniCount == 0 ? -1.0 : aggregateCost/totalAlumniCount),
+                (totalAlumniCount == 0 ? -1.0 : aggregateGPA/totalAlumniCount),
+                (alumniPerTermSummaries.size() == 0 ? -1.0 : (1.0*totalAlumniCount)/alumniPerTermSummaries.size()), maxAlumniCount, minAlumniCount,
+                maxAlumniCountTerm, minAlumniCountTerm, firstTerm, lastTerm);
+    }
+
+    private DropoutsSummary getDropoutsSummary(String from, String to) {
+        Collection<DropoutPerTermSummary> dropouts = this.getDropoutsPerTermSummary(from, to);
+
+        DropoutReasonSummary aggregateDropouts = new DropoutReasonSummary(0, 0,
+                0, 0, 0, 0, 0,
+                0, 0, 0, 0);
+        double aggregateTermsCount = 0.0;
+        double aggregateCost = 0.0;
+
+        for (DropoutPerTermSummary item : dropouts) {
+            aggregateTermsCount += (item.getAverageTerms() * item.getDropoutCount());
+            aggregateCost += (item.getAverageCost() * item.getDropoutCount());
+            aggregateDropouts.add(item.getReasons());
+        }
+
+        String firstTerm = this.getFirstTermFromSummaries(dropouts);
+        String lastTerm = this.getLastTermFromSummaries(dropouts);
+        int dropoutCount = aggregateDropouts.computeTotalDropouts() - aggregateDropouts.getReenterSameCourse();
+
+        double averageTermsCount = (dropoutCount == 0 ? -1.0 : aggregateTermsCount/dropoutCount);
+        double averageCost = (dropoutCount == 0 ? -1.0 : aggregateCost/dropoutCount);
+        CostClass costClass = MetricsCalculator.computeCostClass(averageCost);
+
+        return new DropoutsSummary(dropoutCount, averageTermsCount, averageCost, costClass, aggregateDropouts, firstTerm, lastTerm);
     }
 
     private int getRetentionCount(String courseCode, String curriculumCode, String subjectCode) {

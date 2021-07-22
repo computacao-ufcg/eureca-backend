@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class SubjectsStatisticsController {
     private Logger LOGGER = Logger.getLogger(SubjectsStatisticsController.class);
 
-    private DataAccessFacade dataAccessFacade;
+    private final DataAccessFacade dataAccessFacade;
 
     public SubjectsStatisticsController() {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();

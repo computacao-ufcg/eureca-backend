@@ -12,7 +12,7 @@ import java.util.TreeSet;
 public class StudentsStatisticsController {
     private Logger LOGGER = Logger.getLogger(StudentsStatisticsController.class);
 
-    private DataAccessFacade dataAccessFacade;
+    private final DataAccessFacade dataAccessFacade;
 
     public StudentsStatisticsController() {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
@@ -61,10 +61,6 @@ public class StudentsStatisticsController {
     }
 
     public StudentsSummaryResponse getStudentsStatistics(String from, String to) {
-        ActivesSummary activesSummary = this.dataAccessFacade.getActivesSummary(from, to);
-        AlumniSummary alumniSummary = this.dataAccessFacade.getAlumniSummary(from, to);
-        DropoutsSummary dropoutSummary = this.dataAccessFacade.getDropoutsSummary(from, to);
-
-        return new StudentsSummaryResponse(activesSummary, alumniSummary, dropoutSummary);
+        return this.dataAccessFacade.getStudentsStatistics(from, to);
     }
 }
