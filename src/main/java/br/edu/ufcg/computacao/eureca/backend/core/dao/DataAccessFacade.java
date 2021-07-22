@@ -24,15 +24,11 @@ public interface DataAccessFacade {
 
     Collection<AlumniDigestResponse> getAlumniPerStudentSummary(String from, String to);
 
-    ActivesSummary getActivesSummary(String from, String to);
+    StudentsSummaryResponse getStudentsStatistics(String from, String to);
 
     ActivesSummaryResponse getActivesSummaryResponse(String from, String to);
 
-    AlumniSummary getAlumniSummary(String from, String to);
-
     AlumniSummaryResponse getAlumniSummaryResponse(String from, String to);
-
-    DropoutsSummary getDropoutsSummary(String from, String to);
 
     DropoutsSummaryResponse getDropoutsSummaryResponse(String from, String to);
     
