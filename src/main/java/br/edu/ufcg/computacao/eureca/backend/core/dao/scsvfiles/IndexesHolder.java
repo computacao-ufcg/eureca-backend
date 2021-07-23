@@ -55,7 +55,7 @@ public class IndexesHolder {
         return registrationMap;
     }
 
-    public Map<String, Collection<NationalIdRegistrationKey>> getActiveByAdmissionTerm() {
+    public Map<String, Collection<NationalIdRegistrationKey>> getActivesPerAdmissionTerm() {
         return activeByAdmissionTerm;
     }
 
@@ -67,7 +67,7 @@ public class IndexesHolder {
         return alumniByAdmissionTerm;
     }
 
-    public Map<String, Collection<NationalIdRegistrationKey>> getAlumniByGraduationTerm() {
+    public Map<String, Collection<NationalIdRegistrationKey>> getAlumniPerGraduationTerm() {
         return alumniByGraduationTerm;
     }
 
@@ -79,7 +79,7 @@ public class IndexesHolder {
         return dropoutByAdmissionTerm;
     }
 
-    public Map<String, Collection<NationalIdRegistrationKey>> getDropoutByDropoutTerm() {
+    public Map<String, Collection<NationalIdRegistrationKey>> getDropoutsPerDropoutTerm() {
         return dropoutByLeaveTerm;
     }
 
