@@ -16,23 +16,23 @@ public interface DataAccessFacade {
 
     Collection<Student> getDropouts(String from, String to);
 
-    Collection<ActivesPerTermSummary> getActivesPerTermSummary(String from, String to);
+    Map<String, Collection<Student>> getActivesPerAdmissionTerm(String from, String to);
+
+    Map<String, Collection<Student>> getAlumniPerGraduationTerm(String from, String to);
+
+    Map<String, Collection<Student>> getDropoutsPerDropoutTerm(String from, String to);
 
     Collection<AlumniPerTermSummary> getAlumniPerTermSummary(String from, String to);
 
-    Collection<DropoutPerTermSummary> getDropoutsPerTermSummary(String from, String to);
-
     Collection<AlumniDigestResponse> getAlumniPerStudentSummary(String from, String to);
 
-    StudentsSummaryResponse getStudentsStatistics(String from, String to);
+    Collection<DropoutPerTermSummary> getDropoutsPerTermSummary(String from, String to);
 
-    ActivesSummaryResponse getActivesSummaryResponse(String from, String to);
-
-    AlumniSummaryResponse getAlumniSummaryResponse(String from, String to);
-
-    DropoutsSummaryResponse getDropoutsSummaryResponse(String from, String to);
-    
     Curriculum getCurriculum(String courseCode, String curriculumCode);
+
+    TreeSet<String> getTermsForCurriculum(String courseCode, String curriculumCode);
+
+    Collection<String> getCurriculumCodes(String courseCode);
 
     Subject getSubject(String courseCode, String curriculumCode, String subjectCode);
 
@@ -50,27 +50,13 @@ public interface DataAccessFacade {
 
     MetricStatistics getCancelledStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode);
 
-    Collection<Student> getDelayed(String from, String to);
-
-    DelayedSummary getDelayedSummary(String from, String to);
-
-    SubjectRetentionSummary getSubjectRetentionSummary(String courseCode, String curriculumCode);
-
-    DelayedSummaryResponse getDelayedSummaryResponse(String from, String to);
-
-    Collection<DelayedPerTermSummary> getDelayedPerTermSummary(String from, String to);
-
     Collection<SubjectRetentionResponse> getSubjectsRetention(String courseCode, String curriculumCode) throws InvalidParameterException;
 
     Collection<SubjectRetentionSummaryResponse> getSubjectsRetentionSummary(String courseCode, String curriculumCode) throws InvalidParameterException;
 
-    TreeSet<String> getTermsForCurriculum(String courseCode, String curriculumCode);
-
     int getNumberOfClassesPerSubject(String from, String to, String courseCode, String curriculumCode, String subjectCode);
 
     Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> getEnrollmentsPerTermPerSubject(String from, String to, String courseCode, String curriculumCode);
-
-    Collection<String> getCurriculumCodes(String courseCode);
 
     Collection<SubjectMetricsPerTerm> getSubjectMetricsPerTerm(String from, String to, String courseCode, String curriculumCode, String subjectCode);
 }

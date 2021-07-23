@@ -103,24 +103,24 @@ public class SubjectsStatisticsController {
             MetricStatistics failedDueToAbsences = this.dataAccessFacade.getFailedDueToAbsencesStatistics(from, to, courseCode, curriculumCode, subjectCode);
             if (minFailedDueToAbsences > failedDueToAbsences.getMin()) minFailedDueToAbsences = failedDueToAbsences.getMin();
             if (maxFailedDueToAbsences < failedDueToAbsences.getMax()) maxFailedDueToAbsences = failedDueToAbsences.getMax();
-            totalFailedDueToAbsences += failedDueToAbsences.getTotal();
+            totalFailedDueToAbsences += failedDueToAbsences.getCount();
             MetricStatistics failedDueToGrade = this.dataAccessFacade.getFailedDueToGradeStatistics(from, to, courseCode, curriculumCode, subjectCode);
             if (minFailedDueToGrade > failedDueToGrade.getMin()) minFailedDueToGrade = failedDueToGrade.getMin();
             if (maxFailedDueToGrade < failedDueToGrade.getMax()) maxFailedDueToGrade = failedDueToGrade.getMax();
-            totalFailedDueToGrade += failedDueToGrade.getTotal();
+            totalFailedDueToGrade += failedDueToGrade.getCount();
             MetricStatistics suspended = this.dataAccessFacade.getSuspendedStatistics(from, to, courseCode, curriculumCode, subjectCode);
             if (minSuspended > suspended.getMin()) minSuspended = suspended.getMin();
             if (maxSuspended < suspended.getMax()) maxSuspended = suspended.getMax();
-            totalSuspended += suspended.getTotal();
+            totalSuspended += suspended.getCount();
             MetricStatistics succeeded = this.dataAccessFacade.getSucceededStatistics(from, to, courseCode, curriculumCode, subjectCode);
             if (minSucceeded > succeeded.getMin()) minSucceeded = succeeded.getMin();
             if (maxSucceeded < succeeded.getMax()) maxSucceeded = succeeded.getMax();
-            totalSucceeded += succeeded.getTotal();
+            totalSucceeded += succeeded.getCount();
             totalEnrollments += (totalFailedDueToAbsences + totalFailedDueToGrade + totalSuspended + totalSucceeded);
             MetricStatistics exempted = this.dataAccessFacade.getExemptedStatistics(from, to, courseCode, curriculumCode, subjectCode);
             if (minExempted > exempted.getMin()) minExempted = exempted.getMin();
             if (maxExempted < exempted.getMax()) maxExempted = exempted.getMax();
-            totalExempted += exempted.getTotal();
+            totalExempted += exempted.getCount();
         }
         MetricSummary failedDueToAbsencesSummary = new MetricSummary(minFailedDueToAbsences, maxFailedDueToAbsences,
                 (1.0*totalFailedDueToAbsences)/totalNumberOfClasses);

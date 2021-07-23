@@ -99,7 +99,7 @@ public class ApplicationFacade {
 
     public DropoutsSummaryResponse getDropoutsSummary(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DROPOUTS_SUMMARY);
-        return this.studentsStatisticsController.getDropoutsSummary(from, to);
+        return this.studentsStatisticsController.getDropoutsSummaryResponse(from, to);
     }
 
     public Collection<StudentDataResponse> getDropoutsCSV(String token, String from, String to) throws EurecaException {
