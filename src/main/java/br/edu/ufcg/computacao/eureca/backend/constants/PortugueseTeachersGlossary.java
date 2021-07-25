@@ -10,7 +10,7 @@ public class PortugueseTeachersGlossary implements Glossary {
                 "de créditos integralizados até o momento e o número agregado de créditos matriculados.");
         Field min = new Field("Número mínimo", "Número mínimo de docentes por período considerando todos" +
                 "os períodos desde o início da operação do curso.");
-        Field max = new Field("Número máximo", "Número mánimo de docentes por período considerando todos" +
+        Field max = new Field("Número máximo", "Número máximo de docentes por período considerando todos" +
                 "os períodos desde o início da operação do curso.");
         Field total = new Field("Total", "");
 
