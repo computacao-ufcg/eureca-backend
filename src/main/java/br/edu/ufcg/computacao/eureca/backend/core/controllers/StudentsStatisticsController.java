@@ -11,9 +11,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.util.CollectionUtil;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 import org.apache.log4j.Logger;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.TreeSet;
+import java.util.*;
 
 public class StudentsStatisticsController {
     private Logger LOGGER = Logger.getLogger(StudentsStatisticsController.class);
@@ -60,9 +58,7 @@ public class StudentsStatisticsController {
 
         for (String term : activesPerAdmissionTerm.keySet()) {
             Collection<Student> actives = activesPerAdmissionTerm.get(term);
-            RiskClassCountSummary riskClassCount = getRiskClassCountSummary(actives);
-            ActivesPerTermSummary termData = new ActivesPerTermSummary(term, riskClassCount);
-            terms.add(termData);
+            terms.add(getActivesPerTermSummary(term, actives));
         }
 
         String firstTerm = CollectionUtil.getFirstTermFromSummaries(terms);
@@ -73,34 +69,9 @@ public class StudentsStatisticsController {
     public AlumniSummaryResponse getAlumniSummaryResponse(String from, String to) {
         Collection<AlumniPerTermSummary> terms = new TreeSet<>();
         Map<String, Collection<Student>> alumniPerGraduationTerm = this.dataAccessFacade.getAlumniPerGraduationTerm(from, to);
-
         for (String term : alumniPerGraduationTerm.keySet()) {
             Collection<Student> alumni = alumniPerGraduationTerm.get(term);
-            int termAlumniCount = alumni.size();
-            double aggregateGPA = 0.0;
-            double aggregateTermsCount = 0.0;
-            double aggregateCost = 0.0;
-            for (Student alumnus : alumni) {
-                aggregateGPA += alumnus.getGpa();
-                aggregateTermsCount += alumnus.getCompletedTerms();
-                int attemptedCredits = alumnus.getAttemptedCredits();
-                int termsAccounted = alumnus.getCompletedTerms() + alumnus.getInstitutionalTerms() +
-                            alumnus.getInstitutionalTerms();
-                int completedCredits = alumnus.getCompletedCredits();
-                aggregateCost += (MetricsCalculator.computeMetrics(attemptedCredits, termsAccounted,
-                            completedCredits).getCost());
-            }
-
-            double averageGPA = termAlumniCount == 0 ? 0.0 : Double.parseDouble(String.format("%.2f",
-                    aggregateGPA/termAlumniCount).replace(",", "."));
-            double averageTermsCount = termAlumniCount == 0 ? 0.0 : Double.parseDouble(String.format("%.2f",
-                    aggregateTermsCount/termAlumniCount).replace(",", "."));
-            double averageCost = termAlumniCount == 0 ? 0.0 : Double.parseDouble(String.format("%.2f",
-                    aggregateCost/termAlumniCount).replace(",", "."));
-
-            AlumniPerTermSummary termData = new AlumniPerTermSummary(term, termAlumniCount, averageGPA,
-                    averageTermsCount, averageCost);
-            terms.add(termData);
+            terms.add(getAlumniPerTermSummary(term, alumni));
         }
         String firstTerm = CollectionUtil.getFirstTermFromSummaries(terms);
         String lastTerm = CollectionUtil.getLastTermFromSummaries(terms);
@@ -112,25 +83,8 @@ public class StudentsStatisticsController {
         Map<String, Collection<Student>> dropoutsPerDropoutTerm = this.dataAccessFacade.getDropoutsPerDropoutTerm(from, to);
 
         for (String term : dropoutsPerDropoutTerm.keySet()) {
-            int dropoutsCount[] = new int[SystemConstants.DROPOUT_TYPES_COUNT];
-            double aggregateTermsCount = 0.0;
-            double aggregateCost = 0.0;
             Collection<Student> dropouts = dropoutsPerDropoutTerm.get(term);
-            for (Student dropout : dropouts) {
-                dropoutsCount[dropout.getStatusIndex()]++;
-                aggregateTermsCount += dropout.getCompletedTerms();
-                int attemptedCredits = dropout.getAttemptedCredits();
-                int termsAccounted = dropout.getCompletedTerms() + dropout.getInstitutionalTerms() +
-                        dropout.getInstitutionalTerms();
-                int completedCredits = dropout.getCompletedCredits();
-                aggregateCost += (MetricsCalculator.computeMetrics(attemptedCredits, termsAccounted,
-                        completedCredits).getCost());
-            }
-            DropoutReasonSummary dropoutReasonSummary = new DropoutReasonSummary(dropoutsCount);
-            int size = dropouts.size();
-            double averageTerms = (size == 0 ? 0.0 : aggregateTermsCount/size);
-            double averageCost = (size == 0 ? 0.0 : aggregateCost/size);
-            terms.add(new DropoutPerTermSummary(term, size, dropoutReasonSummary, averageTerms, averageCost));
+            terms.add(getDropoutsPerTermSummary(term, dropouts));
         }
         String firstTerm = CollectionUtil.getFirstTermFromSummaries(terms);
         String lastTerm = CollectionUtil.getLastTermFromSummaries(terms);
@@ -144,84 +98,55 @@ public class StudentsStatisticsController {
         return new StudentsSummaryResponse(activesSummary, alumniSummary, dropoutSummary);
     }
 
-    private ActivesSummary getActivesSummary(String from, String to) {
-        Collection<Student> actives = this.dataAccessFacade.getActives(from, to);
-        MetricsSummary summary = MetricsCalculator.computeMetricsSummary(actives);
-        String firstTerm = CollectionUtil.getFirstTermFromStudents(actives);
-        String lastTerm = CollectionUtil.getLastTermFromStudents(actives);
-        return new ActivesSummary(actives.size(), summary, firstTerm, lastTerm);
-    }
-
-    private AlumniSummary getAlumniSummary(String from, String to) {
-        Collection<AlumniPerTermSummary> alumniPerTermSummaries = this.dataAccessFacade.getAlumniPerTermSummary(from, to);
-
-        double aggregateTerms = 0.0;
-        double aggregateCost = 0.0;
-        double aggregateGPA = 0;
-        int maxAlumniCount = 0;
-        String maxAlumniCountTerm = "";
-        int minAlumniCount = Integer.MAX_VALUE;
-        String minAlumniCountTerm = "";
-        int totalAlumniCount = 0;
-
-        for (AlumniPerTermSummary item : alumniPerTermSummaries) {
-            double averageTerms = item.getAverageTerms();
-            double averageCost = item.getAverageCost();
-            double averageGPA = item.getAverageGpa();
-            int termAlumniCount = item.getAlumniCount();
-            String term = item.getGraduationTerm();
-
-            totalAlumniCount += termAlumniCount;
-            if (termAlumniCount >= maxAlumniCount) {
-                maxAlumniCount = termAlumniCount;
-                maxAlumniCountTerm = term;
-            }
-            if (termAlumniCount <= minAlumniCount) {
-                minAlumniCount = termAlumniCount;
-                minAlumniCountTerm = term;
-            }
-            aggregateTerms += (averageTerms * termAlumniCount);
-            aggregateCost += (averageCost * termAlumniCount);
-            aggregateGPA += (averageGPA * termAlumniCount);
-        }
-
-        String firstTerm = CollectionUtil.getFirstTermFromSummaries(alumniPerTermSummaries);
-        String lastTerm = CollectionUtil.getLastTermFromSummaries(alumniPerTermSummaries);
-
-        return new AlumniSummary(totalAlumniCount, (totalAlumniCount == 0 ? -1.0 : aggregateTerms/totalAlumniCount),
-                (totalAlumniCount == 0 ? -1.0 : aggregateCost/totalAlumniCount),
-                (totalAlumniCount == 0 ? -1.0 : aggregateGPA/totalAlumniCount),
-                (alumniPerTermSummaries.size() == 0 ? -1.0 : (1.0*totalAlumniCount)/alumniPerTermSummaries.size()), maxAlumniCount, minAlumniCount,
-                maxAlumniCountTerm, minAlumniCountTerm, firstTerm, lastTerm);
-    }
-
-    private DropoutsSummary getDropoutsSummary(String from, String to) {
-        Collection<DropoutPerTermSummary> dropouts = this.dataAccessFacade.getDropoutsPerTermSummary(from, to);
-
-        DropoutReasonSummary aggregateDropouts = new DropoutReasonSummary(0, 0,
-                0, 0, 0, 0, 0,
-                0, 0, 0, 0);
+    private AlumniPerTermSummary getAlumniPerTermSummary(String term, Collection<Student> alumni) {
+        int termAlumniCount = alumni.size();
+        double aggregateGPA = 0.0;
         double aggregateTermsCount = 0.0;
         double aggregateCost = 0.0;
-
-        for (DropoutPerTermSummary item : dropouts) {
-            aggregateTermsCount += (item.getAverageTerms() * item.getDropoutCount());
-            aggregateCost += (item.getAverageCost() * item.getDropoutCount());
-            aggregateDropouts.add(item.getReasons());
+        for (Student alumnus : alumni) {
+            aggregateGPA += alumnus.getGpa();
+            aggregateTermsCount += alumnus.getCompletedTerms();
+            int attemptedCredits = alumnus.getAttemptedCredits();
+            int termsAccounted = alumnus.getCompletedTerms() + alumnus.getInstitutionalTerms() +
+                    alumnus.getInstitutionalTerms();
+            int completedCredits = alumnus.getCompletedCredits();
+            aggregateCost += (MetricsCalculator.computeMetrics(attemptedCredits, termsAccounted,
+                    completedCredits).getCost());
         }
 
-        String firstTerm = CollectionUtil.getFirstTermFromSummaries(dropouts);
-        String lastTerm = CollectionUtil.getLastTermFromSummaries(dropouts);
-        int dropoutCount = aggregateDropouts.computeTotalDropouts() - aggregateDropouts.getReenterSameCourse();
-
-        double averageTermsCount = (dropoutCount == 0 ? -1.0 : aggregateTermsCount/dropoutCount);
-        double averageCost = (dropoutCount == 0 ? -1.0 : aggregateCost/dropoutCount);
-        CostClass costClass = MetricsCalculator.computeCostClass(averageCost);
-
-        return new DropoutsSummary(dropoutCount, averageTermsCount, averageCost, costClass, aggregateDropouts, firstTerm, lastTerm);
+        double averageGPA = termAlumniCount == 0 ? 0.0 : Double.parseDouble(String.format("%.2f",
+                aggregateGPA/termAlumniCount).replace(",", "."));
+        double averageTermsCount = termAlumniCount == 0 ? 0.0 : Double.parseDouble(String.format("%.2f",
+                aggregateTermsCount/termAlumniCount).replace(",", "."));
+        double averageCost = termAlumniCount == 0 ? 0.0 : Double.parseDouble(String.format("%.2f",
+                aggregateCost/termAlumniCount).replace(",", "."));
+        AlumniPerTermSummary termData = new AlumniPerTermSummary(term, termAlumniCount, averageGPA,
+                averageTermsCount, averageCost);
+        return termData;
     }
 
-    private RiskClassCountSummary getRiskClassCountSummary(Collection<Student> students) {
+    private DropoutPerTermSummary getDropoutsPerTermSummary(String term, Collection<Student> dropouts) {
+        int dropoutsCount[] = new int[SystemConstants.DROPOUT_TYPES_COUNT];
+        double aggregateTermsCount = 0.0;
+        double aggregateCost = 0.0;
+        for (Student dropout : dropouts) {
+            dropoutsCount[dropout.getStatusIndex()]++;
+            aggregateTermsCount += dropout.getCompletedTerms();
+            int attemptedCredits = dropout.getAttemptedCredits();
+            int termsAccounted = dropout.getCompletedTerms() + dropout.getInstitutionalTerms() +
+                    dropout.getInstitutionalTerms();
+            int completedCredits = dropout.getCompletedCredits();
+            aggregateCost += (MetricsCalculator.computeMetrics(attemptedCredits, termsAccounted,
+                    completedCredits).getCost());
+        }
+        DropoutReasonSummary dropoutReasonSummary = new DropoutReasonSummary(dropoutsCount);
+        int size = dropouts.size();
+        double averageTerms = (size == 0 ? 0.0 : aggregateTermsCount/size);
+        double averageCost = (size == 0 ? 0.0 : aggregateCost/size);
+        return new DropoutPerTermSummary(term, size, dropoutReasonSummary, averageTerms, averageCost);
+    }
+
+    private ActivesPerTermSummary getActivesPerTermSummary(String term, Collection<Student> actives) {
         int inaccurate = 0;
         int safe = 0;
         int low = 0;
@@ -229,7 +154,7 @@ public class StudentsStatisticsController {
         int high = 0;
         int unfeasible = 0;
         int notApplicable = 0;
-        for (Student student : students) {
+        for (Student student : actives) {
             RiskClass riskClass = student.computeRiskClass();
             switch (riskClass) {
                 case INACCURATE:
@@ -258,6 +183,99 @@ public class StudentsStatisticsController {
         }
         RiskClassCountSummary riskClassCount = new
                 RiskClassCountSummary(inaccurate, safe, low, average, high, unfeasible, notApplicable);
-        return riskClassCount;
+        ActivesPerTermSummary termData = new ActivesPerTermSummary(term, riskClassCount);
+        return termData;
+    }
+
+
+    private ActivesSummary getActivesSummary(String from, String to) {
+        Collection<Student> actives = this.dataAccessFacade.getActives(from, to);
+        MetricsSummary summary = MetricsCalculator.computeMetricsSummary(actives);
+        String firstTerm = CollectionUtil.getFirstTermFromStudents(actives);
+        String lastTerm = CollectionUtil.getLastTermFromStudents(actives);
+        return new ActivesSummary(firstTerm, lastTerm, actives.size(), summary);
+    }
+
+    private AlumniSummary getAlumniSummary(String from, String to) {
+        Collection<Student> alumni = this.dataAccessFacade.getAlumni(from, to);
+        double aggregateGPA = 0;
+        int aggregateTermsCount = 0;
+        double aggregateCost = 0.0;
+        int totalAlumniCount = 0;
+        Map<String, Collection<String>> alumniPerTermMap = new HashMap<>();
+        for (Student alumnus : alumni) {
+            aggregateGPA += alumnus.getGpa();
+            aggregateTermsCount += alumnus.getCompletedTerms();
+            int attemptedCredits = alumnus.getAttemptedCredits();
+            int termsAccounted = alumnus.getCompletedTerms() + alumnus.getInstitutionalTerms() + alumnus.getInstitutionalTerms();
+            int completedCredits = alumnus.getCompletedCredits();
+            aggregateCost += (MetricsCalculator.computeMetrics(attemptedCredits, termsAccounted, completedCredits).getCost());
+            totalAlumniCount++;
+            Collection<String> alumniPerTerm = alumniPerTermMap.get(alumnus.getStatusTerm());
+            if (alumniPerTerm == null) {
+                alumniPerTerm = new ArrayList<>();
+            }
+            alumniPerTerm.add(alumnus.getRegistration().toString());
+            alumniPerTermMap.put(alumnus.getStatusTerm(), alumniPerTerm);
+        }
+
+        int maxAlumniCount = Integer.MIN_VALUE;
+        String maxAlumniCountTerm = "";
+        int minAlumniCount = Integer.MAX_VALUE;
+        String minAlumniCountTerm = "";
+        String firstTerm = "0000.0";
+        String lastTerm = "9999.9";
+        int totalTermsCount = alumniPerTermMap.keySet().size();
+
+        for(String term : alumniPerTermMap.keySet()) {
+            if (term.compareTo(firstTerm) < 0) firstTerm = term;
+            if (term.compareTo(lastTerm) > 0) lastTerm = term;
+            Collection<String> alumniPerTerm = alumniPerTermMap.get(term);
+            int size = alumniPerTerm.size();
+            if (size > maxAlumniCount) {
+                maxAlumniCount = size;
+                maxAlumniCountTerm = term;
+            }
+            if (size < minAlumniCount) {
+                minAlumniCount = size;
+                minAlumniCountTerm = term;
+            }
+        }
+
+        return new AlumniSummary(firstTerm, lastTerm, totalAlumniCount,
+                (totalAlumniCount == 0 ? -1.0 : (double) aggregateTermsCount/totalAlumniCount),
+                (totalAlumniCount == 0 ? -1.0 : aggregateCost/totalAlumniCount),
+                (totalAlumniCount == 0 ? -1.0 : aggregateGPA/totalAlumniCount),
+                (totalAlumniCount == 0 ? -1.0 : (double) totalAlumniCount/totalTermsCount),
+                maxAlumniCount, minAlumniCount, maxAlumniCountTerm, minAlumniCountTerm);
+    }
+
+    private DropoutsSummary getDropoutsSummary(String from, String to) {
+        Collection<Student> dropouts = this.dataAccessFacade.getDropouts(from, to);
+        int dropoutsCount[] = new int[SystemConstants.DROPOUT_TYPES_COUNT];
+        double aggregateTermsCount = 0.0;
+        double aggregateCost = 0.0;
+        String firstTerm = "0000.0";
+        String lastTerm = "9999.9";
+
+        for(Student dropout : dropouts) {
+            aggregateTermsCount += dropout.getCompletedTerms();
+            int attemptedCredits = dropout.getAttemptedCredits();
+            int termsAccounted = dropout.getCompletedTerms() + dropout.getInstitutionalTerms() + dropout.getInstitutionalTerms();
+            int completedCredits = dropout.getCompletedCredits();
+            aggregateCost += (MetricsCalculator.computeMetrics(attemptedCredits, termsAccounted, completedCredits).getCost());
+            dropoutsCount[dropout.getStatusIndex()]++;
+            String term = dropout.getAdmissionTerm();
+            if (term.compareTo(firstTerm) < 0) firstTerm = term;
+            if (term.compareTo(lastTerm) > 0) lastTerm = term;
+        }
+        DropoutReasonSummary aggregateDropouts = new DropoutReasonSummary(dropoutsCount);
+        int dropoutCount = aggregateDropouts.computeTotalDropouts() - aggregateDropouts.getReenterSameCourse();
+
+        double averageTermsCount = (dropoutCount == 0 ? -1.0 : aggregateTermsCount/dropoutCount);
+        double averageCost = (dropoutCount == 0 ? -1.0 : aggregateCost/dropoutCount);
+        CostClass costClass = MetricsCalculator.computeCostClass(averageCost);
+
+        return new DropoutsSummary(firstTerm, lastTerm, dropoutCount, averageTermsCount, averageCost, costClass, aggregateDropouts);
     }
 }

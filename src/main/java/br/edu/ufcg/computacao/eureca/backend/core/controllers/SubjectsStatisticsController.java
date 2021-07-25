@@ -10,8 +10,6 @@ import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException
 import org.apache.log4j.Logger;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class SubjectsStatisticsController {
     private Logger LOGGER = Logger.getLogger(SubjectsStatisticsController.class);
@@ -48,13 +46,6 @@ public class SubjectsStatisticsController {
         }
         SubjectMetricsSummaryResponse response = new SubjectMetricsSummaryResponse(subjectMetricsPerTerms, from, to);
         return response;
-    }
-
-    private <T> Collection<String> getSliderLabel(Collection<T> terms, Function<T, String> function) {
-        return terms
-                .stream()
-                .map(function)
-                .collect(Collectors.toCollection(TreeSet::new));
     }
 
     private SubjectsSummaryResponse getSubjectStatisticsSummary(String from, String to, String courseCode,

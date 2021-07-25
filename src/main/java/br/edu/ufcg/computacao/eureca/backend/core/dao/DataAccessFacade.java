@@ -22,11 +22,7 @@ public interface DataAccessFacade {
 
     Map<String, Collection<Student>> getDropoutsPerDropoutTerm(String from, String to);
 
-    Collection<AlumniPerTermSummary> getAlumniPerTermSummary(String from, String to);
-
     Collection<AlumniDigestResponse> getAlumniPerStudentSummary(String from, String to);
-
-    Collection<DropoutPerTermSummary> getDropoutsPerTermSummary(String from, String to);
 
     Curriculum getCurriculum(String courseCode, String curriculumCode);
 
