@@ -4,9 +4,9 @@ public class ActivesSummary {
     private String from;
     private String to;
     private int activesCount;
-    private MetricsSummary average;
+    private StudentMetricsSummary average;
 
-    public ActivesSummary(String from, String to, int activesCount, MetricsSummary average) {
+    public ActivesSummary(String from, String to, int activesCount, StudentMetricsSummary average) {
         this.from = from;
         this.to = to;
         this.activesCount = activesCount;
@@ -37,11 +37,11 @@ public class ActivesSummary {
         this.activesCount = activesCount;
     }
 
-    public MetricsSummary getAverage() {
+    public StudentMetricsSummary getAverage() {
         return average;
     }
 
-    public void setAverage(MetricsSummary average) {
+    public void setAverage(StudentMetricsSummary average) {
         this.average = average;
     }
 }

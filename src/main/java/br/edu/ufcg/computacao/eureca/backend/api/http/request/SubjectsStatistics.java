@@ -30,7 +30,7 @@ public class SubjectsStatistics {
 
     @RequestMapping(value = "mandatory", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.SubjectStatistics.GET_MANDATORY)
-    public ResponseEntity<SubjectMetricsSummaryResponse> getMandatory(
+    public ResponseEntity<SubjectSummaryResponse> getMandatory(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)
@@ -40,7 +40,7 @@ public class SubjectsStatistics {
             throws EurecaException {
 
         try {
-            SubjectMetricsSummaryResponse ret = ApplicationFacade.getInstance().getSubjectsSummary(token, from, to, SubjectType.MANDATORY);
+            SubjectSummaryResponse ret = ApplicationFacade.getInstance().getSubjectsSummary(token, from, to, SubjectType.MANDATORY);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -50,7 +50,7 @@ public class SubjectsStatistics {
 
     @RequestMapping(value = "optional", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.SubjectStatistics.GET_OPTIONAL)
-    public ResponseEntity<SubjectMetricsSummaryResponse> getOptional(
+    public ResponseEntity<SubjectSummaryResponse> getOptional(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)
@@ -60,7 +60,7 @@ public class SubjectsStatistics {
             throws EurecaException {
 
         try {
-            SubjectMetricsSummaryResponse ret = ApplicationFacade.getInstance().getSubjectsSummary(token, from, to, SubjectType.OPTIONAL);
+            SubjectSummaryResponse ret = ApplicationFacade.getInstance().getSubjectsSummary(token, from, to, SubjectType.OPTIONAL);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -70,7 +70,7 @@ public class SubjectsStatistics {
 
     @RequestMapping(value = "elective", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.SubjectStatistics.GET_ELECTIVE)
-    public ResponseEntity<SubjectMetricsSummaryResponse> getElective(
+    public ResponseEntity<SubjectSummaryResponse> getElective(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)
@@ -80,7 +80,7 @@ public class SubjectsStatistics {
             throws EurecaException {
 
         try {
-            SubjectMetricsSummaryResponse ret = ApplicationFacade.getInstance().getSubjectsSummary(token, from, to, SubjectType.ELECTIVE);
+            SubjectSummaryResponse ret = ApplicationFacade.getInstance().getSubjectsSummary(token, from, to, SubjectType.ELECTIVE);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -90,7 +90,7 @@ public class SubjectsStatistics {
 
     @RequestMapping(value = "complementary", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.SubjectStatistics.GET_COMPLEMENTARY)
-    public ResponseEntity<SubjectMetricsSummaryResponse> getComplementary(
+    public ResponseEntity<SubjectSummaryResponse> getComplementary(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Statistics.TO)
@@ -100,7 +100,7 @@ public class SubjectsStatistics {
             throws EurecaException {
 
         try {
-            SubjectMetricsSummaryResponse ret = ApplicationFacade.getInstance().getSubjectsSummary(token, from, to, SubjectType.COMPLEMENTARY);
+            SubjectSummaryResponse ret = ApplicationFacade.getInstance().getSubjectsSummary(token, from, to, SubjectType.COMPLEMENTARY);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);

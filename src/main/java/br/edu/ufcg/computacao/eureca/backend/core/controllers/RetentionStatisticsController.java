@@ -6,7 +6,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EnviromentVariablesHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.backend.core.util.CollectionUtil;
-import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
+import br.edu.ufcg.computacao.eureca.backend.core.util.StudentMetricsCalculator;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
 
@@ -30,7 +30,7 @@ public class RetentionStatisticsController {
         Map<String, Collection<Student>> delayedPerAdmissionTerm = getDelayedPerAdmissionTerm(from, to);
 
         for (String term: delayedPerAdmissionTerm.keySet()) {
-            MetricsSummary metricsSummary = MetricsCalculator.computeMetricsSummary(delayedPerAdmissionTerm.get(term));
+            StudentMetricsSummary metricsSummary = StudentMetricsCalculator.computeMetricsSummary(delayedPerAdmissionTerm.get(term));
             DelayedPerTermSummary termData = new DelayedPerTermSummary(term, metricsSummary);
             terms.add(termData);
         }
@@ -66,7 +66,7 @@ public class RetentionStatisticsController {
         String curriculumCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
 
         Collection<Student> delayed = getDelayed(from, to);
-        MetricsSummary summary = MetricsCalculator.computeMetricsSummary(delayed);
+        StudentMetricsSummary summary = StudentMetricsCalculator.computeMetricsSummary(delayed);
         String firstTerm = CollectionUtil.getFirstTermFromStudents(delayed);
         String lastTerm = CollectionUtil.getLastTermFromStudents(delayed);
         DelayedSummary delayedSummary = new DelayedSummary(delayed.size(), summary, firstTerm, lastTerm);

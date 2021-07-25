@@ -1,7 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
-import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
+import br.edu.ufcg.computacao.eureca.backend.core.util.StudentMetricsCalculator;
 
 public class StudentDataResponse implements Comparable {
     private String registration;
@@ -59,7 +59,7 @@ public class StudentDataResponse implements Comparable {
         this.institutionalEnrollments = student.getInstitutionalTerms();
         this.mobilityTerms = student.getMobilityTerms();
         this.suspendedTerms = student.getSuspendedTerms();
-        StudentMetrics metrics = MetricsCalculator.computeMetrics(student);
+        StudentMetrics metrics = StudentMetricsCalculator.computeMetrics(student);
         this.feasibility = metrics.getFeasibility();
         this.successRate = metrics.getSuccessRate();
         this.averageLoad = metrics.getAverageLoad();
@@ -68,11 +68,11 @@ public class StudentDataResponse implements Comparable {
         this.courseDurationPrediction = metrics.getCourseDurationPrediction();
         this.risk = metrics.getRisk();
         if (student.isActive()) {
-            this.riskClass = MetricsCalculator.computeRiskClass(metrics.getRisk());
+            this.riskClass = StudentMetricsCalculator.computeRiskClass(metrics.getRisk());
         } else {
             this.riskClass = RiskClass.NOT_APPLICABLE;
         }
-        this.costClass = MetricsCalculator.computeCostClass(this.cost);
+        this.costClass = StudentMetricsCalculator.computeCostClass(this.cost);
     }
 
     public String getRegistration() {

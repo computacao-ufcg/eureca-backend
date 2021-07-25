@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class SubjectMetricsPerTerm {
+public class SubjectMetricsPerTerm implements SummaryPerTerm {
     private String term;
     private SubjectMetrics metrics;
 
