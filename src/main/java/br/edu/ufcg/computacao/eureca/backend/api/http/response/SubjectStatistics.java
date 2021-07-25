@@ -1,4 +1,6 @@
-package br.edu.ufcg.computacao.eureca.backend.core.models;
+package br.edu.ufcg.computacao.eureca.backend.api.http.response;
+
+import br.edu.ufcg.computacao.eureca.backend.core.models.MetricSummary;
 
 public class SubjectStatistics {
     private String courseCode;

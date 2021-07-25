@@ -48,16 +48,6 @@ public class StudentsStatisticsController {
         return dropoutsData;
     }
 
-    public Collection<StudentDataResponse> getDelayedCSV(String from, String to) {
-        Collection<StudentDataResponse> delayedData = new TreeSet<>();
-        Collection<Student> delayed = this.dataAccessFacade.getDelayed(from, to);
-        delayed.forEach(item -> {
-            StudentDataResponse studentDataResponse = new StudentDataResponse(item);
-            delayedData.add(studentDataResponse);
-        });
-        return delayedData;
-    }
-
     public ActivesSummaryResponse getActivesSummaryResponse(String from, String to) {
         return this.dataAccessFacade.getActivesSummaryResponse(from, to);
     }
@@ -66,20 +56,15 @@ public class StudentsStatisticsController {
         return this.dataAccessFacade.getAlumniSummaryResponse(from, to);
     }
 
-    public DropoutsSummaryResponse getDropoutsSummaryResponse(String from, String to) {
+    public DropoutsSummaryResponse getDropoutsSummary(String from, String to) {
         return this.dataAccessFacade.getDropoutsSummaryResponse(from, to);
     }
 
-    public DelayedSummaryResponse getDelayedSummaryResponse(String from, String to) {
-        return this.dataAccessFacade.getDelayedSummaryResponse(from, to);
-    }
-
-    public StudentsSummaryResponse getStudentsSummaryResponse(String from, String to) {
+    public StudentsSummaryResponse getStudentsStatistics(String from, String to) {
         ActivesSummary activesSummary = this.dataAccessFacade.getActivesSummary(from, to);
         AlumniSummary alumniSummary = this.dataAccessFacade.getAlumniSummary(from, to);
-        DelayedSummary delayedSummary = this.dataAccessFacade.getDelayedSummary(from, to);
         DropoutsSummary dropoutSummary = this.dataAccessFacade.getDropoutsSummary(from, to);
 
-        return new StudentsSummaryResponse(activesSummary, alumniSummary, delayedSummary, dropoutSummary);
+        return new StudentsSummaryResponse(activesSummary, alumniSummary, dropoutSummary);
     }
 }

@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class ActivesSummary extends Summary {
+public class ActivesSummary extends RangeSummary {
     private int activesCount;
     private MetricsSummary average;
 

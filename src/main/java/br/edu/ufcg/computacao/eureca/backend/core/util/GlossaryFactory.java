@@ -15,6 +15,8 @@ public class GlossaryFactory {
                 return (T) createEnrollmentGlossary(lang);
             case TEACHER:
                 return (T) createTeacherGlossary(lang);
+            case RETENTION:
+                return (T) createRetentionGlossary(lang);
             default:
                 return (T) new GlossaryFields();
         }
@@ -23,7 +25,6 @@ public class GlossaryFactory {
     private static GlossaryFields createStudentGlossary(String lang) {
         switch(lang) {
             case SystemConstants.PORTUGUESE:
-                return new PortugueseStudentsGlossary().getGlossary();
             default:
                 return new PortugueseStudentsGlossary().getGlossary();
         }
@@ -32,7 +33,6 @@ public class GlossaryFactory {
     private static GlossaryFields createSubjectGlossary(String lang) {
         switch(lang) {
             case SystemConstants.PORTUGUESE:
-                return new PortugueseSubjectsGlossary().getGlossary();
             default:
                 return new PortugueseSubjectsGlossary().getGlossary();
         }
@@ -41,7 +41,6 @@ public class GlossaryFactory {
     private static GlossaryFields createEnrollmentGlossary(String lang) {
         switch(lang) {
             case SystemConstants.PORTUGUESE:
-                return new PortugueseEnrollmentsGlossary().getGlossary();
             default:
                 return new PortugueseEnrollmentsGlossary().getGlossary();
         }
@@ -50,9 +49,16 @@ public class GlossaryFactory {
     private static GlossaryFields createTeacherGlossary(String lang) {
         switch(lang) {
             case SystemConstants.PORTUGUESE:
-                return new PortugueseTeachersGlossary().getGlossary();
             default:
                 return new PortugueseTeachersGlossary().getGlossary();
+        }
+    }
+
+    private static GlossaryFields createRetentionGlossary(String lang) {
+        switch(lang) {
+            case SystemConstants.PORTUGUESE:
+            default:
+                return new PortugueseRetentionGlossary().getGlossary();
         }
     }
 }

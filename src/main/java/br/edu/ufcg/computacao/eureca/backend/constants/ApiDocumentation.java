@@ -49,19 +49,6 @@ public class ApiDocumentation {
         public static final String GET_CURRICULA = "Retorna uma lista com os currículos do curso corrente.";
     }
 
-    public static class StudentStatistics {
-        public static final String API = "Estatísticas dos discentes.";
-        public static final String GET_ACTIVES = "Retorna um sumário dos dados dos discentes ativos.";
-        public static final String GET_ACTIVES_CSV = "Retorna os dados completos dos discentes ativos.";
-        public static final String GET_ALUMNI = "Retorna um sumário dos dados dos egressos.";
-        public static final String GET_ALUMNI_CSV = "Retorna os dados completos dos egressos.";
-        public static final String GET_DROPOUT = "Retorna um sumário dos dados dos discentes evadidos.";
-        public static final String GET_DROPOUT_CSV = "Retorna os dados completos dos discentes evadidos.";
-        public static final String GET_DELAYED = "Retorna um sumário dos dados dos discentes atrasados.";
-        public static final String GET_DELAYED_CSV = "Retorna os dados completos dos discentes retidos.";
-        public static final String GET_STUDENTS_SUMMARY = "Retornar um sumário geral dos dados dos discentes.";
-    }
-
     public static class Statistics {
         public static final String FROM = "Período inicial";
         public static final String TO = "Período final";
@@ -74,20 +61,42 @@ public class ApiDocumentation {
         public static final String GET_ENROLLMENTS_CSV = "Retorna os dados completos das matrículas do curso.";
     }
 
-    public static class TeachersStatistics {
-        public static final String API = "Estatísticas dos docentes.";
-        public static final String GET_TEACHERS = "Retorna um sumário dos dados dos docentes.";
-        public static final String GET_TEACHERS_CSV = "Retorna os dados completos dos docentes.";
+    public static class RetentionStatistics {
+        public static final String API = "Estatísticas de retenção.";
+        public static final String GET_SUBJECT = "Retorna um sumário da retenção por aluno.";
+        public static final String GET_SUBJECT_CSV = "Retorna os dados completos da retenção por aluno.";
+        public static final String GET_STUDENT = "Retorna um sumário dos dados da retenção por disciplina do currículo e curso selecionados.";
+        public static final String GET_STUDENT_CSV = "Retorna os dados da retenção por disciplina.";
+        public static final String GET_SUMMARY = "Retornar um sumário geral dos dados dos discentes.";
+    }
+
+    public static class StudentStatistics {
+        public static final String API = "Estatísticas dos discentes.";
+        public static final String GET_ACTIVES = "Retorna um sumário dos dados dos discentes ativos.";
+        public static final String GET_ACTIVES_CSV = "Retorna os dados completos dos discentes ativos.";
+        public static final String GET_ALUMNI = "Retorna um sumário dos dados dos egressos.";
+        public static final String GET_ALUMNI_CSV = "Retorna os dados completos dos egressos.";
+        public static final String GET_DROPOUT = "Retorna um sumário dos dados dos discentes evadidos.";
+        public static final String GET_DROPOUT_CSV = "Retorna os dados completos dos discentes evadidos.";
+        public static final String GET_SUMMARY = "Retornar um sumário geral dos dados dos discentes.";
     }
 
     public static class SubjectStatistics {
         public static final String API = "Estatísticas de disciplinas.";
-        public static final String GET_SUBJECTS = "Retorna um sumário dos dados das disciplinas.";
-        public static final String GET_MANDATORY = "Retorna um sumário dos dados das disciplinas obrigatórias do currículo e curso selecionado.";
-        public static final String GET_OPTIONAL = "Retorna um sumário dos dados das disciplinas optativas do currículo e curso selecionado.";
-        public static final String GET_ELECTIVE = "Retorna um sumário dos dados das disciplinas eletivas do currículo e curso selecionado.";
-        public static final String GET_COMPLEMENTARY = "Retorna um sumário dos dados das disciplinas complementares do currículo e curso selecionado.";
-        public static final String GET_SUBJECTS_SUMMARY = "Retorna um sumário geral dos dados das disciplinas do currículo e curso selecionado.";
-        public static final String GET_SUBJECTS_CSV = "Retorna os dados completos das disciplinas do currículo e curso selecionado.";
+        public static final String GET_MANDATORY = "Retorna um sumário dos dados das disciplinas obrigatórias do currículo e curso selecionados.";
+        public static final String GET_OPTIONAL = "Retorna um sumário dos dados das disciplinas optativas do currículo e curso selecionados.";
+        public static final String GET_ELECTIVE = "Retorna um sumário dos dados das disciplinas eletivas do currículo e curso selecionados.";
+        public static final String GET_COMPLEMENTARY = "Retorna um sumário dos dados das disciplinas complementares do currículo e curso selecionados.";
+        public static final String GET_SUBJECTS_MANDATORY_CSV = "Retorna os dados completos das disciplinas obrigatórias do currículo e curso selecionados.";
+        public static final String GET_SUBJECTS_OPTIONAL_CSV = "Retorna os dados completos das disciplinas optativas do currículo e curso selecionados.";
+        public static final String GET_SUBJECTS_ELECTIVE_CSV = "Retorna os dados completos das disciplinas eletivas do currículo e curso selecionados.";
+        public static final String GET_SUBJECTS_COMPLEMENTARY_CSV = "Retorna os dados completos das disciplinas complementares do currículo e curso selecionados.";
+        public static final String GET_SUBJECTS_SUMMARY = "Retorna um sumário dos dados das disciplinas do currículo e curso selecionados.";
+    }
+
+    public static class TeachersStatistics {
+        public static final String API = "Estatísticas dos docentes.";
+        public static final String GET_TEACHERS = "Retorna um sumário dos dados dos docentes.";
+        public static final String GET_TEACHERS_CSV = "Retorna os dados completos dos docentes.";
     }
 }

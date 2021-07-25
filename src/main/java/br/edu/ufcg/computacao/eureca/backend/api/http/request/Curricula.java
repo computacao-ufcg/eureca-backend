@@ -28,10 +28,10 @@ public class Curricula {
 
     @ApiOperation(value = ApiDocumentation.Curricula.GET_CURRICULA)
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Collection<String>> getCurricula() throws EurecaException {
+    public ResponseEntity<Collection<String>> getCurriculumCodes() throws EurecaException {
         try {
-            Collection<String> curricula = ApplicationFacade.getInstance().getCurricula();
-            return new ResponseEntity<>(curricula, HttpStatus.OK);
+            Collection<String> curriculumCodes = ApplicationFacade.getInstance().getCurriculumCodes();
+            return new ResponseEntity<>(curriculumCodes, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.error(Messages.SOMETHING_WENT_WRONG);
             throw e;

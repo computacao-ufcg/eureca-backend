@@ -1,8 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectSummaryResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsSummaryResponse;
 import br.edu.ufcg.computacao.eureca.backend.core.models.MetricSummary;
-import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectsStatisticsSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsStatisticsSummary;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -19,7 +19,7 @@ public class SubjectStatisticsTest extends EndpointTest {
 
     @Test
     public void getSubjectSummaryTest() throws Exception {
-        Mockito.doReturn(getSubjectStatisticsMock()).when(this.facade).getSubjectsStatisticsSummary(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.doReturn(getSubjectStatisticsMock()).when(this.facade).getSubjectsStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         int expectedStatusCode = HttpStatus.OK.value();
 
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, SUBJECT_STATISTICS_ENDPOINT + "/summary", null, "");
@@ -28,13 +28,13 @@ public class SubjectStatisticsTest extends EndpointTest {
         Assert.assertEquals(expectedStatusCode, res.getResponse().getStatus());
     }
 
-    private SubjectSummaryResponse getSubjectStatisticsMock() {
+    private SubjectsSummaryResponse getSubjectStatisticsMock() {
         MetricSummary metrics = new MetricSummary(20, 30, 25);
-        SubjectsStatisticsSummary mandatory = new SubjectsStatisticsSummary(30,metrics,metrics, metrics, metrics, metrics, metrics);
-        SubjectsStatisticsSummary optional = new SubjectsStatisticsSummary(10, metrics, metrics, metrics, metrics, metrics, metrics);
-        SubjectsStatisticsSummary elective = new SubjectsStatisticsSummary(15,metrics, metrics, metrics, metrics, metrics, metrics);
-        SubjectsStatisticsSummary complementary = new SubjectsStatisticsSummary(10, metrics, metrics, metrics, metrics, metrics, metrics);
-        SubjectSummaryResponse summary = new SubjectSummaryResponse("14102100", "2017", "1980.1", "2020.1", mandatory, optional, elective, complementary);
+        SubjectsStatisticsSummary mandatory = new SubjectsStatisticsSummary(30,200, metrics, metrics, metrics, metrics, metrics);
+        SubjectsStatisticsSummary optional = new SubjectsStatisticsSummary(10, 150, metrics, metrics, metrics, metrics, metrics);
+        SubjectsStatisticsSummary elective = new SubjectsStatisticsSummary(15, 175, metrics, metrics, metrics, metrics, metrics);
+        SubjectsStatisticsSummary complementary = new SubjectsStatisticsSummary(10, 150, metrics, metrics, metrics, metrics, metrics);
+        SubjectsSummaryResponse summary = new SubjectsSummaryResponse("14102100", "2017", "1980.1", "2020.1", mandatory, optional, elective, complementary);
         return summary;
     }
 }

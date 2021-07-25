@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class DelayedSummary extends Summary {
+public class DelayedSummary extends RangeSummary {
     private int delayedCount;
     private MetricsSummary average;
 
