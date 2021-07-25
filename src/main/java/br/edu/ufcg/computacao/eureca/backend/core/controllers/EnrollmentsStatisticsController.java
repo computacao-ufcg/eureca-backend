@@ -3,15 +3,11 @@ package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.EnrollmentsCSVResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.EnrollmentsSummaryItemResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.EnrollmentsSummaryResponse;
-import br.edu.ufcg.computacao.eureca.backend.constants.PortugueseEnrollmentsGlossary;
-import br.edu.ufcg.computacao.eureca.backend.constants.PortugueseStudentsGlossary;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.SubjectKey;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EnviromentVariablesHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.ClassEnrollments;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Enrollment;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Subject;
 import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
 import org.apache.log4j.Logger;
 
