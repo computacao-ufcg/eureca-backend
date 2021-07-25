@@ -2,7 +2,7 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.core.models.CostClass;
 
-public class DropoutsSummary extends Summary {
+public class DropoutsSummary extends RangeSummary {
     private int dropoutCount;
     private double averageTermsCount;
     private double averageCost;

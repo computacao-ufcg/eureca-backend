@@ -1,11 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
-import io.swagger.annotations.ApiModelProperty;
-
 import java.util.Collection;
 
-public class DelayedSummaryResponse extends Summary {
+public class DelayedSummaryResponse extends RangeSummary {
     private Collection<DelayedPerTermSummary> terms;
 
     public DelayedSummaryResponse(Collection<DelayedPerTermSummary> terms, String from, String to) {

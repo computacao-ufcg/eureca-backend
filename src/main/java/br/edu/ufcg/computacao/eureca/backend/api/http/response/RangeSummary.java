@@ -1,10 +1,10 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public abstract class Summary {
+public abstract class RangeSummary {
     private String from;
     private String to;
 
-    public Summary(String from, String to) {
+    public RangeSummary(String from, String to) {
         this.from = from;
         this.to = to;
     }

@@ -3,7 +3,7 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 import br.edu.ufcg.computacao.eureca.backend.core.models.CostClass;
 import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 
-public class AlumniSummary extends Summary {
+public class AlumniSummary extends RangeSummary {
     private int alumniCount;
     private double averageTermsCount;
     private double averageCost;
