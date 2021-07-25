@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.tests.models;
 
-import br.edu.ufcg.computacao.eureca.backend.core.models.StudentMetrics;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.StudentMetrics;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;

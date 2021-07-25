@@ -7,7 +7,6 @@ import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.TreeSet;
 
 public interface DataAccessFacade {
     Collection<Student> getActives(String from, String to);
@@ -26,33 +25,17 @@ public interface DataAccessFacade {
 
     Curriculum getCurriculum(String courseCode, String curriculumCode);
 
-    TreeSet<String> getTermsForCurriculum(String courseCode, String curriculumCode);
-
     Collection<String> getCurriculumCodes(String courseCode);
 
     Subject getSubject(String courseCode, String curriculumCode, String subjectCode);
 
-    MetricStatistics getSucceededStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode);
-
-    MetricStatistics getExemptedStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode);
-
-    MetricStatistics getOngoingStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode);
-
-    MetricStatistics getFailedDueToGradeStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode);
-
-    MetricStatistics getFailedDueToAbsencesStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode);
-
-    MetricStatistics getSuspendedStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode);
-
-    MetricStatistics getCancelledStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode);
+    SubjectsSummaryResponse getSubjectStatisticsSummary(String from, String to, String course, String code) throws InvalidParameterException;
 
     Collection<SubjectRetentionResponse> getSubjectsRetention(String courseCode, String curriculumCode) throws InvalidParameterException;
 
     Collection<SubjectRetentionSummaryResponse> getSubjectsRetentionSummary(String courseCode, String curriculumCode) throws InvalidParameterException;
 
-    int getNumberOfClassesPerSubject(String from, String to, String courseCode, String curriculumCode, String subjectCode);
-
     Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> getEnrollmentsPerTermPerSubject(String from, String to, String courseCode, String curriculumCode);
 
-    Collection<SubjectMetricsPerTerm> getSubjectMetricsPerTerm(String from, String to, String courseCode, String curriculumCode, String subjectCode);
+    Collection<SubjectMetricsSummary> getSubjectMetricsPerTermSummary(String from, String to, String courseCode, String curriculumCode, SubjectType subjectType) throws InvalidParameterException;
 }

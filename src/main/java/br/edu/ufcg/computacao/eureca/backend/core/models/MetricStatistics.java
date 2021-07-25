@@ -6,17 +6,17 @@ public class MetricStatistics {
     private double min;
     private double firstQuartile;
     private double median;
-    private double getThirdQuartile;
+    private double thirdQuartile;
     private double max;
     private double average;
     private int count;
 
-    public MetricStatistics(double min, double firstQuartile, double median, double getThirdQuartile, double max,
+    public MetricStatistics(double min, double firstQuartile, double median, double thirdQuartile, double max,
                             double average, int count) {
         this.min = min;
         this.firstQuartile = firstQuartile;
         this.median = median;
-        this.getThirdQuartile = getThirdQuartile;
+        this.thirdQuartile = thirdQuartile;
         this.max = max;
         this.average = average;
         this.count = count;
@@ -55,12 +55,12 @@ public class MetricStatistics {
         this.median = median;
     }
 
-    public double getGetThirdQuartile() {
-        return getThirdQuartile;
+    public double getThirdQuartile() {
+        return thirdQuartile;
     }
 
-    public void setGetThirdQuartile(double getThirdQuartile) {
-        this.getThirdQuartile = getThirdQuartile;
+    public void setThirdQuartile(double thirdQuartile) {
+        this.thirdQuartile = thirdQuartile;
     }
 
     public double getMax() {

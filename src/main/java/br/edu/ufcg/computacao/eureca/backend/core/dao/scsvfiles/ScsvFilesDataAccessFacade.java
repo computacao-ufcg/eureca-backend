@@ -7,7 +7,6 @@ import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
-import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
 
@@ -84,44 +83,69 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public TreeSet<String> getTermsForCurriculum(String courseCode, String curriculum) {
-        return this.indexesHolder.getTermsPerCurriculum(courseCode, curriculum);
-    }
-
-    @Override
     public Collection<String> getCurriculumCodes(String courseCode) {
         return this.indexesHolder.getCurricula(courseCode);
     }
 
     @Override
-    public Collection<SubjectMetricsPerTerm> getSubjectMetricsPerTerm(String from, String to, String courseCode,
-                                                                      String curriculumCode, String subjectCode) {
-        Collection<SubjectMetricsPerTerm> response = new TreeSet<>();
-        Map<String, Map<String, ClassEnrollments>> terms = this.indexesHolder.getSubjectMetricsPerTerm(from, to, courseCode, curriculumCode, subjectCode);
-        for (String term : terms.keySet()) {
-            int failedDueToAbsences = 0;
-            int failedDueToGrade = 0;
-            int cancelled = 0;
-            int succeeded = 0;
-            int ongoing = 0;
-            int exempted = 0;
-            int totalEnrolled = 0;
-            Map<String, ClassEnrollments> classes = terms.get(term);
-            for (ClassEnrollments enrollments: classes.values()) {
-                failedDueToAbsences += enrollments.getNumberFailedDueToAbsence();
-                failedDueToGrade += enrollments.getNumberFailedDueToGrade();
-                cancelled += enrollments.getNumberCancelled();
-                succeeded += enrollments.getNumberSucess();
-                ongoing += enrollments.getNumberOngoing();
-                exempted += enrollments.getNumberExempted();
-                totalEnrolled += enrollments.getNumberOfEnrolleds();
+    public Collection<SubjectMetricsSummary> getSubjectMetricsPerTermSummary(String from, String to, String courseCode, String curriculumCode, SubjectType subjectType) throws InvalidParameterException {
+        Collection<String> subjects = getSubjectCodes(courseCode, curriculumCode, subjectType);
+        Collection<SubjectMetricsSummary> subjectMetricsPerTerms = new TreeSet<>();
+        for (String subjectCode : subjects) {
+            Collection<SubjectMetricsPerTerm> response = new TreeSet<>();
+            Map<String, Map<String, ClassEnrollments>> terms = this.indexesHolder.getSubjectMetricsPerTerm(from, to, courseCode, curriculumCode, subjectCode);
+            for (String term : terms.keySet()) {
+                int failedDueToAbsences = 0;
+                int failedDueToGrade = 0;
+                int cancelled = 0;
+                int succeeded = 0;
+                int ongoing = 0;
+                int exempted = 0;
+                int totalEnrolled = 0;
+                Map<String, ClassEnrollments> classes = terms.get(term);
+                for (ClassEnrollments enrollments : classes.values()) {
+                    failedDueToAbsences += enrollments.getNumberFailedDueToAbsence();
+                    failedDueToGrade += enrollments.getNumberFailedDueToGrade();
+                    cancelled += enrollments.getNumberCancelled();
+                    succeeded += enrollments.getNumberSucess();
+                    ongoing += enrollments.getNumberOngoing();
+                    exempted += enrollments.getNumberExempted();
+                    totalEnrolled += enrollments.getNumberOfEnrolleds();
+                }
+                SubjectMetrics metrics = new SubjectMetrics(failedDueToAbsences, failedDueToGrade, cancelled,
+                        succeeded, ongoing, exempted, totalEnrolled);
+                SubjectMetricsPerTerm metricsPerTerm = new SubjectMetricsPerTerm(term, metrics);
+                response.add(metricsPerTerm);
             }
-            SubjectMetrics metrics = new SubjectMetrics(failedDueToAbsences, failedDueToGrade, cancelled,
-                    succeeded, ongoing, exempted, totalEnrolled);
-            SubjectMetricsPerTerm metricsPerTerm = new SubjectMetricsPerTerm(term, metrics);
-            response.add(metricsPerTerm);
+            Subject subject = getSubject(courseCode, curriculumCode, subjectCode);
+            subjectMetricsPerTerms.add(new SubjectMetricsSummary(subjectCode, subject.getName(), response));
         }
-        return response;
+        return subjectMetricsPerTerms;
+    }
+
+    @Override
+    public SubjectsSummaryResponse getSubjectStatisticsSummary(String from, String to, String courseCode,
+                                                               String curriculumCode) throws InvalidParameterException {
+        Curriculum curriculum = getCurriculum(courseCode, curriculumCode);
+        if (curriculum == null) {
+            throw new InvalidParameterException(String.format(Messages.INEXISTENT_CURRICULUM_S_S, courseCode, curriculumCode));
+        }
+        SubjectsStatisticsSummary mandatory = buildSummary(from, to, courseCode, curriculumCode,
+                curriculum.getMandatorySubjectsList());
+        SubjectsStatisticsSummary optional = buildSummary(from, to, courseCode, curriculumCode,
+                curriculum.getOptionalSubjectsList());
+        SubjectsStatisticsSummary elective = buildSummary(from, to, courseCode, curriculumCode,
+                curriculum.getElectiveSubjectsList());
+        SubjectsStatisticsSummary complementary = buildSummary(from, to, courseCode, curriculumCode,
+                curriculum.getComplementarySubjectsList());
+        TreeSet<String> terms = getTermsForCurriculum(courseCode, curriculumCode);
+        String first = terms.first();
+        String last = terms.last();
+        from = (from.compareTo(first) < 0 ? first : from);
+        to = (to.compareTo(last) < 0 ? to : last);
+        SubjectsSummaryResponse ret = new SubjectsSummaryResponse(courseCode, curriculumCode, from, to, mandatory,
+                optional, elective, complementary);
+        return ret;
     }
 
     @Override
@@ -133,48 +157,8 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public int getNumberOfClassesPerSubject(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
-        return this.indexesHolder.getNumberOfClassesPerSubject(from, to, courseCode, curriculumCode, subjectCode);
-    }
-
-    @Override
     public Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> getEnrollmentsPerTermPerSubject(String from, String to, String courseCode, String curriculumCode) {
         return this.indexesHolder.getEnrollmentsPerSubjectPerTermPerClass(from, to);
-    }
-
-    @Override
-    public MetricStatistics getSucceededStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
-        return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_SUCCEEDED);
-    }
-
-    @Override
-    public MetricStatistics getExemptedStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
-        return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_EXEMPTED);
-    }
-
-    @Override
-    public MetricStatistics getOngoingStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
-        return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_ONGOING);
-    }
-
-    @Override
-    public MetricStatistics getFailedDueToGradeStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
-        return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_FAILED_DUE_GRADE);
-    }
-
-    @Override
-    public MetricStatistics getFailedDueToAbsencesStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
-        return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_FAILED_DUE_ABSENCE);
-    }
-
-    @Override
-    public MetricStatistics getSuspendedStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
-        return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_SUSPENDED);
-    }
-
-    @Override
-    public MetricStatistics getCancelledStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
-        return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_CANCELLED);
     }
 
     @Override
@@ -215,6 +199,125 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             }
         }
         return termsMap;
+    }
+
+    private Collection<String> getSubjectCodes(String courseCode, String curriculumCode, SubjectType subjectType) throws InvalidParameterException {
+        Curriculum curriculum = getCurriculum(courseCode, curriculumCode);
+        if (curriculum == null) {
+            throw new InvalidParameterException(String.format(Messages.INEXISTENT_CURRICULUM_S_S, curriculumCode, courseCode));
+        }        Collection<String> subjects = null;
+        switch (subjectType) {
+            case MANDATORY:
+                subjects = curriculum.getMandatorySubjectsList();
+                break;
+            case OPTIONAL:
+                subjects = curriculum.getOptionalSubjectsList();
+                break;
+            case ELECTIVE:
+                subjects = curriculum.getElectiveSubjectsList();
+                break;
+            case COMPLEMENTARY:
+                subjects = curriculum.getComplementarySubjectsList();
+                break;
+        }
+        return subjects;
+    }
+
+    private SubjectsStatisticsSummary buildSummary(String from, String to, String courseCode, String curriculumCode,
+                                                   Collection<String> subjects) {
+        double minFailedDueToAbsences = Integer.MAX_VALUE;
+        double maxFailedDueToAbsences = Integer.MIN_VALUE;
+        int totalFailedDueToAbsences = 0;
+        double minFailedDueToGrade = Integer.MAX_VALUE;
+        double maxFailedDueToGrade = Integer.MIN_VALUE;
+        int totalFailedDueToGrade = 0;
+        double minSuspended = Integer.MAX_VALUE;
+        double maxSuspended = Integer.MIN_VALUE;
+        int totalSuspended = 0;
+        double minSucceeded = Integer.MAX_VALUE;
+        double maxSucceeded = Integer.MIN_VALUE;
+        int totalSucceeded = 0;
+        double minExempted = Integer.MAX_VALUE;
+        double maxExempted = Integer.MIN_VALUE;
+        int totalExempted = 0;
+        int totalNumberOfClasses = 0;
+        int totalEnrollments = 0;
+
+        for(String subjectCode : subjects) {
+            totalNumberOfClasses += getNumberOfClassesPerSubject(from, to, courseCode, curriculumCode, subjectCode);
+            Subject subject = getSubject(courseCode, curriculumCode, subjectCode);
+            MetricStatistics failedDueToAbsences = getFailedDueToAbsencesStatistics(from, to, courseCode, curriculumCode, subjectCode);
+            if (minFailedDueToAbsences > failedDueToAbsences.getMin()) minFailedDueToAbsences = failedDueToAbsences.getMin();
+            if (maxFailedDueToAbsences < failedDueToAbsences.getMax()) maxFailedDueToAbsences = failedDueToAbsences.getMax();
+            totalFailedDueToAbsences += failedDueToAbsences.getCount();
+            MetricStatistics failedDueToGrade = getFailedDueToGradeStatistics(from, to, courseCode, curriculumCode, subjectCode);
+            if (minFailedDueToGrade > failedDueToGrade.getMin()) minFailedDueToGrade = failedDueToGrade.getMin();
+            if (maxFailedDueToGrade < failedDueToGrade.getMax()) maxFailedDueToGrade = failedDueToGrade.getMax();
+            totalFailedDueToGrade += failedDueToGrade.getCount();
+            MetricStatistics suspended = getSuspendedStatistics(from, to, courseCode, curriculumCode, subjectCode);
+            if (minSuspended > suspended.getMin()) minSuspended = suspended.getMin();
+            if (maxSuspended < suspended.getMax()) maxSuspended = suspended.getMax();
+            totalSuspended += suspended.getCount();
+            MetricStatistics succeeded = getSucceededStatistics(from, to, courseCode, curriculumCode, subjectCode);
+            if (minSucceeded > succeeded.getMin()) minSucceeded = succeeded.getMin();
+            if (maxSucceeded < succeeded.getMax()) maxSucceeded = succeeded.getMax();
+            totalSucceeded += succeeded.getCount();
+            totalEnrollments += (totalFailedDueToAbsences + totalFailedDueToGrade + totalSuspended + totalSucceeded);
+            MetricStatistics exempted = getExemptedStatistics(from, to, courseCode, curriculumCode, subjectCode);
+            if (minExempted > exempted.getMin()) minExempted = exempted.getMin();
+            if (maxExempted < exempted.getMax()) maxExempted = exempted.getMax();
+            totalExempted += exempted.getCount();
+        }
+        MetricSummary failedDueToAbsencesSummary = new MetricSummary(minFailedDueToAbsences, maxFailedDueToAbsences,
+                (1.0*totalFailedDueToAbsences)/totalNumberOfClasses);
+        MetricSummary failedDueToGradeSummary = new MetricSummary(minFailedDueToGrade, maxFailedDueToGrade,
+                (1.0*totalFailedDueToGrade)/totalNumberOfClasses);
+        MetricSummary suspendedSummary = new MetricSummary(minSuspended, maxSuspended,
+                (1.0*totalSuspended)/totalNumberOfClasses);
+        MetricSummary succeededSummary = new MetricSummary(minSucceeded, maxSucceeded,
+                (1.0*totalSucceeded)/totalNumberOfClasses);
+        MetricSummary exemptedSummary = new MetricSummary(minExempted, maxExempted,
+                (1.0*totalExempted)/totalNumberOfClasses);
+        SubjectsStatisticsSummary ret = new SubjectsStatisticsSummary(subjects.size(), totalEnrollments,
+                failedDueToAbsencesSummary, failedDueToGradeSummary, suspendedSummary, succeededSummary,
+                exemptedSummary);
+        return ret;
+    }
+
+    private TreeSet<String> getTermsForCurriculum(String courseCode, String curriculum) {
+        return this.indexesHolder.getTermsPerCurriculum(courseCode, curriculum);
+    }
+
+    private int getNumberOfClassesPerSubject(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
+        return this.indexesHolder.getNumberOfClassesPerSubject(from, to, courseCode, curriculumCode, subjectCode);
+    }
+
+    private MetricStatistics getSucceededStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_SUCCEEDED);
+    }
+
+    private MetricStatistics getExemptedStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_EXEMPTED);
+    }
+
+    private MetricStatistics getOngoingStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_ONGOING);
+    }
+
+    private MetricStatistics getFailedDueToGradeStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_FAILED_DUE_GRADE);
+    }
+
+    private MetricStatistics getFailedDueToAbsencesStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_FAILED_DUE_ABSENCE);
+    }
+
+    private MetricStatistics getSuspendedStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_SUSPENDED);
+    }
+
+    private MetricStatistics getCancelledStatistics(String from, String to, String courseCode, String curriculumCode, String subjectCode) {
+        return getEnrollmentsStatistics(from, to, courseCode, curriculumCode, subjectCode, SystemConstants.STATUS_CANCELLED);
     }
 
     private int getRetentionCount(String courseCode, String curriculumCode, String subjectCode) {

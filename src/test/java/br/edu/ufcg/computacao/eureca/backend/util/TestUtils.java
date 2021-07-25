@@ -4,7 +4,7 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.CommonKeys;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.NationalIdRegistrationKey;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
-import br.edu.ufcg.computacao.eureca.backend.core.models.StudentMetrics;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.StudentMetrics;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -97,7 +97,7 @@ public class TestUtils {
     public static DelayedSummaryResponse getDelayedSummaryResponse() {
         StudentMetrics metrics = new StudentMetrics(0,0,0,
                 0,0,0,0,0);
-        MetricsSummary metricsSummary = new MetricsSummary(0, metrics);
+        StudentMetricsSummary metricsSummary = new StudentMetricsSummary(0, metrics);
         DelayedPerTermSummary delayedPerTermSummary = new DelayedPerTermSummary("", metricsSummary);
         return new DelayedSummaryResponse(Arrays.asList(delayedPerTermSummary), "x", "y");
     }

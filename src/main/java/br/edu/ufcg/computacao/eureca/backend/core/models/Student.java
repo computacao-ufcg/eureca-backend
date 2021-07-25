@@ -1,7 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.StudentMetrics;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
-import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
+import br.edu.ufcg.computacao.eureca.backend.core.util.StudentMetricsCalculator;
 
 public class Student implements Comparable {
     private Registration registration;
@@ -393,8 +394,8 @@ public class Student implements Comparable {
     }
 
     public RiskClass computeRiskClass() {
-        StudentMetrics studentMetrics = MetricsCalculator.computeMetrics(this);
-        return MetricsCalculator.computeRiskClass(studentMetrics.getRisk());
+        StudentMetrics studentMetrics = StudentMetricsCalculator.computeMetrics(this);
+        return StudentMetricsCalculator.computeRiskClass(studentMetrics.getRisk());
     }
 
     public int getStatusIndex() {

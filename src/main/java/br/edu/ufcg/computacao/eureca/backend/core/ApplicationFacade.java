@@ -147,9 +147,9 @@ public class ApplicationFacade {
         return response;
     }
 
-    public SubjectMetricsSummaryResponse getSubjectsSummary(String token, String from, String to, SubjectType type) throws EurecaException {
+    public SubjectSummaryResponse getSubjectsSummary(String token, String from, String to, SubjectType type) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_SUMMARY);
-        SubjectMetricsSummaryResponse response = this.subjectsStatisticsController.getSubjectsSummary(from, to, type);
+        SubjectSummaryResponse response = this.subjectsStatisticsController.getSubjectsSummary(from, to, type);
         return response;
     }
 
