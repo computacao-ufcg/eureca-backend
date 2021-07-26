@@ -1,7 +1,12 @@
-package br.edu.ufcg.computacao.eureca.backend.core.models;
+package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class SubjectStatisticsItem {
-    private int disciplines;
+import br.edu.ufcg.computacao.eureca.backend.core.models.MetricSummary;
+
+public class SubjectStatistics {
+    private String courseCode;
+    private String curriculumCode;
+    private String subjectCode;
+    private int classesCount;
     private MetricSummary failedDueToAbsences;
     private MetricSummary failedDueToGrade;
     private MetricSummary failedDueToCanceling;
@@ -9,10 +14,14 @@ public class SubjectStatisticsItem {
     private MetricSummary exempted;
     private MetricSummary retention;
 
-    public SubjectStatisticsItem(int disciplines, MetricSummary failedDueToAbsences,
-                                 MetricSummary failedDueToGrade, MetricSummary failedDueToCanceling, MetricSummary succeeded, MetricSummary exempted,
-                                 MetricSummary retention) {
-        this.disciplines = disciplines;
+    public SubjectStatistics(String courseCode, String curriculumCode, String subjectCode, int classesCount,
+                             MetricSummary failedDueToAbsences, MetricSummary failedDueToGrade,
+                             MetricSummary failedDueToCanceling, MetricSummary succeeded, MetricSummary exempted,
+                             MetricSummary retention) {
+        this.courseCode = courseCode;
+        this.curriculumCode = curriculumCode;
+        this.subjectCode = subjectCode;
+        this.classesCount = classesCount;
         this.failedDueToAbsences = failedDueToAbsences;
         this.failedDueToGrade = failedDueToGrade;
         this.failedDueToCanceling = failedDueToCanceling;
@@ -21,12 +30,36 @@ public class SubjectStatisticsItem {
         this.retention = retention;
     }
 
-    public int getDisciplines() {
-        return disciplines;
+    public String getCourseCode() {
+        return courseCode;
     }
 
-    public void setDisciplines(int disciplines) {
-        this.disciplines = disciplines;
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
+    }
+
+    public String getCurriculumCode() {
+        return curriculumCode;
+    }
+
+    public void setCurriculumCode(String curriculumCode) {
+        this.curriculumCode = curriculumCode;
+    }
+
+    public String getSubjectCode() {
+        return subjectCode;
+    }
+
+    public void setSubjectCode(String subjectCode) {
+        this.subjectCode = subjectCode;
+    }
+
+    public int getClassesCount() {
+        return classesCount;
+    }
+
+    public void setClassesCount(int classesCount) {
+        this.classesCount = classesCount;
     }
 
     public MetricSummary getFailedDueToAbsences() {

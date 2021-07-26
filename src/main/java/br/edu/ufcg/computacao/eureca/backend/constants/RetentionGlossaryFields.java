@@ -1,41 +1,31 @@
 package br.edu.ufcg.computacao.eureca.backend.constants;
 
-public class StudentsGlossaryFields extends GlossaryFields {
-    Field Active;
-    Field Dropout;
-    Field Alumnus;
+public class RetentionGlossaryFields extends GlossaryFields {
+    Field Delayed;
     Field averageRisk;
     Field averageLoad;
     Field successRate;
     Field predictedGraduation;
     Field averageCost;
     Field averageTime;
-    Field minimumAlumni;
-    Field maximumAlumni;
-    Field averageAlumni;
     Field averageGpa;
     Field rejoinCount;
     Field canceledCount;
     Field abandonCount;
     Field transferCount;
 
-    public StudentsGlossaryFields(Field active, Field dropout, Field alumnus, Field averageRisk,
-                                  Field averageLoad, Field successRate, Field predictedGraduation, Field averageCost,
-                                  Field averageTime, Field minimumAlumni, Field maximumAlumni, Field averageAlumni,
-                                  Field averageGpa, Field rejoinCount, Field canceledCount, Field abandonCount,
-                                  Field transferCount) {
-        Active = active;
-        Dropout = dropout;
-        Alumnus = alumnus;
+    public RetentionGlossaryFields(Field delayed, Field averageRisk,
+                                   Field averageLoad, Field successRate, Field predictedGraduation, Field averageCost,
+                                   Field averageTime,
+                                   Field averageGpa, Field rejoinCount, Field canceledCount, Field abandonCount,
+                                   Field transferCount) {
+        Delayed = delayed;
         this.averageRisk = averageRisk;
         this.averageLoad = averageLoad;
         this.successRate = successRate;
         this.predictedGraduation = predictedGraduation;
         this.averageCost = averageCost;
         this.averageTime = averageTime;
-        this.minimumAlumni = minimumAlumni;
-        this.maximumAlumni = maximumAlumni;
-        this.averageAlumni = averageAlumni;
         this.averageGpa = averageGpa;
         this.rejoinCount = rejoinCount;
         this.canceledCount = canceledCount;
@@ -43,28 +33,12 @@ public class StudentsGlossaryFields extends GlossaryFields {
         this.transferCount = transferCount;
     }
 
-    public Field getActive() {
-        return Active;
+    public Field getDelayed() {
+        return Delayed;
     }
 
-    public void setActive(Field active) {
-        Active = active;
-    }
-
-    public Field getDropout() {
-        return Dropout;
-    }
-
-    public void setDropout(Field dropout) {
-        Dropout = dropout;
-    }
-
-    public Field getAlumnus() {
-        return Alumnus;
-    }
-
-    public void setAlumnus(Field alumnus) {
-        Alumnus = alumnus;
+    public void setDelayed(Field delayed) {
+        Delayed = delayed;
     }
 
     public Field getAverageRisk() {
@@ -113,30 +87,6 @@ public class StudentsGlossaryFields extends GlossaryFields {
 
     public void setAverageTime(Field averageTime) {
         this.averageTime = averageTime;
-    }
-
-    public Field getMinimumAlumni() {
-        return minimumAlumni;
-    }
-
-    public void setMinimumAlumni(Field minimumAlumni) {
-        this.minimumAlumni = minimumAlumni;
-    }
-
-    public Field getMaximumAlumni() {
-        return maximumAlumni;
-    }
-
-    public void setMaximumAlumni(Field maximumAlumni) {
-        this.maximumAlumni = maximumAlumni;
-    }
-
-    public Field getAverageAlumni() {
-        return averageAlumni;
-    }
-
-    public void setAverageAlumni(Field averageAlumni) {
-        this.averageAlumni = averageAlumni;
     }
 
     public Field getAverageGpa() {

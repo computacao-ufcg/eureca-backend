@@ -106,8 +106,9 @@ public class SubjectData implements EurecaMapValue {
     }
 
     public Subject createSubject(SubjectKey key) {
-        return new Subject(key.getCurriculumCode(), key.getSubjectCode(), getAcademicUnit(), getType(), getCredits(),
-                getHours(), getName(), getEquivalentCodes(), getIdealTerm(), getPreRequirements());
+        return new Subject(key.getCourseCode(), key.getCurriculumCode(), key.getSubjectCode(), getAcademicUnit(),
+                getType(), getCredits(), getHours(), getName(), getEquivalentCodes(), getIdealTerm(),
+                getPreRequirements());
     }
 
     public Collection<String> getPreRequirementsList() {

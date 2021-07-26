@@ -23,7 +23,7 @@ public class ClassEnrollments {
     }
 
     public int getNumberOfEnrolleds() {
-        return this.success.size() + this.cancelled.size() + this.exempted.size() + this.ongoing.size() +
+        return this.success.size() + this.cancelled.size() + this.ongoing.size() +
                 this.failedDueToGrade.size() + this.failedDueToAbsence.size() + this.suspended.size();
     }
 
