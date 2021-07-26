@@ -396,7 +396,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
         Curriculum curriculum = this.getCurriculum(courseCode, curriculumCode);
         Collection<String> subjects = curriculum.getMandatorySubjectsList();
-        TreeSet<Integer> retentionSet = new TreeSet<>();
+        Collection<Integer> retentionSet = new TreeSet<>();
         int totalRetention = 0;
         for (String subjectCode : subjects) {
             subjectCount++;
