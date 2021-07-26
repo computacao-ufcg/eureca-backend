@@ -396,7 +396,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
         Curriculum curriculum = this.getCurriculum(courseCode, curriculumCode);
         Collection<String> subjects = curriculum.getMandatorySubjectsList();
-        Collection<Integer> retentionSet = new TreeSet<>();
+        TreeSet<Integer> retentionSet = new TreeSet<>();
         int totalRetention = 0;
         for (String subjectCode : subjects) {
             subjectCount++;
@@ -404,7 +404,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             totalRetention += retention;
             retentionSet.add(retention);
         }
-        Integer[] retentionArray = (Integer[]) retentionSet.toArray();
+        int[] retentionArray = retentionSet.stream().mapToInt(Integer::new).toArray();
         int size = retentionArray.length;
         minimum = retentionArray[0];
         maximum = retentionArray[size-1];
