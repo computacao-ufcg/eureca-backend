@@ -4,10 +4,13 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectRetentionR
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.TeacherData;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EnviromentVariablesHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
+
 import org.apache.log4j.Logger;
 
+import javax.security.auth.Subject;
 import java.util.*;
 
 public class IndexesHolder {
@@ -19,6 +22,8 @@ public class IndexesHolder {
     private final Map<RegistrationCodeTermKey, EnrollmentData> enrollmentsMap;
     private final Map<SubjectKey, SubjectData> subjectsMap;
     private final Map<CurriculumKey, CurriculumData> curriculumMap;
+    private final Map<CodeTermClassIdKey, TeacherData> classesMap;
+    private final Map<AcademicUnitKey, AcademicUnitData> academicUnitsMap;
     // Student indexes
     private Map<String, NationalIdRegistrationKey> registrationMap;
     private List<NationalIdRegistrationKey> actives;
@@ -33,6 +38,8 @@ public class IndexesHolder {
     private Map<String, Collection<NationalIdRegistrationKey>> dropoutByReasonAndLeaveTerm;
     // Enrollment indexes
     private Map<CurriculumKey, Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>>> enrollmentsPerCurriculumPerSubjectPerTermPerClass;
+    private Map<AcademicUnitKey, Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>>> enrollmentsPerAcademicUnitPerSubjectPerTermPerClass;
+    private Map<AcademicUnitKey, TreeSet<String>> termsPerAcademicUnit;
     private Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> enrollmentsPerSubjectPerTermPerClass;
     private Map<CurriculumKey, TreeSet<String>> termsPerCurriculum;
     private Map<SubjectKey, Map<String, Collection<String>>> classesPerSubjectPerTerm;
@@ -47,6 +54,8 @@ public class IndexesHolder {
         this.enrollmentsMap = this.mapsHolder.getMap("enrollments");
         this.subjectsMap = this.mapsHolder.getMap("subjects");
         this.curriculumMap = this.mapsHolder.getMap("curriculum");
+        this.classesMap = this.mapsHolder.getMap("classes");
+        this.academicUnitsMap = this.mapsHolder.getMap("academicUnits");
         buildIndexes();
     }
 
@@ -169,6 +178,11 @@ public class IndexesHolder {
     }
 
     private void buildEnrollmentIndexes() {
+        this.buildEnrollmentsPerCurriculum();
+        this.buildEnrollmentsPerAcademicUnit();
+    }
+
+    private void buildEnrollmentsPerCurriculum() {
         this.enrollmentsPerCurriculumPerSubjectPerTermPerClass = new HashMap<>();
         this.enrollmentsPerSubjectPerTermPerClass = new HashMap<>();
         this.termsPerCurriculum = new HashMap<>();
@@ -216,6 +230,83 @@ public class IndexesHolder {
             enrollmentsPerTermPerClass.put(enrollmentKey.getTerm(), enrollmentsPerClass);
             enrollmentsPerSubjectPerTermPerClass.put(subjectKey, enrollmentsPerTermPerClass);
             this.enrollmentsPerCurriculumPerSubjectPerTermPerClass.put(curriculumKey, enrollmentsPerSubjectPerTermPerClass);
+
+            Map<String, Collection<String>> classesPerTerm = this.classesPerSubjectPerTerm.get(subjectKey);
+            if (classesPerTerm == null) {
+                classesPerTerm = new HashMap<>();
+            }
+            Collection<String> classes = classesPerTerm.get(enrollmentKey.getTerm());
+            if (classes == null) {
+                classes = new TreeSet<>();
+            }
+            classes.add(enrollmentData.getClassId());
+            classesPerTerm.put(enrollmentKey.getTerm(), classes);
+            this.classesPerSubjectPerTerm.put(subjectKey, classesPerTerm);
+            LOGGER.debug(String.format("inserting: (%s, %s, %s) %d", enrollmentKey.getCode(), enrollmentKey.getTerm(), enrollmentData.getClassId(), classes.size()));
+
+            if (!enrollmentData.getStatus().equals(SystemConstants.STATUS_ONGOING) &&
+                    !enrollmentData.getStatus().equals(SystemConstants.STATUS_CANCELLED)) {
+                Integer currentCount = attemptsSummary.get(new Registration(enrollmentKey.getRegistration()));
+                if (currentCount == null) {
+                    currentCount = enrollmentData.getCredits();
+                } else {
+                    currentCount += enrollmentData.getCredits();
+                }
+                attemptsSummary.put(new Registration(enrollmentKey.getRegistration()), currentCount);
+            }
+        });
+        attemptsSummary.forEach((registration, credits) -> {
+            NationalIdRegistrationKey key = registrationMap.get(registration.getRegistration());
+            StudentData student = getStudent(key);
+            if (student != null) {
+                student.setAttemptedCredits(credits);
+                updateStudent(key, student);
+            }
+        });
+    }
+
+    private void buildEnrollmentsPerAcademicUnit() {
+        this.enrollmentsPerAcademicUnitPerSubjectPerTermPerClass = new HashMap<>();
+        this.termsPerAcademicUnit = new HashMap<>();
+        this.classesPerSubjectPerTerm = new HashMap<>();
+        Map<Registration, Integer> attemptsSummary = new HashMap<>();
+
+        this.enrollmentsMap.forEach((enrollmentKey, enrollmentData) -> {
+            NationalIdRegistrationKey studentId = registrationMap.get(enrollmentKey.getRegistration());
+            StudentData studentData = this.studentsMap.get(studentId);
+            String course = studentData.getCourse();
+            String curriculum = studentData.getCurriculum();
+            AcademicUnitKey academicUnitKey = new AcademicUnitKey(enrollmentKey.getCode().substring(0, 4));
+            SubjectKey subjectKey = new SubjectKey(course, curriculum, enrollmentKey.getCode());
+
+            TreeSet<String> terms = this.termsPerAcademicUnit.get(academicUnitKey);
+            if (terms == null) terms = new TreeSet<>();
+            terms.add(enrollmentKey.getTerm());
+            this.termsPerAcademicUnit.put(academicUnitKey, terms);
+
+            Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> enrollmentsPerSubjectPerTermPerClass =
+                    this.enrollmentsPerAcademicUnitPerSubjectPerTermPerClass.get(academicUnitKey);
+            if (enrollmentsPerSubjectPerTermPerClass == null) {
+                enrollmentsPerSubjectPerTermPerClass = new HashMap<>();
+            }
+            Map<String, Map<String, ClassEnrollments>> enrollmentsPerTermPerClass =
+                    enrollmentsPerSubjectPerTermPerClass.get(subjectKey);
+            if (enrollmentsPerTermPerClass == null) {
+                enrollmentsPerTermPerClass = new HashMap<>();
+            }
+            Map<String, ClassEnrollments> enrollementsPerClass = enrollmentsPerTermPerClass.get(enrollmentKey.getTerm());
+            if (enrollementsPerClass == null) {
+                enrollementsPerClass = new HashMap<>();
+            }
+            ClassEnrollments classEnrollments = enrollementsPerClass.get(enrollmentData.getClassId());
+            if (classEnrollments == null) {
+                classEnrollments = new ClassEnrollments();
+            }
+            addEnrolment(classEnrollments, studentId, subjectKey, enrollmentData.getStatus());
+            enrollementsPerClass.put(enrollmentData.getClassId(), classEnrollments);
+            enrollmentsPerTermPerClass.put(enrollmentKey.getTerm(), enrollementsPerClass);
+            enrollmentsPerSubjectPerTermPerClass.put(subjectKey, enrollmentsPerTermPerClass);
+            this.enrollmentsPerAcademicUnitPerSubjectPerTermPerClass.put(academicUnitKey, enrollmentsPerSubjectPerTermPerClass);
 
             Map<String, Collection<String>> classesPerTerm = this.classesPerSubjectPerTerm.get(subjectKey);
             if (classesPerTerm == null) {
@@ -420,6 +511,27 @@ public class IndexesHolder {
                 }
             }
         }
+        return filteredEnrollments;
+    }
+
+    public Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> getEnrollmentsPerSubjectPerTermPerClass(String academicUnitCode) {
+        return this.enrollmentsPerAcademicUnitPerSubjectPerTermPerClass.get(new AcademicUnitKey(academicUnitCode));
+    }
+
+    public Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> getEnrollmentsPerClassPerTermPerSubjectPerAcademicUnit(String from, String to, String academicUnit) {
+        Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> enrollmentsPerClassPerTermPerSubject = this.getEnrollmentsPerSubjectPerTermPerClass(academicUnit);
+        Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> filteredEnrollments = new HashMap<>();
+
+        for (Map.Entry<SubjectKey, Map<String, Map<String, ClassEnrollments>>> entry : enrollmentsPerClassPerTermPerSubject.entrySet()) {
+            SubjectKey subjectKey = entry.getKey();
+            Map<String, Map<String, ClassEnrollments>> enrollmentsPerClassPerTerm = entry.getValue();
+            for (Map.Entry<String, Map<String, ClassEnrollments>> entry1 : enrollmentsPerClassPerTerm.entrySet()) {
+                String term = entry1.getKey();
+                if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0)
+                    filteredEnrollments.put(subjectKey, enrollmentsPerClassPerTerm);
+            }
+        }
+
         return filteredEnrollments;
     }
 
