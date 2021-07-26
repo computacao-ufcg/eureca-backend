@@ -1,33 +1,20 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
-import io.swagger.annotations.ApiModelProperty;
-
 import java.util.Collection;
 
-public class ActivesSummaryResponse {
-    @ApiModelProperty(position = 0, example = ApiDocumentation.Model.SLIDER_LABEL)
-    private Collection<String> sliderLabel;
-    private Collection<ActivesPerTermSummary> terms;
+public class ActivesSummaryResponse extends RangeSummary {
+    private Collection<ActivesPerTermSummary> activesPerTermSummaries;
 
-    public ActivesSummaryResponse(Collection<String> sliderLabel, Collection<ActivesPerTermSummary> terms) {
-        this.sliderLabel = sliderLabel;
-        this.terms = terms;
+    public ActivesSummaryResponse(Collection<ActivesPerTermSummary> activesPerTermSummaries, String from, String to) {
+        super(from, to);
+        this.activesPerTermSummaries = activesPerTermSummaries;
     }
 
-    public Collection<String> getSliderLabel() {
-        return sliderLabel;
+    public Collection<ActivesPerTermSummary> getActivesPerTermSummaries() {
+        return activesPerTermSummaries;
     }
 
-    public void setSliderLabel(Collection<String> sliderLabel) {
-        this.sliderLabel = sliderLabel;
-    }
-
-    public Collection<ActivesPerTermSummary> getTerms() {
-        return terms;
-    }
-
-    public void setTerms(Collection<ActivesPerTermSummary> terms) {
-        this.terms = terms;
+    public void setActivesPerTermSummaries(Collection<ActivesPerTermSummary> activesPerTermSummaries) {
+        this.activesPerTermSummaries = activesPerTermSummaries;
     }
 }

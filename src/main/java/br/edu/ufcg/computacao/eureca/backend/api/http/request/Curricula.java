@@ -19,22 +19,22 @@ import java.util.Collection;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = Curriculum.ENDPOINT)
-@Api(description = ApiDocumentation.Curriculum.API)
-public class Curriculum {
-    private Logger LOGGER = Logger.getLogger(Curriculum.class);
+@RequestMapping(value = Curricula.ENDPOINT)
+@Api(description = ApiDocumentation.Curricula.API)
+public class Curricula {
+    private Logger LOGGER = Logger.getLogger(Curricula.class);
 
-    @ApiOperation(value = ApiDocumentation.Curriculum.GET_AVAILABLE_CURRICULUMS)
+    public static final String ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "curricula";
+
+    @ApiOperation(value = ApiDocumentation.Curricula.GET_CURRICULA)
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Collection<String>> getAvailableCurriculums() throws EurecaException {
+    public ResponseEntity<Collection<String>> getCurriculumCodes() throws EurecaException {
         try {
-            Collection<String> curriculums = ApplicationFacade.getInstance().getAvailableCurriculums();
-            return new ResponseEntity<>(curriculums, HttpStatus.OK);
+            Collection<String> curriculumCodes = ApplicationFacade.getInstance().getCurriculumCodes();
+            return new ResponseEntity<>(curriculumCodes, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.error(Messages.SOMETHING_WENT_WRONG);
             throw e;
         }
     }
-
-    public static final String ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "curriculums";
 }

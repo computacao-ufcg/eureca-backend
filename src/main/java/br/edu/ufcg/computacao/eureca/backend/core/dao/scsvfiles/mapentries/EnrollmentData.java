@@ -1,5 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
 
+import br.edu.ufcg.computacao.eureca.backend.core.models.Enrollment;
+
 public class EnrollmentData implements EurecaMapValue {
     private String classId;
     private int credits;
@@ -46,6 +48,11 @@ public class EnrollmentData implements EurecaMapValue {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Enrollment createEnrollment(RegistrationCodeTermKey key) {
+        return new Enrollment(key.getRegistration(), key.getCode(), key.getTerm(),
+                getClassId(), getCredits(), getGrade(), getStatus());
     }
 
     @Override

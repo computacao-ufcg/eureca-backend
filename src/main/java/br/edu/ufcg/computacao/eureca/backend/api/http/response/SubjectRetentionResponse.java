@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class SubjectsRetentionResponse implements Comparable {
+public class SubjectRetentionResponse implements Comparable {
     private String courseCode;
     private String curriculumCode;
     private int idealTerm;
@@ -18,10 +18,10 @@ public class SubjectsRetentionResponse implements Comparable {
     private int mobilityTerms;
     private double gpa;
 
-    public SubjectsRetentionResponse(String courseCode, String curriculumCode, int idealTerm, String subjectCode, String subjectName,
-                                     String registration, int attemptedCredits, int mandatoryCredits, int optionalCredits,
-                                     int electiveCredits, int complementaryCredits, int completedTerms,
-                                     int suspendedTerms, int institutionalTerms, int mobilityTerms, double gpa) {
+    public SubjectRetentionResponse(String courseCode, String curriculumCode, int idealTerm, String subjectCode, String subjectName,
+                                    String registration, int attemptedCredits, int mandatoryCredits, int optionalCredits,
+                                    int electiveCredits, int complementaryCredits, int completedTerms,
+                                    int suspendedTerms, int institutionalTerms, int mobilityTerms, double gpa) {
         this.courseCode = courseCode;
         this.curriculumCode = curriculumCode;
         this.idealTerm = idealTerm;
@@ -171,7 +171,7 @@ public class SubjectsRetentionResponse implements Comparable {
     @Override
     public int compareTo(Object o) {
         String thisValue = courseCode + curriculumCode + subjectCode + registration;
-        SubjectsRetentionResponse otherValue = (SubjectsRetentionResponse) o;
+        SubjectRetentionResponse otherValue = (SubjectRetentionResponse) o;
         return thisValue.compareTo((otherValue.getCourseCode() + otherValue.getCurriculumCode()+
                 otherValue.getSubjectCode() + otherValue.getRegistration()));
     }

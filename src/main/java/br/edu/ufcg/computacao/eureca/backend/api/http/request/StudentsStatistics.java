@@ -40,7 +40,7 @@ public class StudentsStatistics {
 
         try {
             LOGGER.info(Messages.RECEIVING_GET_STUDENTS_STATISTICS);
-            ActivesSummaryResponse ret = ApplicationFacade.getInstance().getActiveSummary(token, from, to);
+            ActivesSummaryResponse ret = ApplicationFacade.getInstance().getActivesSummary(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -60,7 +60,7 @@ public class StudentsStatistics {
             throws EurecaException {
 
         try {
-            Collection<StudentDataResponse> ret = ApplicationFacade.getInstance().getActiveCSV(token, from, to);
+            Collection<StudentDataResponse> ret = ApplicationFacade.getInstance().getActivesCSV(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -150,48 +150,8 @@ public class StudentsStatistics {
         }
     }
 
-    @RequestMapping(value = "delayed", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_DELAYED)
-    public ResponseEntity<DelayedSummaryResponse> getDelayed(
-            @ApiParam(value = ApiDocumentation.Statistics.FROM)
-            @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
-            @ApiParam(value = ApiDocumentation.Statistics.TO)
-            @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
-            @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
-            @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
-            throws EurecaException {
-
-        try {
-            DelayedSummaryResponse ret = ApplicationFacade.getInstance().getDelayedSummary(token, from, to);
-            return new ResponseEntity<>(ret, HttpStatus.OK);
-        } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
-            throw e;
-        }
-    }
-
-    @RequestMapping(value = "delayed/csv", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_DELAYED_CSV)
-    public ResponseEntity<Collection<StudentDataResponse>> getDelayedCSV(
-            @ApiParam(value = ApiDocumentation.Statistics.FROM)
-            @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
-            @ApiParam(value = ApiDocumentation.Statistics.TO)
-            @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
-            @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
-            @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
-            throws EurecaException {
-
-        try {
-            Collection<StudentDataResponse> delayed = ApplicationFacade.getInstance().getDelayedCSV(token, from, to);
-            return new ResponseEntity<>(delayed, HttpStatus.OK);
-        } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
-            throw e;
-        }
-    }
-
     @RequestMapping(value = "summary", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_STUDENTS_SUMMARY)
+    @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_SUMMARY)
     public ResponseEntity<StudentsSummaryResponse> getStudentsSummary(
             @ApiParam(value = ApiDocumentation.Statistics.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,

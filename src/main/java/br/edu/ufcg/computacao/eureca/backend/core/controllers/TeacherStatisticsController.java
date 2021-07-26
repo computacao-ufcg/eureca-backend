@@ -34,7 +34,7 @@ public class TeacherStatisticsController {
         return summary;
     }
 
-    public Collection<TeachersSummaryItemResponse> getTeacherStatisticsCSV() {
+    public Collection<TeachersSummaryItemResponse> getTeacherCSV() {
         List<TeachersSummaryItemResponse> response = new ArrayList<>();
         response.add(new TeachersSummaryItemResponse("fubica", 0.12, 0.03, 0.01, 0.84, 75, "2010.1", "2012.2", new PortugueseTeachersGlossary()));
         response.add(new TeachersSummaryItemResponse("joao arthur", 0.11, 0.08, 0.01, 0.80, 120, "2010.1", "2012.2", new PortugueseTeachersGlossary()));
