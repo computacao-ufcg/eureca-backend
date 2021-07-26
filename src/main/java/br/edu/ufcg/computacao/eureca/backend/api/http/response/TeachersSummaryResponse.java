@@ -1,24 +1,25 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.TeachersGlossaryFields;
-import br.edu.ufcg.computacao.eureca.backend.core.models.MetricSummary;
+import br.edu.ufcg.computacao.eureca.backend.core.models.MetricStatistics;
 import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
 
 public class TeachersSummaryResponse {
     private String curriculum;
     private String from;
     private String to;
-    private MetricSummary failedDueToAbsences;
-    private MetricSummary failedDueToGrade;
-    private MetricSummary failedDueToCanceling;
-    private MetricSummary success;
+    private MetricStatistics failedDueToAbsences;
+    private MetricStatistics failedDueToGrade;
+    private MetricStatistics failedDueToCanceling;
+    private MetricStatistics success;
     private TermCount min;
     private TermCount max;
     private int total;
     private TeachersGlossaryFields glossary;
 
-    public TeachersSummaryResponse(String curriculum, String from, String to, MetricSummary failedDueToAbsences, MetricSummary failedDueToGrade, MetricSummary failedDueToCanceling,
-                                   MetricSummary success, TermCount min, TermCount max, int total) {
+    public TeachersSummaryResponse(String curriculum, String from, String to, MetricStatistics failedDueToAbsences,
+                                   MetricStatistics failedDueToGrade, MetricStatistics failedDueToCanceling,
+                                   MetricStatistics success, TermCount min, TermCount max, int total) {
         this.curriculum = curriculum;
         this.from = from;
         this.to = to;
@@ -55,19 +56,19 @@ public class TeachersSummaryResponse {
         this.to = to;
     }
 
-    public MetricSummary getFailedDueToAbsences() {
+    public MetricStatistics getFailedDueToAbsences() {
         return failedDueToAbsences;
     }
 
-    public MetricSummary getFailedDueToGrade() {
+    public MetricStatistics getFailedDueToGrade() {
         return failedDueToGrade;
     }
 
-    public MetricSummary getFailedDueToCanceling() {
+    public MetricStatistics getFailedDueToCanceling() {
         return failedDueToCanceling;
     }
 
-    public MetricSummary getSuccess() {
+    public MetricStatistics getSuccess() {
         return success;
     }
 
@@ -89,21 +90,5 @@ public class TeachersSummaryResponse {
 
     public void setGlossary(TeachersGlossaryFields glossary) {
         this.glossary = glossary;
-    }
-
-    @Override
-    public String toString() {
-        return "TeachersSummaryResponse{" +
-                "curriculum='" + curriculum + '\'' +
-                ", from='" + from + '\'' +
-                ", to='" + to + '\'' +
-                ", failedDueToAbsences=" + failedDueToAbsences +
-                ", failedDueToGrade=" + failedDueToGrade +
-                ", failedDueToCanceling=" + failedDueToCanceling +
-                ", success=" + success +
-                ", min=" + min +
-                ", max=" + max +
-                ", total=" + total +
-                '}';
     }
 }

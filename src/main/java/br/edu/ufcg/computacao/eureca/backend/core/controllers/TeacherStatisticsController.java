@@ -1,11 +1,10 @@
 package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
-import br.edu.ufcg.computacao.eureca.backend.constants.PortugueseStudentsGlossary;
 import br.edu.ufcg.computacao.eureca.backend.constants.PortugueseTeachersGlossary;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.models.MetricSummary;
+import br.edu.ufcg.computacao.eureca.backend.core.models.MetricStatistics;
 import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
 import org.apache.log4j.Logger;
 
@@ -23,10 +22,10 @@ public class TeacherStatisticsController {
     }
 
     public TeachersSummaryResponse getTeachersStatisticsMock() {
-        MetricSummary failedDueToAbsences = new MetricSummary(3, 5,4);
-        MetricSummary failedDueToGrade = new MetricSummary(3,5,4);
-        MetricSummary failedDueToCanceling = new MetricSummary(3,5,4);
-        MetricSummary success = new MetricSummary(3,5,4);
+        MetricStatistics failedDueToAbsences = new MetricStatistics(3, 5, 9, 11, 15, 10, 25);
+        MetricStatistics failedDueToGrade = new MetricStatistics(3, 5, 9, 11, 15, 10, 25);
+        MetricStatistics failedDueToCanceling = new MetricStatistics(3, 5, 9, 11, 15, 10, 25);
+        MetricStatistics success = new MetricStatistics(3, 5, 9, 11, 15, 10, 25);
         TermCount min = new TermCount(10,"x");
         TermCount max = new TermCount(10, "y");
         TeachersSummaryResponse summary = new TeachersSummaryResponse("2017","1980.1","2020.1",failedDueToAbsences, failedDueToGrade,

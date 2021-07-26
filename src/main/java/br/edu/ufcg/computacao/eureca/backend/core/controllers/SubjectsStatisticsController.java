@@ -23,11 +23,11 @@ public class SubjectsStatisticsController {
     public SubjectSummaryResponse getSubjectsSummary(String from, String to, SubjectType subjectType) throws InvalidParameterException {
         String courseCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
         String curriculumCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
-        Collection<SubjectMetricsSummary> metricsPerTerm =
+        Collection<SubjectMetricsPerTermSummary> metricsPerTerm =
                 this.dataAccessFacade.getSubjectMetricsPerTermSummary(from, to, courseCode, curriculumCode, subjectType);
         String firstTerm = "0000.0";
         String lastTerm = "9999.9";
-        for (SubjectMetricsSummary metricsSummary : metricsPerTerm) {
+        for (SubjectMetricsPerTermSummary metricsSummary : metricsPerTerm) {
             String first = CollectionUtil.getFirstTermFromSummaries(metricsSummary.getTerms());
             if (first.compareTo(firstTerm) < 0) firstTerm = first;
             String last = CollectionUtil.getLastTermFromSummaries(metricsSummary.getTerms());
@@ -41,7 +41,7 @@ public class SubjectsStatisticsController {
         String courseCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
         String curriculumCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
         Collection<SubjectDataResponse> subjectDataResponses = new TreeSet<>();
-        Collection<SubjectMetricsSummary> metricsPerTerm =
+        Collection<SubjectMetricsPerTermSummary> metricsPerTerm =
                 this.dataAccessFacade.getSubjectMetricsPerTermSummary(from, to, courseCode, curriculumCode, subjectType);
         metricsPerTerm.forEach(subject -> {
             subject.getTerms().forEach(termSummary -> {

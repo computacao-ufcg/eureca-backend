@@ -10,10 +10,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.util.StudentMetricsCalculator;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class RetentionStatisticsController {
@@ -72,18 +69,18 @@ public class RetentionStatisticsController {
         DelayedSummary delayedSummary = new DelayedSummary(delayed.size(), summary, firstTerm, lastTerm);
 
         Collection<SubjectRetentionSummaryResponse> subjectsRetentionList = this.dataAccessFacade.getSubjectsRetentionSummary(courseCode, curriculumCode);
-        MetricStatistics retentionStatistics = new MetricStatistics().computeStatistics(getRetentionSample(subjectsRetentionList));
+        MetricStatistics retentionStatistics = new MetricStatistics(getRetentionSample(subjectsRetentionList));
         SubjectRetentionSummary subjectRetentionSummary = new SubjectRetentionSummary(retentionStatistics);
 
         return new RetentionSummaryResponse(delayedSummary, subjectRetentionSummary);
     }
 
-    private Collection<Double> getRetentionSample(Collection<SubjectRetentionSummaryResponse> subjectsRetentionList) {
-        Collection<Double> retentionSample = new TreeSet<>();
+    private List<Double> getRetentionSample(Collection<SubjectRetentionSummaryResponse> subjectsRetentionList) {
+        List<Double> retentionSampleList = new ArrayList<>();
         subjectsRetentionList.forEach(item -> {
-            retentionSample.add((double) item.getRetention());
+            retentionSampleList.add((double) item.getRetention());
         });
-        return retentionSample;
+        return retentionSampleList;
     }
 
     private Collection<Student> getDelayed(String from, String to) {

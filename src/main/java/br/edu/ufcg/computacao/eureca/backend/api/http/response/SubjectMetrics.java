@@ -7,16 +7,20 @@ public class SubjectMetrics {
     private int succeeded;
     private int ongoing;
     private int exempted;
+    private int suspended;
+    private int numberOfClasses;
     private int totalEnrolled;
 
-    public SubjectMetrics(int failedDueToAbsences, int failedDueToGrade, int cancelled,
-                          int succeeded, int ongoing, int exempted, int totalEnrolled) {
+    public SubjectMetrics(int failedDueToAbsences, int failedDueToGrade, int cancelled, int succeeded, int ongoing,
+                          int exempted, int suspended, int numberOfClasses, int totalEnrolled) {
         this.failedDueToAbsences = failedDueToAbsences;
         this.failedDueToGrade = failedDueToGrade;
         this.cancelled = cancelled;
         this.succeeded = succeeded;
         this.ongoing = ongoing;
         this.exempted = exempted;
+        this.suspended = suspended;
+        this.numberOfClasses = numberOfClasses;
         this.totalEnrolled = totalEnrolled;
     }
 
@@ -68,6 +72,22 @@ public class SubjectMetrics {
         this.exempted = exempted;
     }
 
+    public int getSuspended() {
+        return suspended;
+    }
+
+    public void setSuspended(int suspended) {
+        this.suspended = suspended;
+    }
+
+    public int getNumberOfClasses() {
+        return numberOfClasses;
+    }
+
+    public void setNumberOfClasses(int numberOfClasses) {
+        this.numberOfClasses = numberOfClasses;
+    }
+
     public int getTotalEnrolled() {
         return totalEnrolled;
     }
@@ -85,6 +105,8 @@ public class SubjectMetrics {
                 ", succeeded=" + succeeded +
                 ", ongoing=" + ongoing +
                 ", exempted=" + exempted +
+                ", suspended=" + suspended +
+                ", numberOfClasses=" + numberOfClasses +
                 ", totalEnrolled=" + totalEnrolled +
                 '}';
     }

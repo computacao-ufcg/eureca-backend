@@ -1,6 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
-import java.util.Collection;
+import javax.validation.constraints.NotNull;
+import java.util.Collections;
+import java.util.List;
 
 public class MetricStatistics {
     private double min;
@@ -9,26 +11,59 @@ public class MetricStatistics {
     private double thirdQuartile;
     private double max;
     private double average;
-    private int count;
+    private int sampleSize;
 
     public MetricStatistics(double min, double firstQuartile, double median, double thirdQuartile, double max,
-                            double average, int count) {
+                            double average, int sampleSize) {
         this.min = min;
         this.firstQuartile = firstQuartile;
         this.median = median;
         this.thirdQuartile = thirdQuartile;
         this.max = max;
         this.average = average;
-        this.count = count;
+        this.sampleSize = sampleSize;
     }
 
-    public MetricStatistics(int min, int max, int count) {
+    public MetricStatistics(int min, int max, int sampleSize) {
         this.min = min;
         this.max = max;
-        this.count = count;
+        this.sampleSize = sampleSize;
     }
 
-    public MetricStatistics() {
+    public MetricStatistics(@NotNull List<Double> sample) {
+        this.min = 0;
+        this.firstQuartile = 0;
+        this.median = 0;
+        this.thirdQuartile = 0;
+        this.max = 0;
+        this.sampleSize = sample.size();
+
+        Double[] sampleArray = new Double[this.sampleSize];
+        Collections.sort(sample);
+        int i = 0;
+        double accumulated = 0;
+        for (Double item: sample) {
+            sampleArray[i++] = item;
+            accumulated += item;
+        }
+        this.min = sampleArray[0];
+        this.max = sampleArray[sampleSize-1];
+
+        if (this.sampleSize >= 4) {
+            int quartilSize = this.sampleSize / 4;
+            this.firstQuartile = sampleArray[(quartilSize == 0 ? 0 : quartilSize - 1)];
+            if (this.sampleSize % 2 == 0) {
+                this.median = (sampleArray[2 * quartilSize] + sampleArray[2 * quartilSize + 1]) / 2;
+            } else {
+                this.median = sampleArray[2 * quartilSize];
+            }
+            this.thirdQuartile = sampleArray[3 * quartilSize - 1];
+        } else {
+            this.firstQuartile = -1;
+            this.median = -1;
+            this.thirdQuartile = -1;
+        }
+        this.average = (sampleSize == 0 ? -1 : accumulated/this.sampleSize);
     }
 
     public double getMin() {
@@ -79,45 +114,11 @@ public class MetricStatistics {
         this.average = average;
     }
 
-    public int getCount() {
-        return count;
+    public int getSampleSize() {
+        return sampleSize;
     }
 
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    public MetricStatistics computeStatistics(Collection<Double> sample) {
-        double min;
-        double firstQuartile;
-        double median;
-        double thirdQuartile;
-        double max;
-        int count;
-        double accumulated = 0;
-
-        Double[] sampleArray = (Double[]) sample.toArray();
-        count = sampleArray.length;
-        min = sampleArray[0];
-        max = sampleArray[count-1];
-
-        for (int i = 0; i < count; i++) {
-            accumulated += sampleArray[i];
-        }
-        if (count >= 4) {
-            int quartilSize = count / 4;
-            firstQuartile = sampleArray[(quartilSize == 0 ? 0 : quartilSize - 1)];
-            if (count % 2 == 0) {
-                median = (double) (sampleArray[2 * quartilSize] + sampleArray[2 * quartilSize + 1]) / 2;
-            } else {
-                median = (double) sampleArray[2 * quartilSize];
-            }
-            thirdQuartile = sampleArray[3 * quartilSize - 1];
-        } else {
-            firstQuartile = -1;
-            median = -1;
-            thirdQuartile = -1;
-        }
-        return new MetricStatistics(min, firstQuartile, median, thirdQuartile, max, accumulated/count, count);
+    public void setSampleSize(int sampleSize) {
+        this.sampleSize = sampleSize;
     }
 }
