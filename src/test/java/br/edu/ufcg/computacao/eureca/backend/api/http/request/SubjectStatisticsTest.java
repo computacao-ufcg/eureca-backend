@@ -1,7 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectMetricsStatistics;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsSummaryResponse;
-import br.edu.ufcg.computacao.eureca.backend.core.models.MetricSummary;
+import br.edu.ufcg.computacao.eureca.backend.core.models.MetricStatistics;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsStatisticsSummary;
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,11 +30,12 @@ public class SubjectStatisticsTest extends EndpointTest {
     }
 
     private SubjectsSummaryResponse getSubjectStatisticsMock() {
-        MetricSummary metrics = new MetricSummary(20, 30, 25);
-        SubjectsStatisticsSummary mandatory = new SubjectsStatisticsSummary(30,200, metrics, metrics, metrics, metrics, metrics);
-        SubjectsStatisticsSummary optional = new SubjectsStatisticsSummary(10, 150, metrics, metrics, metrics, metrics, metrics);
-        SubjectsStatisticsSummary elective = new SubjectsStatisticsSummary(15, 175, metrics, metrics, metrics, metrics, metrics);
-        SubjectsStatisticsSummary complementary = new SubjectsStatisticsSummary(10, 150, metrics, metrics, metrics, metrics, metrics);
+        MetricStatistics metrics = new MetricStatistics(1, 3, 5, 7, 9, 6, 100);
+        SubjectMetricsStatistics subjectMetrics = new SubjectMetricsStatistics(metrics, metrics, metrics, metrics, metrics, metrics, metrics, metrics);
+        SubjectsStatisticsSummary mandatory = new SubjectsStatisticsSummary(30, subjectMetrics);
+        SubjectsStatisticsSummary optional = new SubjectsStatisticsSummary(10, subjectMetrics);
+        SubjectsStatisticsSummary elective = new SubjectsStatisticsSummary(15, subjectMetrics);
+        SubjectsStatisticsSummary complementary = new SubjectsStatisticsSummary(10, subjectMetrics);
         SubjectsSummaryResponse summary = new SubjectsSummaryResponse("14102100", "2017", "1980.1", "2020.1", mandatory, optional, elective, complementary);
         return summary;
     }

@@ -9,7 +9,6 @@ import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import org.apache.log4j.Logger;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class IndexesHolder {
     private final Logger LOGGER = Logger.getLogger(IndexesHolder.class);
@@ -322,7 +321,7 @@ public class IndexesHolder {
         StudentCurriculum curriculum;
         switch(status) {
             case SystemConstants.STATUS_SUCCEEDED:
-                classEnrollments.getSuccess().add(studentId.getRegistration());
+                classEnrollments.getSucceeded().add(studentId.getRegistration());
                 if ((curriculum = retrieveCurriculum(studentId)) != null) curriculum.getCompleted().add(subjectKey);
                 break;
             case SystemConstants.STATUS_EXEMPTED:

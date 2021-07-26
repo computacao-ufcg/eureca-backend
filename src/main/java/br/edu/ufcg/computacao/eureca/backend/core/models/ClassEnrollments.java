@@ -4,7 +4,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class ClassEnrollments {
-    private Set<String> success;
+    private Set<String> succeeded;
     private Set<String> cancelled;
     private Set<String> exempted;
     private Set<String> ongoing;
@@ -13,7 +13,7 @@ public class ClassEnrollments {
     private Set<String> suspended;
 
     public ClassEnrollments() {
-        this.success = new TreeSet<>();
+        this.succeeded = new TreeSet<>();
         this.cancelled = new TreeSet<>();
         this.exempted = new TreeSet<>();
         this.ongoing = new TreeSet<>();
@@ -23,12 +23,12 @@ public class ClassEnrollments {
     }
 
     public int getNumberOfEnrolleds() {
-        return this.success.size() + this.cancelled.size() + this.ongoing.size() +
+        return this.succeeded.size() + this.cancelled.size() + this.ongoing.size() +
                 this.failedDueToGrade.size() + this.failedDueToAbsence.size() + this.suspended.size();
     }
 
-    public int getNumberSucess() {
-        return this.success.size();
+    public int getNumberSucceeded() {
+        return this.succeeded.size();
     }
 
     public int getNumberCancelled() {
@@ -57,7 +57,7 @@ public class ClassEnrollments {
 
     public Set<String> getEnrolleds() {
         Set<String> ret = new TreeSet<>();
-        ret.addAll(this.success);
+        ret.addAll(this.succeeded);
         ret.addAll(this.cancelled);
         ret.addAll(this.exempted);
         ret.addAll(this.ongoing);
@@ -67,12 +67,12 @@ public class ClassEnrollments {
         return ret;
     }
 
-    public Set<String> getSuccess() {
-        return success;
+    public Set<String> getSucceeded() {
+        return succeeded;
     }
 
-    public void setSuccess(Set<String> success) {
-        this.success = success;
+    public void setSucceeded(Set<String> succeeded) {
+        this.succeeded = succeeded;
     }
 
     public Set<String> getCancelled() {

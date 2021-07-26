@@ -2,12 +2,12 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import java.util.Collection;
 
-public class SubjectMetricsSummary {
+public class SubjectMetricsPerTermSummary {
     private String code;
     private String name;
     private Collection<SubjectMetricsPerTerm> terms;
 
-    public SubjectMetricsSummary(String code, String name, Collection<SubjectMetricsPerTerm> terms) {
+    public SubjectMetricsPerTermSummary(String code, String name, Collection<SubjectMetricsPerTerm> terms) {
         this.code = code;
         this.name = name;
         this.terms = terms;
