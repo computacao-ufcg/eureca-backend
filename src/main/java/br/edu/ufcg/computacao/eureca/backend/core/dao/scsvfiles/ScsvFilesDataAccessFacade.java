@@ -404,7 +404,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             totalRetention += retention;
             retentionSet.add(retention);
         }
-        Integer[] retentionArray = (Integer[]) retentionSet.toArray();
+        int[] retentionArray = retentionSet.stream().mapToInt(Integer::new).toArray();
         int size = retentionArray.length;
         minimum = retentionArray[0];
         maximum = retentionArray[size-1];
