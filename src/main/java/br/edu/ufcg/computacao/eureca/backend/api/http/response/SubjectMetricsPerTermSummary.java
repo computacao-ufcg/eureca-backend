@@ -2,7 +2,7 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import java.util.Collection;
 
-public class SubjectMetricsPerTermSummary {
+public class SubjectMetricsPerTermSummary implements Comparable {
     private String code;
     private String name;
     private Collection<SubjectMetricsPerTerm> terms;
@@ -35,5 +35,11 @@ public class SubjectMetricsPerTermSummary {
 
     public void setTerms(Collection<SubjectMetricsPerTerm> terms) {
         this.terms = terms;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        SubjectMetricsPerTermSummary other = (SubjectMetricsPerTermSummary) o;
+        return code.compareTo(other.getCode());
     }
 }
