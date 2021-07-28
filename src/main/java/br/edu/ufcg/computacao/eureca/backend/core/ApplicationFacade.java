@@ -73,7 +73,8 @@ public class ApplicationFacade {
         return response;
     }
 
-    public CurriculumCodesResponse getCurriculumCodes() throws EurecaException {
+    public CurriculumCodesResponse getCurriculumCodes(String token) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_CURRICULUM_CODES);
         String courseCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
         return this.curriculaController.getCurriculumCodes(courseCode);
     }

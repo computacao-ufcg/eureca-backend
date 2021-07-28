@@ -570,7 +570,7 @@ public class IndexesHolder {
                         student.getComplementaryCredits(), student.getCompletedTerms(), student.getSuspendedTerms(),
                         student.getInstitutionalTerms(), student.getMobilityTerms(), student.getGpa());
                 responses.add(response);
-                LOGGER.info(response.toString());
+                LOGGER.debug(response.toString());
             }
         }
         return responses;
