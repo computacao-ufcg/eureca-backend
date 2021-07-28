@@ -22,7 +22,7 @@ public class RetentionStatisticsController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
-    public DelayedSummaryResponse getDelayedSummary(String from, String to) {
+    public DelayedStatisticsResponse getDelayedSummary(String from, String to) {
         Collection<DelayedPerTermSummary> terms = new TreeSet<>();
         Map<String, Collection<Student>> delayedPerAdmissionTerm = getDelayedPerAdmissionTerm(from, to);
 
@@ -33,32 +33,34 @@ public class RetentionStatisticsController {
         }
         String firstTerm = CollectionUtil.getFirstTermFromSummaries(terms);
         String lastTerm = CollectionUtil.getLastTermFromSummaries(terms);
-        return new DelayedSummaryResponse(terms, firstTerm, lastTerm);
+        return new DelayedStatisticsResponse(terms, firstTerm, lastTerm);
     }
 
-    public Collection<StudentDataResponse> getDelayedCSV(String from, String to) {
-        Collection<StudentDataResponse> delayedData = new TreeSet<>();
+    public StudentResponse getDelayedCSV(String from, String to) {
+        Collection<StudentCSV> delayedData = new TreeSet<>();
         Collection<Student> delayed = getDelayed(from, to);
         delayed.forEach(item -> {
-            StudentDataResponse studentDataResponse = new StudentDataResponse(item);
+            StudentCSV studentDataResponse = new StudentCSV(item);
             delayedData.add(studentDataResponse);
         });
-        return delayedData;
+        return new StudentResponse(delayedData);
     }
 
-    public Collection<SubjectRetentionSummaryResponse> getSubjectsRetentionSummary() throws InvalidParameterException {
+    public SubjectRetentionStatisticsResponse getSubjectRetentionSummary() throws InvalidParameterException {
         String courseCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
         String curriculumCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
-        return this.dataAccessFacade.getSubjectsRetentionSummary(courseCode, curriculumCode);
+        Collection<SubjectRetentionDigest> digest = this.dataAccessFacade.getSubjectsRetentionSummary(courseCode, curriculumCode);
+        return new SubjectRetentionStatisticsResponse(digest);
     }
 
-    public Collection<SubjectRetentionResponse> getSubjectsRetentionCSV() throws InvalidParameterException {
+    public SubjectRetentionResponse getSubjectsRetentionCSV() throws InvalidParameterException {
         String courseCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
         String curriculumCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
-        return this.dataAccessFacade.getSubjectsRetention(courseCode, curriculumCode);
+        Collection<SubjectRetentionCSV> retention = this.dataAccessFacade.getSubjectsRetention(courseCode, curriculumCode);
+        return new SubjectRetentionResponse(retention);
     }
 
-    public RetentionSummaryResponse getRetentionStatistics(String from, String to) throws InvalidParameterException {
+    public RetentionStatisticsSummaryResponse getRetentionStatistics(String from, String to) throws InvalidParameterException {
         String courseCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
         String curriculumCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
 
@@ -68,14 +70,14 @@ public class RetentionStatisticsController {
         String lastTerm = CollectionUtil.getLastTermFromStudents(delayed);
         DelayedSummary delayedSummary = new DelayedSummary(delayed.size(), summary, firstTerm, lastTerm);
 
-        Collection<SubjectRetentionSummaryResponse> subjectsRetentionList = this.dataAccessFacade.getSubjectsRetentionSummary(courseCode, curriculumCode);
+        Collection<SubjectRetentionDigest> subjectsRetentionList = this.dataAccessFacade.getSubjectsRetentionSummary(courseCode, curriculumCode);
         MetricStatistics retentionStatistics = new MetricStatistics(getRetentionSample(subjectsRetentionList));
         SubjectRetentionSummary subjectRetentionSummary = new SubjectRetentionSummary(retentionStatistics);
 
-        return new RetentionSummaryResponse(delayedSummary, subjectRetentionSummary);
+        return new RetentionStatisticsSummaryResponse(delayedSummary, subjectRetentionSummary);
     }
 
-    private List<Double> getRetentionSample(Collection<SubjectRetentionSummaryResponse> subjectsRetentionList) {
+    private List<Double> getRetentionSample(Collection<SubjectRetentionDigest> subjectsRetentionList) {
         List<Double> retentionSampleList = new ArrayList<>();
         subjectsRetentionList.forEach(item -> {
             retentionSampleList.add((double) item.getRetention());

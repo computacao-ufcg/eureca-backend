@@ -1,12 +1,12 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class SubjectRetentionSummaryResponse implements Comparable {
+public class SubjectRetentionDigest implements Comparable {
     private int idealTerm;
     private String subjectCode;
     private String subjectName;
     private int retention;
 
-    public SubjectRetentionSummaryResponse(int idealTerm, String subjectCode, String subjectName, int retention) {
+    public SubjectRetentionDigest(int idealTerm, String subjectCode, String subjectName, int retention) {
         this.idealTerm = idealTerm;
         this.subjectCode = subjectCode;
         this.subjectName = subjectName;
@@ -47,7 +47,7 @@ public class SubjectRetentionSummaryResponse implements Comparable {
 
     @Override
     public int compareTo(Object o) {
-        SubjectRetentionSummaryResponse otherValue = (SubjectRetentionSummaryResponse) o;
+        SubjectRetentionDigest otherValue = (SubjectRetentionDigest) o;
         if (this.idealTerm != otherValue.idealTerm) return this.idealTerm - otherValue.idealTerm;
         return this.subjectCode.compareTo(otherValue.getSubjectCode());
     }

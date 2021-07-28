@@ -4,7 +4,7 @@ import br.edu.ufcg.computacao.eureca.backend.constants.Glossary;
 
 import java.util.Objects;
 
-public class TeachersSummaryItemResponse {
+public class TeachersCSV {
     private String teacherName;
     private double averageFailDueToGrade;
     private double averageFailDueToAbsences;
@@ -15,9 +15,9 @@ public class TeachersSummaryItemResponse {
     private String to;
     private Glossary glossary;
 
-    public TeachersSummaryItemResponse(String teacherName, double averageFailDueToGrade, double averageFailDueToAbsences,
-                                       double suspendedRate, double successRate, int totalEnrollments, String from, String to,
-                                       Glossary glossary) {
+    public TeachersCSV(String teacherName, double averageFailDueToGrade, double averageFailDueToAbsences,
+                       double suspendedRate, double successRate, int totalEnrollments, String from, String to,
+                       Glossary glossary) {
         this.teacherName = teacherName;
         this.averageFailDueToGrade = averageFailDueToGrade;
         this.averageFailDueToAbsences = averageFailDueToAbsences;
@@ -69,7 +69,7 @@ public class TeachersSummaryItemResponse {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TeachersSummaryItemResponse that = (TeachersSummaryItemResponse) o;
+        TeachersCSV that = (TeachersCSV) o;
         return teacherName.equals(that.teacherName);
     }
 
@@ -80,7 +80,7 @@ public class TeachersSummaryItemResponse {
 
     @Override
     public String toString() {
-        return "TeachersSummaryItemResponse{" +
+        return "TeachersCSV{" +
                 "teacherName='" + teacherName + '\'' +
                 ", averageFailDueToGrade=" + averageFailDueToGrade +
                 ", averageFailDueToAbsences=" + averageFailDueToAbsences +

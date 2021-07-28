@@ -1,5 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.CurriculumCodesResponse;
 import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
@@ -28,9 +29,9 @@ public class Curricula {
 
     @ApiOperation(value = ApiDocumentation.Curricula.GET_CURRICULA)
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Collection<String>> getCurriculumCodes() throws EurecaException {
+    public ResponseEntity<CurriculumCodesResponse> getCurriculumCodes() throws EurecaException {
         try {
-            Collection<String> curriculumCodes = ApplicationFacade.getInstance().getCurriculumCodes();
+            CurriculumCodesResponse curriculumCodes = ApplicationFacade.getInstance().getCurriculumCodes();
             return new ResponseEntity<>(curriculumCodes, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.error(Messages.SOMETHING_WENT_WRONG);

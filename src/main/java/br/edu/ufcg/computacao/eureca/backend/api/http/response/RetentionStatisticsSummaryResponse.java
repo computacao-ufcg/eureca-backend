@@ -2,12 +2,12 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.RetentionGlossaryFields;
 
-public class RetentionSummaryResponse {
+public class RetentionStatisticsSummaryResponse {
     private DelayedSummary delayedSummary;
     private SubjectRetentionSummary subjectRetentionSummary;
     private RetentionGlossaryFields glossary;
 
-    public RetentionSummaryResponse(DelayedSummary delayedSummary, SubjectRetentionSummary subjectRetentionSummary) {
+    public RetentionStatisticsSummaryResponse(DelayedSummary delayedSummary, SubjectRetentionSummary subjectRetentionSummary) {
         this.delayedSummary = delayedSummary;
         this.subjectRetentionSummary = subjectRetentionSummary;
     }

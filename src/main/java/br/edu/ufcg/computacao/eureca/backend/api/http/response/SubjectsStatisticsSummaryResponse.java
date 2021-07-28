@@ -2,20 +2,20 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.SubjectsGlossaryFields;
 
-public class SubjectsSummaryResponse {
+public class SubjectsStatisticsSummaryResponse {
     private String course;
     private String curriculum;
     private String from;
     private String to;
-    private SubjectsStatisticsSummary mandatory;
-    private SubjectsStatisticsSummary optional;
-    private SubjectsStatisticsSummary elective;
-    private SubjectsStatisticsSummary complementary;
+    private SubjectStatisticsSummary mandatory;
+    private SubjectStatisticsSummary optional;
+    private SubjectStatisticsSummary elective;
+    private SubjectStatisticsSummary complementary;
     private SubjectsGlossaryFields glossary;
 
-    public SubjectsSummaryResponse(String course, String curriculum, String from, String to,
-                                   SubjectsStatisticsSummary mandatory, SubjectsStatisticsSummary optional,
-                                   SubjectsStatisticsSummary elective, SubjectsStatisticsSummary complementary) {
+    public SubjectsStatisticsSummaryResponse(String course, String curriculum, String from, String to,
+                                             SubjectStatisticsSummary mandatory, SubjectStatisticsSummary optional,
+                                             SubjectStatisticsSummary elective, SubjectStatisticsSummary complementary) {
         this.course = course;
         this.curriculum = curriculum;
         this.from = from;
@@ -58,35 +58,35 @@ public class SubjectsSummaryResponse {
         this.to = to;
     }
 
-    public SubjectsStatisticsSummary getMandatory() {
+    public SubjectStatisticsSummary getMandatory() {
         return mandatory;
     }
 
-    public void setMandatory(SubjectsStatisticsSummary mandatory) {
+    public void setMandatory(SubjectStatisticsSummary mandatory) {
         this.mandatory = mandatory;
     }
 
-    public SubjectsStatisticsSummary getOptional() {
+    public SubjectStatisticsSummary getOptional() {
         return optional;
     }
 
-    public void setOptional(SubjectsStatisticsSummary optional) {
+    public void setOptional(SubjectStatisticsSummary optional) {
         this.optional = optional;
     }
 
-    public SubjectsStatisticsSummary getElective() {
+    public SubjectStatisticsSummary getElective() {
         return elective;
     }
 
-    public void setElective(SubjectsStatisticsSummary elective) {
+    public void setElective(SubjectStatisticsSummary elective) {
         this.elective = elective;
     }
 
-    public SubjectsStatisticsSummary getComplementary() {
+    public SubjectStatisticsSummary getComplementary() {
         return complementary;
     }
 
-    public void setComplementary(SubjectsStatisticsSummary complementary) {
+    public void setComplementary(SubjectStatisticsSummary complementary) {
         this.complementary = complementary;
     }
 

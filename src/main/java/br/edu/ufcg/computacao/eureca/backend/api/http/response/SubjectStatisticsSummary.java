@@ -1,10 +1,10 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class SubjectsStatisticsSummary {
+public class SubjectStatisticsSummary {
     private int subjectsCount;
     private SubjectMetricsStatistics subjectMetricsStatistics;
 
-    public SubjectsStatisticsSummary(int subjectsCount, SubjectMetricsStatistics subjectMetricsStatistics) {
+    public SubjectStatisticsSummary(int subjectsCount, SubjectMetricsStatistics subjectMetricsStatistics) {
         this.subjectsCount = subjectsCount;
         this.subjectMetricsStatistics = subjectMetricsStatistics;
     }

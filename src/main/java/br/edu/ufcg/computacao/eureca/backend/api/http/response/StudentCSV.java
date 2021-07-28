@@ -3,7 +3,7 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.backend.core.util.StudentMetricsCalculator;
 
-public class StudentDataResponse implements Comparable {
+public class StudentCSV implements Comparable {
     private String registration;
     private String name;
     private String gender;
@@ -36,7 +36,7 @@ public class StudentDataResponse implements Comparable {
     private RiskClass riskClass;
     private CostClass costClass;
 
-    public StudentDataResponse(Student student) {
+    public StudentCSV(Student student) {
         this.registration = student.getRegistration().toString();
         this.name = student.getName();
         this.gender = student.getGender();
@@ -330,7 +330,7 @@ public class StudentDataResponse implements Comparable {
 
     @Override
     public int compareTo(Object o) {
-        StudentDataResponse other = (StudentDataResponse) o;
+        StudentCSV other = (StudentCSV) o;
         return (new Registration(this.getRegistration())).compareTo((new Registration(other.getRegistration())));
     }
 }

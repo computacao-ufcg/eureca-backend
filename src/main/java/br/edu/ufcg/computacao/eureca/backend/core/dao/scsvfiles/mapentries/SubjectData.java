@@ -130,7 +130,7 @@ public class SubjectData implements EurecaMapValue {
 
     @Override
     public String toString() {
-        return "SubjectData{" +
+        return "SubjectCSV{" +
                 "academicUnit='" + academicUnit + '\'' +
                 ", type='" + type + '\'' +
                 ", credits=" + credits +
