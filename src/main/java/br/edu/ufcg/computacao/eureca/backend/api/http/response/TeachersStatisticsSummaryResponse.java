@@ -4,7 +4,7 @@ import br.edu.ufcg.computacao.eureca.backend.constants.TeachersGlossaryFields;
 import br.edu.ufcg.computacao.eureca.backend.core.models.MetricStatistics;
 import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
 
-public class TeachersSummaryResponse {
+public class TeachersStatisticsSummaryResponse {
     private String curriculum;
     private String from;
     private String to;
@@ -17,9 +17,9 @@ public class TeachersSummaryResponse {
     private int total;
     private TeachersGlossaryFields glossary;
 
-    public TeachersSummaryResponse(String curriculum, String from, String to, MetricStatistics failedDueToAbsences,
-                                   MetricStatistics failedDueToGrade, MetricStatistics failedDueToCanceling,
-                                   MetricStatistics success, TermCount min, TermCount max, int total) {
+    public TeachersStatisticsSummaryResponse(String curriculum, String from, String to, MetricStatistics failedDueToAbsences,
+                                             MetricStatistics failedDueToGrade, MetricStatistics failedDueToCanceling,
+                                             MetricStatistics success, TermCount min, TermCount max, int total) {
         this.curriculum = curriculum;
         this.from = from;
         this.to = to;

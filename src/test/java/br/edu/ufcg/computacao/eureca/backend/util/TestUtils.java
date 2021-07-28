@@ -3,7 +3,6 @@ package br.edu.ufcg.computacao.eureca.backend.util;
 import br.edu.ufcg.computacao.eureca.backend.api.http.CommonKeys;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.NationalIdRegistrationKey;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.StudentMetrics;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -37,26 +36,26 @@ public class TestUtils {
         return headers;
     }
 
-    public static ActivesSummaryResponse getActivesSummaryResponse() {
+    public static ActivesStatisticsResponse getActivesSummaryResponse() {
         RiskClassCountSummary riskClassCountSummary = new RiskClassCountSummary(0, 0, 0, 0, 0, 0, 0);
         ActivesPerTermSummary activesPerTerm = new ActivesPerTermSummary("", riskClassCountSummary);
-        return new ActivesSummaryResponse(Arrays.asList(activesPerTerm), "x", "y");
+        return new ActivesStatisticsResponse(Arrays.asList(activesPerTerm), "x", "y");
     }
 
-    public static AlumniSummaryResponse getAlumniSummaryResponse() {
+    public static AlumniStatisticsResponse getAlumniSummaryResponse() {
         AlumniPerTermSummary alumniPerTerm = new AlumniPerTermSummary("x", 10, 5, 4, 1);
-        return new AlumniSummaryResponse(Arrays.asList(alumniPerTerm), "x", "y");
+        return new AlumniStatisticsResponse(Arrays.asList(alumniPerTerm), "x", "y");
     }
 
-    public static Collection<StudentDataResponse> getStudentsCsvResponse() {
-        StudentData mockedStudentData = new StudentData("x", "x", "x", "x", "x",
+    public static Collection<StudentCSV> getStudentsCsvResponse() {
+        br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData mockedStudentData = new br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData("x", "x", "x", "x", "x",
                 "x", "x", "x", "Ativo",
                 "VESTIBULAR 2007.2", "x", "x", "x",
                 "x", "x",0,120,0,
                 58,0,26,5.68,
                 7,1.69,14,1,0,
                 0,0,0);
-        StudentDataResponse mockedStudentDataResponse = new StudentDataResponse(mockedStudentData.
+        StudentCSV mockedStudentDataResponse = new StudentCSV(mockedStudentData.
                 createStudent(new NationalIdRegistrationKey("fake-national-id", "fake-registration")));
         return Arrays.asList(mockedStudentDataResponse);
     }
@@ -85,20 +84,20 @@ public class TestUtils {
                 "\"riskClass\":\"UNFEASIBLE\",\"costClass\":\"NOT_APPLICABLE\"}]";
     }
 
-    public static DropoutsSummaryResponse getDropoutsSummaryResponse() {
+    public static DropoutsStatisticsResponse getDropoutsSummaryResponse() {
         DropoutReasonSummary reasonSummary = new DropoutReasonSummary(0,0,0,
                 0,0,0,
                 0,0,0,
                 0,0);
         DropoutPerTermSummary dropouts = new DropoutPerTermSummary("", 0, reasonSummary, 0, 0);
-        return new DropoutsSummaryResponse(Arrays.asList(dropouts), "x", "y");
+        return new DropoutsStatisticsResponse(Arrays.asList(dropouts), "x", "y");
     }
 
-    public static DelayedSummaryResponse getDelayedSummaryResponse() {
+    public static DelayedStatisticsResponse getDelayedSummaryResponse() {
         StudentMetrics metrics = new StudentMetrics(0,0,0,
                 0,0,0,0,0);
         StudentMetricsSummary metricsSummary = new StudentMetricsSummary(0, metrics);
         DelayedPerTermSummary delayedPerTermSummary = new DelayedPerTermSummary("", metricsSummary);
-        return new DelayedSummaryResponse(Arrays.asList(delayedPerTermSummary), "x", "y");
+        return new DelayedStatisticsResponse(Arrays.asList(delayedPerTermSummary), "x", "y");
     }
 }

@@ -20,7 +20,7 @@ public class SubjectsStatisticsController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
-    public SubjectSummaryResponse getSubjectsSummary(String from, String to, SubjectType subjectType) throws InvalidParameterException {
+    public SubjectsStatisticsResponse getSubjectsSummary(String from, String to, SubjectType subjectType) throws InvalidParameterException {
         String courseCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
         String curriculumCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
         Collection<SubjectMetricsPerTermSummary> metricsPerTerm =
@@ -33,30 +33,30 @@ public class SubjectsStatisticsController {
             String last = CollectionUtil.getLastTermFromSummaries(metricsSummary.getTerms());
             if (last.compareTo(lastTerm) > 0) lastTerm = last;
         }
-        SubjectSummaryResponse response = new SubjectSummaryResponse(metricsPerTerm, firstTerm, lastTerm);
+        SubjectsStatisticsResponse response = new SubjectsStatisticsResponse(metricsPerTerm, firstTerm, lastTerm);
         return response;
     }
 
-    public Collection<SubjectDataResponse> getSubjectsCSV(String from, String to, SubjectType subjectType) throws InvalidParameterException {
+    public SubjectResponse getSubjectsCSV(String from, String to, SubjectType subjectType) throws InvalidParameterException {
         String courseCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
         String curriculumCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
-        Collection<SubjectDataResponse> subjectDataResponses = new TreeSet<>();
+        Collection<SubjectCSV> subjectDataResponses = new TreeSet<>();
         Collection<SubjectMetricsPerTermSummary> metricsPerTerm =
                 this.dataAccessFacade.getSubjectMetricsPerTermSummary(from, to, courseCode, curriculumCode, subjectType);
         metricsPerTerm.forEach(subject -> {
             subject.getTerms().forEach(termSummary -> {
-                SubjectDataResponse subjectData = new SubjectDataResponse(courseCode, curriculumCode, subject.getCode(),
+                SubjectCSV subjectData = new SubjectCSV(courseCode, curriculumCode, subject.getCode(),
                         termSummary.getTerm(), termSummary.getMetrics());
                 subjectDataResponses.add(subjectData);
             });
         });
-        return subjectDataResponses;
+        return new SubjectResponse(subjectDataResponses);
     }
 
-    public SubjectsSummaryResponse getSubjectStatistics(String from, String to) throws InvalidParameterException {
+    public SubjectsStatisticsSummaryResponse getSubjectStatistics(String from, String to) throws InvalidParameterException {
         String course = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
         String code = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
-        SubjectsSummaryResponse summary = this.dataAccessFacade.getSubjectStatisticsSummary(from, to, course, code);
+        SubjectsStatisticsSummaryResponse summary = this.dataAccessFacade.getSubjectStatisticsSummary(from, to, course, code);
         return summary;
     }
 }

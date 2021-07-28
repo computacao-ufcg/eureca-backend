@@ -5,6 +5,8 @@ import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.SubjectData;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.StudentClassification;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
@@ -107,26 +109,26 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public SubjectsSummaryResponse getSubjectStatisticsSummary(String from, String to, String courseCode,
-                                                               String curriculumCode) throws InvalidParameterException {
+    public SubjectsStatisticsSummaryResponse getSubjectStatisticsSummary(String from, String to, String courseCode,
+                                                                         String curriculumCode) throws InvalidParameterException {
         Curriculum curriculum = getCurriculum(courseCode, curriculumCode);
         if (curriculum == null) {
             throw new InvalidParameterException(String.format(Messages.INEXISTENT_CURRICULUM_S_S, courseCode, curriculumCode));
         }
-        SubjectsStatisticsSummary mandatory = buildSummary(from, to, courseCode, curriculumCode,
+        SubjectStatisticsSummary mandatory = buildSummary(from, to, courseCode, curriculumCode,
                 curriculum.getMandatorySubjectsList());
-        SubjectsStatisticsSummary optional = buildSummary(from, to, courseCode, curriculumCode,
+        SubjectStatisticsSummary optional = buildSummary(from, to, courseCode, curriculumCode,
                 curriculum.getOptionalSubjectsList());
-        SubjectsStatisticsSummary elective = buildSummary(from, to, courseCode, curriculumCode,
+        SubjectStatisticsSummary elective = buildSummary(from, to, courseCode, curriculumCode,
                 curriculum.getElectiveSubjectsList());
-        SubjectsStatisticsSummary complementary = buildSummary(from, to, courseCode, curriculumCode,
+        SubjectStatisticsSummary complementary = buildSummary(from, to, courseCode, curriculumCode,
                 curriculum.getComplementarySubjectsList());
         TreeSet<String> terms = getTermsForCurriculum(courseCode, curriculumCode);
         String first = terms.first();
         String last = terms.last();
         from = (from.compareTo(first) < 0 ? first : from);
         to = (to.compareTo(last) < 0 ? to : last);
-        SubjectsSummaryResponse ret = new SubjectsSummaryResponse(courseCode, curriculumCode, from, to, mandatory,
+        SubjectsStatisticsSummaryResponse ret = new SubjectsStatisticsSummaryResponse(courseCode, curriculumCode, from, to, mandatory,
                 optional, elective, complementary);
         return ret;
     }
@@ -145,20 +147,20 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Collection<SubjectRetentionSummaryResponse> getSubjectsRetentionSummary(String courseCode, String curriculumCode) throws InvalidParameterException {
-        Collection<SubjectRetentionSummaryResponse> response = new TreeSet<>();
+    public Collection<SubjectRetentionDigest> getSubjectsRetentionSummary(String courseCode, String curriculumCode) throws InvalidParameterException {
+        Collection<SubjectRetentionDigest> response = new TreeSet<>();
         Collection<String> subjectCodes = getMandatorySubjectsList(courseCode, curriculumCode);
         subjectCodes.forEach(item -> {
             int retention = getRetentionCount(courseCode, curriculumCode, item);
             Subject subject = getSubject(courseCode, curriculumCode, item);
-            response.add(new SubjectRetentionSummaryResponse(subject.getIdealTerm(), item, subject.getName(), retention));
+            response.add(new SubjectRetentionDigest(subject.getIdealTerm(), item, subject.getName(), retention));
         });
         return response;
     }
 
     @Override
-    public Collection<SubjectRetentionResponse> getSubjectsRetention(String courseCode, String curriculumCode) throws InvalidParameterException {
-        Collection<SubjectRetentionResponse> response = new TreeSet<>();
+    public Collection<SubjectRetentionCSV> getSubjectsRetention(String courseCode, String curriculumCode) throws InvalidParameterException {
+        Collection<SubjectRetentionCSV> response = new TreeSet<>();
         Collection<String> subjectCodes = getMandatorySubjectsList(courseCode, curriculumCode);
         subjectCodes.forEach(item -> {
             response.addAll(this.indexesHolder.getRetention(courseCode, curriculumCode, item));
@@ -232,8 +234,8 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                 succeeded, ongoing, exempted, suspended, numberOfClasses, totalEnrolled);
     }
 
-    private SubjectsStatisticsSummary buildSummary(String from, String to, String courseCode, String curriculumCode,
-                                                   Collection<String> subjects) {
+    private SubjectStatisticsSummary buildSummary(String from, String to, String courseCode, String curriculumCode,
+                                                  Collection<String> subjects) {
 
         Collection<SubjectMetrics> metricsPerSubject = new ArrayList<>();
         for(String subjectCode : subjects) {
@@ -245,7 +247,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             }
         }
         SubjectMetricsStatistics metrics = computeSubjectMetricsStatistics(metricsPerSubject);
-        return new SubjectsStatisticsSummary(subjects.size(), metrics);
+        return new SubjectStatisticsSummary(subjects.size(), metrics);
     }
 
     private SubjectMetricsStatistics computeSubjectMetricsStatistics(Collection<SubjectMetrics> metricsPerSubject) {

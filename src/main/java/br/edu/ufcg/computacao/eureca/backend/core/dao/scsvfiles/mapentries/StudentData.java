@@ -427,7 +427,7 @@ public class StudentData implements EurecaMapValue {
 
     @Override
     public String toString() {
-        return "StudentData{" +
+        return "StudentCSV{" +
                 "name='" + name + '\'' +
                 ", birthDate='" + birthDate + '\'' +
                 ", email='" + email + '\'' +

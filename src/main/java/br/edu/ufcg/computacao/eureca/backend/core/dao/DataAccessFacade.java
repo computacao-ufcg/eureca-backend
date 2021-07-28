@@ -29,11 +29,11 @@ public interface DataAccessFacade {
 
     Subject getSubject(String courseCode, String curriculumCode, String subjectCode);
 
-    SubjectsSummaryResponse getSubjectStatisticsSummary(String from, String to, String course, String code) throws InvalidParameterException;
+    SubjectsStatisticsSummaryResponse getSubjectStatisticsSummary(String from, String to, String course, String code) throws InvalidParameterException;
 
-    Collection<SubjectRetentionResponse> getSubjectsRetention(String courseCode, String curriculumCode) throws InvalidParameterException;
+    Collection<SubjectRetentionCSV> getSubjectsRetention(String courseCode, String curriculumCode) throws InvalidParameterException;
 
-    Collection<SubjectRetentionSummaryResponse> getSubjectsRetentionSummary(String courseCode, String curriculumCode) throws InvalidParameterException;
+    Collection<SubjectRetentionDigest> getSubjectsRetentionSummary(String courseCode, String curriculumCode) throws InvalidParameterException;
 
     Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> getEnrollmentsPerTermPerSubject(String from, String to, String courseCode, String curriculumCode);
 

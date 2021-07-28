@@ -1,16 +1,16 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectRetentionResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectRetentionCSV;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.TeacherData;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.StudentCurriculum;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EnviromentVariablesHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 
 import org.apache.log4j.Logger;
 
-import javax.security.auth.Subject;
 import java.util.*;
 
 public class IndexesHolder {
@@ -553,8 +553,8 @@ public class IndexesHolder {
         return retention;
     }
 
-    public Collection<SubjectRetentionResponse> getRetention(String courseCode, String curriculumCode, String subjectCode) {
-        Collection<SubjectRetentionResponse> responses = new TreeSet<>();
+    public Collection<SubjectRetentionCSV> getRetention(String courseCode, String curriculumCode, String subjectCode) {
+        Collection<SubjectRetentionCSV> responses = new TreeSet<>();
         SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
         for (NationalIdRegistrationKey active : this.actives) {
             StudentCurriculum studentCurriculum = this.studentCurriculumMap.get(active);
@@ -564,7 +564,7 @@ public class IndexesHolder {
                 SubjectData subject = this.subjectsMap.get(subjectKey);
                 int idealTerm = subject.getIdealTerm();
                 String name = subject.getName();
-                SubjectRetentionResponse response = new SubjectRetentionResponse(courseCode, curriculumCode,
+                SubjectRetentionCSV response = new SubjectRetentionCSV(courseCode, curriculumCode,
                         idealTerm, subjectCode, name, active.getRegistration(), student.getAttemptedCredits(),
                         student.getMandatoryCredits(), 0, student.getElectiveCredits(),
                         student.getComplementaryCredits(), student.getCompletedTerms(), student.getSuspendedTerms(),
