@@ -21,20 +21,27 @@ public class SubjectsStatisticsController {
     }
 
     public SubjectsStatisticsResponse getSubjectsSummary(String from, String to, SubjectType subjectType) throws InvalidParameterException {
+        try {
         String courseCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
         String curriculumCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
         Collection<SubjectMetricsPerTermSummary> metricsPerTerm =
                 this.dataAccessFacade.getSubjectMetricsPerTermSummary(from, to, courseCode, curriculumCode, subjectType);
-        String firstTerm = "0000.0";
-        String lastTerm = "9999.9";
+        String firstTerm = "9999.9";
+        String lastTerm = "0000.0";
         for (SubjectMetricsPerTermSummary metricsSummary : metricsPerTerm) {
-            String first = CollectionUtil.getFirstTermFromSummaries(metricsSummary.getTerms());
-            if (first.compareTo(firstTerm) < 0) firstTerm = first;
-            String last = CollectionUtil.getLastTermFromSummaries(metricsSummary.getTerms());
-            if (last.compareTo(lastTerm) > 0) lastTerm = last;
+            if (metricsSummary != null && metricsSummary.getTerms() != null) {
+                String first = CollectionUtil.getFirstTermFromSummaries(metricsSummary.getTerms());
+                if (first.compareTo(firstTerm) < 0) firstTerm = first;
+                String last = CollectionUtil.getLastTermFromSummaries(metricsSummary.getTerms());
+                if (last.compareTo(lastTerm) > 0) lastTerm = last;
+            }
         }
         SubjectsStatisticsResponse response = new SubjectsStatisticsResponse(metricsPerTerm, firstTerm, lastTerm);
         return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     public SubjectResponse getSubjectsCSV(String from, String to, SubjectType subjectType) throws InvalidParameterException {

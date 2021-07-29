@@ -24,46 +24,43 @@ public class MetricStatistics {
         this.sampleSize = sampleSize;
     }
 
-    public MetricStatistics(int min, int max, int sampleSize) {
-        this.min = min;
-        this.max = max;
-        this.sampleSize = sampleSize;
-    }
-
     public MetricStatistics(@NotNull List<Double> sample) {
         this.min = 0;
         this.firstQuartile = 0;
         this.median = 0;
         this.thirdQuartile = 0;
         this.max = 0;
+        this.average = 0;
         this.sampleSize = sample.size();
 
-        Double[] sampleArray = new Double[this.sampleSize];
-        Collections.sort(sample);
-        int i = 0;
-        double accumulated = 0;
-        for (Double item: sample) {
-            sampleArray[i++] = item;
-            accumulated += item;
-        }
-        this.min = sampleArray[0];
-        this.max = sampleArray[sampleSize-1];
-
-        if (this.sampleSize >= 4) {
-            int quartilSize = this.sampleSize / 4;
-            this.firstQuartile = sampleArray[(quartilSize == 0 ? 0 : quartilSize - 1)];
-            if (this.sampleSize % 2 == 0) {
-                this.median = (sampleArray[2 * quartilSize] + sampleArray[2 * quartilSize + 1]) / 2;
-            } else {
-                this.median = sampleArray[2 * quartilSize];
+        if (this.sampleSize != 0) {
+            Double[] sampleArray = new Double[this.sampleSize];
+            Collections.sort(sample);
+            int i = 0;
+            double accumulated = 0;
+            for (Double item : sample) {
+                sampleArray[i++] = item;
+                accumulated += item;
             }
-            this.thirdQuartile = sampleArray[3 * quartilSize - 1];
-        } else {
-            this.firstQuartile = -1;
-            this.median = -1;
-            this.thirdQuartile = -1;
+            this.min = sampleArray[0];
+            this.max = sampleArray[sampleSize - 1];
+
+            if (this.sampleSize >= 4) {
+                int quartilSize = this.sampleSize / 4;
+                this.firstQuartile = sampleArray[(quartilSize == 0 ? 0 : quartilSize - 1)];
+                if (this.sampleSize % 2 == 0) {
+                    this.median = (sampleArray[2 * quartilSize] + sampleArray[2 * quartilSize + 1]) / 2;
+                } else {
+                    this.median = sampleArray[2 * quartilSize];
+                }
+                this.thirdQuartile = sampleArray[3 * quartilSize - 1];
+            } else {
+                this.firstQuartile = -1;
+                this.median = -1;
+                this.thirdQuartile = -1;
+            }
+            this.average = (sampleSize == 0 ? -1 : accumulated / this.sampleSize);
         }
-        this.average = (sampleSize == 0 ? -1 : accumulated/this.sampleSize);
     }
 
     public double getMin() {
