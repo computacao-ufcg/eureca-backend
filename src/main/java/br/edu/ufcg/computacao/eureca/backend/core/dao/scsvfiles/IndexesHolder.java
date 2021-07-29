@@ -598,9 +598,11 @@ public class IndexesHolder {
         Map<String, Map<String, ClassEnrollments>> response = new HashMap<>();
         SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
         Map<String, Map<String, ClassEnrollments>> classEnrollmentsPerTerm = this.enrollmentsPerSubjectPerTermPerClass.get(subjectKey);
-        for(String term: classEnrollmentsPerTerm.keySet()) {
-            if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
-                response.put(term, classEnrollmentsPerTerm.get(term));
+        if (classEnrollmentsPerTerm != null) {
+            for (String term : classEnrollmentsPerTerm.keySet()) {
+                if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
+                    response.put(term, classEnrollmentsPerTerm.get(term));
+                }
             }
         }
         return response;
