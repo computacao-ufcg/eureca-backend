@@ -5,5 +5,6 @@ public enum GlossaryType {
     ENROLLMENT,
     TEACHER,
     SUBJECT,
-    STUDENT
+    STUDENT,
+    ALUMNI
 }

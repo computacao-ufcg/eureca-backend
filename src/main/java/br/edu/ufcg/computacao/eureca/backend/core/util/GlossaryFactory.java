@@ -17,6 +17,8 @@ public class GlossaryFactory {
                 return (T) createTeacherGlossary(lang);
             case RETENTION:
                 return (T) createRetentionGlossary(lang);
+            case ALUMNI:
+                return (T) createAlumniGlossary(lang);
             default:
                 return (T) new GlossaryFields();
         }
@@ -59,6 +61,14 @@ public class GlossaryFactory {
             case SystemConstants.PORTUGUESE:
             default:
                 return new PortugueseRetentionGlossary().getGlossary();
+        }
+    }
+
+    private static Object createAlumniGlossary(String lang) {
+        switch (lang) {
+            case SystemConstants.PORTUGUESE:
+            default:
+                return new PortugueseAlumniGlossary().getGlossary();
         }
     }
 }
