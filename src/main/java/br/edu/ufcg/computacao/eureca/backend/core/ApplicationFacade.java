@@ -62,13 +62,8 @@ public class ApplicationFacade {
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_BASIC_DATA);
         Collection<AlumniDigestResponse> digest = this.alumniController.getAlumniPerStudentSummary(from, to);
-        AlumniGlossaryFields glossaryFields = null;
-        switch(language) {
-            case SystemConstants.PORTUGUESE:
-            default:
-                glossaryFields = new PortugueseAlumniGlossary().getGlossary();
-        }
         AlumniResponse response = new AlumniResponse(digest);
+        AlumniGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.ALUMNI);
         response.setGlossary(glossaryFields);
         return response;
     }
