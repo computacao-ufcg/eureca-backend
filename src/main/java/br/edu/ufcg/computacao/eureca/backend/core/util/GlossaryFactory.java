@@ -64,7 +64,7 @@ public class GlossaryFactory {
         }
     }
 
-    private static Object createAlumniGlossary(String lang) {
+    private static GlossaryFields createAlumniGlossary(String lang) {
         switch (lang) {
             case SystemConstants.PORTUGUESE:
             default:
