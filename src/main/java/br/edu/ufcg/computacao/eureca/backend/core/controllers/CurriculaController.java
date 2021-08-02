@@ -1,5 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.CurriculumCodesResponse;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 
@@ -12,7 +13,8 @@ public class CurriculaController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
-    public Collection<String> getCurriculumCodes(String courseCode) {
-        return this.dataAccessFacade.getCurriculumCodes(courseCode);
+    public CurriculumCodesResponse getCurriculumCodes(String courseCode) {
+        Collection<String> response = this.dataAccessFacade.getCurriculumCodes(courseCode);
+        return new CurriculumCodesResponse(response);
     }
 }

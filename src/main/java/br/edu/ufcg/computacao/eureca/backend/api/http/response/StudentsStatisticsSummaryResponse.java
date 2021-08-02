@@ -2,13 +2,13 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.StudentsGlossaryFields;
 
-public class StudentsSummaryResponse {
+public class StudentsStatisticsSummaryResponse {
     private ActivesSummary activesSummary;
     private AlumniSummary alumniSummary;
     private DropoutsSummary dropoutsSummary;
     private StudentsGlossaryFields glossary;
 
-    public StudentsSummaryResponse(ActivesSummary activesSummary, AlumniSummary alumniSummary, DropoutsSummary dropoutsSummary) {
+    public StudentsStatisticsSummaryResponse(ActivesSummary activesSummary, AlumniSummary alumniSummary, DropoutsSummary dropoutsSummary) {
         this.activesSummary = activesSummary;
         this.alumniSummary = alumniSummary;
         this.dropoutsSummary = dropoutsSummary;

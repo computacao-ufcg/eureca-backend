@@ -25,6 +25,12 @@ public class ApiDocumentation {
         public static final String RISK = "NORMAL";
     }
 
+    public static class Common {
+        public static final String FROM = "Período inicial";
+        public static final String TO = "Período final";
+        public static final String LANGUAGE = "Língua";
+    }
+
     public static class Alumni {
         public static final String API = "Egressos.";
         public static final String GET = "Retorna a lista de egressos.";
@@ -47,12 +53,6 @@ public class ApiDocumentation {
     public static class Curricula {
         public static final String API = "Currículos de cursos.";
         public static final String GET_CURRICULA = "Retorna uma lista com os currículos do curso corrente.";
-    }
-
-    public static class Statistics {
-        public static final String FROM = "Período inicial";
-        public static final String TO = "Período final";
-        public static final String LANGUAGE = "Língua";
     }
 
     public static class EnrollmentsStatistics {

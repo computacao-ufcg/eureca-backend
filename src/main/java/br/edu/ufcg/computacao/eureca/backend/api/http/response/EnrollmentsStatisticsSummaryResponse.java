@@ -3,7 +3,7 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 import br.edu.ufcg.computacao.eureca.backend.constants.EnrollmentsGlossaryFields;
 import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
 
-public class EnrollmentsSummaryResponse {
+public class EnrollmentsStatisticsSummaryResponse {
     private String curriculum;
     private String from;
     private String to;
@@ -16,7 +16,7 @@ public class EnrollmentsSummaryResponse {
     private double averageEnrollmentsPerPeriod;
     private EnrollmentsGlossaryFields glossary;
 
-    public EnrollmentsSummaryResponse(String curriculum, String from, String to, int subjects, TermCount max, TermCount min, double averageClassesPerDiscipline, double averageClassesPerPeriod, double averageEnrollmentsPerClass, double averageEnrollmentsPerPeriod) {
+    public EnrollmentsStatisticsSummaryResponse(String curriculum, String from, String to, int subjects, TermCount max, TermCount min, double averageClassesPerDiscipline, double averageClassesPerPeriod, double averageEnrollmentsPerClass, double averageEnrollmentsPerPeriod) {
         this.curriculum = curriculum;
         this.from = from;
         this.to = to;
@@ -91,7 +91,7 @@ public class EnrollmentsSummaryResponse {
 
     @Override
     public String toString() {
-        return "EnrollmentsSummaryResponse{" +
+        return "EnrollmentsStatisticsSummaryResponse{" +
                 "curriculum='" + curriculum + '\'' +
                 ", from='" + from + '\'' +
                 ", to='" + to + '\'' +

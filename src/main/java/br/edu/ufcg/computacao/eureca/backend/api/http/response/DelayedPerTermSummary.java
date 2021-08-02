@@ -2,9 +2,9 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class DelayedPerTermSummary implements Comparable, SummaryPerTerm {
     private String admissionTerm;
-    private MetricsSummary metricsSummary;
+    private StudentMetricsSummary metricsSummary;
 
-    public DelayedPerTermSummary(String admissionTerm, MetricsSummary metricsSummary) {
+    public DelayedPerTermSummary(String admissionTerm, StudentMetricsSummary metricsSummary) {
         this.admissionTerm = admissionTerm;
         this.metricsSummary = metricsSummary;
     }
@@ -17,11 +17,11 @@ public class DelayedPerTermSummary implements Comparable, SummaryPerTerm {
         this.admissionTerm = admissionTerm;
     }
 
-    public MetricsSummary getMetricsSummary() {
+    public StudentMetricsSummary getMetricsSummary() {
         return metricsSummary;
     }
 
-    public void setMetricsSummary(MetricsSummary metricsSummary) {
+    public void setMetricsSummary(StudentMetricsSummary metricsSummary) {
         this.metricsSummary = metricsSummary;
     }
 

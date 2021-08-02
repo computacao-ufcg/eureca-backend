@@ -1,6 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
-import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.StudentMetrics;
+import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
+import br.edu.ufcg.computacao.eureca.backend.core.util.StudentMetricsCalculator;
 
 public class Student implements Comparable {
     private Registration registration;
@@ -392,8 +394,47 @@ public class Student implements Comparable {
     }
 
     public RiskClass computeRiskClass() {
-        StudentMetrics studentMetrics = MetricsCalculator.computeMetrics(this);
-        return MetricsCalculator.computeRiskClass(studentMetrics.getRisk());
+        StudentMetrics studentMetrics = StudentMetricsCalculator.computeMetrics(this);
+        return StudentMetricsCalculator.computeRiskClass(studentMetrics.getRisk());
+    }
+
+    public int getStatusIndex() {
+        if (this.statusStr.contains(SystemConstants.FAILED_3_TIMES)) {
+            return SystemConstants.FAILED_3_TIMES_INDEX;
+        }
+        else if (this.statusStr.contains(SystemConstants.REENTER_SAME_COURSE)) {
+            return SystemConstants.REENTER_SAME_COURSE_INDEX;
+        }
+        else if (this.statusStr.contains(SystemConstants.REENTER_OTHER_COURSE)) {
+            return SystemConstants.REENTER_OTHER_COURSE_INDEX;
+        }
+        else if (this.statusStr.contains(SystemConstants.FAILED_ALL)) {
+            return SystemConstants.FAILED_ALL_INDEX;
+        }
+        else if (this.statusStr.contains(SystemConstants.CANCELLED)) {
+            return SystemConstants.CANCELLED_INDEX;
+        }
+        else if (this.statusStr.contains(SystemConstants.CANCELLED_BY_DECREE)) {
+            return SystemConstants.CANCELLED_BY_DECREE_INDEX;
+        }
+        else if (this.statusStr.contains(SystemConstants.CANCELLED_COURSE_CHANGE)) {
+            return SystemConstants.CANCELLED_COURSE_CHANGE_INDEX;
+        }
+        else if (this.statusStr.contains(SystemConstants.CANCELLED_UPON_REQUEST)) {
+            return SystemConstants.CANCELLED_UPON_REQUEST_INDEX;
+        }
+        else if (this.statusStr.contains(SystemConstants.LEFT_WITHOUT_NOTICE)) {
+            return SystemConstants.LEFT_WITHOUT_NOTICE_INDEX;
+        }
+        else if (this.statusStr.contains(SystemConstants.MISSED_GRADUATION)) {
+            return SystemConstants.MISSED_GRADUATION_INDEX;
+        }
+        else if (this.statusStr.contains(SystemConstants.TRANSFERRED)) {
+            return SystemConstants.TRANSFERRED_INDEX;
+        }
+        else {
+            return SystemConstants.UNKNOWN;
+        }
     }
 
     @Override

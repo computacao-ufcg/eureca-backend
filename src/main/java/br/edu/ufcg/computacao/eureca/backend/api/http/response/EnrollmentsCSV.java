@@ -1,11 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-import br.edu.ufcg.computacao.eureca.backend.constants.Glossary;
-
 import java.util.Objects;
 
-public class EnrollmentsSummaryItemResponse {
-
+public class EnrollmentsCSV {
     private String discipline;
     private int totalEnrollments;
     private double averageEnrollmentsPerClass;
@@ -13,8 +10,8 @@ public class EnrollmentsSummaryItemResponse {
     private String from;
     private String to;
 
-    public EnrollmentsSummaryItemResponse(String discipline, int totalEnrollments, double averageEnrollmentsPerClass,
-                                          int totalClasses, String from, String to) {
+    public EnrollmentsCSV(String discipline, int totalEnrollments, double averageEnrollmentsPerClass,
+                          int totalClasses, String from, String to) {
         this.discipline = discipline;
         this.totalEnrollments = totalEnrollments;
         this.averageEnrollmentsPerClass = averageEnrollmentsPerClass;
@@ -51,7 +48,7 @@ public class EnrollmentsSummaryItemResponse {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        EnrollmentsSummaryItemResponse that = (EnrollmentsSummaryItemResponse) o;
+        EnrollmentsCSV that = (EnrollmentsCSV) o;
         return Objects.equals(discipline, that.discipline);
     }
 

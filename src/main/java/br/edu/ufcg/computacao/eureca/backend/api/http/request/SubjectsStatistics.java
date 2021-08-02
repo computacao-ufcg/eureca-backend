@@ -30,17 +30,17 @@ public class SubjectsStatistics {
 
     @RequestMapping(value = "mandatory", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.SubjectStatistics.GET_MANDATORY)
-    public ResponseEntity<SubjectMetricsSummaryResponse> getMandatory(
-            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+    public ResponseEntity<SubjectsStatisticsResponse> getMandatory(
+            @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
-            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @ApiParam(value = ApiDocumentation.Common.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
-            SubjectMetricsSummaryResponse ret = ApplicationFacade.getInstance().getSubjectsSummary(token, from, to, SubjectType.MANDATORY);
+            SubjectsStatisticsResponse ret = ApplicationFacade.getInstance().getSubjectsStatistics(token, from, to, SubjectType.MANDATORY);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -50,17 +50,17 @@ public class SubjectsStatistics {
 
     @RequestMapping(value = "optional", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.SubjectStatistics.GET_OPTIONAL)
-    public ResponseEntity<SubjectMetricsSummaryResponse> getOptional(
-            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+    public ResponseEntity<SubjectsStatisticsResponse> getOptional(
+            @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
-            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @ApiParam(value = ApiDocumentation.Common.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
-            SubjectMetricsSummaryResponse ret = ApplicationFacade.getInstance().getSubjectsSummary(token, from, to, SubjectType.OPTIONAL);
+            SubjectsStatisticsResponse ret = ApplicationFacade.getInstance().getSubjectsStatistics(token, from, to, SubjectType.OPTIONAL);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -70,17 +70,17 @@ public class SubjectsStatistics {
 
     @RequestMapping(value = "elective", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.SubjectStatistics.GET_ELECTIVE)
-    public ResponseEntity<SubjectMetricsSummaryResponse> getElective(
-            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+    public ResponseEntity<SubjectsStatisticsResponse> getElective(
+            @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
-            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @ApiParam(value = ApiDocumentation.Common.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
-            SubjectMetricsSummaryResponse ret = ApplicationFacade.getInstance().getSubjectsSummary(token, from, to, SubjectType.ELECTIVE);
+            SubjectsStatisticsResponse ret = ApplicationFacade.getInstance().getSubjectsStatistics(token, from, to, SubjectType.ELECTIVE);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -90,17 +90,17 @@ public class SubjectsStatistics {
 
     @RequestMapping(value = "complementary", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.SubjectStatistics.GET_COMPLEMENTARY)
-    public ResponseEntity<SubjectMetricsSummaryResponse> getComplementary(
-            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+    public ResponseEntity<SubjectsStatisticsResponse> getComplementary(
+            @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
-            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @ApiParam(value = ApiDocumentation.Common.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
-            SubjectMetricsSummaryResponse ret = ApplicationFacade.getInstance().getSubjectsSummary(token, from, to, SubjectType.COMPLEMENTARY);
+            SubjectsStatisticsResponse ret = ApplicationFacade.getInstance().getSubjectsStatistics(token, from, to, SubjectType.COMPLEMENTARY);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -110,17 +110,17 @@ public class SubjectsStatistics {
 
     @RequestMapping(value = "mandatory/csv", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.SubjectStatistics.GET_SUBJECTS_MANDATORY_CSV)
-    public ResponseEntity<Collection<SubjectDataResponse>> getMandatorySubjectsCSV(
-            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+    public ResponseEntity<SubjectResponse> getMandatorySubjectsCSV(
+            @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
-            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @ApiParam(value = ApiDocumentation.Common.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
-            Collection<SubjectDataResponse> ret = ApplicationFacade.getInstance().getSubjectsCSV(token, from, to, SubjectType.MANDATORY);
+            SubjectResponse ret = ApplicationFacade.getInstance().getSubjectsCSV(token, from, to, SubjectType.MANDATORY);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -130,17 +130,17 @@ public class SubjectsStatistics {
 
     @RequestMapping(value = "optional/csv", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.SubjectStatistics.GET_SUBJECTS_OPTIONAL_CSV)
-    public ResponseEntity<Collection<SubjectDataResponse>> getOptionalSubjectsCSV(
-            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+    public ResponseEntity<SubjectResponse> getOptionalSubjectsCSV(
+            @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
-            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @ApiParam(value = ApiDocumentation.Common.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
-            Collection<SubjectDataResponse> ret = ApplicationFacade.getInstance().getSubjectsCSV(token, from, to, SubjectType.OPTIONAL);
+            SubjectResponse ret = ApplicationFacade.getInstance().getSubjectsCSV(token, from, to, SubjectType.OPTIONAL);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -150,17 +150,17 @@ public class SubjectsStatistics {
 
     @RequestMapping(value = "elective/csv", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.SubjectStatistics.GET_SUBJECTS_ELECTIVE_CSV)
-    public ResponseEntity<Collection<SubjectDataResponse>> getElectiveSubjectsCSV(
-            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+    public ResponseEntity<SubjectResponse> getElectiveSubjectsCSV(
+            @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
-            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @ApiParam(value = ApiDocumentation.Common.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
-            Collection<SubjectDataResponse> ret = ApplicationFacade.getInstance().getSubjectsCSV(token, from, to, SubjectType.ELECTIVE);
+            SubjectResponse ret = ApplicationFacade.getInstance().getSubjectsCSV(token, from, to, SubjectType.ELECTIVE);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -170,17 +170,17 @@ public class SubjectsStatistics {
 
     @RequestMapping(value = "complementary/csv", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.SubjectStatistics.GET_SUBJECTS_COMPLEMENTARY_CSV)
-    public ResponseEntity<Collection<SubjectDataResponse>> getComplementarySubjectsCSV(
-            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+    public ResponseEntity<SubjectResponse> getComplementarySubjectsCSV(
+            @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
-            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @ApiParam(value = ApiDocumentation.Common.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
-            Collection<SubjectDataResponse> ret = ApplicationFacade.getInstance().getSubjectsCSV(token, from, to, SubjectType.COMPLEMENTARY);
+            SubjectResponse ret = ApplicationFacade.getInstance().getSubjectsCSV(token, from, to, SubjectType.COMPLEMENTARY);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -190,18 +190,18 @@ public class SubjectsStatistics {
 
     @RequestMapping(value = "summary", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.SubjectStatistics.GET_SUBJECTS_SUMMARY)
-    public ResponseEntity<SubjectsSummaryResponse> getSubjectsSummary(
-            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+    public ResponseEntity<SubjectsStatisticsSummaryResponse> getSubjectsSummary(
+            @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
-            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @ApiParam(value = ApiDocumentation.Common.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
-            @ApiParam(value = ApiDocumentation.Statistics.LANGUAGE)
+            @ApiParam(value = ApiDocumentation.Common.LANGUAGE)
             @RequestParam(required = false, value = "language", defaultValue = SystemConstants.PORTUGUESE) String lang,
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
             LOGGER.info(Messages.RECEIVING_GET_SUBJECTS_STATISTICS);
-            SubjectsSummaryResponse summary = ApplicationFacade.getInstance().getSubjectsStatistics(token, from, to, lang);
+            SubjectsStatisticsSummaryResponse summary = ApplicationFacade.getInstance().getSubjectsStatisticsSummary(token, from, to, lang);
             return new ResponseEntity<>(summary, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));

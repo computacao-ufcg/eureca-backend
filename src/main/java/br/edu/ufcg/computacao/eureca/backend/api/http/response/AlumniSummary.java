@@ -1,9 +1,11 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.core.models.CostClass;
-import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
+import br.edu.ufcg.computacao.eureca.backend.core.util.StudentMetricsCalculator;
 
-public class AlumniSummary extends RangeSummary {
+public class AlumniSummary {
+    private String from;
+    private String to;
     private int alumniCount;
     private double averageTermsCount;
     private double averageCost;
@@ -15,20 +17,37 @@ public class AlumniSummary extends RangeSummary {
     private String maxAlumniCountTerm;
     private String minAlumniCountTerm;
 
-    public AlumniSummary(int alumniCount, double averageTermsCount, double averageCost, double averageGpa,
+    public AlumniSummary(String from, String to, int alumniCount, double averageTermsCount, double averageCost, double averageGpa,
                          double averageAlumniCount, int maxAlumniCount, int minAlumniCount, String maxAlumniCountTerm,
-                         String minAlumniCountTerm, String from, String to) {
-        super(from, to);
+                         String minAlumniCountTerm) {
+        this.from = from;
+        this.to = to;
         this.alumniCount = alumniCount;
         this.averageTermsCount = averageTermsCount;
         this.averageCost = averageCost;
-        this.costClass = MetricsCalculator.computeCostClass(this.averageCost);
+        this.costClass = StudentMetricsCalculator.computeCostClass(this.averageCost);
         this.averageGpa = averageGpa;
         this.averageAlumniCount = averageAlumniCount;
         this.maxAlumniCount = maxAlumniCount;
         this.minAlumniCount = minAlumniCount;
         this.maxAlumniCountTerm = maxAlumniCountTerm;
         this.minAlumniCountTerm = minAlumniCountTerm;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
     }
 
     public double getAverageTermsCount() {

@@ -20,7 +20,8 @@ public enum EurecaOperation {
     GET_TEACHERS_STATISTICS("getTeachersStatistics"),
     GET_TEACHERS_CSV("getTeachersStatisticsCSV"),
     GET_ENROLLMENTS_STATISTICS("getEnrollmentsStatistics"),
-    GET_ENROLLMENTS_CSV("getEnrollmentsStatisticsCSV");
+    GET_ENROLLMENTS_CSV("getEnrollmentsStatisticsCSV"),
+    GET_CURRICULUM_CODES("getCurriculumCodes");
 
     private String value;
 

@@ -58,10 +58,4 @@ public class StudentDataTest {
         this.studentDataActive.setComplementaryCredits(10); // case 2: complementary > 8
         Assert.assertEquals(28, this.studentDataActive.getCompletedCredits());
     }
-
-    @Test
-    public void testGetStatusIndex() {
-        Assert.assertEquals(0, this.studentDataDropout.getStatusIndex());
-        Assert.assertEquals(11, this.studentDataActive.getStatusIndex());
-    }
 }

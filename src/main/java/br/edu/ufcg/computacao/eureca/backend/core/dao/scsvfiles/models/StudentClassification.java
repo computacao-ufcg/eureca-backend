@@ -1,4 +1,4 @@
-package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
+package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models;
 
 public enum StudentClassification {
     ACTIVE,

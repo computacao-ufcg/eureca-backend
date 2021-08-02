@@ -2,20 +2,39 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.core.models.CostClass;
 
-public class DropoutsSummary extends RangeSummary {
+public class DropoutsSummary {
+    private String from;
+    private String to;
     private int dropoutCount;
     private double averageTermsCount;
     private double averageCost;
     private CostClass costClass;
     private DropoutReasonSummary dropouts;
 
-    public DropoutsSummary(int dropoutCount, double averageTermsCount, double averageCost, CostClass costClass, DropoutReasonSummary dropouts, String from, String to) {
-        super(from, to);
+    public DropoutsSummary(String from, String to, int dropoutCount, double averageTermsCount, double averageCost, CostClass costClass, DropoutReasonSummary dropouts) {
+        this.from = from;
+        this.to = to;
         this.dropoutCount = dropoutCount;
         this.averageTermsCount = averageTermsCount;
         this.averageCost = averageCost;
         this.costClass = costClass;
         this.dropouts = dropouts;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
     }
 
     public int getDropoutCount() {

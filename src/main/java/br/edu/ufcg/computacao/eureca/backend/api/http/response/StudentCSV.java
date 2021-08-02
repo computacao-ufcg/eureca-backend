@@ -1,9 +1,9 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
-import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
+import br.edu.ufcg.computacao.eureca.backend.core.util.StudentMetricsCalculator;
 
-public class StudentDataResponse implements Comparable {
+public class StudentCSV implements Comparable {
     private String registration;
     private String name;
     private String gender;
@@ -36,7 +36,7 @@ public class StudentDataResponse implements Comparable {
     private RiskClass riskClass;
     private CostClass costClass;
 
-    public StudentDataResponse(Student student) {
+    public StudentCSV(Student student) {
         this.registration = student.getRegistration().toString();
         this.name = student.getName();
         this.gender = student.getGender();
@@ -59,7 +59,7 @@ public class StudentDataResponse implements Comparable {
         this.institutionalEnrollments = student.getInstitutionalTerms();
         this.mobilityTerms = student.getMobilityTerms();
         this.suspendedTerms = student.getSuspendedTerms();
-        StudentMetrics metrics = MetricsCalculator.computeMetrics(student);
+        StudentMetrics metrics = StudentMetricsCalculator.computeMetrics(student);
         this.feasibility = metrics.getFeasibility();
         this.successRate = metrics.getSuccessRate();
         this.averageLoad = metrics.getAverageLoad();
@@ -68,11 +68,11 @@ public class StudentDataResponse implements Comparable {
         this.courseDurationPrediction = metrics.getCourseDurationPrediction();
         this.risk = metrics.getRisk();
         if (student.isActive()) {
-            this.riskClass = MetricsCalculator.computeRiskClass(metrics.getRisk());
+            this.riskClass = StudentMetricsCalculator.computeRiskClass(metrics.getRisk());
         } else {
             this.riskClass = RiskClass.NOT_APPLICABLE;
         }
-        this.costClass = MetricsCalculator.computeCostClass(this.cost);
+        this.costClass = StudentMetricsCalculator.computeCostClass(this.cost);
     }
 
     public String getRegistration() {
@@ -330,7 +330,7 @@ public class StudentDataResponse implements Comparable {
 
     @Override
     public int compareTo(Object o) {
-        StudentDataResponse other = (StudentDataResponse) o;
+        StudentCSV other = (StudentCSV) o;
         return (new Registration(this.getRegistration())).compareTo((new Registration(other.getRegistration())));
     }
 }

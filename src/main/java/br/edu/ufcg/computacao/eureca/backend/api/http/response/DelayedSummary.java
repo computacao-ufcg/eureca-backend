@@ -2,9 +2,9 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class DelayedSummary extends RangeSummary {
     private int delayedCount;
-    private MetricsSummary average;
+    private StudentMetricsSummary average;
 
-    public DelayedSummary(int delayedCount, MetricsSummary average, String from, String to) {
+    public DelayedSummary(int delayedCount, StudentMetricsSummary average, String from, String to) {
         super(from, to);
         this.delayedCount = delayedCount;
         this.average = average;
@@ -18,11 +18,11 @@ public class DelayedSummary extends RangeSummary {
         this.delayedCount = delayedCount;
     }
 
-    public MetricsSummary getAverage() {
+    public StudentMetricsSummary getAverage() {
         return average;
     }
 
-    public void setAverage(MetricsSummary average) {
+    public void setAverage(StudentMetricsSummary average) {
         this.average = average;
     }
 }
