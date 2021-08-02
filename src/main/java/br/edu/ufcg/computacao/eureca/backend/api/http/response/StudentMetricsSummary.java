@@ -1,21 +1,20 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.core.models.CostClass;
-import br.edu.ufcg.computacao.eureca.backend.core.models.StudentMetrics;
 import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
-import br.edu.ufcg.computacao.eureca.backend.core.util.MetricsCalculator;
+import br.edu.ufcg.computacao.eureca.backend.core.util.StudentMetricsCalculator;
 
-public class MetricsSummary {
+public class StudentMetricsSummary {
     private double termsCount;
     private StudentMetrics metrics;
     private RiskClass riskClass;
     private CostClass costClass;
 
-    public MetricsSummary(double termsCount, StudentMetrics metrics) {
+    public StudentMetricsSummary(double termsCount, StudentMetrics metrics) {
         this.termsCount = termsCount;
         this.metrics = metrics;
-        this.riskClass = MetricsCalculator.computeRiskClass(metrics.getRisk());
-        this.costClass = MetricsCalculator.computeCostClass(metrics.getCost());
+        this.riskClass = StudentMetricsCalculator.computeRiskClass(metrics.getRisk());
+        this.costClass = StudentMetricsCalculator.computeCostClass(metrics.getCost());
     }
 
     public double getTermsCount() {

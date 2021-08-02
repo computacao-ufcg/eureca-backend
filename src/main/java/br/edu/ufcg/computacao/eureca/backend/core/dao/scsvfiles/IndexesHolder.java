@@ -1,17 +1,17 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectRetentionResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectRetentionCSV;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.TeacherData;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.StudentCurriculum;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EnviromentVariablesHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 
 import org.apache.log4j.Logger;
 
-import javax.security.auth.Subject;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class IndexesHolder {
     private final Logger LOGGER = Logger.getLogger(IndexesHolder.class);
@@ -63,7 +63,7 @@ public class IndexesHolder {
         return registrationMap;
     }
 
-    public Map<String, Collection<NationalIdRegistrationKey>> getActiveByAdmissionTerm() {
+    public Map<String, Collection<NationalIdRegistrationKey>> getActivesPerAdmissionTerm() {
         return activeByAdmissionTerm;
     }
 
@@ -75,7 +75,7 @@ public class IndexesHolder {
         return alumniByAdmissionTerm;
     }
 
-    public Map<String, Collection<NationalIdRegistrationKey>> getAlumniByGraduationTerm() {
+    public Map<String, Collection<NationalIdRegistrationKey>> getAlumniPerGraduationTerm() {
         return alumniByGraduationTerm;
     }
 
@@ -87,7 +87,7 @@ public class IndexesHolder {
         return dropoutByAdmissionTerm;
     }
 
-    public Map<String, Collection<NationalIdRegistrationKey>> getDropoutByDropoutTerm() {
+    public Map<String, Collection<NationalIdRegistrationKey>> getDropoutsPerDropoutTerm() {
         return dropoutByLeaveTerm;
     }
 
@@ -412,7 +412,7 @@ public class IndexesHolder {
         StudentCurriculum curriculum;
         switch(status) {
             case SystemConstants.STATUS_SUCCEEDED:
-                classEnrollments.getSuccess().add(studentId.getRegistration());
+                classEnrollments.getSucceeded().add(studentId.getRegistration());
                 if ((curriculum = retrieveCurriculum(studentId)) != null) curriculum.getCompleted().add(subjectKey);
                 break;
             case SystemConstants.STATUS_EXEMPTED:
@@ -553,8 +553,8 @@ public class IndexesHolder {
         return retention;
     }
 
-    public Collection<SubjectRetentionResponse> getRetention(String courseCode, String curriculumCode, String subjectCode) {
-        Collection<SubjectRetentionResponse> responses = new TreeSet<>();
+    public Collection<SubjectRetentionCSV> getRetention(String courseCode, String curriculumCode, String subjectCode) {
+        Collection<SubjectRetentionCSV> responses = new TreeSet<>();
         SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
         for (NationalIdRegistrationKey active : this.actives) {
             StudentCurriculum studentCurriculum = this.studentCurriculumMap.get(active);
@@ -564,13 +564,13 @@ public class IndexesHolder {
                 SubjectData subject = this.subjectsMap.get(subjectKey);
                 int idealTerm = subject.getIdealTerm();
                 String name = subject.getName();
-                SubjectRetentionResponse response = new SubjectRetentionResponse(courseCode, curriculumCode,
+                SubjectRetentionCSV response = new SubjectRetentionCSV(courseCode, curriculumCode,
                         idealTerm, subjectCode, name, active.getRegistration(), student.getAttemptedCredits(),
                         student.getMandatoryCredits(), 0, student.getElectiveCredits(),
                         student.getComplementaryCredits(), student.getCompletedTerms(), student.getSuspendedTerms(),
                         student.getInstitutionalTerms(), student.getMobilityTerms(), student.getGpa());
                 responses.add(response);
-                LOGGER.info(response.toString());
+                LOGGER.debug(response.toString());
             }
         }
         return responses;
@@ -598,9 +598,11 @@ public class IndexesHolder {
         Map<String, Map<String, ClassEnrollments>> response = new HashMap<>();
         SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
         Map<String, Map<String, ClassEnrollments>> classEnrollmentsPerTerm = this.enrollmentsPerSubjectPerTermPerClass.get(subjectKey);
-        for(String term: classEnrollmentsPerTerm.keySet()) {
-            if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
-                response.put(term, classEnrollmentsPerTerm.get(term));
+        if (classEnrollmentsPerTerm != null) {
+            for (String term : classEnrollmentsPerTerm.keySet()) {
+                if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
+                    response.put(term, classEnrollmentsPerTerm.get(term));
+                }
             }
         }
         return response;

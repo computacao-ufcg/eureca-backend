@@ -1,8 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.CommonKeys;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.EnrollmentsCSVResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.EnrollmentsSummaryResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.EnrollmentsResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.EnrollmentsStatisticsSummaryResponse;
 import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
@@ -26,41 +26,39 @@ public class EnrollmentsStatistics {
 
     private static final Logger LOGGER = Logger.getLogger(EnrollmentsStatistics.class);
 
-    @RequestMapping(value = "summary", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.EnrollmentsStatistics.GET_ENROLLMENTS)
-    public ResponseEntity<EnrollmentsSummaryResponse> getEnrollmentsSummary(
-            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+    @RequestMapping(value = "summary/csv", method = RequestMethod.GET)
+    @ApiOperation(value = ApiDocumentation.EnrollmentsStatistics.GET_ENROLLMENTS_CSV)
+    public ResponseEntity<EnrollmentsResponse> getEnrollmentsSummaryCSV(
+            @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
-            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @ApiParam(value = ApiDocumentation.Common.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
-            @ApiParam(value = ApiDocumentation.Statistics.LANGUAGE)
-            @RequestParam(required = false, value = "language", defaultValue = SystemConstants.PORTUGUESE) String lang,
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
-            LOGGER.info(Messages.RECEIVING_GET_ENROLLMENTS_STATISTICS);
-            EnrollmentsSummaryResponse summary = ApplicationFacade.getInstance().getEnrollmentsStatistics(token, from, to, lang);
-            return new ResponseEntity<>(summary, HttpStatus.OK);
+            EnrollmentsResponse response = ApplicationFacade.getInstance().getEnrollmentsCSV(token, from, to);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
             throw e;
         }
     }
 
-    @RequestMapping(value = "summary/csv", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.EnrollmentsStatistics.GET_ENROLLMENTS_CSV)
-    public ResponseEntity<EnrollmentsCSVResponse> getEnrollmentsSummaryCSV(
-            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+    @RequestMapping(value = "summary", method = RequestMethod.GET)
+    @ApiOperation(value = ApiDocumentation.EnrollmentsStatistics.GET_ENROLLMENTS)
+    public ResponseEntity<EnrollmentsStatisticsSummaryResponse> getEnrollmentsSummary(
+            @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
-            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @ApiParam(value = ApiDocumentation.Common.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
-            @ApiParam(value = ApiDocumentation.Statistics.LANGUAGE)
+            @ApiParam(value = ApiDocumentation.Common.LANGUAGE)
             @RequestParam(required = false, value = "language", defaultValue = SystemConstants.PORTUGUESE) String lang,
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
-            EnrollmentsCSVResponse response = ApplicationFacade.getInstance().getEnrollmentsCSV(token, from, to, lang);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            LOGGER.info(Messages.RECEIVING_GET_ENROLLMENTS_STATISTICS);
+            EnrollmentsStatisticsSummaryResponse summary = ApplicationFacade.getInstance().getEnrollmentsStatisticsSummary(token, from, to, lang);
+            return new ResponseEntity<>(summary, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
             throw e;

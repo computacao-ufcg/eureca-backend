@@ -58,139 +58,133 @@ public class ApplicationFacade {
         this.authorizationPlugin = authorizationPlugin;
     }
 
-    public Collection<AlumniDigestResponse> getAlumniBasicData(String token, String from, String to)
+    public AlumniResponse getAlumni(String token, String from, String to, String language)
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_BASIC_DATA);
-        return this.alumniController.getAlumniPerStudentSummary(from, to);
-    }
-
-    public Collection<String> getCurriculumCodes() throws EurecaException {
-        String courseCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
-        return this.curriculaController.getCurriculumCodes(courseCode);
-    }
-
-    public ActivesSummaryResponse getActivesSummary(String token, String from, String to) throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_ACTIVES_SUMMARY);
-        return this.studentsStatisticsController.getActivesSummaryResponse(from, to);
-    }
-
-    public Collection<StudentDataResponse> getActivesCSV(String token, String from, String to) throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_ACTIVES_CSV);
-        return this.studentsStatisticsController.getActiveCSV(from, to);
-    }
-
-    public AlumniSummaryResponse getAlumniSummary(String token, String from, String to, String language) throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_SUMMARY);
-        AlumniSummaryResponse response = this.studentsStatisticsController.getAlumniSummaryResponse(from, to);
-        AlumniGlossaryFields glossaryFields = null;
-        switch(language) {
-            case SystemConstants.PORTUGUESE:
-            default:
-                glossaryFields = new PortugueseAlumniGlossary().getGlossary();
-        }
+        Collection<AlumniDigestResponse> digest = this.alumniController.getAlumniPerStudentSummary(from, to);
+        AlumniResponse response = new AlumniResponse(digest);
+        AlumniGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.ALUMNI);
         response.setGlossary(glossaryFields);
         return response;
     }
 
-    public Collection<StudentDataResponse> getAlumniCSV(String token, String from, String to) throws EurecaException {
+    public CurriculumCodesResponse getCurriculumCodes(String token) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_CURRICULUM_CODES);
+        String courseCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
+        return this.curriculaController.getCurriculumCodes(courseCode);
+    }
+
+    public ActivesStatisticsResponse getActivesStatistics(String token, String from, String to) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_ACTIVES_SUMMARY);
+        return this.studentsStatisticsController.getActivesSummaryResponse(from, to);
+    }
+
+    public StudentResponse getActivesCSV(String token, String from, String to) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_ACTIVES_CSV);
+        return this.studentsStatisticsController.getActiveCSV(from, to);
+    }
+
+    public AlumniStatisticsResponse getAlumniStatistics(String token, String from, String to, String language) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_SUMMARY);
+        return this.studentsStatisticsController.getAlumniSummaryResponse(from, to);
+    }
+
+    public StudentResponse getAlumniCSV(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_CSV);
         return this.studentsStatisticsController.getAlumniCSV(from, to);
     }
 
-    public DropoutsSummaryResponse getDropoutsSummary(String token, String from, String to) throws EurecaException {
+    public DropoutsStatisticsResponse getDropoutsStatistics(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DROPOUTS_SUMMARY);
-        return this.studentsStatisticsController.getDropoutsSummary(from, to);
+        return this.studentsStatisticsController.getDropoutsSummaryResponse(from, to);
     }
 
-    public Collection<StudentDataResponse> getDropoutsCSV(String token, String from, String to) throws EurecaException {
+    public StudentResponse getDropoutsCSV(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DROPOUTS_CSV);
         return this.studentsStatisticsController.getDropoutsCSV(from, to);
     }
 
-    public StudentsSummaryResponse getStudentsStatistics(String token, String from, String to, String language)
+    public StudentsStatisticsSummaryResponse getStudentsStatisticsSummary(String token, String from, String to, String language)
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_STATISTICS);
-        StudentsSummaryResponse response = this.studentsStatisticsController.getStudentsStatistics(from, to);
+        StudentsStatisticsSummaryResponse response = this.studentsStatisticsController.getStudentsStatistics(from, to);
         StudentsGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.STUDENT);
         response.setGlossary(glossaryFields);
         return response;
     }
 
-    public DelayedSummaryResponse getDelayedSummary(String token, String from, String to) throws EurecaException {
+    public DelayedStatisticsResponse getDelayedStatistics(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DELAYED_SUMMARY);
         return this.retentionStatisticsController.getDelayedSummary(from, to);
     }
 
-    public Collection<StudentDataResponse> getDelayedCSV(String token, String from, String to) throws EurecaException {
+    public StudentResponse getDelayedCSV(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DELAYED_CSV);
         return this.retentionStatisticsController.getDelayedCSV(from, to);
     }
 
-    public Collection<SubjectRetentionSummaryResponse> getSubjectsRetentionSummary(String token) throws EurecaException {
+    public SubjectRetentionStatisticsResponse getSubjectsRetentionStatistics(String token) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_RETENTION_SUMMARY);
-        Collection<SubjectRetentionSummaryResponse> response = this.retentionStatisticsController.getSubjectsRetentionSummary();
-        return response;
+        return this.retentionStatisticsController.getSubjectRetentionSummary();
     }
 
-    public Collection<SubjectRetentionResponse> getSubjectsRetentionCSV(String token) throws EurecaException {
+    public SubjectRetentionResponse getSubjectsRetentionCSV(String token) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_RETENTION_CSV);
-        Collection<SubjectRetentionResponse> response = this.retentionStatisticsController.getSubjectsRetentionCSV();
-        return response;
+        return this.retentionStatisticsController.getSubjectsRetentionCSV();
     }
 
-    public RetentionSummaryResponse getRetentionStatistics(String token, String from, String to, String language)
+    public RetentionStatisticsSummaryResponse getRetentionStatisticsSummary(String token, String from, String to, String language)
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_RETENTION_STATISTICS);
-        RetentionSummaryResponse response = this.retentionStatisticsController.getRetentionStatistics(from, to);
+        RetentionStatisticsSummaryResponse response = this.retentionStatisticsController.getRetentionStatistics(from, to);
         RetentionGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.RETENTION);
         response.setGlossary(glossaryFields);
         return response;
     }
 
-    public SubjectMetricsSummaryResponse getSubjectsSummary(String token, String from, String to, SubjectType type) throws EurecaException {
+    public SubjectsStatisticsResponse getSubjectsStatistics(String token, String from, String to, SubjectType type) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_SUMMARY);
-        SubjectMetricsSummaryResponse response = this.subjectsStatisticsController.getSubjectsSummary(from, to, type);
+        SubjectsStatisticsResponse response = this.subjectsStatisticsController.getSubjectsSummary(from, to, type);
         return response;
     }
 
-    public Collection<SubjectDataResponse> getSubjectsCSV(String token, String from, String to, SubjectType subjectType) throws EurecaException {
+    public SubjectResponse getSubjectsCSV(String token, String from, String to, SubjectType subjectType) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_CSV);
-        Collection<SubjectDataResponse> response = this.subjectsStatisticsController.getSubjectsCSV(from, to, subjectType);
-        return response;
+        return this.subjectsStatisticsController.getSubjectsCSV(from, to, subjectType);
     }
 
-    public SubjectsSummaryResponse getSubjectsStatistics(String token, String from, String to, String language)
+    public SubjectsStatisticsSummaryResponse getSubjectsStatisticsSummary(String token, String from, String to, String language)
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_STATISTICS);
-        SubjectsSummaryResponse response = this.subjectsStatisticsController.getSubjectStatistics(from, to);
+        SubjectsStatisticsSummaryResponse response = this.subjectsStatisticsController.getSubjectStatistics(from, to);
         SubjectsGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.SUBJECT);
         response.setGlossary(glossaryFields);
         return response;
     }
 
-    public Collection<TeachersSummaryItemResponse> getTeachersCSV(String token, String from, String to) throws EurecaException {
+    public TeachersResponse getTeachersCSV(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_TEACHERS_CSV);
         return this.teacherStatisticsController.getTeacherCSV();
     }
 
-    public TeachersSummaryResponse getTeachersStatistics(String token, String from, String to, String language)
+    public TeachersStatisticsSummaryResponse getTeachersStatisticsSummary(String token, String from, String to, String language)
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_TEACHERS_STATISTICS);
-        TeachersSummaryResponse response = this.teacherStatisticsController.getTeachersStatisticsMock();
+        TeachersStatisticsSummaryResponse response = this.teacherStatisticsController.getTeachersStatisticsMock();
         TeachersGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.TEACHER);
         response.setGlossary(glossaryFields);
         return response;
     }
 
-    public EnrollmentsCSVResponse getEnrollmentsCSV(String token, String from, String to, String lang) throws EurecaException {
+    public EnrollmentsResponse getEnrollmentsCSV(String token, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ENROLLMENTS_CSV);
         return this.enrollmentsStatisticsController.getEnrollmentsCSV(from, to);
     }
 
-    public EnrollmentsSummaryResponse getEnrollmentsStatistics(String token, String from, String to, String language)
+    public EnrollmentsStatisticsSummaryResponse getEnrollmentsStatisticsSummary(String token, String from, String to, String language)
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ENROLLMENTS_STATISTICS);
-        EnrollmentsSummaryResponse response = this.enrollmentsStatisticsController.getEnrollmentsStatistics(from, to);
+        EnrollmentsStatisticsSummaryResponse response = this.enrollmentsStatisticsController.getEnrollmentsStatistics(from, to);
         EnrollmentsGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.ENROLLMENT);
         response.setGlossary(glossaryFields);
         return response;

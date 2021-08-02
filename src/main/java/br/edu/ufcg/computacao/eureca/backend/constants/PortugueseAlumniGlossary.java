@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.constants;
 
-public class PortugueseAlumniGlossary {
+public class PortugueseAlumniGlossary implements Glossary {
 
     public AlumniGlossaryFields getGlossary() {
         Field alumniTracked = new Field("Egressos rastreados","Egressos que já tiveram seus perfis no LinkedIn encontrados");

@@ -29,10 +29,10 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "actives", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_ACTIVES)
-    public ResponseEntity<ActivesSummaryResponse> getActives(
-            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+    public ResponseEntity<ActivesStatisticsResponse> getActives(
+            @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
-            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @ApiParam(value = ApiDocumentation.Common.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
@@ -40,7 +40,7 @@ public class StudentsStatistics {
 
         try {
             LOGGER.info(Messages.RECEIVING_GET_STUDENTS_STATISTICS);
-            ActivesSummaryResponse ret = ApplicationFacade.getInstance().getActivesSummary(token, from, to);
+            ActivesStatisticsResponse ret = ApplicationFacade.getInstance().getActivesStatistics(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -50,17 +50,17 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "actives/csv", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_ACTIVES_CSV)
-    public ResponseEntity<Collection<StudentDataResponse>> getActivesCSV(
-            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+    public ResponseEntity<StudentResponse> getActivesCSV(
+            @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
-            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @ApiParam(value = ApiDocumentation.Common.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
-            Collection<StudentDataResponse> ret = ApplicationFacade.getInstance().getActivesCSV(token, from, to);
+            StudentResponse ret = ApplicationFacade.getInstance().getActivesCSV(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -70,19 +70,19 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "alumni", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_ALUMNI)
-    public ResponseEntity<AlumniSummaryResponse> getAlumni(
-            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+    public ResponseEntity<AlumniStatisticsResponse> getAlumni(
+            @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
-            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @ApiParam(value = ApiDocumentation.Common.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
-            @ApiParam(value = ApiDocumentation.Statistics.LANGUAGE)
+            @ApiParam(value = ApiDocumentation.Common.LANGUAGE)
             @RequestParam(required = false, value = "language", defaultValue = SystemConstants.PORTUGUESE) String lang,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
-            AlumniSummaryResponse ret = ApplicationFacade.getInstance().getAlumniSummary(token, from, to, lang);
+            AlumniStatisticsResponse ret = ApplicationFacade.getInstance().getAlumniStatistics(token, from, to, lang);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -92,17 +92,17 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "alumni/csv", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_ALUMNI_CSV)
-    public ResponseEntity<Collection<StudentDataResponse>> getAlumniCSV(
-            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+    public ResponseEntity<StudentResponse> getAlumniCSV(
+            @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
-            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @ApiParam(value = ApiDocumentation.Common.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
-            Collection<StudentDataResponse> ret = ApplicationFacade.getInstance().getAlumniCSV(token, from, to);
+            StudentResponse ret = ApplicationFacade.getInstance().getAlumniCSV(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -112,17 +112,17 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "dropouts", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_DROPOUT)
-    public ResponseEntity<DropoutsSummaryResponse> getDropouts(
-            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+    public ResponseEntity<DropoutsStatisticsResponse> getDropouts(
+            @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
-            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @ApiParam(value = ApiDocumentation.Common.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
-            DropoutsSummaryResponse ret = ApplicationFacade.getInstance().getDropoutsSummary(token, from, to);
+            DropoutsStatisticsResponse ret = ApplicationFacade.getInstance().getDropoutsStatistics(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -132,17 +132,17 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "dropouts/csv", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_DROPOUT_CSV)
-    public ResponseEntity<Collection<StudentDataResponse>> getDropoutsCSV(
-            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+    public ResponseEntity<StudentResponse> getDropoutsCSV(
+            @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
-            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @ApiParam(value = ApiDocumentation.Common.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
 
         try {
-            Collection<StudentDataResponse> ret = ApplicationFacade.getInstance().getDropoutsCSV(token, from, to);
+            StudentResponse ret = ApplicationFacade.getInstance().getDropoutsCSV(token, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -152,17 +152,17 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "summary", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_SUMMARY)
-    public ResponseEntity<StudentsSummaryResponse> getStudentsSummary(
-            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+    public ResponseEntity<StudentsStatisticsSummaryResponse> getStudentsSummary(
+            @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
-            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @ApiParam(value = ApiDocumentation.Common.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
-            @ApiParam(value = ApiDocumentation.Statistics.LANGUAGE)
+            @ApiParam(value = ApiDocumentation.Common.LANGUAGE)
             @RequestParam(required = false, value = "language", defaultValue = SystemConstants.PORTUGUESE) String lang,
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
-            StudentsSummaryResponse summary = ApplicationFacade.getInstance().getStudentsStatistics(token, from, to, lang);
+            StudentsStatisticsSummaryResponse summary = ApplicationFacade.getInstance().getStudentsStatisticsSummary(token, from, to, lang);
             return new ResponseEntity<>(summary, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));

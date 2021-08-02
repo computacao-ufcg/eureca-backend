@@ -1,7 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.CommonKeys;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.AlumniDigestResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.AlumniResponse;
 import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
@@ -15,8 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
-
 @CrossOrigin
 @RestController
 @RequestMapping(value = Alumni.ENDPOINT)
@@ -29,17 +27,19 @@ public class Alumni {
 
     @ApiOperation(value = ApiDocumentation.Alumni.GET)
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Collection<AlumniDigestResponse>> getAlumni(
-            @ApiParam(value = ApiDocumentation.Statistics.FROM)
+    public ResponseEntity<AlumniResponse> getAlumni(
+            @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
-            @ApiParam(value = ApiDocumentation.Statistics.TO)
+            @ApiParam(value = ApiDocumentation.Common.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
+            @ApiParam(value = ApiDocumentation.Common.LANGUAGE)
+            @RequestParam(required = false, value = "language", defaultValue = SystemConstants.PORTUGUESE) String lang,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
             throws EurecaException {
         try {
             LOGGER.info(Messages.RECEIVING_GET_ALUMNI);
-            Collection<AlumniDigestResponse> alumniBasicData = ApplicationFacade.getInstance().getAlumniBasicData(token, from, to);
+            AlumniResponse alumniBasicData = ApplicationFacade.getInstance().getAlumni(token, from, to, lang);
             return new ResponseEntity<>(alumniBasicData, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);

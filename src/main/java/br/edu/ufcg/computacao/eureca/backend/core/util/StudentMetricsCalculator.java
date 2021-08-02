@@ -1,6 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.core.util;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.MetricsSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.StudentMetrics;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.StudentMetricsSummary;
 import br.edu.ufcg.computacao.eureca.backend.constants.Curriculum;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 
@@ -8,8 +9,8 @@ import org.apache.log4j.Logger;
 
 import java.util.Collection;
 
-public class MetricsCalculator {
-    private Logger LOGGER = Logger.getLogger(MetricsCalculator.class);
+public class StudentMetricsCalculator {
+    private Logger LOGGER = Logger.getLogger(StudentMetricsCalculator.class);
 
     public static StudentMetrics computeMetrics(int attemptedCredits, int termsAccounted, int completedCredits) {
         return doComputeMetrics(attemptedCredits, termsAccounted, completedCredits);
@@ -132,7 +133,7 @@ public class MetricsCalculator {
         return CostClass.UNACCEPTABLE;
     }
 
-    public static MetricsSummary computeMetricsSummary(Collection<Student> students) {
+    public static StudentMetricsSummary computeMetricsSummary(Collection<Student> students) {
         double size = 1.0 * students.size();
         double aggregateTerms = 0.0;
         double aggregateAttemptedCredits = 0.0;
@@ -146,7 +147,7 @@ public class MetricsCalculator {
         double v;
         for (Student item : students) {
             aggregateTerms += item.getCompletedTerms();
-            StudentMetrics studentMetrics = MetricsCalculator.computeMetrics(item);
+            StudentMetrics studentMetrics = StudentMetricsCalculator.computeMetrics(item);
             aggregateAttemptedCredits += studentMetrics.getAttemptedCredits();
             aggregateFeasibility += ((v = studentMetrics.getFeasibility()) == -1.0 ? 0.0 : v);
             aggregateSuccessRate += ((v = studentMetrics.getSuccessRate()) == -1.0 ? 0.0 : v);
@@ -160,6 +161,6 @@ public class MetricsCalculator {
                 aggregateFeasibility/size, aggregateSuccessRate/size, aggregateLoad/size,
                 aggregateCost/size, aggregatePace/size,
                 aggregateCourseDurationPrediction/size,aggregateRisk/size);
-        return (size == 0.0 ? null : new MetricsSummary(aggregateTerms/size, metricsSummary));
+        return (size == 0.0 ? null : new StudentMetricsSummary(aggregateTerms/size, metricsSummary));
     }
 }

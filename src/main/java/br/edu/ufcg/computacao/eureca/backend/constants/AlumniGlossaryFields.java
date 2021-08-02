@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.constants;
 
-public class AlumniGlossaryFields {
+public class AlumniGlossaryFields extends GlossaryFields {
     Field alumniTracked;
     Field consolidatedEmployers;
     Field employersInAcademy;
