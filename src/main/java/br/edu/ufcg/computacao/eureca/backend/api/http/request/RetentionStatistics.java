@@ -84,7 +84,7 @@ public class RetentionStatistics {
     }
 
     @RequestMapping(value = "subjects/csv", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.RetentionStatistics.GET_STUDENT_CSV)
+    @ApiOperation(value = ApiDocumentation.RetentionStatistics.GET_SUBJECT_CSV)
     public ResponseEntity<SubjectRetentionResponse> getSubjectsRetentionCSV(
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)

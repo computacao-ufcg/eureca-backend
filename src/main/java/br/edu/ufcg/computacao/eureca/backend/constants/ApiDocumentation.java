@@ -33,7 +33,12 @@ public class ApiDocumentation {
 
     public static class Alumni {
         public static final String API = "Egressos.";
-        public static final String GET = "Retorna a lista de egressos.";
+        public static final String GET_ALUMNI = "Retorna a lista de egressos.";
+    }
+
+    public static class Profile {
+        public static final String API = "Perfil.";
+        public static final String GET_PROFILE = "Retorna o perfil do usuário.";
     }
 
     public static class Version {

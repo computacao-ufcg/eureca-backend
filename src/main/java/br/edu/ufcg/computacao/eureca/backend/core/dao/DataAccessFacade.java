@@ -38,4 +38,6 @@ public interface DataAccessFacade {
     Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> getEnrollmentsPerTermPerSubject(String from, String to, String courseCode, String curriculumCode);
 
     Collection<SubjectMetricsPerTermSummary> getSubjectMetricsPerTermSummary(String from, String to, String courseCode, String curriculumCode, SubjectType subjectType) throws InvalidParameterException;
+
+    ProfileResponse getProfile(String userId);
 }
