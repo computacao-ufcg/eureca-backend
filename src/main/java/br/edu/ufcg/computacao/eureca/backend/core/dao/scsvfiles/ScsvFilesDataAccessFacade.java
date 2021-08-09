@@ -90,6 +90,13 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
+    public ProfileResponse getProfile(String userId) {
+        Map<UserKey, ProfileData> profileMap = this.mapsHolder.getMap("profile");
+        ProfileData profileData = profileMap.get(new UserKey(userId));
+        return new ProfileResponse(profileData.getCourseCode(), profileData.getCourseName());
+    }
+
+    @Override
     public Collection<SubjectMetricsPerTermSummary> getSubjectMetricsPerTermSummary(String from, String to, String courseCode, String curriculumCode, SubjectType subjectType) throws InvalidParameterException {
         Collection<String> subjects = getSubjectCodes(courseCode, curriculumCode, subjectType);
         Collection<SubjectMetricsPerTermSummary> subjectMetricsPerTerms = new TreeSet<>();

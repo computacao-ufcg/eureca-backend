@@ -25,7 +25,7 @@ public class Alumni {
 
     private final Logger LOGGER = Logger.getLogger(Alumni.class);
 
-    @ApiOperation(value = ApiDocumentation.Alumni.GET)
+    @ApiOperation(value = ApiDocumentation.Alumni.GET_ALUMNI)
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<AlumniResponse> getAlumni(
             @ApiParam(value = ApiDocumentation.Common.FROM)

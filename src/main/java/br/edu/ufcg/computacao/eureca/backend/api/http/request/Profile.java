@@ -1,7 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.CommonKeys;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.CurriculumCodesResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.ProfileResponse;
 import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
@@ -17,22 +17,22 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = Curricula.ENDPOINT)
-@Api(description = ApiDocumentation.Curricula.API)
-public class Curricula {
-    private Logger LOGGER = Logger.getLogger(Curricula.class);
+@RequestMapping(value = Profile.ENDPOINT)
+@Api(description = ApiDocumentation.Profile.API)
+public class Profile {
+    private Logger LOGGER = Logger.getLogger(Profile.class);
 
-    public static final String ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "curricula";
+    public static final String ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "profile";
 
-    @ApiOperation(value = ApiDocumentation.Curricula.GET_CURRICULA)
+    @ApiOperation(value = ApiDocumentation.Profile.GET_PROFILE)
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<CurriculumCodesResponse> getCurriculumCodes(
+    public ResponseEntity<ProfileResponse> getProfile(
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
     throws EurecaException {
         try {
-            CurriculumCodesResponse curriculumCodes = ApplicationFacade.getInstance().getCurriculumCodes(token);
-            return new ResponseEntity<>(curriculumCodes, HttpStatus.OK);
+            ProfileResponse profile = ApplicationFacade.getInstance().getProfile(token);
+            return new ResponseEntity<>(profile, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.error(Messages.SOMETHING_WENT_WRONG);
             throw e;

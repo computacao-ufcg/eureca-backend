@@ -27,6 +27,7 @@ public class ApplicationFacade {
     private RSAPublicKey asPublicKey;
     private AuthorizationPlugin authorizationPlugin;
     private AlumniController alumniController;
+    private ProfileController profileController;
     private CurriculaController curriculaController;
     private StudentsStatisticsController studentsStatisticsController;
     private SubjectsStatisticsController subjectsStatisticsController;
@@ -37,6 +38,7 @@ public class ApplicationFacade {
 
     private ApplicationFacade() {
         this.alumniController = new AlumniController();
+        this.profileController = new ProfileController();
         this.curriculaController = new CurriculaController();
         this.studentsStatisticsController = new StudentsStatisticsController();
         this.subjectsStatisticsController = new SubjectsStatisticsController();
@@ -66,6 +68,11 @@ public class ApplicationFacade {
         AlumniGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.ALUMNI);
         response.setGlossary(glossaryFields);
         return response;
+    }
+
+    public ProfileResponse getProfile(String token) throws EurecaException {
+        SystemUser systemUser = authenticateAndAuthorize(token, EurecaOperation.GET_PROFILE);
+        return this.profileController.getProfile(systemUser.getId());
     }
 
     public CurriculumCodesResponse getCurriculumCodes(String token) throws EurecaException {
