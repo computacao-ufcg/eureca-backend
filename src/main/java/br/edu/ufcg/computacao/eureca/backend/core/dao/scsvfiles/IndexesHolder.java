@@ -188,8 +188,6 @@ public class IndexesHolder {
         this.termsPerCurriculum = new HashMap<>();
         this.classesPerSubjectPerTerm = new HashMap<>();
         Map<Registration, Integer> attemptsSummary = new HashMap<>();
-        String courseCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
-        String curriculumCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
 
         this.enrollmentsMap.forEach((enrollmentKey, enrollmentData) -> {
             NationalIdRegistrationKey studentId = registrationMap.get(enrollmentKey.getRegistration());
@@ -209,9 +207,8 @@ public class IndexesHolder {
             if (enrollmentsPerSubjectPerTermPerClass == null) {
                 enrollmentsPerSubjectPerTermPerClass = new HashMap<>();
             }
-            if (courseCode.equals(course) && curriculumCode.equals(curriculum)) {
-                this.enrollmentsPerSubjectPerTermPerClass.putAll(enrollmentsPerSubjectPerTermPerClass);
-            }
+            this.enrollmentsPerSubjectPerTermPerClass.putAll(enrollmentsPerSubjectPerTermPerClass);
+
             Map<String, Map<String, ClassEnrollments>> enrollmentsPerTermPerClass =
                     enrollmentsPerSubjectPerTermPerClass.get(subjectKey);
             if (enrollmentsPerTermPerClass == null) {
