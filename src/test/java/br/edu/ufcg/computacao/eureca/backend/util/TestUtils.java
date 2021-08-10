@@ -95,7 +95,7 @@ public class TestUtils {
     public static DelayedStatisticsResponse getDelayedSummaryResponse() {
         StudentMetrics metrics = new StudentMetrics(0,0,0,
                 0,0,0,0,0);
-        StudentMetricsSummary metricsSummary = new StudentMetricsSummary(0, metrics);
+        StudentMetricsSummary metricsSummary = new StudentMetricsSummary(0, metrics, 0, 0);
         DelayedPerTermSummary delayedPerTermSummary = new DelayedPerTermSummary("", metricsSummary);
         return new DelayedStatisticsResponse(Arrays.asList(delayedPerTermSummary), "x", "y");
     }

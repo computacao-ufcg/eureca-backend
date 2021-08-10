@@ -17,7 +17,8 @@ public class AlumniSummary {
     private String maxAlumniCountTerm;
     private String minAlumniCountTerm;
 
-    public AlumniSummary(String from, String to, int alumniCount, double averageTermsCount, double averageCost, double averageGpa,
+    public AlumniSummary(String from, String to, int alumniCount, double averageTermsCount, double averageCost,
+                         double averageCostIncrement, double averageGpa,
                          double averageAlumniCount, int maxAlumniCount, int minAlumniCount, String maxAlumniCountTerm,
                          String minAlumniCountTerm) {
         this.from = from;
@@ -25,7 +26,7 @@ public class AlumniSummary {
         this.alumniCount = alumniCount;
         this.averageTermsCount = averageTermsCount;
         this.averageCost = averageCost;
-        this.costClass = StudentMetricsCalculator.computeCostClass(this.averageCost, null);
+        this.costClass = StudentMetricsCalculator.computeCostClass(this.averageCost, averageCostIncrement);
         this.averageGpa = averageGpa;
         this.averageAlumniCount = averageAlumniCount;
         this.maxAlumniCount = maxAlumniCount;

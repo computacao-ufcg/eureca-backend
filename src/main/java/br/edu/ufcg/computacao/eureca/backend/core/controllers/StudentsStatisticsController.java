@@ -203,6 +203,7 @@ public class StudentsStatisticsController {
         Collection<Student> alumni = this.dataAccessFacade.getAlumni(courseCode, from, to);
         double aggregateGPA = 0;
         int aggregateTermsCount = 0;
+        double aggregateCostIncrement = 0.0;
         double aggregateCost = 0.0;
         int totalAlumniCount = 0;
         Map<String, Collection<String>> alumniPerTermMap = new HashMap<>();
@@ -213,6 +214,8 @@ public class StudentsStatisticsController {
             int termsAccounted = alumnus.getCompletedTerms() + alumnus.getInstitutionalEnrollments() + alumnus.getInstitutionalEnrollments();
             int completedCredits = alumnus.getCompletedCredits();
             Curriculum curriculum = alumnus.getCurriculum();
+            aggregateCostIncrement += ((alumnus.getCurriculum().getMinNumberOfTerms() + (alumnus.getCurriculum().getMaxNumberOfTerms() -
+                    alumnus.getCurriculum().getMinNumberOfTerms()) / 4.0) / alumnus.getCurriculum().getMinNumberOfTerms()) - 1.0;
             aggregateCost += (StudentMetricsCalculator.computeMetrics(attemptedCredits, termsAccounted, completedCredits, curriculum).getCost());
             totalAlumniCount++;
             Collection<String> alumniPerTerm = alumniPerTermMap.get(alumnus.getStatusTerm());
@@ -249,6 +252,7 @@ public class StudentsStatisticsController {
         return new AlumniSummary(firstTerm, lastTerm, totalAlumniCount,
                 (totalAlumniCount == 0 ? -1.0 : (double) aggregateTermsCount/totalAlumniCount),
                 (totalAlumniCount == 0 ? -1.0 : aggregateCost/totalAlumniCount),
+                (totalAlumniCount == 0 ? -1.0 : aggregateCostIncrement/totalAlumniCount),
                 (totalAlumniCount == 0 ? -1.0 : aggregateGPA/totalAlumniCount),
                 (totalAlumniCount == 0 ? -1.0 : (double) totalAlumniCount/totalTermsCount),
                 maxAlumniCount, minAlumniCount, maxAlumniCountTerm, minAlumniCountTerm);
@@ -259,6 +263,7 @@ public class StudentsStatisticsController {
         int dropoutsCount[] = new int[SystemConstants.DROPOUT_TYPES_COUNT];
         double aggregateTermsCount = 0.0;
         double aggregateCost = 0.0;
+        double aggregateLowestCost = 0.0;
         String firstTerm = "0000.0";
         String lastTerm = "9999.9";
 
@@ -269,6 +274,8 @@ public class StudentsStatisticsController {
             int completedCredits = dropout.getCompletedCredits();
             Curriculum curriculum = dropout.getCurriculum();
             aggregateCost += (StudentMetricsCalculator.computeMetrics(attemptedCredits, termsAccounted, completedCredits, curriculum).getCost());
+            aggregateLowestCost += ((curriculum.getMinNumberOfTerms() + (curriculum.getMaxNumberOfTerms() -
+                curriculum.getMinNumberOfTerms()) / 4.0) / curriculum.getMinNumberOfTerms()) - 1.0;
             dropoutsCount[dropout.getStatusIndex()]++;
             String term = dropout.getAdmissionTerm();
             if (term.compareTo(firstTerm) < 0) firstTerm = term;
@@ -279,7 +286,8 @@ public class StudentsStatisticsController {
 
         double averageTermsCount = (dropoutCount == 0 ? -1.0 : aggregateTermsCount/dropoutCount);
         double averageCost = (dropoutCount == 0 ? -1.0 : aggregateCost/dropoutCount);
-        CostClass costClass = StudentMetricsCalculator.computeCostClass(averageCost, null);
+        double averageLowestCost = (dropoutCount == 0 ? -1.0 : aggregateLowestCost/dropoutCount);
+        CostClass costClass = StudentMetricsCalculator.computeCostClass(averageCost, averageLowestCost);
 
         return new DropoutsSummary(firstTerm, lastTerm, dropoutCount, averageTermsCount, averageCost, costClass, aggregateDropouts);
     }

@@ -68,11 +68,16 @@ public class StudentCSV implements Comparable {
         this.courseDurationPrediction = metrics.getCourseDurationPrediction();
         this.risk = metrics.getRisk();
         if (student.isActive()) {
-            this.riskClass = StudentMetricsCalculator.computeRiskClass(metrics.getRisk(), student.getCurriculum());
+            double desiredAverageDuration = (student.getCurriculum().getMinNumberOfTerms() +
+                    (student.getCurriculum().getMaxNumberOfTerms() - student.getCurriculum().getMinNumberOfTerms()) / 4.0);
+            double lowestRisk = student.getCurriculum().getMinNumberOfTerms() / desiredAverageDuration;
+            this.riskClass = StudentMetricsCalculator.computeRiskClass(metrics.getRisk(), lowestRisk);
         } else {
             this.riskClass = RiskClass.NOT_APPLICABLE;
         }
-        this.costClass = StudentMetricsCalculator.computeCostClass(this.cost, student.getCurriculum());
+        double costIncrement = ((student.getCurriculum().getMinNumberOfTerms() + (student.getCurriculum().getMaxNumberOfTerms() -
+                student.getCurriculum().getMinNumberOfTerms()) / 4.0) / student.getCurriculum().getMinNumberOfTerms()) - 1.0;
+        this.costClass = StudentMetricsCalculator.computeCostClass(this.cost, costIncrement);
     }
 
     public String getRegistration() {

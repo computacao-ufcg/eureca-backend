@@ -10,11 +10,11 @@ public class StudentMetricsSummary {
     private RiskClass riskClass;
     private CostClass costClass;
 
-    public StudentMetricsSummary(double termsCount, StudentMetrics metrics) {
+    public StudentMetricsSummary(double termsCount, StudentMetrics metrics, double averageLowestRisk, double averageCostIncrement) {
         this.termsCount = termsCount;
         this.metrics = metrics;
-        this.riskClass = StudentMetricsCalculator.computeRiskClass(metrics.getRisk(), null);
-        this.costClass = StudentMetricsCalculator.computeCostClass(metrics.getCost(), null);
+        this.riskClass = StudentMetricsCalculator.computeRiskClass(metrics.getRisk(), averageLowestRisk);
+        this.costClass = StudentMetricsCalculator.computeCostClass(metrics.getCost(), averageCostIncrement);
     }
 
     public double getTermsCount() {

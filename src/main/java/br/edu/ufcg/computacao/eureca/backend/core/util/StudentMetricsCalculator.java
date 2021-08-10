@@ -22,10 +22,7 @@ public class StudentMetricsCalculator {
         return doComputeMetrics(attemptedCredits, termsAccounted, completedCredits, curriculum);
     }
 
-    public static RiskClass computeRiskClass(double risk, Curriculum curriculum) {
-        double desiredAverageDuration = (curriculum.getMinNumberOfTerms() +
-                (curriculum.getMaxNumberOfTerms() - curriculum.getMinNumberOfTerms()) / 4.0);
-        double lowestRisk = curriculum.getMinNumberOfTerms() / desiredAverageDuration;
+    public static RiskClass computeRiskClass(double risk, double lowestRisk) {
         double riskIncrement = 1.0 - lowestRisk;
         if (risk < 0.0) return RiskClass.NOT_APPLICABLE;
         if (risk < lowestRisk) return RiskClass.INACCURATE;
@@ -36,10 +33,8 @@ public class StudentMetricsCalculator {
         return RiskClass.UNFEASIBLE;
     }
 
-    public static CostClass computeCostClass(double cost, Curriculum curriculum) {
+    public static CostClass computeCostClass(double cost, double costIncrement) {
         double lowestCost = 1.0;
-        double costIncrement = ((curriculum.getMinNumberOfTerms() + (curriculum.getMaxNumberOfTerms() -
-                curriculum.getMinNumberOfTerms()) / 4.0) / curriculum.getMinNumberOfTerms()) - 1.0;
         if (cost < 0.0) return CostClass.NOT_APPLICABLE;
         if (cost < lowestCost) return CostClass.INACCURATE;
         if (cost < lowestCost + 1.0 * costIncrement) return CostClass.ADEQUATE;
@@ -60,6 +55,8 @@ public class StudentMetricsCalculator {
         double aggregatePace = 0.0;
         double aggregateCourseDurationPrediction = 0.0;
         double aggregateRisk = 0.0;
+        double aggregateLowestRisk = 0.0;
+        double aggregateCostIncrement = 0.0;
         double v;
         for (Student item : students) {
             aggregateTerms += item.getCompletedTerms();
@@ -72,12 +69,17 @@ public class StudentMetricsCalculator {
             aggregatePace += ((v = studentMetrics.getPace()) == -1.0 ? 0.0 : v);
             aggregateCourseDurationPrediction += ((v = studentMetrics.getCourseDurationPrediction()) == -1.0 ? 0.0 : v);
             aggregateRisk += ((v = studentMetrics.getRisk()) == -1.0 ? 0.0 : v);
+            aggregateLowestRisk += item.getCurriculum().getMinNumberOfTerms() / ((item.getCurriculum().getMinNumberOfTerms() +
+                    (item.getCurriculum().getMaxNumberOfTerms() - item.getCurriculum().getMinNumberOfTerms()) / 4.0));
+            aggregateCostIncrement += ((item.getCurriculum().getMinNumberOfTerms() + (item.getCurriculum().getMaxNumberOfTerms() -
+                    item.getCurriculum().getMinNumberOfTerms()) / 4.0) / item.getCurriculum().getMinNumberOfTerms()) - 1.0;
         }
         StudentMetrics metricsSummary = new StudentMetrics(aggregateAttemptedCredits/size,
                 aggregateFeasibility/size, aggregateSuccessRate/size, aggregateLoad/size,
                 aggregateCost/size, aggregatePace/size,
                 aggregateCourseDurationPrediction/size,aggregateRisk/size);
-        return (size == 0.0 ? null : new StudentMetricsSummary(aggregateTerms/size, metricsSummary));
+        return (size == 0.0 ? null : new StudentMetricsSummary(aggregateTerms/size, metricsSummary,
+                aggregateLowestRisk/size, aggregateCostIncrement/size));
     }
 
     private static StudentMetrics doComputeMetrics(int attemptedCredits, int termsAccounted, int completedCredits, Curriculum curriculum) {

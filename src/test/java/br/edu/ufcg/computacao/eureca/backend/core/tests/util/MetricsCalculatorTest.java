@@ -182,7 +182,7 @@ public class MetricsCalculatorTest {
         RiskClass expected = RiskClass.LOW;
 
         // exercise
-        RiskClass result = StudentMetricsCalculator.computeRiskClass(1, null);
+        RiskClass result = StudentMetricsCalculator.computeRiskClass(1, 0);
 
         Assert.assertEquals(expected, result);
     }
@@ -194,7 +194,7 @@ public class MetricsCalculatorTest {
         CostClass expected = CostClass.NOT_APPLICABLE;
 
         // exercise
-        CostClass result = StudentMetricsCalculator.computeCostClass(-1, null);
+        CostClass result = StudentMetricsCalculator.computeCostClass(-1, 0);
 
         // verify
         Assert.assertEquals(expected, result);
