@@ -37,7 +37,7 @@ public class Student implements Comparable {
     private double iea;
     private int completedTerms;
     private int suspendedTerms;
-    private int institutionalTerms;
+    private int institutionalEnrollments;
     private int mobilityTerms;
     private int enrolledCredits;
     private double admissionGrade;
@@ -48,7 +48,7 @@ public class Student implements Comparable {
                    String affirmativePolicy, String secondarySchool, String secondarySchoolGraduationYear,
                    String course, String curriculum, int mandatoryHours, int mandatoryCredits, int electiveHours,
                    int electiveCredits, int complementaryHours, int complementaryCredits, int attemptedCredits,
-                   double gpa, double mc, double iea, int completedTerms, int suspendedTerms, int institutionalTerms,
+                   double gpa, double mc, double iea, int completedTerms, int suspendedTerms, int institutionalEnrollments,
                    int mobilityTerms, int enrolledCredits, double admissionGrade) {
         this.registration = new Registration(registration);
         this.nationalId = nationalId;
@@ -82,7 +82,7 @@ public class Student implements Comparable {
         this.iea = iea;
         this.completedTerms = completedTerms;
         this.suspendedTerms = suspendedTerms;
-        this.institutionalTerms = institutionalTerms;
+        this.institutionalEnrollments = institutionalEnrollments;
         this.mobilityTerms = mobilityTerms;
         this.enrolledCredits = enrolledCredits;
         this.admissionGrade = admissionGrade;
@@ -344,12 +344,12 @@ public class Student implements Comparable {
         this.suspendedTerms = suspendedTerms;
     }
 
-    public int getInstitutionalTerms() {
-        return institutionalTerms;
+    public int getInstitutionalEnrollments() {
+        return institutionalEnrollments;
     }
 
-    public void setInstitutionalTerms(int institutionalTerms) {
-        this.institutionalTerms = institutionalTerms;
+    public void setInstitutionalEnrollments(int institutionalEnrollments) {
+        this.institutionalEnrollments = institutionalEnrollments;
     }
 
     public int getMobilityTerms() {
@@ -389,8 +389,7 @@ public class Student implements Comparable {
     }
 
     public int getCompletedCredits() {
-        int complementary = (this.getComplementaryCredits() > 8 ? 8 : this.getComplementaryCredits());
-        return this.getMandatoryCredits() + this.getElectiveCredits() + complementary;
+        return this.getMandatoryCredits() + this.getElectiveCredits() + this.getComplementaryCredits();
     }
 
     public RiskClass computeRiskClass() {
@@ -478,7 +477,7 @@ public class Student implements Comparable {
                 ", iea=" + iea +
                 ", completedTerms=" + completedTerms +
                 ", suspendedTerms=" + suspendedTerms +
-                ", institutionalTerms=" + institutionalTerms +
+                ", institutionalTerms=" + institutionalEnrollments +
                 ", mobilityTerms=" + mobilityTerms +
                 ", enrolledCredits=" + enrolledCredits +
                 ", admissionGrade=" + admissionGrade +

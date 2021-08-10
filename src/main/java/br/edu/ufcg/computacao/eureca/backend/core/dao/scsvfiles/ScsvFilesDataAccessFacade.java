@@ -25,40 +25,40 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Collection<Student> getActives(String from, String to) {
+    public Collection<Student> getActives(String courseCode, String from, String to) {
         return getFilteredStudents(StudentClassification.ACTIVE, from, to);
     }
 
     @Override
-    public Collection<Student> getAlumni(String from, String to) {
+    public Collection<Student> getAlumni(String courseCode, String from, String to) {
         return getFilteredStudents(StudentClassification.ALUMNUS, from, to);
     }
 
     @Override
-    public Collection<Student> getDropouts(String from, String to) {
+    public Collection<Student> getDropouts(String courseCode, String from, String to) {
         return getFilteredStudents(StudentClassification.DROPOUT, from, to);
     }
 
     @Override
-    public Map<String, Collection<Student>> getActivesPerAdmissionTerm(String from, String to) {
+    public Map<String, Collection<Student>> getActivesPerAdmissionTerm(String courseCode, String from, String to) {
         Map<String, Collection<NationalIdRegistrationKey>> index = indexesHolder.getActivesPerAdmissionTerm();
         return getStudentMapFromIndex(from, to, index);
     }
 
     @Override
-    public Map<String, Collection<Student>> getAlumniPerGraduationTerm(String from, String to) {
+    public Map<String, Collection<Student>> getAlumniPerGraduationTerm(String courseCode, String from, String to) {
         Map<String, Collection<NationalIdRegistrationKey>> index = indexesHolder.getAlumniPerGraduationTerm();
         return getStudentMapFromIndex(from, to, index);
     }
 
     @Override
-    public Map<String, Collection<Student>> getDropoutsPerDropoutTerm(String from, String to) {
+    public Map<String, Collection<Student>> getDropoutsPerDropoutTerm(String courseCode, String from, String to) {
         Map<String, Collection<NationalIdRegistrationKey>> index = indexesHolder.getDropoutsPerDropoutTerm();
         return getStudentMapFromIndex(from, to, index);
     }
 
     @Override
-    public Collection<AlumniDigestResponse> getAlumniPerStudentSummary(String from, String to) {
+    public Collection<AlumniDigestResponse> getAlumniPerStudentSummary(String courseCode, String from, String to) {
         String parsedFrom = "1" + from.substring(2,4) + from.substring(5,6) + "00000";
         String parsedTo = "1" + to.substring(2,4) + to.substring(5,6) + "99999";
         Collection<AlumniDigestResponse> alumniBasicData = new TreeSet<>();

@@ -18,7 +18,7 @@ public class StudentMetricsCalculator {
 
     public static StudentMetrics computeMetrics(Student student) {
         int attemptedCredits = student.getAttemptedCredits();
-        int termsAccounted = student.getCompletedTerms() + student.getInstitutionalTerms() + student.getInstitutionalTerms();
+        int termsAccounted = student.getCompletedTerms() + student.getInstitutionalEnrollments() + student.getInstitutionalEnrollments();
         int completedCredits = student.getCompletedCredits();
         return doComputeMetrics(attemptedCredits, termsAccounted, completedCredits);
     }

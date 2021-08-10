@@ -22,9 +22,9 @@ public class StudentsStatisticsController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
-    public StudentResponse getActiveCSV(String from, String to) {
+    public StudentResponse getActiveCSV(String courseCode, String from, String to) {
         Collection<StudentCSV> activeStudentsData = new TreeSet<>();
-        Collection<Student> actives = this.dataAccessFacade.getActives(from, to);
+        Collection<Student> actives = this.dataAccessFacade.getActives(courseCode, from, to);
         actives.forEach(item -> {
             StudentCSV studentDataResponse = new StudentCSV(item);
             activeStudentsData.add(studentDataResponse);
@@ -32,9 +32,9 @@ public class StudentsStatisticsController {
         return new StudentResponse(activeStudentsData);
     }
 
-    public StudentResponse getAlumniCSV(String from, String to) {
+    public StudentResponse getAlumniCSV(String courseCode, String from, String to) {
         Collection<StudentCSV> alumniData = new TreeSet<>();
-        Collection<Student> actives = this.dataAccessFacade.getAlumni(from, to);
+        Collection<Student> actives = this.dataAccessFacade.getAlumni(courseCode, from, to);
         actives.forEach(item -> {
             StudentCSV studentDataResponse = new StudentCSV(item);
             alumniData.add(studentDataResponse);
@@ -42,9 +42,9 @@ public class StudentsStatisticsController {
         return new StudentResponse(alumniData);
     }
 
-    public StudentResponse getDropoutsCSV(String from, String to) {
+    public StudentResponse getDropoutsCSV(String courseCode, String from, String to) {
         Collection<StudentCSV> dropoutsData = new TreeSet<>();
-        Collection<Student> dropouts = this.dataAccessFacade.getDropouts(from, to);
+        Collection<Student> dropouts = this.dataAccessFacade.getDropouts(courseCode, from, to);
         dropouts.forEach(item -> {
             StudentCSV studentDataResponse = new StudentCSV(item);
             dropoutsData.add(studentDataResponse);
@@ -52,9 +52,9 @@ public class StudentsStatisticsController {
         return new StudentResponse(dropoutsData);
     }
 
-    public ActivesStatisticsResponse getActivesSummaryResponse(String from, String to) {
+    public ActivesStatisticsResponse getActivesSummaryResponse(String courseCode, String from, String to) {
         Collection<ActivesPerTermSummary> terms = new TreeSet<>();
-        Map<String, Collection<Student>> activesPerAdmissionTerm = this.dataAccessFacade.getActivesPerAdmissionTerm(from, to);
+        Map<String, Collection<Student>> activesPerAdmissionTerm = this.dataAccessFacade.getActivesPerAdmissionTerm(courseCode, from, to);
 
         for (String term : activesPerAdmissionTerm.keySet()) {
             Collection<Student> actives = activesPerAdmissionTerm.get(term);
@@ -66,9 +66,9 @@ public class StudentsStatisticsController {
         return new ActivesStatisticsResponse(terms, firstTerm, lastTerm);
     }
 
-    public AlumniStatisticsResponse getAlumniSummaryResponse(String from, String to) {
+    public AlumniStatisticsResponse getAlumniSummaryResponse(String courseCode, String from, String to) {
         Collection<AlumniPerTermSummary> terms = new TreeSet<>();
-        Map<String, Collection<Student>> alumniPerGraduationTerm = this.dataAccessFacade.getAlumniPerGraduationTerm(from, to);
+        Map<String, Collection<Student>> alumniPerGraduationTerm = this.dataAccessFacade.getAlumniPerGraduationTerm(courseCode, from, to);
         for (String term : alumniPerGraduationTerm.keySet()) {
             Collection<Student> alumni = alumniPerGraduationTerm.get(term);
             terms.add(getAlumniPerTermSummary(term, alumni));
@@ -78,9 +78,9 @@ public class StudentsStatisticsController {
         return new AlumniStatisticsResponse(terms, firstTerm, lastTerm);
     }
 
-    public DropoutsStatisticsResponse getDropoutsSummaryResponse(String from, String to) {
+    public DropoutsStatisticsResponse getDropoutsSummaryResponse(String courseCode, String from, String to) {
         Collection<DropoutPerTermSummary> terms = new TreeSet<>();
-        Map<String, Collection<Student>> dropoutsPerDropoutTerm = this.dataAccessFacade.getDropoutsPerDropoutTerm(from, to);
+        Map<String, Collection<Student>> dropoutsPerDropoutTerm = this.dataAccessFacade.getDropoutsPerDropoutTerm(courseCode, from, to);
 
         for (String term : dropoutsPerDropoutTerm.keySet()) {
             Collection<Student> dropouts = dropoutsPerDropoutTerm.get(term);
@@ -91,10 +91,10 @@ public class StudentsStatisticsController {
         return new DropoutsStatisticsResponse(terms, firstTerm, lastTerm);
     }
 
-    public StudentsStatisticsSummaryResponse getStudentsStatistics(String from, String to) {
-        ActivesSummary activesSummary = getActivesSummary(from, to);
-        AlumniSummary alumniSummary = getAlumniSummary(from, to);
-        DropoutsSummary dropoutSummary = getDropoutsSummary(from, to);
+    public StudentsStatisticsSummaryResponse getStudentsStatistics(String courseCode, String from, String to) {
+        ActivesSummary activesSummary = getActivesSummary(courseCode, from, to);
+        AlumniSummary alumniSummary = getAlumniSummary(courseCode, from, to);
+        DropoutsSummary dropoutSummary = getDropoutsSummary(courseCode, from, to);
         return new StudentsStatisticsSummaryResponse(activesSummary, alumniSummary, dropoutSummary);
     }
 
@@ -107,8 +107,8 @@ public class StudentsStatisticsController {
             aggregateGPA += alumnus.getGpa();
             aggregateTermsCount += alumnus.getCompletedTerms();
             int attemptedCredits = alumnus.getAttemptedCredits();
-            int termsAccounted = alumnus.getCompletedTerms() + alumnus.getInstitutionalTerms() +
-                    alumnus.getInstitutionalTerms();
+            int termsAccounted = alumnus.getCompletedTerms() + alumnus.getInstitutionalEnrollments() +
+                    alumnus.getInstitutionalEnrollments();
             int completedCredits = alumnus.getCompletedCredits();
             aggregateCost += (StudentMetricsCalculator.computeMetrics(attemptedCredits, termsAccounted,
                     completedCredits).getCost());
@@ -133,8 +133,8 @@ public class StudentsStatisticsController {
             dropoutsCount[dropout.getStatusIndex()]++;
             aggregateTermsCount += dropout.getCompletedTerms();
             int attemptedCredits = dropout.getAttemptedCredits();
-            int termsAccounted = dropout.getCompletedTerms() + dropout.getInstitutionalTerms() +
-                    dropout.getInstitutionalTerms();
+            int termsAccounted = dropout.getCompletedTerms() + dropout.getInstitutionalEnrollments() +
+                    dropout.getInstitutionalEnrollments();
             int completedCredits = dropout.getCompletedCredits();
             aggregateCost += (StudentMetricsCalculator.computeMetrics(attemptedCredits, termsAccounted,
                     completedCredits).getCost());
@@ -188,16 +188,16 @@ public class StudentsStatisticsController {
     }
 
 
-    private ActivesSummary getActivesSummary(String from, String to) {
-        Collection<Student> actives = this.dataAccessFacade.getActives(from, to);
+    private ActivesSummary getActivesSummary(String courseCode, String from, String to) {
+        Collection<Student> actives = this.dataAccessFacade.getActives(courseCode, from, to);
         StudentMetricsSummary summary = StudentMetricsCalculator.computeMetricsSummary(actives);
         String firstTerm = CollectionUtil.getFirstTermFromStudents(actives);
         String lastTerm = CollectionUtil.getLastTermFromStudents(actives);
         return new ActivesSummary(firstTerm, lastTerm, actives.size(), summary);
     }
 
-    private AlumniSummary getAlumniSummary(String from, String to) {
-        Collection<Student> alumni = this.dataAccessFacade.getAlumni(from, to);
+    private AlumniSummary getAlumniSummary(String courseCode, String from, String to) {
+        Collection<Student> alumni = this.dataAccessFacade.getAlumni(courseCode, from, to);
         double aggregateGPA = 0;
         int aggregateTermsCount = 0;
         double aggregateCost = 0.0;
@@ -207,7 +207,7 @@ public class StudentsStatisticsController {
             aggregateGPA += alumnus.getGpa();
             aggregateTermsCount += alumnus.getCompletedTerms();
             int attemptedCredits = alumnus.getAttemptedCredits();
-            int termsAccounted = alumnus.getCompletedTerms() + alumnus.getInstitutionalTerms() + alumnus.getInstitutionalTerms();
+            int termsAccounted = alumnus.getCompletedTerms() + alumnus.getInstitutionalEnrollments() + alumnus.getInstitutionalEnrollments();
             int completedCredits = alumnus.getCompletedCredits();
             aggregateCost += (StudentMetricsCalculator.computeMetrics(attemptedCredits, termsAccounted, completedCredits).getCost());
             totalAlumniCount++;
@@ -250,8 +250,8 @@ public class StudentsStatisticsController {
                 maxAlumniCount, minAlumniCount, maxAlumniCountTerm, minAlumniCountTerm);
     }
 
-    private DropoutsSummary getDropoutsSummary(String from, String to) {
-        Collection<Student> dropouts = this.dataAccessFacade.getDropouts(from, to);
+    private DropoutsSummary getDropoutsSummary(String courseCode, String from, String to) {
+        Collection<Student> dropouts = this.dataAccessFacade.getDropouts(courseCode, from, to);
         int dropoutsCount[] = new int[SystemConstants.DROPOUT_TYPES_COUNT];
         double aggregateTermsCount = 0.0;
         double aggregateCost = 0.0;
@@ -261,7 +261,7 @@ public class StudentsStatisticsController {
         for(Student dropout : dropouts) {
             aggregateTermsCount += dropout.getCompletedTerms();
             int attemptedCredits = dropout.getAttemptedCredits();
-            int termsAccounted = dropout.getCompletedTerms() + dropout.getInstitutionalTerms() + dropout.getInstitutionalTerms();
+            int termsAccounted = dropout.getCompletedTerms() + dropout.getInstitutionalEnrollments() + dropout.getInstitutionalEnrollments();
             int completedCredits = dropout.getCompletedCredits();
             aggregateCost += (StudentMetricsCalculator.computeMetrics(attemptedCredits, termsAccounted, completedCredits).getCost());
             dropoutsCount[dropout.getStatusIndex()]++;

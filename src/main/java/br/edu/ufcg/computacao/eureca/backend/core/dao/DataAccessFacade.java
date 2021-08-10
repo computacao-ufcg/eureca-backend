@@ -9,19 +9,19 @@ import java.util.Collection;
 import java.util.Map;
 
 public interface DataAccessFacade {
-    Collection<Student> getActives(String from, String to);
+    Collection<Student> getActives(String courseCode, String from, String to);
 
-    Collection<Student> getAlumni(String from, String to);
+    Collection<Student> getAlumni(String courseCode, String from, String to);
 
-    Collection<Student> getDropouts(String from, String to);
+    Collection<Student> getDropouts(String courseCode, String from, String to);
 
-    Map<String, Collection<Student>> getActivesPerAdmissionTerm(String from, String to);
+    Map<String, Collection<Student>> getActivesPerAdmissionTerm(String courseCode, String from, String to);
 
-    Map<String, Collection<Student>> getAlumniPerGraduationTerm(String from, String to);
+    Map<String, Collection<Student>> getAlumniPerGraduationTerm(String courseCode, String from, String to);
 
-    Map<String, Collection<Student>> getDropoutsPerDropoutTerm(String from, String to);
+    Map<String, Collection<Student>> getDropoutsPerDropoutTerm(String courseCode, String from, String to);
 
-    Collection<AlumniDigestResponse> getAlumniPerStudentSummary(String from, String to);
+    Collection<AlumniDigestResponse> getAlumniPerStudentSummary(String courseCode, String from, String to);
 
     Curriculum getCurriculum(String courseCode, String curriculumCode);
 
