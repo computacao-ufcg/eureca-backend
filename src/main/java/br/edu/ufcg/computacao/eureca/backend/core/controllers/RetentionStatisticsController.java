@@ -3,7 +3,6 @@ package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.holders.EnviromentVariablesHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.backend.core.util.CollectionUtil;
 import br.edu.ufcg.computacao.eureca.backend.core.util.StudentMetricsCalculator;
@@ -46,24 +45,17 @@ public class RetentionStatisticsController {
         return new StudentResponse(delayedData);
     }
 
-    public SubjectRetentionStatisticsResponse getSubjectRetentionSummary() throws InvalidParameterException {
-        String courseCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
-        String curriculumCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
+    public SubjectRetentionStatisticsResponse getSubjectRetentionSummary(String courseCode, String curriculumCode) throws InvalidParameterException {
         Collection<SubjectRetentionDigest> digest = this.dataAccessFacade.getSubjectsRetentionSummary(courseCode, curriculumCode);
         return new SubjectRetentionStatisticsResponse(digest);
     }
 
-    public SubjectRetentionResponse getSubjectsRetentionCSV() throws InvalidParameterException {
-        String courseCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
-        String curriculumCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
+    public SubjectRetentionResponse getSubjectsRetentionCSV(String courseCode, String curriculumCode) throws InvalidParameterException {
         Collection<SubjectRetentionCSV> retention = this.dataAccessFacade.getSubjectsRetention(courseCode, curriculumCode);
         return new SubjectRetentionResponse(retention);
     }
 
-    public RetentionStatisticsSummaryResponse getRetentionStatistics(String from, String to) throws InvalidParameterException {
-        String courseCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
-        String curriculumCode = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
-
+    public RetentionStatisticsSummaryResponse getRetentionStatistics(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         Collection<Student> delayed = getDelayed(from, to);
         StudentMetricsSummary summary = StudentMetricsCalculator.computeMetricsSummary(delayed);
         String firstTerm = CollectionUtil.getFirstTermFromStudents(delayed);

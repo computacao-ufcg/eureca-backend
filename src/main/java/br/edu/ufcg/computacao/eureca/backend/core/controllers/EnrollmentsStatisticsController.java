@@ -6,7 +6,6 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.EnrollmentsCSV;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.SubjectKey;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.holders.EnviromentVariablesHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.ClassEnrollments;
 import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
 import org.apache.log4j.Logger;
@@ -30,16 +29,13 @@ public class EnrollmentsStatisticsController {
         return summary;
     }
 
-    public EnrollmentsStatisticsSummaryResponse getEnrollmentsStatistics(String from, String to) {
-        String curriculum = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
-        String course = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
-
+    public EnrollmentsStatisticsSummaryResponse getEnrollmentsStatistics(String courseCode, String curriculumCode, String from, String to) {
         int totalClasses = 0;
         int totalEnrollments = 0;
         TermCount max = new TermCount(-1, null);
         TermCount min = new TermCount(Integer.MAX_VALUE, null);
 
-        Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> enrollmentsPerTermPerSubject = this.dataAccessFacade.getEnrollmentsPerTermPerSubject(from, to, course, curriculum);
+        Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> enrollmentsPerTermPerSubject = this.dataAccessFacade.getEnrollmentsPerTermPerSubject(from, to, courseCode, curriculumCode);
         TreeSet<String> terms = new TreeSet<>();
 
         int subjects = enrollmentsPerTermPerSubject.size();
@@ -79,15 +75,12 @@ public class EnrollmentsStatisticsController {
         from = terms.first();
         to = terms.last();
 
-        return new EnrollmentsStatisticsSummaryResponse(curriculum, from, to, subjects, max, min, avgClassesPerSubject, avgClassesPerPeriod, avgEnrollmentsPerClass, avgEnrollmentsPerPeriod);
+        return new EnrollmentsStatisticsSummaryResponse(curriculumCode, from, to, subjects, max, min, avgClassesPerSubject, avgClassesPerPeriod, avgEnrollmentsPerClass, avgEnrollmentsPerPeriod);
     }
 
-    public EnrollmentsResponse getEnrollmentsCSV(String from, String to) {
-        String course = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCourse();
-        String curriculum = EnviromentVariablesHolder.getInstance().getEnvironmentVariables().getCurrentCurriculum();
-
+    public EnrollmentsResponse getEnrollmentsCSV(String courseCode, String curriculumCode, String from, String to) {
         List<EnrollmentsCSV> response = new ArrayList<>();
-        Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> enrollmentsPerTermPerSubject = this.dataAccessFacade.getEnrollmentsPerTermPerSubject(from, to, course, curriculum);
+        Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> enrollmentsPerTermPerSubject = this.dataAccessFacade.getEnrollmentsPerTermPerSubject(from, to, courseCode, curriculumCode);
 
         for (Map.Entry<SubjectKey, Map<String, Map<String, ClassEnrollments>>> entry : enrollmentsPerTermPerSubject.entrySet()) {
             SubjectKey subjectKey = entry.getKey();

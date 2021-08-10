@@ -29,6 +29,8 @@ public class ApiDocumentation {
         public static final String FROM = "Período inicial";
         public static final String TO = "Período final";
         public static final String LANGUAGE = "Língua";
+        public static final String COURSE = "Código do curso";
+        public static final String CURRICULUM = "Código do currículo";
     }
 
     public static class Alumni {
