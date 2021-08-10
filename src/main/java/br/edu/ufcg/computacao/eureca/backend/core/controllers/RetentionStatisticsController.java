@@ -21,9 +21,9 @@ public class RetentionStatisticsController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
-    public DelayedStatisticsResponse getDelayedSummary(String from, String to) {
+    public DelayedStatisticsResponse getDelayedSummary(String courseCode, String from, String to) {
         Collection<DelayedPerTermSummary> terms = new TreeSet<>();
-        Map<String, Collection<Student>> delayedPerAdmissionTerm = getDelayedPerAdmissionTerm(from, to);
+        Map<String, Collection<Student>> delayedPerAdmissionTerm = getDelayedPerAdmissionTerm(courseCode, from, to);
 
         for (String term: delayedPerAdmissionTerm.keySet()) {
             StudentMetricsSummary metricsSummary = StudentMetricsCalculator.computeMetricsSummary(delayedPerAdmissionTerm.get(term));
@@ -35,9 +35,9 @@ public class RetentionStatisticsController {
         return new DelayedStatisticsResponse(terms, firstTerm, lastTerm);
     }
 
-    public StudentResponse getDelayedCSV(String from, String to) {
+    public StudentResponse getDelayedCSV(String courseCode, String from, String to) {
         Collection<StudentCSV> delayedData = new TreeSet<>();
-        Collection<Student> delayed = getDelayed(from, to);
+        Collection<Student> delayed = getDelayed(courseCode, from, to);
         delayed.forEach(item -> {
             StudentCSV studentDataResponse = new StudentCSV(item);
             delayedData.add(studentDataResponse);
@@ -56,7 +56,7 @@ public class RetentionStatisticsController {
     }
 
     public RetentionStatisticsSummaryResponse getRetentionStatistics(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
-        Collection<Student> delayed = getDelayed(from, to);
+        Collection<Student> delayed = getDelayed(courseCode, from, to);
         StudentMetricsSummary summary = StudentMetricsCalculator.computeMetricsSummary(delayed);
         String firstTerm = CollectionUtil.getFirstTermFromStudents(delayed);
         String lastTerm = CollectionUtil.getLastTermFromStudents(delayed);
@@ -77,17 +77,17 @@ public class RetentionStatisticsController {
         return retentionSampleList;
     }
 
-    private Collection<Student> getDelayed(String from, String to) {
-         return this.dataAccessFacade.getActives(from, to).stream()
+    private Collection<Student> getDelayed(String courseCode, String from, String to) {
+         return this.dataAccessFacade.getActives(courseCode, from, to).stream()
                 .filter(item -> item.computeRiskClass().equals(RiskClass.AVERAGE) ||
                         item.computeRiskClass().equals(RiskClass.HIGH) ||
                         item.computeRiskClass().equals(RiskClass.UNFEASIBLE))
                 .collect(Collectors.toSet());
     }
 
-    private Map<String, Collection<Student>> getDelayedPerAdmissionTerm(String from, String to) {
+    private Map<String, Collection<Student>> getDelayedPerAdmissionTerm(String courseCode, String from, String to) {
         Map<String, Collection<Student>> delayedPerAdmissionTerm = new HashMap<>();
-        Map<String, Collection<Student>> activesPerAdmissionTerm = this.dataAccessFacade.getActivesPerAdmissionTerm(from, to);
+        Map<String, Collection<Student>> activesPerAdmissionTerm = this.dataAccessFacade.getActivesPerAdmissionTerm(courseCode, from, to);
         for (String term: activesPerAdmissionTerm.keySet()) {
             Collection<Student> delayed = activesPerAdmissionTerm.get(term).stream()
                     .filter(item -> item.computeRiskClass().equals(RiskClass.AVERAGE) ||

@@ -47,15 +47,7 @@ public class StudentDataTest {
     public void testGetCompletedCredits() {
         this.studentDataActive.setMandatoryCredits(10);
         this.studentDataActive.setElectiveCredits(10);
-        this.studentDataActive.setComplementaryCredits(5); // case 1: complementary < 8
+        this.studentDataActive.setComplementaryCredits(5);
         Assert.assertEquals(25, this.studentDataActive.getCompletedCredits());
-    }
-
-    @Test
-    public void testGetCompletedCredits_WhenComplementaryMoreThan8() {
-        this.studentDataActive.setMandatoryCredits(10);
-        this.studentDataActive.setElectiveCredits(10);
-        this.studentDataActive.setComplementaryCredits(10); // case 2: complementary > 8
-        Assert.assertEquals(28, this.studentDataActive.getCompletedCredits());
     }
 }

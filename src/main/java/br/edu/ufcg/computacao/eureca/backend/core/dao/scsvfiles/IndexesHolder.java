@@ -564,7 +564,7 @@ public class IndexesHolder {
                         idealTerm, subjectCode, name, active.getRegistration(), student.getAttemptedCredits(),
                         student.getMandatoryCredits(), 0, student.getElectiveCredits(),
                         student.getComplementaryCredits(), student.getCompletedTerms(), student.getSuspendedTerms(),
-                        student.getInstitutionalTerms(), student.getMobilityTerms(), student.getGpa());
+                        student.getInstitutionalEnrollments(), student.getMobilityTerms(), student.getGpa());
                 responses.add(response);
                 LOGGER.debug(response.toString());
             }

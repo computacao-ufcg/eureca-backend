@@ -56,7 +56,7 @@ public class StudentCSV implements Comparable {
         this.electiveCredits = student.getElectiveCredits();
         this.completedTerms = student.getCompletedTerms();
         this.attemptedCredits = student.getAttemptedCredits();
-        this.institutionalEnrollments = student.getInstitutionalTerms();
+        this.institutionalEnrollments = student.getInstitutionalEnrollments();
         this.mobilityTerms = student.getMobilityTerms();
         this.suspendedTerms = student.getSuspendedTerms();
         StudentMetrics metrics = StudentMetricsCalculator.computeMetrics(student);

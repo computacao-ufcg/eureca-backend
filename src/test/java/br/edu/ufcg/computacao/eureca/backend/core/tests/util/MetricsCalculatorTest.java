@@ -30,10 +30,8 @@ public class MetricsCalculatorTest {
 
     @Before
     public void setUp() {
-        this.studentData = new StudentData("x", "x", "x", "x", "x",
-                "x", "x", "x", "Ativo",
-                "VESTIBULAR 2007.2", "x", "x", "x",
-                "x", "x", 1980,196,840,
+        this.studentData = new StudentData("x", "Ativo", "VESTIBULAR 2007.2", "x", "x", "x", "x",
+                "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", 1980,196,840,
                 56,450,30,5.68,
                 7,1.69,14,1,0,
                 0,0,0);
@@ -56,7 +54,7 @@ public class MetricsCalculatorTest {
 
         // exercise
         int attemptedCredits = this.studentData.getAttemptedCredits();
-        int termsAccounted = this.studentData.getCompletedTerms() + this.studentData.getInstitutionalTerms() + this.studentData.getInstitutionalTerms();
+        int termsAccounted = this.studentData.getCompletedTerms() + this.studentData.getInstitutionalEnrollments() + this.studentData.getInstitutionalEnrollments();
         int completedCredits = this.studentData.getCompletedCredits();
 
         StudentMetrics result = StudentMetricsCalculator.computeMetrics(attemptedCredits, termsAccounted, completedCredits);
