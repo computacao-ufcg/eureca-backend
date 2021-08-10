@@ -29,7 +29,7 @@ public interface DataAccessFacade {
 
     Subject getSubject(String courseCode, String curriculumCode, String subjectCode);
 
-    SubjectsStatisticsSummaryResponse getSubjectStatisticsSummary(String from, String to, String course, String code) throws InvalidParameterException;
+    SubjectsStatisticsSummaryResponse getSubjectStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 
     Collection<SubjectRetentionCSV> getSubjectsRetention(String courseCode, String curriculumCode) throws InvalidParameterException;
 

@@ -6,7 +6,6 @@ import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.TeacherData;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.StudentCurriculum;
-import br.edu.ufcg.computacao.eureca.backend.core.holders.EnviromentVariablesHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 
 import org.apache.log4j.Logger;

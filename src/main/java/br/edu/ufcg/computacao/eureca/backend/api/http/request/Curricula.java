@@ -27,11 +27,13 @@ public class Curricula {
     @ApiOperation(value = ApiDocumentation.Curricula.GET_CURRICULA)
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<CurriculumCodesResponse> getCurriculumCodes(
+            @ApiParam(value = ApiDocumentation.Common.COURSE)
+            @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
     throws EurecaException {
         try {
-            CurriculumCodesResponse curriculumCodes = ApplicationFacade.getInstance().getCurriculumCodes(token);
+            CurriculumCodesResponse curriculumCodes = ApplicationFacade.getInstance().getCurriculumCodes(token, courseCode);
             return new ResponseEntity<>(curriculumCodes, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.error(Messages.SOMETHING_WENT_WRONG);

@@ -29,6 +29,10 @@ public class EnrollmentsStatistics {
     @RequestMapping(value = "summary/csv", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.EnrollmentsStatistics.GET_ENROLLMENTS_CSV)
     public ResponseEntity<EnrollmentsResponse> getEnrollmentsSummaryCSV(
+            @ApiParam(value = ApiDocumentation.Common.COURSE)
+            @RequestParam(required = true, value = "courseCode") String courseCode,
+            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Common.TO)
@@ -36,7 +40,7 @@ public class EnrollmentsStatistics {
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
-            EnrollmentsResponse response = ApplicationFacade.getInstance().getEnrollmentsCSV(token, from, to);
+            EnrollmentsResponse response = ApplicationFacade.getInstance().getEnrollmentsCSV(token, courseCode, curriculumCode, from, to);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
@@ -47,6 +51,10 @@ public class EnrollmentsStatistics {
     @RequestMapping(value = "summary", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.EnrollmentsStatistics.GET_ENROLLMENTS)
     public ResponseEntity<EnrollmentsStatisticsSummaryResponse> getEnrollmentsSummary(
+            @ApiParam(value = ApiDocumentation.Common.COURSE)
+            @RequestParam(required = true, value = "courseCode") String courseCode,
+            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Common.TO)
@@ -57,7 +65,7 @@ public class EnrollmentsStatistics {
     ) throws EurecaException {
         try {
             LOGGER.info(Messages.RECEIVING_GET_ENROLLMENTS_STATISTICS);
-            EnrollmentsStatisticsSummaryResponse summary = ApplicationFacade.getInstance().getEnrollmentsStatisticsSummary(token, from, to, lang);
+            EnrollmentsStatisticsSummaryResponse summary = ApplicationFacade.getInstance().getEnrollmentsStatisticsSummary(token, courseCode, curriculumCode, from, to, lang);
             return new ResponseEntity<>(summary, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));

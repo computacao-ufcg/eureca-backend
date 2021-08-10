@@ -28,6 +28,8 @@ public class Alumni {
     @ApiOperation(value = ApiDocumentation.Alumni.GET_ALUMNI)
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<AlumniResponse> getAlumni(
+            @ApiParam(value = ApiDocumentation.Common.COURSE)
+            @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Common.TO)
@@ -39,7 +41,7 @@ public class Alumni {
             throws EurecaException {
         try {
             LOGGER.info(Messages.RECEIVING_GET_ALUMNI);
-            AlumniResponse alumniBasicData = ApplicationFacade.getInstance().getAlumni(token, from, to, lang);
+            AlumniResponse alumniBasicData = ApplicationFacade.getInstance().getAlumni(token, courseCode, from, to, lang);
             return new ResponseEntity<>(alumniBasicData, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
