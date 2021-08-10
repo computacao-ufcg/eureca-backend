@@ -46,7 +46,7 @@ public class StudentDataTest {
     @Test
     public void testGetCompletedCredits() {
         this.studentDataActive.setMandatoryCredits(10);
-        this.studentDataActive.setElectiveCredits(10);
+        this.studentDataActive.setOptionalCredits(10);
         this.studentDataActive.setComplementaryCredits(5);
         Assert.assertEquals(25, this.studentDataActive.getCompletedCredits());
     }

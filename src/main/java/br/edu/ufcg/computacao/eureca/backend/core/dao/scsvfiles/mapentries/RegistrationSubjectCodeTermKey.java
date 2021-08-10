@@ -2,18 +2,18 @@ package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
 
 import java.util.Objects;
 
-public class RegistrationCodeTermKey implements EurecaMapKey {
+public class RegistrationSubjectCodeTermKey implements EurecaMapKey {
     private String registration;
-    private String code;
+    private String subjectCode;
     private String term;
 
-    public RegistrationCodeTermKey(String registration, String code, String term) {
+    public RegistrationSubjectCodeTermKey(String registration, String subjectCode, String term) {
         this.registration = registration;
-        this.code = code;
+        this.subjectCode = subjectCode;
         this.term = term;
     }
 
-    public RegistrationCodeTermKey() {
+    public RegistrationSubjectCodeTermKey() {
     }
 
     public String getRegistration() {
@@ -24,12 +24,12 @@ public class RegistrationCodeTermKey implements EurecaMapKey {
         this.registration = registration;
     }
 
-    public String getCode() {
-        return code;
+    public String getSubjectCode() {
+        return subjectCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setSubjectCode(String subjectCode) {
+        this.subjectCode = subjectCode;
     }
 
     public String getTerm() {
@@ -44,19 +44,19 @@ public class RegistrationCodeTermKey implements EurecaMapKey {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RegistrationCodeTermKey that = (RegistrationCodeTermKey) o;
+        RegistrationSubjectCodeTermKey that = (RegistrationSubjectCodeTermKey) o;
         return Objects.equals(getRegistration(), that.getRegistration()) &&
-                Objects.equals(getCode(), that.getCode()) &&
+                Objects.equals(getSubjectCode(), that.getSubjectCode()) &&
                 Objects.equals(getTerm(), that.getTerm());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getRegistration(), getCode(), getTerm());
+        return Objects.hash(getRegistration(), getSubjectCode(), getTerm());
     }
 
     @Override
     public String toString() {
-        return this.registration + ':' + this.code + ':' + this.term;
+        return this.registration + ':' + this.subjectCode + ':' + this.term;
     }
 }

@@ -55,7 +55,7 @@ public class TestUtils {
                 7,1.69,14,1,0,
                 0,0,0);
         StudentCSV mockedStudentDataResponse = new StudentCSV(mockedStudentData.
-                createStudent(new NationalIdRegistrationKey("fake-national-id", "fake-registration")));
+                createStudent(new NationalIdRegistrationKey("fake-national-id", "fake-registration"), null));
         return Arrays.asList(mockedStudentDataResponse);
     }
 

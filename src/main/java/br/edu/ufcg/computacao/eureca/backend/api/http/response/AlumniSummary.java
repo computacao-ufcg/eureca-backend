@@ -25,7 +25,7 @@ public class AlumniSummary {
         this.alumniCount = alumniCount;
         this.averageTermsCount = averageTermsCount;
         this.averageCost = averageCost;
-        this.costClass = StudentMetricsCalculator.computeCostClass(this.averageCost);
+        this.costClass = StudentMetricsCalculator.computeCostClass(this.averageCost, null);
         this.averageGpa = averageGpa;
         this.averageAlumniCount = averageAlumniCount;
         this.maxAlumniCount = maxAlumniCount;

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class Curriculum {
-    private String course;
-    private String code;
+    private String courseCode;
+    private String curriculumCode;
     private String idealMandatoryCredits;
     private Collection<Integer> idealMandatoryCreditsList;
     private String idealOptionalCredits;
@@ -35,15 +35,15 @@ public class Curriculum {
     private String complementaryActivities;
     private Collection<String> complementaryActivitiesList;
 
-    public Curriculum(String course, String code, String idealMandatoryCredits, String idealOptionalCredits,
+    public Curriculum(String courseCode, String curriculumCode, String idealMandatoryCredits, String idealOptionalCredits,
                       String idealElectiveCredits, String idealComplementaryCredits, int minMandatoryCreditsNeeded,
                       int minOptionalCreditsNeeded, int minElectiveCreditsNeeded, int minComplementaryCreditsNeeded,
                       int minActivitiesNeeded, int minNumberOfTerms, int maxNumberOfTerms, int minNumberOfEnrolledCredits,
                       int maxNumberOfEnrolledCredits, int exceptionalAdditionalEnrolledCredits,
                       String mandatorySubjects, String optionalSubjects, String electiveSubjects,
                       String complementarySubjects, String complementaryActivities) {
-        this.course = course;
-        this.code = code;
+        this.courseCode = courseCode;
+        this.curriculumCode = curriculumCode;
         this.idealMandatoryCredits = idealMandatoryCredits;
         this.idealOptionalCredits = idealOptionalCredits;
         this.idealElectiveCredits = idealElectiveCredits;
@@ -77,20 +77,20 @@ public class Curriculum {
     public Curriculum() {
     }
 
-    public String getCourse() {
-        return course;
+    public String getCourseCode() {
+        return courseCode;
     }
 
-    public void setCourse(String course) {
-        this.course = course;
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
     }
 
-    public String getCode() {
-        return code;
+    public String getCurriculumCode() {
+        return curriculumCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCurriculumCode(String curriculumCode) {
+        this.curriculumCode = curriculumCode;
     }
 
     public String getIdealMandatoryCredits() {
@@ -163,6 +163,11 @@ public class Curriculum {
 
     public void setMinActivitiesNeeded(int minActivitiesNeeded) {
         this.minActivitiesNeeded = minActivitiesNeeded;
+    }
+
+    public double getMinNumberOfCreditsNeeded() {
+        return this.getMinMandatoryCreditsNeeded() + this.getMinElectiveCreditsNeeded() +
+                this.getMinOptionalCreditsNeeded() + getMinComplementaryCreditsNeeded();
     }
 
     public int getMinNumberOfTerms() {
@@ -330,8 +335,8 @@ public class Curriculum {
     @Override
     public String toString() {
         return "Curricula{" +
-                "course='" + course + '\'' +
-                ", code='" + code + '\'' +
+                "course='" + courseCode + '\'' +
+                ", code='" + curriculumCode + '\'' +
                 ", idealMandatoryCredits='" + idealMandatoryCredits + '\'' +
                 ", idealOptionalCredits='" + idealOptionalCredits + '\'' +
                 ", idealElectiveCredits='" + idealElectiveCredits + '\'' +

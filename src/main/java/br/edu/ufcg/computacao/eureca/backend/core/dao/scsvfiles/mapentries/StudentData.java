@@ -1,6 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Curriculum;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.backend.core.models.StudentStatus;
 import org.apache.log4j.Logger;
@@ -23,12 +24,12 @@ public class StudentData implements EurecaMapValue {
     private String placeOfBirth;
     private String race;
     private String disabilities;
-    private String course;
-    private String curriculum;
+    private String courseCode;
+    private String curriculumCode;
     private int mandatoryHours;
     private int mandatoryCredits;
-    private int electiveHours;
-    private int electiveCredits;
+    private int optionalHours;
+    private int optionalCredits;
     private int complementaryHours;
     private int complementaryCredits;
     private double gpa;
@@ -48,8 +49,8 @@ public class StudentData implements EurecaMapValue {
     public StudentData(String name, String statusStr, String admissionStr, String affirmativePolicy, String birthDate,
                        String secondarySchool, String secondarySchoolGraduationYear, String email, String gender,
                        String maritalStatus, String nationality, String country, String placeOfBirth, String race,
-                       String disabilities, String course, String curriculum, int mandatoryHours, int mandatoryCredits,
-                       int electiveHours, int electiveCredits, int complementaryHours, int complementaryCredits,
+                       String disabilities, String courseCode, String curriculumCode, int mandatoryHours, int mandatoryCredits,
+                       int optionalHours, int optionalCredits, int complementaryHours, int complementaryCredits,
                        double gpa, double mc, double iea, int completedTerms, int suspendedTerms,
                        int institutionalEnrollments, int mobilityTerms, int enrolledCredits, double admissionGrade) {
         this.name = name;
@@ -67,12 +68,12 @@ public class StudentData implements EurecaMapValue {
         this.placeOfBirth = placeOfBirth;
         this.race = race;
         this.disabilities = disabilities;
-        this.course = course;
-        this.curriculum = curriculum;
+        this.courseCode = courseCode;
+        this.curriculumCode = curriculumCode;
         this.mandatoryHours = mandatoryHours;
         this.mandatoryCredits = mandatoryCredits;
-        this.electiveHours = electiveHours;
-        this.electiveCredits = electiveCredits;
+        this.optionalHours = optionalHours;
+        this.optionalCredits = optionalCredits;
         this.complementaryHours = complementaryHours;
         this.complementaryCredits = complementaryCredits;
         this.gpa = gpa;
@@ -213,20 +214,20 @@ public class StudentData implements EurecaMapValue {
         this.disabilities = disabilities;
     }
 
-    public String getCourse() {
-        return course;
+    public String getCourseCode() {
+        return courseCode;
     }
 
-    public void setCourse(String course) {
-        this.course = course;
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
     }
 
-    public String getCurriculum() {
-        return curriculum;
+    public String getCurriculumCode() {
+        return curriculumCode;
     }
 
-    public void setCurriculum(String curriculum) {
-        this.curriculum = curriculum;
+    public void setCurriculumCode(String curriculumCode) {
+        this.curriculumCode = curriculumCode;
     }
 
     public int getMandatoryHours() {
@@ -245,20 +246,20 @@ public class StudentData implements EurecaMapValue {
         this.mandatoryCredits = mandatoryCredits;
     }
 
-    public int getElectiveHours() {
-        return electiveHours;
+    public int getOptionalHours() {
+        return optionalHours;
     }
 
-    public void setElectiveHours(int electiveHours) {
-        this.electiveHours = electiveHours;
+    public void setOptionalHours(int optionalHours) {
+        this.optionalHours = optionalHours;
     }
 
-    public int getElectiveCredits() {
-        return electiveCredits;
+    public int getOptionalCredits() {
+        return optionalCredits;
     }
 
-    public void setElectiveCredits(int electiveCredits) {
-        this.electiveCredits = electiveCredits;
+    public void setOptionalCredits(int optionalCredits) {
+        this.optionalCredits = optionalCredits;
     }
 
     public int getComplementaryHours() {
@@ -399,18 +400,19 @@ public class StudentData implements EurecaMapValue {
         return this.status.equals(StudentStatus.DROPOUT);
     }
 
-    public Student createStudent(NationalIdRegistrationKey id) {
+    public Student createStudent(NationalIdRegistrationKey id, Curriculum curriculum) {
         return new Student(id.getRegistration(), id.getNationalId(), getName(), getBirthDate(), getEmail(), getGender(),
-                getMaritalStatus(), getNationality(), getPlaceOfBirth(), getRace(), getStatusStr(), getStatus(),
-                getStatusTerm(), getAdmissionStr(), getAdmissionTerm(), getAffirmativePolicy(), getSecondarySchool(),
-                getSecondarySchoolGraduationYear(), getCourse(), getCurriculum(), getMandatoryHours(), getMandatoryCredits(),
-                getElectiveHours(), getElectiveCredits(), getComplementaryHours(), getComplementaryCredits(),
+                getMaritalStatus(), getNationality(), getCountry(), getPlaceOfBirth(), getRace(), getStatusStr(),
+                getStatus(), getStatusTerm(), getAdmissionStr(), getAdmissionTerm(), getDisabilities(),
+                getAffirmativePolicy(), getSecondarySchool(), getSecondarySchoolGraduationYear(), getCourseCode(),
+                getCurriculumCode(), curriculum, getMandatoryHours(), getMandatoryCredits(),
+                getOptionalHours(), getOptionalCredits(), getComplementaryHours(), getComplementaryCredits(),
                 getAttemptedCredits(), getGpa(), getMc(), getIea(), getCompletedTerms(), getSuspendedTerms(),
                 getInstitutionalEnrollments(), getMobilityTerms(), getEnrolledCredits(), getAdmissionGrade());
     }
 
     public int getCompletedCredits() {
-        return this.getMandatoryCredits() + this.getElectiveCredits() + this.getComplementaryCredits();
+        return this.getMandatoryCredits() + this.getOptionalCredits() + this.getComplementaryCredits();
     }
 
     private void parseAdmissionStr(String admission) {
@@ -456,21 +458,23 @@ public class StudentData implements EurecaMapValue {
                 ", gender='" + gender + '\'' +
                 ", maritalStatus='" + maritalStatus + '\'' +
                 ", nationality='" + nationality + '\'' +
+                ", country='" + country + '\'' +
                 ", placeOfBirth='" + placeOfBirth + '\'' +
                 ", race='" + race + '\'' +
                 ", status='" + statusStr + '\'' +
                 ", termStatus='" + statusTerm + '\'' +
                 ", admission='" + admissionStr + '\'' +
                 ", admissionTerm='" + admissionTerm + '\'' +
+                ", disabilities='" + disabilities + '\'' +
                 ", affirmativeAction='" + affirmativePolicy + '\'' +
                 ", secondarySchool='" + secondarySchool + '\'' +
                 ", secondarySchoolGraduationYear='" + secondarySchoolGraduationYear + '\'' +
-                ", course='" + course + '\'' +
-                ", curriculum='" + curriculum + '\'' +
+                ", courseCode='" + courseCode + '\'' +
+                ", curriculumCode='" + curriculumCode + '\'' +
                 ", mandatoryHours=" + mandatoryHours +
                 ", mandatoryCredits=" + mandatoryCredits +
-                ", electiveHours=" + electiveHours +
-                ", electiveCredits=" + electiveCredits +
+                ", optionalHours=" + optionalHours +
+                ", optionalCredits=" + optionalCredits +
                 ", complementaryHours=" + complementaryHours +
                 ", complementaryCredits=" + complementaryCredits +
                 ", gpa=" + gpa +

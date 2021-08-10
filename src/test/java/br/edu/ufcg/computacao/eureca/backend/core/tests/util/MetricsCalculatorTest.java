@@ -56,8 +56,7 @@ public class MetricsCalculatorTest {
         int attemptedCredits = this.studentData.getAttemptedCredits();
         int termsAccounted = this.studentData.getCompletedTerms() + this.studentData.getInstitutionalEnrollments() + this.studentData.getInstitutionalEnrollments();
         int completedCredits = this.studentData.getCompletedCredits();
-
-        StudentMetrics result = StudentMetricsCalculator.computeMetrics(attemptedCredits, termsAccounted, completedCredits);
+        StudentMetrics result = StudentMetricsCalculator.computeMetrics(attemptedCredits, termsAccounted, completedCredits, null);
 
         // verify
         Assert.assertEquals(expected.getAttemptedCredits(), result.getAttemptedCredits(), 0.1);
@@ -183,7 +182,7 @@ public class MetricsCalculatorTest {
         RiskClass expected = RiskClass.LOW;
 
         // exercise
-        RiskClass result = StudentMetricsCalculator.computeRiskClass(1);
+        RiskClass result = StudentMetricsCalculator.computeRiskClass(1, null);
 
         Assert.assertEquals(expected, result);
     }
@@ -195,7 +194,7 @@ public class MetricsCalculatorTest {
         CostClass expected = CostClass.NOT_APPLICABLE;
 
         // exercise
-        CostClass result = StudentMetricsCalculator.computeCostClass(-1);
+        CostClass result = StudentMetricsCalculator.computeCostClass(-1, null);
 
         // verify
         Assert.assertEquals(expected, result);
@@ -207,7 +206,7 @@ public class MetricsCalculatorTest {
         // set up
         List<Student> students = new ArrayList<>();
         NationalIdRegistrationKey cpfRegistration = new NationalIdRegistrationKey("","");
-        Student student = this.studentData.createStudent(cpfRegistration);
+        Student student = this.studentData.createStudent(cpfRegistration, null);
         students.add(student);
 
         // exercise
