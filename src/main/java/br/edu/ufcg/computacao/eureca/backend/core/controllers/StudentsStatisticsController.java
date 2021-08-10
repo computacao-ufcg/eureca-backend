@@ -5,6 +5,7 @@ import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.CostClass;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Curriculum;
 import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.backend.core.util.CollectionUtil;
@@ -110,8 +111,9 @@ public class StudentsStatisticsController {
             int termsAccounted = alumnus.getCompletedTerms() + alumnus.getInstitutionalEnrollments() +
                     alumnus.getInstitutionalEnrollments();
             int completedCredits = alumnus.getCompletedCredits();
+            Curriculum curriculum = alumnus.getCurriculum();
             aggregateCost += (StudentMetricsCalculator.computeMetrics(attemptedCredits, termsAccounted,
-                    completedCredits).getCost());
+                    completedCredits, curriculum).getCost());
         }
 
         double averageGPA = termAlumniCount == 0 ? 0.0 : Double.parseDouble(String.format("%.2f",
@@ -136,8 +138,9 @@ public class StudentsStatisticsController {
             int termsAccounted = dropout.getCompletedTerms() + dropout.getInstitutionalEnrollments() +
                     dropout.getInstitutionalEnrollments();
             int completedCredits = dropout.getCompletedCredits();
+            Curriculum curriculum = dropout.getCurriculum();
             aggregateCost += (StudentMetricsCalculator.computeMetrics(attemptedCredits, termsAccounted,
-                    completedCredits).getCost());
+                    completedCredits, curriculum).getCost());
         }
         DropoutReasonSummary dropoutReasonSummary = new DropoutReasonSummary(dropoutsCount);
         int size = dropouts.size();
@@ -209,7 +212,8 @@ public class StudentsStatisticsController {
             int attemptedCredits = alumnus.getAttemptedCredits();
             int termsAccounted = alumnus.getCompletedTerms() + alumnus.getInstitutionalEnrollments() + alumnus.getInstitutionalEnrollments();
             int completedCredits = alumnus.getCompletedCredits();
-            aggregateCost += (StudentMetricsCalculator.computeMetrics(attemptedCredits, termsAccounted, completedCredits).getCost());
+            Curriculum curriculum = alumnus.getCurriculum();
+            aggregateCost += (StudentMetricsCalculator.computeMetrics(attemptedCredits, termsAccounted, completedCredits, curriculum).getCost());
             totalAlumniCount++;
             Collection<String> alumniPerTerm = alumniPerTermMap.get(alumnus.getStatusTerm());
             if (alumniPerTerm == null) {
@@ -263,7 +267,8 @@ public class StudentsStatisticsController {
             int attemptedCredits = dropout.getAttemptedCredits();
             int termsAccounted = dropout.getCompletedTerms() + dropout.getInstitutionalEnrollments() + dropout.getInstitutionalEnrollments();
             int completedCredits = dropout.getCompletedCredits();
-            aggregateCost += (StudentMetricsCalculator.computeMetrics(attemptedCredits, termsAccounted, completedCredits).getCost());
+            Curriculum curriculum = dropout.getCurriculum();
+            aggregateCost += (StudentMetricsCalculator.computeMetrics(attemptedCredits, termsAccounted, completedCredits, curriculum).getCost());
             dropoutsCount[dropout.getStatusIndex()]++;
             String term = dropout.getAdmissionTerm();
             if (term.compareTo(firstTerm) < 0) firstTerm = term;
@@ -274,7 +279,7 @@ public class StudentsStatisticsController {
 
         double averageTermsCount = (dropoutCount == 0 ? -1.0 : aggregateTermsCount/dropoutCount);
         double averageCost = (dropoutCount == 0 ? -1.0 : aggregateCost/dropoutCount);
-        CostClass costClass = StudentMetricsCalculator.computeCostClass(averageCost);
+        CostClass costClass = StudentMetricsCalculator.computeCostClass(averageCost, null);
 
         return new DropoutsSummary(firstTerm, lastTerm, dropoutCount, averageTermsCount, averageCost, costClass, aggregateDropouts);
     }

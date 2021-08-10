@@ -77,11 +77,8 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Curriculum getCurriculum(String course, String code) {
-        Map<CurriculumKey, CurriculumData> curriculumMap = this.mapsHolder.getMap("curriculum");
-        CurriculumKey key = new CurriculumKey(course, code);
-        CurriculumData ret = curriculumMap.get(key);
-        return ret.getCurriculum(key);
+    public Curriculum getCurriculum(String courseCode, String curriculumCode) {
+        return this.indexesHolder.getCurriculum(courseCode, curriculumCode);
     }
 
     @Override
@@ -184,7 +181,8 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                 Collection<Student> actives = new TreeSet<>();
                 entry.getValue().forEach(cpfRegistration -> {
                     StudentData studentData = studentsMap.get(cpfRegistration);
-                    actives.add(studentData.createStudent(cpfRegistration));
+                    Curriculum curriculum = getCurriculum(studentData.getCourseCode(), studentData.getCurriculumCode());
+                    actives.add(studentData.createStudent(cpfRegistration, curriculum));
                 });
                 termsMap.put(term, actives);
             }

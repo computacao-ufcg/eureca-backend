@@ -50,8 +50,8 @@ public class EnrollmentData implements EurecaMapValue {
         this.status = status;
     }
 
-    public Enrollment createEnrollment(RegistrationCodeTermKey key) {
-        return new Enrollment(key.getRegistration(), key.getCode(), key.getTerm(),
+    public Enrollment createEnrollment(RegistrationSubjectCodeTermKey key) {
+        return new Enrollment(key.getRegistration(), key.getSubjectCode(), key.getTerm(),
                 getClassId(), getCredits(), getGrade(), getStatus());
     }
 

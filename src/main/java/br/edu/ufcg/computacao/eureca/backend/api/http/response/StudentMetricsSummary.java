@@ -13,8 +13,8 @@ public class StudentMetricsSummary {
     public StudentMetricsSummary(double termsCount, StudentMetrics metrics) {
         this.termsCount = termsCount;
         this.metrics = metrics;
-        this.riskClass = StudentMetricsCalculator.computeRiskClass(metrics.getRisk());
-        this.costClass = StudentMetricsCalculator.computeCostClass(metrics.getCost());
+        this.riskClass = StudentMetricsCalculator.computeRiskClass(metrics.getRisk(), null);
+        this.costClass = StudentMetricsCalculator.computeCostClass(metrics.getCost(), null);
     }
 
     public double getTermsCount() {

@@ -13,8 +13,10 @@ public class Student implements Comparable {
     private String gender;
     private String maritalStatus;
     private String nationality;
+    private String country;
     private String placeOfBirth;
     private String race;
+    private String disabilities;
     private String statusStr;
     private StudentStatus status;
     private String statusTerm;
@@ -23,12 +25,13 @@ public class Student implements Comparable {
     private String affirmativePolicy;
     private String secondarySchool;
     private String secondarySchoolGraduationYear;
-    private String course;
-    private String curriculum;
+    private String courseCode;
+    private String curriculumCode;
+    private Curriculum curriculum;
     private int mandatoryHours;
     private int mandatoryCredits;
-    private int electiveHours;
-    private int electiveCredits;
+    private int optionalHours;
+    private int optionalCredits;
     private int complementaryHours;
     private int complementaryCredits;
     private int attemptedCredits;
@@ -43,11 +46,11 @@ public class Student implements Comparable {
     private double admissionGrade;
 
     public Student(String registration, String nationalId, String name, String birthDate, String email, String gender,
-                   String maritalStatus, String nationality, String placeOfBirth, String race, String statusStr,
-                   StudentStatus status, String statusTerm, String admissionStr, String admissionTerm,
+                   String maritalStatus, String nationality, String country, String placeOfBirth, String race, String statusStr,
+                   StudentStatus status, String statusTerm, String admissionStr, String admissionTerm, String disabilities,
                    String affirmativePolicy, String secondarySchool, String secondarySchoolGraduationYear,
-                   String course, String curriculum, int mandatoryHours, int mandatoryCredits, int electiveHours,
-                   int electiveCredits, int complementaryHours, int complementaryCredits, int attemptedCredits,
+                   String courseCode, String curriculumCode, Curriculum curriculum, int mandatoryHours, int mandatoryCredits, int optionalHours,
+                   int optionalCredits, int complementaryHours, int complementaryCredits, int attemptedCredits,
                    double gpa, double mc, double iea, int completedTerms, int suspendedTerms, int institutionalEnrollments,
                    int mobilityTerms, int enrolledCredits, double admissionGrade) {
         this.registration = new Registration(registration);
@@ -58,6 +61,7 @@ public class Student implements Comparable {
         this.gender = gender;
         this.maritalStatus = maritalStatus;
         this.nationality = nationality;
+        this.country = country;
         this.placeOfBirth = placeOfBirth;
         this.race = race;
         this.statusStr = statusStr;
@@ -65,15 +69,17 @@ public class Student implements Comparable {
         this.statusTerm = statusTerm;
         this.admissionStr = admissionStr;
         this.admissionTerm = admissionTerm;
+        this.disabilities = disabilities;
         this.affirmativePolicy = affirmativePolicy;
         this.secondarySchool = secondarySchool;
         this.secondarySchoolGraduationYear = secondarySchoolGraduationYear;
-        this.course = course;
+        this.courseCode = courseCode;
+        this.curriculumCode = curriculumCode;
         this.curriculum = curriculum;
         this.mandatoryHours = mandatoryHours;
         this.mandatoryCredits = mandatoryCredits;
-        this.electiveHours = electiveHours;
-        this.electiveCredits = electiveCredits;
+        this.optionalHours = optionalHours;
+        this.optionalCredits = optionalCredits;
         this.complementaryHours = complementaryHours;
         this.complementaryCredits = complementaryCredits;
         this.attemptedCredits = attemptedCredits;
@@ -152,6 +158,14 @@ public class Student implements Comparable {
         this.nationality = nationality;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     public String getPlaceOfBirth() {
         return placeOfBirth;
     }
@@ -208,6 +222,14 @@ public class Student implements Comparable {
         this.admissionTerm = admissionTerm;
     }
 
+    public String getDisabilities() {
+        return disabilities;
+    }
+
+    public void setDisabilities(String disabilities) {
+        this.disabilities = disabilities;
+    }
+
     public String getAffirmativePolicy() {
         return affirmativePolicy;
     }
@@ -232,19 +254,27 @@ public class Student implements Comparable {
         this.secondarySchoolGraduationYear = secondarySchoolGraduationYear;
     }
 
-    public String getCourse() {
-        return course;
+    public String getCourseCode() {
+        return courseCode;
     }
 
-    public void setCourse(String course) {
-        this.course = course;
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
     }
 
-    public String getCurriculum() {
+    public String getCurriculumCode() {
+        return curriculumCode;
+    }
+
+    public void setCurriculumCode(String curriculumCode) {
+        this.curriculumCode = curriculumCode;
+    }
+
+    public Curriculum getCurriculum() {
         return curriculum;
     }
 
-    public void setCurriculum(String curriculum) {
+    public void setCurriculum(Curriculum curriculum) {
         this.curriculum = curriculum;
     }
 
@@ -264,20 +294,20 @@ public class Student implements Comparable {
         this.mandatoryCredits = mandatoryCredits;
     }
 
-    public int getElectiveHours() {
-        return electiveHours;
+    public int getOptionalHours() {
+        return optionalHours;
     }
 
-    public void setElectiveHours(int electiveHours) {
-        this.electiveHours = electiveHours;
+    public void setOptionalHours(int optionalHours) {
+        this.optionalHours = optionalHours;
     }
 
-    public int getElectiveCredits() {
-        return electiveCredits;
+    public int getOptionalCredits() {
+        return optionalCredits;
     }
 
-    public void setElectiveCredits(int electiveCredits) {
-        this.electiveCredits = electiveCredits;
+    public void setOptionalCredits(int optionalCredits) {
+        this.optionalCredits = optionalCredits;
     }
 
     public int getComplementaryHours() {
@@ -389,12 +419,12 @@ public class Student implements Comparable {
     }
 
     public int getCompletedCredits() {
-        return this.getMandatoryCredits() + this.getElectiveCredits() + this.getComplementaryCredits();
+        return this.getMandatoryCredits() + this.getOptionalCredits() + this.getComplementaryCredits();
     }
 
     public RiskClass computeRiskClass() {
         StudentMetrics studentMetrics = StudentMetricsCalculator.computeMetrics(this);
-        return StudentMetricsCalculator.computeRiskClass(studentMetrics.getRisk());
+        return StudentMetricsCalculator.computeRiskClass(studentMetrics.getRisk(), this.curriculum);
     }
 
     public int getStatusIndex() {
@@ -453,6 +483,7 @@ public class Student implements Comparable {
                 ", gender='" + gender + '\'' +
                 ", maritalStatus='" + maritalStatus + '\'' +
                 ", nationality='" + nationality + '\'' +
+                ", country='" + country + '\'' +
                 ", placeOfBirth='" + placeOfBirth + '\'' +
                 ", race='" + race + '\'' +
                 ", statusStr='" + statusStr + '\'' +
@@ -460,15 +491,17 @@ public class Student implements Comparable {
                 ", statusTerm='" + statusTerm + '\'' +
                 ", admissionStr='" + admissionStr + '\'' +
                 ", admissionTerm='" + admissionTerm + '\'' +
+                ", disabilities='" + disabilities + '\'' +
                 ", affirmativePolicy='" + affirmativePolicy + '\'' +
                 ", secondarySchool='" + secondarySchool + '\'' +
                 ", secondarySchoolGraduationYear='" + secondarySchoolGraduationYear + '\'' +
-                ", course='" + course + '\'' +
+                ", courseCode='" + courseCode + '\'' +
+                ", curriculumCode='" + curriculumCode + '\'' +
                 ", curriculum='" + curriculum + '\'' +
                 ", mandatoryHours=" + mandatoryHours +
                 ", mandatoryCredits=" + mandatoryCredits +
-                ", electiveHours=" + electiveHours +
-                ", electiveCredits=" + electiveCredits +
+                ", optionalHours=" + optionalHours +
+                ", optionalCredits=" + optionalCredits +
                 ", complementaryHours=" + complementaryHours +
                 ", complementaryCredits=" + complementaryCredits +
                 ", attemptedCredits=" + attemptedCredits +

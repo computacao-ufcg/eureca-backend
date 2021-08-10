@@ -41,7 +41,7 @@ public class StudentCSV implements Comparable {
         this.name = student.getName();
         this.gender = student.getGender();
         this.maritalStatus = student.getMaritalStatus();
-        this.curriculum = student.getCurriculum();
+        this.curriculum = student.getCurriculumCode();
         this.affirmativePolicy = student.getAffirmativePolicy();
         this.admissionType = student.getAdmissionStr();
         this.admissionTerm = student.getAdmissionTerm();
@@ -53,7 +53,7 @@ public class StudentCSV implements Comparable {
         this.mc = student.getMc();
         this.mandatoryCredits = student.getMandatoryCredits();
         this.complementaryCredits = student.getComplementaryCredits();
-        this.electiveCredits = student.getElectiveCredits();
+        this.electiveCredits = student.getOptionalCredits();
         this.completedTerms = student.getCompletedTerms();
         this.attemptedCredits = student.getAttemptedCredits();
         this.institutionalEnrollments = student.getInstitutionalEnrollments();
@@ -68,11 +68,11 @@ public class StudentCSV implements Comparable {
         this.courseDurationPrediction = metrics.getCourseDurationPrediction();
         this.risk = metrics.getRisk();
         if (student.isActive()) {
-            this.riskClass = StudentMetricsCalculator.computeRiskClass(metrics.getRisk());
+            this.riskClass = StudentMetricsCalculator.computeRiskClass(metrics.getRisk(), student.getCurriculum());
         } else {
             this.riskClass = RiskClass.NOT_APPLICABLE;
         }
-        this.costClass = StudentMetricsCalculator.computeCostClass(this.cost);
+        this.costClass = StudentMetricsCalculator.computeCostClass(this.cost, student.getCurriculum());
     }
 
     public String getRegistration() {
