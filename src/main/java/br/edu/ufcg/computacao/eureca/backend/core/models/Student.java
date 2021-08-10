@@ -424,7 +424,10 @@ public class Student implements Comparable {
 
     public RiskClass computeRiskClass() {
         StudentMetrics studentMetrics = StudentMetricsCalculator.computeMetrics(this);
-        return StudentMetricsCalculator.computeRiskClass(studentMetrics.getRisk(), this.curriculum);
+        double desiredAverageDuration = (this.getCurriculum().getMinNumberOfTerms() +
+                (this.getCurriculum().getMaxNumberOfTerms() - this.getCurriculum().getMinNumberOfTerms()) / 4.0);
+        double lowestRisk = this.getCurriculum().getMinNumberOfTerms() / desiredAverageDuration;
+        return StudentMetricsCalculator.computeRiskClass(studentMetrics.getRisk(), lowestRisk);
     }
 
     public int getStatusIndex() {
