@@ -2,7 +2,7 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import java.util.Collection;
 
-public class AlumniStatisticsResponse extends RangeSummary {
+public class AlumniStatisticsResponse extends Range {
     private Collection<AlumniPerTermSummary> alumniPerTermSummaries;
 
     public AlumniStatisticsResponse(Collection<AlumniPerTermSummary> alumniPerTermSummaries, String from, String to) {

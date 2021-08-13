@@ -28,7 +28,7 @@ public class SubjectsStatistics {
 
     @RequestMapping(value = "mandatory", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.SubjectStatistics.GET_MANDATORY)
-    public ResponseEntity<SubjectsStatisticsResponse> getMandatory(
+    public ResponseEntity<SubjectsStatisticsResponse> getMandatorySubjects(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
@@ -52,7 +52,7 @@ public class SubjectsStatistics {
 
     @RequestMapping(value = "optional", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.SubjectStatistics.GET_OPTIONAL)
-    public ResponseEntity<SubjectsStatisticsResponse> getOptional(
+    public ResponseEntity<SubjectsStatisticsResponse> getOptionalSubjects(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
@@ -76,7 +76,7 @@ public class SubjectsStatistics {
 
     @RequestMapping(value = "elective", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.SubjectStatistics.GET_ELECTIVE)
-    public ResponseEntity<SubjectsStatisticsResponse> getElective(
+    public ResponseEntity<SubjectsStatisticsResponse> getElectiveSubjects(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
@@ -100,7 +100,7 @@ public class SubjectsStatistics {
 
     @RequestMapping(value = "complementary", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.SubjectStatistics.GET_COMPLEMENTARY)
-    public ResponseEntity<SubjectsStatisticsResponse> getComplementary(
+    public ResponseEntity<SubjectsStatisticsResponse> getComplementarySubjects(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
