@@ -58,9 +58,7 @@ public class RetentionStatisticsController {
     public RetentionStatisticsSummaryResponse getRetentionStatistics(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         Collection<Student> delayed = getDelayed(courseCode, from, to);
         StudentMetricsSummary summary = StudentMetricsCalculator.computeMetricsSummary(delayed);
-        String firstTerm = CollectionUtil.getFirstTermFromStudents(delayed);
-        String lastTerm = CollectionUtil.getLastTermFromStudents(delayed);
-        DelayedSummary delayedSummary = new DelayedSummary(delayed.size(), summary, firstTerm, lastTerm);
+        DelayedSummary delayedSummary = new DelayedSummary(from, to, delayed.size(), summary);
 
         Collection<SubjectRetentionDigest> subjectsRetentionList = this.dataAccessFacade.getSubjectsRetentionSummary(courseCode, curriculumCode);
         MetricStatistics retentionStatistics = new MetricStatistics(getRetentionSample(subjectsRetentionList));

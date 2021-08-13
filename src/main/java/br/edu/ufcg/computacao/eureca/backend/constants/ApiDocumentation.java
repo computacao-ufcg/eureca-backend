@@ -65,7 +65,8 @@ public class ApiDocumentation {
     public static class EnrollmentsStatistics {
         public static final String API = "Estatísticas de matrículas.";
         public static final String GET_ENROLLMENTS = "Retorna um sumário dos dados das matrículas.";
-        public static final String GET_ENROLLMENTS_CSV = "Retorna os dados completos das matrículas do curso.";
+        public static final String GET_MANDATORY_SUBJECTS_ENROLLMENTS_CSV = "Retorna os dados completos das matrículas do curso.";
+        public static final String GET_MANDATOTY_SUBJECTS_ENROLLMENTS = "Retorna um sumário dos dados das matrículas do curso";
     }
 
     public static class RetentionStatistics {

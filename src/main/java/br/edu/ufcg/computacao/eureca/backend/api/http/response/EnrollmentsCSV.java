@@ -1,71 +1,42 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-import java.util.Objects;
+public class EnrollmentsCSV implements Comparable {
+    private String term;
+    private EnrollmentsPerSubjectSummary summary;
 
-public class EnrollmentsCSV {
-    private String discipline;
-    private int totalEnrollments;
-    private double averageEnrollmentsPerClass;
-    private int totalClasses;
-    private String from;
-    private String to;
-
-    public EnrollmentsCSV(String discipline, int totalEnrollments, double averageEnrollmentsPerClass,
-                          int totalClasses, String from, String to) {
-        this.discipline = discipline;
-        this.totalEnrollments = totalEnrollments;
-        this.averageEnrollmentsPerClass = averageEnrollmentsPerClass;
-        this.totalClasses = totalClasses;
-        this.from = from;
-        this.to = to;
+    public EnrollmentsCSV(String term, EnrollmentsPerSubjectSummary summary) {
+        this.term = term;
+        this.summary = summary;
     }
 
-    public String getDiscipline() {
-        return discipline;
+    public String getTerm() {
+        return term;
     }
 
-    public int getTotalEnrollments() {
-        return totalEnrollments;
+    public void setTerm(String term) {
+        this.term = term;
     }
 
-    public double getAverageEnrollmentsPerClass() {
-        return averageEnrollmentsPerClass;
+    public EnrollmentsPerSubjectSummary getSummary() {
+        return summary;
     }
 
-    public int getTotalClasses() {
-        return totalClasses;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public String getTo() {
-        return to;
+    public void setSummary(EnrollmentsPerSubjectSummary summary) {
+        this.summary = summary;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        EnrollmentsCSV that = (EnrollmentsCSV) o;
-        return Objects.equals(discipline, that.discipline);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(discipline);
+    public int compareTo(Object o) {
+        EnrollmentsCSV other = (EnrollmentsCSV) o;
+        int result = this.getTerm().compareTo(other.getTerm());
+        return (result == 0 ? this.getSummary().compareTo(other.getSummary()) : result);
     }
 
     @Override
     public String toString() {
-        return "EnrollmentsStatisticsItemResponse{" +
-                "discipline='" + discipline + '\'' +
-                ", totalEnrollments=" + totalEnrollments +
-                ", averageEnrollmentsPerClass=" + averageEnrollmentsPerClass +
-                ", totalClasses=" + totalClasses +
-                ", from='" + from + '\'' +
-                ", to='" + to + '\'' +
+        return "EnrollmentsCSV{" +
+                "term='" + term + '\'' +
+                ", summary=" + summary +
                 '}';
     }
 }

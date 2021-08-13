@@ -2,7 +2,7 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import java.util.Collection;
 
-public class DropoutsStatisticsResponse extends RangeSummary {
+public class DropoutsStatisticsResponse extends Range {
     private Collection<DropoutPerTermSummary> dropoutPerTermSummaries;
 
     public DropoutsStatisticsResponse(Collection<DropoutPerTermSummary> dropoutPerTermSummaries, String from, String to) {

@@ -21,7 +21,7 @@ public class SubjectsStatisticsController {
 
     public SubjectsStatisticsResponse getSubjectsSummary(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
         Collection<SubjectMetricsPerTermSummary> metricsPerTerm =
-                this.dataAccessFacade.getSubjectMetricsPerTermSummary(from, to, courseCode, curriculumCode, subjectType);
+                this.dataAccessFacade.getSubjectMetricsPerTermSummary(courseCode, curriculumCode, from, to, subjectType);
         String firstTerm = "9999.9";
         String lastTerm = "0000.0";
         for (SubjectMetricsPerTermSummary metricsSummary : metricsPerTerm) {
@@ -39,7 +39,7 @@ public class SubjectsStatisticsController {
     public SubjectResponse getSubjectsCSV(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
         Collection<SubjectCSV> subjectDataResponses = new TreeSet<>();
         Collection<SubjectMetricsPerTermSummary> metricsPerTerm =
-                this.dataAccessFacade.getSubjectMetricsPerTermSummary(from, to, courseCode, curriculumCode, subjectType);
+                this.dataAccessFacade.getSubjectMetricsPerTermSummary(courseCode, curriculumCode, from, to, subjectType);
         metricsPerTerm.forEach(subject -> {
             subject.getTerms().forEach(termSummary -> {
                 SubjectCSV subjectData = new SubjectCSV(courseCode, curriculumCode, subject.getCode(),
