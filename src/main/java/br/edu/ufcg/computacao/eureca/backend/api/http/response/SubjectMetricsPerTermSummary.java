@@ -3,30 +3,30 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 import java.util.Collection;
 
 public class SubjectMetricsPerTermSummary implements Comparable {
-    private String code;
-    private String name;
+    private String subjectCode;
+    private String subjectName;
     private Collection<SubjectMetricsPerTerm> terms;
 
-    public SubjectMetricsPerTermSummary(String code, String name, Collection<SubjectMetricsPerTerm> terms) {
-        this.code = code;
-        this.name = name;
+    public SubjectMetricsPerTermSummary(String subjectCode, String subjectName, Collection<SubjectMetricsPerTerm> terms) {
+        this.subjectCode = subjectCode;
+        this.subjectName = subjectName;
         this.terms = terms;
     }
 
-    public String getCode() {
-        return code;
+    public String getSubjectCode() {
+        return subjectCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setSubjectCode(String subjectCode) {
+        this.subjectCode = subjectCode;
     }
 
-    public String getName() {
-        return name;
+    public String getSubjectName() {
+        return subjectName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSubjectName(String subjectName) {
+        this.subjectName = subjectName;
     }
 
     public Collection<SubjectMetricsPerTerm> getTerms() {
@@ -40,6 +40,6 @@ public class SubjectMetricsPerTermSummary implements Comparable {
     @Override
     public int compareTo(Object o) {
         SubjectMetricsPerTermSummary other = (SubjectMetricsPerTermSummary) o;
-        return code.compareTo(other.getCode());
+        return subjectCode.compareTo(other.getSubjectCode());
     }
 }

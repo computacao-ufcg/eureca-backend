@@ -4,14 +4,16 @@ public class SubjectCSV implements Comparable {
     String courseCode;
     String curriculumCode;
     String subjectCode;
+    String subjectName;
     String term;
     SubjectMetrics metrics;
 
-    public SubjectCSV(String courseCode, String curriculumCode, String subjectCode, String term,
+    public SubjectCSV(String courseCode, String curriculumCode, String subjectCode, String subjectName, String term,
                       SubjectMetrics metrics) {
         this.courseCode = courseCode;
         this.curriculumCode = curriculumCode;
         this.subjectCode = subjectCode;
+        this.subjectName = subjectName;
         this.term = term;
         this.metrics = metrics;
     }
@@ -40,6 +42,14 @@ public class SubjectCSV implements Comparable {
         this.subjectCode = subjectCode;
     }
 
+    public String getSubjectName() {
+        return subjectName;
+    }
+
+    public void setSubjectName(String subjectName) {
+        this.subjectName = subjectName;
+    }
+
     public String getTerm() {
         return term;
     }
@@ -59,9 +69,9 @@ public class SubjectCSV implements Comparable {
     @Override
     public int compareTo(Object o) {
         String thisValue = courseCode + curriculumCode + subjectCode + term;
-        SubjectCSV otherValue = (SubjectCSV) o;
-        return thisValue.compareTo((otherValue.getCourseCode() + otherValue.getCurriculumCode()+
-                otherValue.getSubjectCode() + otherValue.getTerm()));
+        SubjectCSV other = (SubjectCSV) o;
+        String otherValue = other.getCourseCode() + other.getCurriculumCode()+ other.getSubjectCode() + other.getTerm();
+        return thisValue.compareTo(otherValue);
     }
 
     @Override
@@ -70,6 +80,7 @@ public class SubjectCSV implements Comparable {
                 "courseCode='" + courseCode + '\'' +
                 ", curriculumCode='" + curriculumCode + '\'' +
                 ", subjectCode='" + subjectCode + '\'' +
+                ", subjectName='" + subjectName + '\'' +
                 ", term='" + term + '\'' +
                 ", metrics='" + metrics + '\'' +
                 '}';

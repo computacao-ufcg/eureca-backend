@@ -72,6 +72,138 @@ public class EnrollmentsStatistics {
         }
     }
 
+    @RequestMapping(value = "optional", method = RequestMethod.GET)
+    @ApiOperation(value = ApiDocumentation.EnrollmentsStatistics.GET_OPTIONAL_SUBJECTS_ENROLLMENTS)
+    public ResponseEntity<EnrollmentsStatisticsResponse> getOptionalSubjectsEnrollmentsStatistics(
+            @ApiParam(value = ApiDocumentation.Common.COURSE)
+            @RequestParam(required = true, value = "courseCode") String courseCode,
+            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
+            @ApiParam(value = ApiDocumentation.Common.FROM)
+            @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
+            @ApiParam(value = ApiDocumentation.Common.TO)
+            @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
+            @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
+    ) throws EurecaException {
+        try {
+            EnrollmentsStatisticsResponse response = ApplicationFacade.getInstance().getEnrollmentsStatistics(token, courseCode, curriculumCode, from, to, SubjectType.OPTIONAL);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (EurecaException e) {
+            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
+            throw e;
+        }
+    }
+
+    @RequestMapping(value = "optional/csv", method = RequestMethod.GET)
+    @ApiOperation(value = ApiDocumentation.EnrollmentsStatistics.GET_OPTIONAL_SUBJECTS_ENROLLMENTS_CSV)
+    public ResponseEntity<EnrollmentsResponse> getOptionalSubjectsEnrollmentsCSV(
+            @ApiParam(value = ApiDocumentation.Common.COURSE)
+            @RequestParam(required = true, value = "courseCode") String courseCode,
+            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
+            @ApiParam(value = ApiDocumentation.Common.FROM)
+            @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
+            @ApiParam(value = ApiDocumentation.Common.TO)
+            @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
+            @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
+    ) throws EurecaException {
+        try {
+            EnrollmentsResponse response = ApplicationFacade.getInstance().getEnrollmentsCSV(token, courseCode, curriculumCode, from, to, SubjectType.OPTIONAL);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (EurecaException e) {
+            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
+            throw e;
+        }
+    }
+
+    @RequestMapping(value = "elective", method = RequestMethod.GET)
+    @ApiOperation(value = ApiDocumentation.EnrollmentsStatistics.GET_ELECTIVE_SUBJECTS_ENROLLMENTS)
+    public ResponseEntity<EnrollmentsStatisticsResponse> getElectiveSubjectsEnrollmentsStatistics(
+            @ApiParam(value = ApiDocumentation.Common.COURSE)
+            @RequestParam(required = true, value = "courseCode") String courseCode,
+            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
+            @ApiParam(value = ApiDocumentation.Common.FROM)
+            @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
+            @ApiParam(value = ApiDocumentation.Common.TO)
+            @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
+            @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
+    ) throws EurecaException {
+        try {
+            EnrollmentsStatisticsResponse response = ApplicationFacade.getInstance().getEnrollmentsStatistics(token, courseCode, curriculumCode, from, to, SubjectType.ELECTIVE);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (EurecaException e) {
+            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
+            throw e;
+        }
+    }
+
+    @RequestMapping(value = "elective/csv", method = RequestMethod.GET)
+    @ApiOperation(value = ApiDocumentation.EnrollmentsStatistics.GET_ELECTIVE_SUBJECTS_ENROLLMENTS_CSV)
+    public ResponseEntity<EnrollmentsResponse> getElectiveSubjectsEnrollmentsCSV(
+            @ApiParam(value = ApiDocumentation.Common.COURSE)
+            @RequestParam(required = true, value = "courseCode") String courseCode,
+            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
+            @ApiParam(value = ApiDocumentation.Common.FROM)
+            @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
+            @ApiParam(value = ApiDocumentation.Common.TO)
+            @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
+            @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
+    ) throws EurecaException {
+        try {
+            EnrollmentsResponse response = ApplicationFacade.getInstance().getEnrollmentsCSV(token, courseCode, curriculumCode, from, to, SubjectType.ELECTIVE);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (EurecaException e) {
+            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
+            throw e;
+        }
+    }
+
+    @RequestMapping(value = "complementary", method = RequestMethod.GET)
+    @ApiOperation(value = ApiDocumentation.EnrollmentsStatistics.GET_COMPLEMENTARY_SUBJECTS_ENROLLMENTS)
+    public ResponseEntity<EnrollmentsStatisticsResponse> getComplementarySubjectsEnrollmentsStatistics(
+            @ApiParam(value = ApiDocumentation.Common.COURSE)
+            @RequestParam(required = true, value = "courseCode") String courseCode,
+            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
+            @ApiParam(value = ApiDocumentation.Common.FROM)
+            @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
+            @ApiParam(value = ApiDocumentation.Common.TO)
+            @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
+            @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
+    ) throws EurecaException {
+        try {
+            EnrollmentsStatisticsResponse response = ApplicationFacade.getInstance().getEnrollmentsStatistics(token, courseCode, curriculumCode, from, to, SubjectType.COMPLEMENTARY);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (EurecaException e) {
+            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
+            throw e;
+        }
+    }
+
+    @RequestMapping(value = "complementary/csv", method = RequestMethod.GET)
+    @ApiOperation(value = ApiDocumentation.EnrollmentsStatistics.GET_COMPLEMENTARY_SUBJECTS_ENROLLMENTS_CSV)
+    public ResponseEntity<EnrollmentsResponse> getComplementarySubjectsEnrollmentsCSV(
+            @ApiParam(value = ApiDocumentation.Common.COURSE)
+            @RequestParam(required = true, value = "courseCode") String courseCode,
+            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
+            @ApiParam(value = ApiDocumentation.Common.FROM)
+            @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
+            @ApiParam(value = ApiDocumentation.Common.TO)
+            @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
+            @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
+    ) throws EurecaException {
+        try {
+            EnrollmentsResponse response = ApplicationFacade.getInstance().getEnrollmentsCSV(token, courseCode, curriculumCode, from, to, SubjectType.COMPLEMENTARY);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (EurecaException e) {
+            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
+            throw e;
+        }
+    }
+
     @RequestMapping(value = "summary", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.EnrollmentsStatistics.GET_ENROLLMENTS)
     public ResponseEntity<EnrollmentsStatisticsSummaryResponse> getEnrollmentsSummary(

@@ -65,8 +65,14 @@ public class ApiDocumentation {
     public static class EnrollmentsStatistics {
         public static final String API = "Estatísticas de matrículas.";
         public static final String GET_ENROLLMENTS = "Retorna um sumário dos dados das matrículas.";
-        public static final String GET_MANDATORY_SUBJECTS_ENROLLMENTS_CSV = "Retorna os dados completos das matrículas do curso.";
-        public static final String GET_MANDATOTY_SUBJECTS_ENROLLMENTS = "Retorna um sumário dos dados das matrículas do curso";
+        public static final String GET_MANDATORY_SUBJECTS_ENROLLMENTS_CSV = "Retorna os dados completos das matrículas em disciplinas obrigatórias.";
+        public static final String GET_MANDATOTY_SUBJECTS_ENROLLMENTS = "Retorna um sumário dos dados das matrículas em disciplinas obrigatórias.";
+        public static final String GET_OPTIONAL_SUBJECTS_ENROLLMENTS_CSV = "Retorna os dados completos das matrículas em disciplinas optativas.";
+        public static final String GET_OPTIONAL_SUBJECTS_ENROLLMENTS = "Retorna um sumário dos dados das matrículas em disciplinas optativas";
+        public static final String GET_ELECTIVE_SUBJECTS_ENROLLMENTS_CSV = "Retorna os dados completos das matrículas em disciplinas eletivas.";
+        public static final String GET_ELECTIVE_SUBJECTS_ENROLLMENTS = "Retorna um sumário dos dados das matrículas em disciplinas eletivas.";
+        public static final String GET_COMPLEMENTARY_SUBJECTS_ENROLLMENTS_CSV = "Retorna os dados completos das matrículas em disciplinas complementares.";
+        public static final String GET_COMPLEMENTARY_SUBJECTS_ENROLLMENTS = "Retorna um sumário dos dados das matrículas em disciplinas complementares.";
     }
 
     public static class RetentionStatistics {

@@ -1,7 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.SubjectKey;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 
@@ -31,13 +30,17 @@ public interface DataAccessFacade {
 
     SubjectsStatisticsSummaryResponse getSubjectStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 
+    Collection<SubjectMetricsPerTermSummary> getSubjectMetricsPerTermSummary(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException;
+
     Collection<SubjectRetentionCSV> getSubjectsRetention(String courseCode, String curriculumCode) throws InvalidParameterException;
 
     Collection<SubjectRetentionDigest> getSubjectsRetentionSummary(String courseCode, String curriculumCode) throws InvalidParameterException;
 
-    Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> getEnrollmentsPerTermPerSubject(String courseCode, String curriculumCode, String from, String to);
+    Collection<EnrollmentsPerSubjectData> getEnrollmentsPerSubjectPerTerm(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException;
 
-    Collection<SubjectMetricsPerTermSummary> getSubjectMetricsPerTermSummary(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException;
+    EnrollmentsStatisticsSummaryResponse getEnrollmentsStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
+
+    Collection<EnrollmentsMetricsPerTermSummary> getEnrollmentsPerTermSummary(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException;
 
     ProfileResponse getProfile(String userId);
 }
