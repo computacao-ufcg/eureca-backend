@@ -441,7 +441,6 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             case DROPOUT:
                 return item.getStatusTerm();
             case ACTIVE:
-            case DELAYED:
             default:
                 return item.getAdmissionTerm();
         }
@@ -454,7 +453,6 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             case DROPOUT:
                 return this.indexesHolder.getAllDropouts(courseCode);
             case ACTIVE:
-            case DELAYED:
             default:
                 return this.indexesHolder.getAllActives(courseCode);
         }

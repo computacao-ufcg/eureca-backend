@@ -2,10 +2,10 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.core.models.MetricStatistics;
 
-public class SubjectRetentionSummary {
+public class SubjectsRetentionSummary {
     private MetricStatistics retentionStatistics;
 
-    public SubjectRetentionSummary(MetricStatistics retentionStatistics) {
+    public SubjectsRetentionSummary(MetricStatistics retentionStatistics) {
         this.retentionStatistics = retentionStatistics;
     }
 

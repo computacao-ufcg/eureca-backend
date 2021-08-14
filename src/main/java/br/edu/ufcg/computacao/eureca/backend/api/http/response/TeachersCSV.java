@@ -1,95 +1,130 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-import br.edu.ufcg.computacao.eureca.backend.constants.Glossary;
-
-import java.util.Objects;
-
-public class TeachersCSV {
+public class TeachersCSV implements Comparable {
+    private String teacherId;
     private String teacherName;
+    private double averageSucceeded;
+    private double averageSuspended;
     private double averageFailDueToGrade;
     private double averageFailDueToAbsences;
-    private double suspendedRate;
-    private double successRate;
+    private int subjectsCount;
+    private int classesCount;
     private int totalEnrollments;
-    private String from;
-    private String to;
-    private Glossary glossary;
+    private double averageEnrollmentsPerClass;
 
-    public TeachersCSV(String teacherName, double averageFailDueToGrade, double averageFailDueToAbsences,
-                       double suspendedRate, double successRate, int totalEnrollments, String from, String to,
-                       Glossary glossary) {
+    public TeachersCSV(String teacherId, String teacherName, double averageSucceeded, double averageSuspended,
+                       double averageFailDueToGrade, double averageFailDueToAbsences, int subjectsCount,
+                       int classesCount, int totalEnrollments, double averageEnrollmentsPerClass) {
+        this.teacherId = teacherId;
         this.teacherName = teacherName;
+        this.averageSucceeded = averageSucceeded;
+        this.averageSuspended = averageSuspended;
         this.averageFailDueToGrade = averageFailDueToGrade;
         this.averageFailDueToAbsences = averageFailDueToAbsences;
-        this.suspendedRate = suspendedRate;
-        this.successRate = successRate;
+        this.subjectsCount = subjectsCount;
+        this.classesCount = classesCount;
         this.totalEnrollments = totalEnrollments;
-        this.from = from;
-        this.to = to;
-        this.glossary = glossary;
+        this.averageEnrollmentsPerClass = averageEnrollmentsPerClass;
+    }
+
+    public String getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(String teacherId) {
+        this.teacherId = teacherId;
     }
 
     public String getTeacherName() {
         return teacherName;
     }
 
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
+    }
+
+    public double getAverageSucceeded() {
+        return averageSucceeded;
+    }
+
+    public void setAverageSucceeded(double averageSucceeded) {
+        this.averageSucceeded = averageSucceeded;
+    }
+
+    public double getAverageSuspended() {
+        return averageSuspended;
+    }
+
+    public void setAverageSuspended(double averageSuspended) {
+        this.averageSuspended = averageSuspended;
+    }
+
     public double getAverageFailDueToGrade() {
         return averageFailDueToGrade;
+    }
+
+    public void setAverageFailDueToGrade(double averageFailDueToGrade) {
+        this.averageFailDueToGrade = averageFailDueToGrade;
     }
 
     public double getAverageFailDueToAbsences() {
         return averageFailDueToAbsences;
     }
 
-    public double getSuspendedRate() {
-        return suspendedRate;
+    public void setAverageFailDueToAbsences(double averageFailDueToAbsences) {
+        this.averageFailDueToAbsences = averageFailDueToAbsences;
     }
 
-    public double getSuccessRate() {
-        return successRate;
+    public int getSubjectsCount() {
+        return subjectsCount;
+    }
+
+    public void setSubjectsCount(int subjectsCount) {
+        this.subjectsCount = subjectsCount;
+    }
+
+    public int getClassesCount() {
+        return classesCount;
+    }
+
+    public void setClassesCount(int classesCount) {
+        this.classesCount = classesCount;
     }
 
     public int getTotalEnrollments() {
         return totalEnrollments;
     }
 
-    public String getFrom() {
-        return from;
+    public void setTotalEnrollments(int totalEnrollments) {
+        this.totalEnrollments = totalEnrollments;
     }
 
-    public String getTo() {
-        return to;
+    public double getAverageEnrollmentsPerClass() {
+        return averageEnrollmentsPerClass;
     }
 
-    public Glossary getGlossary() {
-        return glossary;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TeachersCSV that = (TeachersCSV) o;
-        return teacherName.equals(that.teacherName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(teacherName);
+    public void setAverageEnrollmentsPerClass(double averageEnrollmentsPerClass) {
+        this.averageEnrollmentsPerClass = averageEnrollmentsPerClass;
     }
 
     @Override
     public String toString() {
         return "TeachersCSV{" +
-                "teacherName='" + teacherName + '\'' +
+                "teacherId='" + teacherId + '\'' +
+                ", teacherName='" + teacherName + '\'' +
+                ", averageSucceeded=" + averageSucceeded +
+                ", averageSuspended=" + averageSuspended +
                 ", averageFailDueToGrade=" + averageFailDueToGrade +
                 ", averageFailDueToAbsences=" + averageFailDueToAbsences +
-                ", lockingRate=" + suspendedRate +
-                ", successRate=" + successRate +
+                ", subjectsCount=" + subjectsCount +
+                ", classesCount=" + classesCount +
                 ", totalEnrollments=" + totalEnrollments +
-                ", from='" + from + '\'' +
-                ", to='" + to + '\'' +
-                ", glossary='" + glossary + '\'' +
+                ", averageEnrollmentsPerClass=" + averageEnrollmentsPerClass +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return 0;
     }
 }

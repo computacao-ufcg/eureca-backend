@@ -27,7 +27,7 @@ public class RetentionStatistics {
 
     @RequestMapping(value = "students", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.RetentionStatistics.GET_STUDENT)
-    public ResponseEntity<DelayedStatisticsResponse> getDelayed(
+    public ResponseEntity<StudentsRetentionStatisticsResponse> getStudentsRetentionStatistics(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
@@ -39,7 +39,7 @@ public class RetentionStatistics {
             throws EurecaException {
 
         try {
-            DelayedStatisticsResponse ret = ApplicationFacade.getInstance().getDelayedStatistics(token, courseCode, from, to);
+            StudentsRetentionStatisticsResponse ret = ApplicationFacade.getInstance().getStudentsRetentionStatistics(token, courseCode, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -49,7 +49,7 @@ public class RetentionStatistics {
 
     @RequestMapping(value = "students/csv", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.RetentionStatistics.GET_STUDENT_CSV)
-    public ResponseEntity<StudentResponse> getDelayedCSV(
+    public ResponseEntity<StudentResponse> getStudentsRetentionCSV(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
@@ -61,8 +61,8 @@ public class RetentionStatistics {
             throws EurecaException {
 
         try {
-            StudentResponse delayed = ApplicationFacade.getInstance().getDelayedCSV(token, courseCode, from, to);
-            return new ResponseEntity<>(delayed, HttpStatus.OK);
+            StudentResponse studentsRetentionCSV = ApplicationFacade.getInstance().getStudentsRetentionCSV(token, courseCode, from, to);
+            return new ResponseEntity<>(studentsRetentionCSV, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
             throw e;
@@ -71,7 +71,7 @@ public class RetentionStatistics {
 
     @RequestMapping(value = "subjects", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.RetentionStatistics.GET_SUBJECT)
-    public ResponseEntity<SubjectRetentionStatisticsResponse> getSubjectsRetention(
+    public ResponseEntity<SubjectRetentionStatisticsResponse> getSubjectsRetentionStatistics(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
@@ -112,7 +112,7 @@ public class RetentionStatistics {
 
     @RequestMapping(value = "summary", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.RetentionStatistics.GET_SUMMARY)
-    public ResponseEntity<RetentionStatisticsSummaryResponse> getRetentionSummary(
+    public ResponseEntity<RetentionStatisticsSummaryResponse> getRetentionStatisticsSummary(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.CURRICULUM)

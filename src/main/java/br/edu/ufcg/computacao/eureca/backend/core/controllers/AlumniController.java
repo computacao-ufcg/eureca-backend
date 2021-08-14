@@ -17,7 +17,7 @@ public class AlumniController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
-    public Collection<AlumniDigestResponse> getAlumniPerStudentSummary(String courseCode, String from, String to) {
+    public Collection<AlumniDigestResponse> getAlumniDigest(String courseCode, String from, String to) {
         return this.dataAccessFacade.getAlumniPerStudentSummary(courseCode, from, to);
     }
 }

@@ -1,15 +1,15 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class DelayedSummary {
+public class StudentsRetentionSummary {
     private String from;
     private String to;
-    private int delayedCount;
+    private int studentsRetentionCount;
     private StudentMetricsSummary average;
 
-    public DelayedSummary(String from, String to, int delayedCount, StudentMetricsSummary average) {
+    public StudentsRetentionSummary(String from, String to, int studentsRetentionCount, StudentMetricsSummary average) {
         this.from = from;
         this.to = to;
-        this.delayedCount = delayedCount;
+        this.studentsRetentionCount = studentsRetentionCount;
         this.average = average;
     }
 
@@ -29,12 +29,12 @@ public class DelayedSummary {
         this.to = to;
     }
 
-    public int getDelayedCount() {
-        return delayedCount;
+    public int getStudentsRetentionCount() {
+        return studentsRetentionCount;
     }
 
-    public void setDelayedCount(int delayedCount) {
-        this.delayedCount = delayedCount;
+    public void setStudentsRetentionCount(int studentsRetentionCount) {
+        this.studentsRetentionCount = studentsRetentionCount;
     }
 
     public StudentMetricsSummary getAverage() {

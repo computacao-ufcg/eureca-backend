@@ -59,10 +59,10 @@ public class ApplicationFacade {
         this.authorizationPlugin = authorizationPlugin;
     }
 
-    public AlumniResponse getAlumni(String token, String courseCode, String from, String to, String language)
+    public AlumniResponse getAlumniDigest(String token, String courseCode, String from, String to, String language)
             throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_BASIC_DATA);
-        Collection<AlumniDigestResponse> digest = this.alumniController.getAlumniPerStudentSummary(courseCode, from, to);
+        authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_DIGEST);
+        Collection<AlumniDigestResponse> digest = this.alumniController.getAlumniDigest(courseCode, from, to);
         AlumniResponse response = new AlumniResponse(digest);
         AlumniGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.ALUMNI);
         response.setGlossary(glossaryFields);
@@ -79,28 +79,28 @@ public class ApplicationFacade {
         return this.curriculaController.getCurriculumCodes(courseCode);
     }
 
-    public EnrollmentsStatisticsResponse getEnrollmentsStatistics(String token, String courseCode, String curriculumCode, String from, String to, SubjectType type) throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_ENROLLMENTS_SUMMARY);
-        return this.enrollmentsStatisticsController.getEnrollments(courseCode, curriculumCode, from, to, type);
+    public EnrollmentsStatisticsResponse getSubjectEnrollmentsStatistics(String token, String courseCode, String curriculumCode, String from, String to, SubjectType type) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECT_ENROLLMENTS_STATISTICS);
+        return this.enrollmentsStatisticsController.getSubjectEnrollmentsStatistics(courseCode, curriculumCode, from, to, type);
     }
 
-    public EnrollmentsResponse getEnrollmentsCSV(String token, String courseCode, String curriculumCode, String from, String to, SubjectType type) throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_ENROLLMENTS_CSV);
-        return this.enrollmentsStatisticsController.getEnrollmentsCSV(courseCode, curriculumCode, from, to, type);
+    public EnrollmentsResponse getSubjectEnrollmentsCSV(String token, String courseCode, String curriculumCode, String from, String to, SubjectType type) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECT_ENROLLMENTS_CSV);
+        return this.enrollmentsStatisticsController.getSubjectEnrollmentsCSV(courseCode, curriculumCode, from, to, type);
     }
 
-    public EnrollmentsStatisticsSummaryResponse getEnrollmentsStatisticsSummary(String token, String courseCode, String curriculumCode, String from, String to, String language)
+    public EnrollmentsStatisticsSummaryResponse getSubjectEnrollmentsStatisticsSummary(String token, String courseCode, String curriculumCode, String from, String to, String language)
             throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_ENROLLMENTS_STATISTICS);
-        EnrollmentsStatisticsSummaryResponse response = this.enrollmentsStatisticsController.getEnrollmentsStatistics(courseCode, curriculumCode, from, to);
+        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECT_ENROLLMENTS_STATISTICS_SUMMARY);
+        EnrollmentsStatisticsSummaryResponse response = this.enrollmentsStatisticsController.getSubjectEnrollmentsStatisticsSummary(courseCode, curriculumCode, from, to);
         EnrollmentsGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.ENROLLMENT);
         response.setGlossary(glossaryFields);
         return response;
     }
 
     public ActivesStatisticsResponse getActivesStatistics(String token, String courseCode, String from, String to) throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_ACTIVES_SUMMARY);
-        return this.studentsStatisticsController.getActivesSummaryResponse(courseCode, from, to);
+        authenticateAndAuthorize(token, EurecaOperation.GET_ACTIVES_STATISTICS);
+        return this.studentsStatisticsController.getActivesStatistics(courseCode, from, to);
     }
 
     public StudentResponse getActivesCSV(String token, String courseCode, String from, String to) throws EurecaException {
@@ -109,8 +109,8 @@ public class ApplicationFacade {
     }
 
     public AlumniStatisticsResponse getAlumniStatistics(String token, String courseCode, String from, String to, String language) throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_SUMMARY);
-        return this.studentsStatisticsController.getAlumniSummaryResponse(courseCode, from, to);
+        authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_STATISTICS);
+        return this.studentsStatisticsController.getAlumniStatistics(courseCode, from, to);
     }
 
     public StudentResponse getAlumniCSV(String token, String courseCode, String from, String to) throws EurecaException {
@@ -119,8 +119,8 @@ public class ApplicationFacade {
     }
 
     public DropoutsStatisticsResponse getDropoutsStatistics(String token, String courseCode, String from, String to) throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_DROPOUTS_SUMMARY);
-        return this.studentsStatisticsController.getDropoutsSummaryResponse(courseCode, from, to);
+        authenticateAndAuthorize(token, EurecaOperation.GET_DROPOUTS_STATISTICS);
+        return this.studentsStatisticsController.getDropoutsStatistics(courseCode, from, to);
     }
 
     public StudentResponse getDropoutsCSV(String token, String courseCode, String from, String to) throws EurecaException {
@@ -130,26 +130,26 @@ public class ApplicationFacade {
 
     public StudentsStatisticsSummaryResponse getStudentsStatisticsSummary(String token, String courseCode, String from, String to, String language)
             throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_STATISTICS);
-        StudentsStatisticsSummaryResponse response = this.studentsStatisticsController.getStudentsStatistics(courseCode, from, to);
+        authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_STATISTICS_SUMMARY);
+        StudentsStatisticsSummaryResponse response = this.studentsStatisticsController.getStudentsStatisticsSummary(courseCode, from, to);
         StudentsGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.STUDENT);
         response.setGlossary(glossaryFields);
         return response;
     }
 
-    public DelayedStatisticsResponse getDelayedStatistics(String token, String courseCode, String from, String to) throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_DELAYED_SUMMARY);
-        return this.retentionStatisticsController.getDelayedSummary(courseCode, from, to);
+    public StudentsRetentionStatisticsResponse getStudentsRetentionStatistics(String token, String courseCode, String from, String to) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_RETENTION_STATISTICS);
+        return this.retentionStatisticsController.getStudentsRetentionStatistics(courseCode, from, to);
     }
 
-    public StudentResponse getDelayedCSV(String token, String courseCode, String from, String to) throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_DELAYED_CSV);
-        return this.retentionStatisticsController.getDelayedCSV(courseCode, from, to);
+    public StudentResponse getStudentsRetentionCSV(String token, String courseCode, String from, String to) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_RETENTION_CSV);
+        return this.retentionStatisticsController.getStudentsRetentionCSV(courseCode, from, to);
     }
 
     public SubjectRetentionStatisticsResponse getSubjectsRetentionStatistics(String token, String courseCode, String curriculumCode) throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_RETENTION_SUMMARY);
-        return this.retentionStatisticsController.getSubjectRetentionSummary(courseCode, curriculumCode);
+        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_RETENTION_STATISTICS);
+        return this.retentionStatisticsController.getSubjectsRetentionStatistics(courseCode, curriculumCode);
     }
 
     public SubjectRetentionResponse getSubjectsRetentionCSV(String token, String courseCode, String curriculumCode) throws EurecaException {
@@ -159,16 +159,16 @@ public class ApplicationFacade {
 
     public RetentionStatisticsSummaryResponse getRetentionStatisticsSummary(String token, String courseCode, String curriculumCode, String from, String to, String language)
             throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_RETENTION_STATISTICS);
-        RetentionStatisticsSummaryResponse response = this.retentionStatisticsController.getRetentionStatistics(courseCode, curriculumCode, from, to);
+        authenticateAndAuthorize(token, EurecaOperation.GET_RETENTION_STATISTICS_SUMMARY);
+        RetentionStatisticsSummaryResponse response = this.retentionStatisticsController.getRetentionStatisticsSummary(courseCode, curriculumCode, from, to);
         RetentionGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.RETENTION);
         response.setGlossary(glossaryFields);
         return response;
     }
 
     public SubjectsStatisticsResponse getSubjectsStatistics(String token, String courseCode, String curriculumCode, String from, String to, SubjectType type) throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_SUMMARY);
-        SubjectsStatisticsResponse response = this.subjectsStatisticsController.getSubjectsSummary(courseCode, curriculumCode, from, to, type);
+        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_STATISTICS);
+        SubjectsStatisticsResponse response = this.subjectsStatisticsController.getSubjectsStatistics(courseCode, curriculumCode, from, to, type);
         return response;
     }
 
@@ -179,22 +179,27 @@ public class ApplicationFacade {
 
     public SubjectsStatisticsSummaryResponse getSubjectsStatisticsSummary(String token, String courseCode, String curriculumCode, String from, String to, String language)
             throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_STATISTICS);
-        SubjectsStatisticsSummaryResponse response = this.subjectsStatisticsController.getSubjectStatistics(courseCode, curriculumCode, from, to);
+        authenticateAndAuthorize(token, EurecaOperation.GET_SUBJECTS_STATISTICS_SUMMARY);
+        SubjectsStatisticsSummaryResponse response = this.subjectsStatisticsController.getSubjectsStatisticsSummary(courseCode, curriculumCode, from, to);
         SubjectsGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.SUBJECT);
         response.setGlossary(glossaryFields);
         return response;
     }
 
-    public TeachersResponse getTeachersCSV(String token, String from, String to) throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_TEACHERS_CSV);
-        return this.teacherStatisticsController.getTeacherCSV();
+    public TeachersStatisticsResponse getTeachersStatistics(String token, String courseCode, String curriculumCode, String from, String to) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_TEACHERS_STATISTICS);
+        return this.teacherStatisticsController.getTeachersStatistics(courseCode, curriculumCode, from, to);
     }
 
-    public TeachersStatisticsSummaryResponse getTeachersStatisticsSummary(String token, String from, String to, String language)
+    public TeachersResponse getTeachersCSV(String token, String courseCode, String curriculumCode, String from, String to) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_TEACHERS_CSV);
+        return this.teacherStatisticsController.getTeachersCSV(courseCode, curriculumCode, from, to);
+    }
+
+    public TeachersStatisticsSummaryResponse getTeachersStatisticsSummary(String token, String courseCode, String curriculumCode, String from, String to, String language)
             throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.GET_TEACHERS_STATISTICS);
-        TeachersStatisticsSummaryResponse response = this.teacherStatisticsController.getTeachersStatisticsMock();
+        authenticateAndAuthorize(token, EurecaOperation.GET_TEACHERS_STATISTICS_SUMMARY);
+        TeachersStatisticsSummaryResponse response = this.teacherStatisticsController.getTeachersStatisticsSummary(courseCode, curriculumCode, from, to);
         TeachersGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.TEACHER);
         response.setGlossary(glossaryFields);
         return response;

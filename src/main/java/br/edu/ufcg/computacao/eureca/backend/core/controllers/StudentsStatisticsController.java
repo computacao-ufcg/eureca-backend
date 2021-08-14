@@ -53,7 +53,7 @@ public class StudentsStatisticsController {
         return new StudentResponse(dropoutsData);
     }
 
-    public ActivesStatisticsResponse getActivesSummaryResponse(String courseCode, String from, String to) {
+    public ActivesStatisticsResponse getActivesStatistics(String courseCode, String from, String to) {
         Collection<ActivesPerTermSummary> terms = new TreeSet<>();
         Map<String, Collection<Student>> activesPerAdmissionTerm = this.dataAccessFacade.getActivesPerAdmissionTerm(courseCode, from, to);
 
@@ -67,7 +67,7 @@ public class StudentsStatisticsController {
         return new ActivesStatisticsResponse(terms, firstTerm, lastTerm);
     }
 
-    public AlumniStatisticsResponse getAlumniSummaryResponse(String courseCode, String from, String to) {
+    public AlumniStatisticsResponse getAlumniStatistics(String courseCode, String from, String to) {
         Collection<AlumniPerTermSummary> terms = new TreeSet<>();
         Map<String, Collection<Student>> alumniPerGraduationTerm = this.dataAccessFacade.getAlumniPerGraduationTerm(courseCode, from, to);
         for (String term : alumniPerGraduationTerm.keySet()) {
@@ -79,7 +79,7 @@ public class StudentsStatisticsController {
         return new AlumniStatisticsResponse(terms, firstTerm, lastTerm);
     }
 
-    public DropoutsStatisticsResponse getDropoutsSummaryResponse(String courseCode, String from, String to) {
+    public DropoutsStatisticsResponse getDropoutsStatistics(String courseCode, String from, String to) {
         Collection<DropoutPerTermSummary> terms = new TreeSet<>();
         Map<String, Collection<Student>> dropoutsPerDropoutTerm = this.dataAccessFacade.getDropoutsPerDropoutTerm(courseCode, from, to);
 
@@ -92,7 +92,7 @@ public class StudentsStatisticsController {
         return new DropoutsStatisticsResponse(terms, firstTerm, lastTerm);
     }
 
-    public StudentsStatisticsSummaryResponse getStudentsStatistics(String courseCode, String from, String to) {
+    public StudentsStatisticsSummaryResponse getStudentsStatisticsSummary(String courseCode, String from, String to) {
         ActivesSummary activesSummary = getActivesSummary(courseCode, from, to);
         AlumniSummary alumniSummary = getAlumniSummary(courseCode, from, to);
         DropoutsSummary dropoutSummary = getDropoutsSummary(courseCode, from, to);
