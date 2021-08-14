@@ -92,11 +92,11 @@ public class TestUtils {
         return new DropoutsStatisticsResponse(Arrays.asList(dropouts), "x", "y");
     }
 
-    public static DelayedStatisticsResponse getDelayedSummaryResponse() {
+    public static StudentsRetentionStatisticsResponse getDelayedSummaryResponse() {
         StudentMetrics metrics = new StudentMetrics(0,0,0,
                 0,0,0,0,0);
         StudentMetricsSummary metricsSummary = new StudentMetricsSummary(0, metrics, 0, 0);
-        DelayedPerTermSummary delayedPerTermSummary = new DelayedPerTermSummary("", metricsSummary);
-        return new DelayedStatisticsResponse(Arrays.asList(delayedPerTermSummary), "x", "y");
+        StudentsRetentionPerTermSummary delayedPerTermSummary = new StudentsRetentionPerTermSummary("", metricsSummary);
+        return new StudentsRetentionStatisticsResponse(Arrays.asList(delayedPerTermSummary), "x", "y");
     }
 }

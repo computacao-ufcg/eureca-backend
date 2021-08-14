@@ -116,8 +116,8 @@ public class StudentStatisticsTest extends EndpointTest {
     @Test
     public void getDelayedTest() throws Exception {
         // set up
-        DelayedStatisticsResponse response = getDelayedSummaryResponse();
-        Mockito.doReturn(response).when(this.facade).getDelayedStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        StudentsRetentionStatisticsResponse response = getDelayedSummaryResponse();
+        Mockito.doReturn(response).when(this.facade).getStudentsRetentionStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         RequestBuilder requestBuilder = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/delayed", null, "");
 
         // exercise
@@ -132,7 +132,7 @@ public class StudentStatisticsTest extends EndpointTest {
     public void getDelayedCsvTest() throws Exception {
         // set up
         Collection<StudentCSV> response = getStudentsCsvResponse();
-        Mockito.doReturn(response).when(this.facade).getDelayedCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.doReturn(response).when(this.facade).getStudentsRetentionCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/delayed/csv", null, "");
 
         // exercise

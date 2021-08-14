@@ -3,29 +3,29 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 import br.edu.ufcg.computacao.eureca.backend.constants.RetentionGlossaryFields;
 
 public class RetentionStatisticsSummaryResponse {
-    private DelayedSummary delayedSummary;
-    private SubjectRetentionSummary subjectRetentionSummary;
+    private StudentsRetentionSummary studentsRetentionSummary;
+    private SubjectsRetentionSummary subjectsRetentionSummary;
     private RetentionGlossaryFields glossary;
 
-    public RetentionStatisticsSummaryResponse(DelayedSummary delayedSummary, SubjectRetentionSummary subjectRetentionSummary) {
-        this.delayedSummary = delayedSummary;
-        this.subjectRetentionSummary = subjectRetentionSummary;
+    public RetentionStatisticsSummaryResponse(StudentsRetentionSummary studentsRetentionSummary, SubjectsRetentionSummary subjectsRetentionSummary) {
+        this.studentsRetentionSummary = studentsRetentionSummary;
+        this.subjectsRetentionSummary = subjectsRetentionSummary;
     }
 
-    public DelayedSummary getDelayedSummary() {
-        return delayedSummary;
+    public StudentsRetentionSummary getStudentsRetentionSummary() {
+        return studentsRetentionSummary;
     }
 
-    public void setDelayedSummary(DelayedSummary delayedSummary) {
-        this.delayedSummary = delayedSummary;
+    public void setStudentsRetentionSummary(StudentsRetentionSummary studentsRetentionSummary) {
+        this.studentsRetentionSummary = studentsRetentionSummary;
     }
 
-    public SubjectRetentionSummary getSubjectRetentionSummary() {
-        return subjectRetentionSummary;
+    public SubjectsRetentionSummary getSubjectsRetentionSummary() {
+        return subjectsRetentionSummary;
     }
 
-    public void setSubjectRetentionSummary(SubjectRetentionSummary subjectRetentionSummary) {
-        this.subjectRetentionSummary = subjectRetentionSummary;
+    public void setSubjectsRetentionSummary(SubjectsRetentionSummary subjectsRetentionSummary) {
+        this.subjectsRetentionSummary = subjectsRetentionSummary;
     }
 
     public RetentionGlossaryFields getGlossary() {

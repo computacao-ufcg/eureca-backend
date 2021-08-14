@@ -19,7 +19,7 @@ public class SubjectsStatisticsController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
-    public SubjectsStatisticsResponse getSubjectsSummary(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
+    public SubjectsStatisticsResponse getSubjectsStatistics(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
         Collection<SubjectMetricsPerTermSummary> metricsPerTerm =
                 this.dataAccessFacade.getSubjectMetricsPerTermSummary(courseCode, curriculumCode, from, to, subjectType);
         String firstTerm = "9999.9";
@@ -50,7 +50,7 @@ public class SubjectsStatisticsController {
         return new SubjectResponse(subjectDataResponses);
     }
 
-    public SubjectsStatisticsSummaryResponse getSubjectStatistics(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+    public SubjectsStatisticsSummaryResponse getSubjectsStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         SubjectsStatisticsSummaryResponse summary = this.dataAccessFacade.getSubjectStatisticsSummary(courseCode, curriculumCode, from, to);
         return summary;
     }

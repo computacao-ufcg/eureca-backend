@@ -27,7 +27,7 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "actives", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_ACTIVES)
-    public ResponseEntity<ActivesStatisticsResponse> getActives(
+    public ResponseEntity<ActivesStatisticsResponse> getActivesStatistics(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
@@ -72,7 +72,7 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "alumni", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_ALUMNI)
-    public ResponseEntity<AlumniStatisticsResponse> getAlumni(
+    public ResponseEntity<AlumniStatisticsResponse> getAlumniStatistics(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
@@ -118,7 +118,7 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "dropouts", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_DROPOUT)
-    public ResponseEntity<DropoutsStatisticsResponse> getDropouts(
+    public ResponseEntity<DropoutsStatisticsResponse> getDropoutsStatistics(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
@@ -162,7 +162,7 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "summary", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_SUMMARY)
-    public ResponseEntity<StudentsStatisticsSummaryResponse> getStudentsSummary(
+    public ResponseEntity<StudentsStatisticsSummaryResponse> getStudentsStatisticsSummary(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)

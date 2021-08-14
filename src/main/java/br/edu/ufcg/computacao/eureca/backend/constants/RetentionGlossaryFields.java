@@ -1,7 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.constants;
 
 public class RetentionGlossaryFields extends GlossaryFields {
-    Field Delayed;
+    Field studentRetention;
     Field averageRisk;
     Field averageLoad;
     Field successRate;
@@ -11,15 +11,15 @@ public class RetentionGlossaryFields extends GlossaryFields {
     Field averageGpa;
     Field rejoinCount;
     Field canceledCount;
-    Field abandonCount;
+    Field dropoutCount;
     Field transferCount;
 
-    public RetentionGlossaryFields(Field delayed, Field averageRisk,
+    public RetentionGlossaryFields(Field studentRetention, Field averageRisk,
                                    Field averageLoad, Field successRate, Field predictedGraduation, Field averageCost,
                                    Field averageTime,
-                                   Field averageGpa, Field rejoinCount, Field canceledCount, Field abandonCount,
+                                   Field averageGpa, Field rejoinCount, Field canceledCount, Field dropoutCount,
                                    Field transferCount) {
-        Delayed = delayed;
+        this.studentRetention = studentRetention;
         this.averageRisk = averageRisk;
         this.averageLoad = averageLoad;
         this.successRate = successRate;
@@ -29,16 +29,16 @@ public class RetentionGlossaryFields extends GlossaryFields {
         this.averageGpa = averageGpa;
         this.rejoinCount = rejoinCount;
         this.canceledCount = canceledCount;
-        this.abandonCount = abandonCount;
+        this.dropoutCount = dropoutCount;
         this.transferCount = transferCount;
     }
 
-    public Field getDelayed() {
-        return Delayed;
+    public Field getStudentRetention() {
+        return studentRetention;
     }
 
-    public void setDelayed(Field delayed) {
-        Delayed = delayed;
+    public void setStudentRetention(Field studentRetention) {
+        this.studentRetention = studentRetention;
     }
 
     public Field getAverageRisk() {
@@ -113,12 +113,12 @@ public class RetentionGlossaryFields extends GlossaryFields {
         this.canceledCount = canceledCount;
     }
 
-    public Field getAbandonCount() {
-        return abandonCount;
+    public Field getDropoutCount() {
+        return dropoutCount;
     }
 
-    public void setAbandonCount(Field abandonCount) {
-        this.abandonCount = abandonCount;
+    public void setDropoutCount(Field dropoutCount) {
+        this.dropoutCount = dropoutCount;
     }
 
     public Field getTransferCount() {
