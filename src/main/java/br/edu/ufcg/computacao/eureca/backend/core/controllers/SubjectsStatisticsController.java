@@ -42,8 +42,8 @@ public class SubjectsStatisticsController {
                 this.dataAccessFacade.getSubjectMetricsPerTermSummary(courseCode, curriculumCode, from, to, subjectType);
         metricsPerTerm.forEach(subject -> {
             subject.getTerms().forEach(termSummary -> {
-                SubjectCSV subjectData = new SubjectCSV(courseCode, curriculumCode, subject.getCode(),
-                        termSummary.getTerm(), termSummary.getMetrics());
+                SubjectCSV subjectData = new SubjectCSV(courseCode, curriculumCode, subject.getSubjectCode(),
+                        subject.getSubjectName(), termSummary.getTerm(), termSummary.getMetrics());
                 subjectDataResponses.add(subjectData);
             });
         });

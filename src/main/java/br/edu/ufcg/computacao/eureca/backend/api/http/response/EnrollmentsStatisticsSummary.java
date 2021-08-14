@@ -2,17 +2,17 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class EnrollmentsStatisticsSummary {
     private int subjectsCount;
-    private double averageClassesPerSubjet;
+    private double averageClassesPerSubject;
     private double averageClassesPerTerm;
-    private double averageEnrollmentsPerClass;
+    private double averageEnrollmentsPerSubject;
     private double averageEnrollmentsPerTerm;
 
-    public EnrollmentsStatisticsSummary(int subjectsCount, double averageClassesPerSubjet, double averageClassesPerTerm,
-                                        double averageEnrollmentsPerClass, double averageEnrollmentsPerTerm) {
+    public EnrollmentsStatisticsSummary(int subjectsCount, double averageClassesPerSubject, double averageClassesPerTerm,
+                                        double averageEnrollmentsPerSubject, double averageEnrollmentsPerTerm) {
         this.subjectsCount = subjectsCount;
-        this.averageClassesPerSubjet = averageClassesPerSubjet;
+        this.averageClassesPerSubject = averageClassesPerSubject;
         this.averageClassesPerTerm = averageClassesPerTerm;
-        this.averageEnrollmentsPerClass = averageEnrollmentsPerClass;
+        this.averageEnrollmentsPerSubject = averageEnrollmentsPerSubject;
         this.averageEnrollmentsPerTerm = averageEnrollmentsPerTerm;
     }
 
@@ -20,16 +20,16 @@ public class EnrollmentsStatisticsSummary {
         return subjectsCount;
     }
 
-    public double getAverageClassesPerSubjet() {
-        return averageClassesPerSubjet;
+    public double getAverageClassesPerSubject() {
+        return averageClassesPerSubject;
     }
 
     public double getAverageClassesPerTerm() {
         return averageClassesPerTerm;
     }
 
-    public double getAverageEnrollmentsPerClass() {
-        return averageEnrollmentsPerClass;
+    public double getAverageEnrollmentsPerSubject() {
+        return averageEnrollmentsPerSubject;
     }
 
     public double getAverageEnrollmentsPerTerm() {
@@ -40,9 +40,9 @@ public class EnrollmentsStatisticsSummary {
     public String toString() {
         return "EnrollmentsStatisticsSummaryResponse{" +
                 ", subjectsCount=" + subjectsCount +
-                ", averageClassesPerDiscipline=" + averageClassesPerSubjet +
+                ", averageClassesPerDiscipline=" + averageClassesPerSubject +
                 ", averageClassesPerPeriod=" + averageClassesPerTerm +
-                ", averageEnrollmentsPerClass=" + averageEnrollmentsPerClass +
+                ", averageEnrollmentsPerSubject=" + averageEnrollmentsPerSubject +
                 ", averageEnrollmentsPerPeriod=" + averageEnrollmentsPerTerm +
                 '}';
     }

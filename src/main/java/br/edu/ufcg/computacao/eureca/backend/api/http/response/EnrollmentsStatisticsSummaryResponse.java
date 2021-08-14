@@ -3,6 +3,8 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 import br.edu.ufcg.computacao.eureca.backend.constants.EnrollmentsGlossaryFields;
 
 public class EnrollmentsStatisticsSummaryResponse {
+    private String courseCode;
+    private String curriculumCode;
     private String from;
     private String to;
     private EnrollmentsSummary mandatory;
@@ -11,15 +13,33 @@ public class EnrollmentsStatisticsSummaryResponse {
     private EnrollmentsSummary complementary;
     private EnrollmentsGlossaryFields glossary;
 
-    public EnrollmentsStatisticsSummaryResponse(String from, String to, EnrollmentsSummary mandatory,
-                                                EnrollmentsSummary optional, EnrollmentsSummary elective,
-                                                EnrollmentsSummary complementary) {
+    public EnrollmentsStatisticsSummaryResponse(String courseCode, String curriculumCode, String from, String to,
+                                                EnrollmentsSummary mandatory, EnrollmentsSummary optional,
+                                                EnrollmentsSummary elective, EnrollmentsSummary complementary) {
+        this.courseCode = courseCode;
+        this.curriculumCode = curriculumCode;
         this.from = from;
         this.to = to;
         this.mandatory = mandatory;
         this.optional = optional;
         this.elective = elective;
         this.complementary = complementary;
+    }
+
+    public String getCourseCode() {
+        return courseCode;
+    }
+
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
+    }
+
+    public String getCurriculumCode() {
+        return curriculumCode;
+    }
+
+    public void setCurriculumCode(String curriculumCode) {
+        this.curriculumCode = curriculumCode;
     }
 
     public String getFrom() {
@@ -81,7 +101,9 @@ public class EnrollmentsStatisticsSummaryResponse {
     @Override
     public String toString() {
         return "EnrollmentsStatisticsSummaryResponse{" +
-                "from='" + from + '\'' +
+                "courseCode='" + courseCode + '\'' +
+                ", curriculumCode='" + curriculumCode + '\'' +
+                ", from='" + from + '\'' +
                 ", to='" + to + '\'' +
                 ", mandatory=" + mandatory +
                 ", optional=" + optional +

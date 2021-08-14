@@ -1,24 +1,25 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class EnrollmentsPerSubjectSummary implements Comparable {
-    private String subjectCode;
+public class EnrollmentsMetricsPerTerm implements Comparable, SummaryPerTerm {
+    private String term;
     private int enrollmentsCount;
     private int classesCount;
     private double averageEnrollmentsPerClass;
 
-    public EnrollmentsPerSubjectSummary(String subjectCode, int enrollmentsCount, int classesCount, double averageEnrollmentsPerClass) {
-        this.subjectCode = subjectCode;
+    public EnrollmentsMetricsPerTerm(String term, int enrollmentsCount, int classesCount, double averageEnrollmentsPerClass) {
+        this.term = term;
         this.enrollmentsCount = enrollmentsCount;
         this.classesCount = classesCount;
         this.averageEnrollmentsPerClass = averageEnrollmentsPerClass;
     }
 
-    public String getSubjectCode() {
-        return subjectCode;
+    @Override
+    public String getTerm() {
+        return this.term;
     }
 
-    public void setSubjectCode(String subjectCode) {
-        this.subjectCode = subjectCode;
+    public void setTerm(String term) {
+        this.term = term;
     }
 
     public int getEnrollmentsCount() {
@@ -47,14 +48,14 @@ public class EnrollmentsPerSubjectSummary implements Comparable {
 
     @Override
     public int compareTo(Object o) {
-        EnrollmentsPerSubjectSummary other = (EnrollmentsPerSubjectSummary) o;
-        return this.getSubjectCode().compareTo(other.getSubjectCode());
+        EnrollmentsMetricsPerTerm other = (EnrollmentsMetricsPerTerm) o;
+        return this.getTerm().compareTo(other.getTerm());
     }
 
     @Override
     public String toString() {
-        return "EnrollmentsPerSubjectSummary{" +
-                "subjectCode='" + subjectCode + '\'' +
+        return "EnrollmentsMetricsPerTerm{" +
+                "term='" + term + '\'' +
                 ", enrollmentsCount=" + enrollmentsCount +
                 ", classesCount=" + classesCount +
                 ", averageEnrollmentsPerClass=" + averageEnrollmentsPerClass +
