@@ -36,7 +36,7 @@ public class EnrollmentsStatisticsController {
                 if (last.compareTo(lastTerm) > 0) lastTerm = last;
             }
         }
-        EnrollmentsStatisticsResponse response = new EnrollmentsStatisticsResponse(enrollmentsPerTerm, firstTerm, lastTerm);
+        EnrollmentsStatisticsResponse response = new EnrollmentsStatisticsResponse(enrollmentsPerTerm, courseCode, curriculumCode, firstTerm, lastTerm);
         return response;
     }
 

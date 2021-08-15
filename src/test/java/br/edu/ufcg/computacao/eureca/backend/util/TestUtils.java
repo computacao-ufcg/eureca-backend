@@ -40,12 +40,12 @@ public class TestUtils {
     public static ActivesStatisticsResponse getActivesSummaryResponse() {
         RiskClassCountSummary riskClassCountSummary = new RiskClassCountSummary(0, 0, 0, 0, 0, 0, 0);
         ActivesPerTermSummary activesPerTerm = new ActivesPerTermSummary("", riskClassCountSummary);
-        return new ActivesStatisticsResponse(Arrays.asList(activesPerTerm), "x", "y");
+        return new ActivesStatisticsResponse(Arrays.asList(activesPerTerm), "", "", "x", "y");
     }
 
     public static AlumniStatisticsResponse getAlumniSummaryResponse() {
         AlumniPerTermSummary alumniPerTerm = new AlumniPerTermSummary("x", 10, 5, 4, 1);
-        return new AlumniStatisticsResponse(Arrays.asList(alumniPerTerm), "x", "y");
+        return new AlumniStatisticsResponse(Arrays.asList(alumniPerTerm), "", "", "x", "y");
     }
 
     public static Collection<StudentCSV> getStudentsCsvResponse() {
@@ -89,7 +89,7 @@ public class TestUtils {
                 0,0,0,
                 0,0);
         DropoutPerTermSummary dropouts = new DropoutPerTermSummary("", 0, reasonSummary, 0, 0);
-        return new DropoutsStatisticsResponse(Arrays.asList(dropouts), "x", "y");
+        return new DropoutsStatisticsResponse(Arrays.asList(dropouts), "", "","x", "y");
     }
 
     public static StudentsRetentionStatisticsResponse getDelayedSummaryResponse() {
@@ -97,6 +97,6 @@ public class TestUtils {
                 0,0,0,0,0);
         StudentMetricsSummary metricsSummary = new StudentMetricsSummary(0, metrics, 0, 0);
         StudentsRetentionPerTermSummary delayedPerTermSummary = new StudentsRetentionPerTermSummary("", metricsSummary);
-        return new StudentsRetentionStatisticsResponse(Arrays.asList(delayedPerTermSummary), "x", "y");
+        return new StudentsRetentionStatisticsResponse(Arrays.asList(delayedPerTermSummary), "", "", "x", "y");
     }
 }

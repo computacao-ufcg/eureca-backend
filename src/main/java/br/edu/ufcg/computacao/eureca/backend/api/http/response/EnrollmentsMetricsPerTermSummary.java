@@ -5,7 +5,7 @@ import java.util.Collection;
 public class EnrollmentsMetricsPerTermSummary implements Comparable {
     private String subjectCode;
     private String subjectName;
-    Collection<EnrollmentsMetricsPerTerm> terms;
+    private Collection<EnrollmentsMetricsPerTerm> terms;
 
     public EnrollmentsMetricsPerTermSummary(String subjectCode, String subjectName, Collection<EnrollmentsMetricsPerTerm> terms) {
         this.subjectCode = subjectCode;
