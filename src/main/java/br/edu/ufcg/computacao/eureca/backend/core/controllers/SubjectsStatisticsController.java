@@ -36,7 +36,7 @@ public class SubjectsStatisticsController {
         return response;
     }
 
-    public SubjectResponse getSubjectsCSV(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
+    public SubjectsResponse getSubjectsCSV(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
         Collection<SubjectCSV> subjectDataResponses = new TreeSet<>();
         Collection<SubjectMetricsPerTermSummary> metricsPerTerm =
                 this.dataAccessFacade.getSubjectMetricsPerTermSummary(courseCode, curriculumCode, from, to, subjectType);
@@ -47,7 +47,7 @@ public class SubjectsStatisticsController {
                 subjectDataResponses.add(subjectData);
             });
         });
-        return new SubjectResponse(subjectDataResponses);
+        return new SubjectsResponse(subjectDataResponses);
     }
 
     public SubjectsStatisticsSummaryResponse getSubjectsStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {

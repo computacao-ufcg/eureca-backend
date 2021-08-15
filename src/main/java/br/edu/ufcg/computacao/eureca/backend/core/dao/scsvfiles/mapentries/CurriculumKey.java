@@ -3,31 +3,31 @@ package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
 import java.util.Objects;
 
 public class CurriculumKey implements EurecaMapKey {
-    private String course;
-    private String code;
+    private String courseCode;
+    private String curriculumCode;
 
-    public CurriculumKey(String course, String code) {
-        this.course = course;
-        this.code = code;
+    public CurriculumKey(String courseCode, String curriculumCode) {
+        this.courseCode = courseCode;
+        this.curriculumCode = curriculumCode;
     }
 
     public CurriculumKey() {
     }
 
-    public String getCourse() {
-        return course;
+    public String getCourseCode() {
+        return courseCode;
     }
 
-    public void setCourse(String course) {
-        this.course = course;
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
     }
 
-    public String getCode() {
-        return code;
+    public String getCurriculumCode() {
+        return curriculumCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCurriculumCode(String curriculumCode) {
+        this.curriculumCode = curriculumCode;
     }
 
     @Override
@@ -35,12 +35,17 @@ public class CurriculumKey implements EurecaMapKey {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CurriculumKey that = (CurriculumKey) o;
-        return getCourse().equals(that.getCourse()) &&
-                getCode().equals(that.getCode());
+        return getCourseCode().equals(that.getCourseCode()) &&
+                getCurriculumCode().equals(that.getCurriculumCode());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCourse(), getCode());
+        return Objects.hash(getCourseCode(), getCurriculumCode());
+    }
+
+    @Override
+    public String toString() {
+        return this.courseCode + ":" + this.curriculumCode;
     }
 }

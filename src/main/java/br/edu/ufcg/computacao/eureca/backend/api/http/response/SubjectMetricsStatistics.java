@@ -11,10 +11,14 @@ public class SubjectMetricsStatistics {
     private MetricStatistics exempted;
     private MetricStatistics suspended;
     private MetricStatistics totalEnrolled;
+    private MetricStatistics numberOfClasses;
+    private MetricStatistics averageEnrollmentsPerClass;
 
     public SubjectMetricsStatistics(MetricStatistics failedDueToAbsences, MetricStatistics failedDueToGrade,
                                     MetricStatistics cancelled, MetricStatistics succeeded, MetricStatistics ongoing,
-                                    MetricStatistics exempted, MetricStatistics suspended, MetricStatistics totalEnrolled) {
+                                    MetricStatistics exempted, MetricStatistics suspended,
+                                    MetricStatistics totalEnrolled, MetricStatistics numberOfClasses,
+                                    MetricStatistics averageEnrollmentsPerClass) {
         this.failedDueToAbsences = failedDueToAbsences;
         this.failedDueToGrade = failedDueToGrade;
         this.cancelled = cancelled;
@@ -23,6 +27,8 @@ public class SubjectMetricsStatistics {
         this.exempted = exempted;
         this.suspended = suspended;
         this.totalEnrolled = totalEnrolled;
+        this.numberOfClasses = numberOfClasses;
+        this.averageEnrollmentsPerClass = averageEnrollmentsPerClass;
     }
 
     public MetricStatistics getFailedDueToAbsences() {
@@ -87,5 +93,21 @@ public class SubjectMetricsStatistics {
 
     public void setTotalEnrolled(MetricStatistics totalEnrolled) {
         this.totalEnrolled = totalEnrolled;
+    }
+
+    public MetricStatistics getNumberOfClasses() {
+        return numberOfClasses;
+    }
+
+    public void setNumberOfClasses(MetricStatistics numberOfClasses) {
+        this.numberOfClasses = numberOfClasses;
+    }
+
+    public MetricStatistics getAverageEnrollmentsPerClass() {
+        return averageEnrollmentsPerClass;
+    }
+
+    public void setAverageEnrollmentsPerClass(MetricStatistics averageEnrollmentsPerClass) {
+        this.averageEnrollmentsPerClass = averageEnrollmentsPerClass;
     }
 }

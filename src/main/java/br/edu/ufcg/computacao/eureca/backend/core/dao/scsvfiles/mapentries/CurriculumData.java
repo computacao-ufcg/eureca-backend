@@ -311,7 +311,7 @@ public class CurriculumData implements EurecaMapValue {
     }
 
     public Curriculum createCurriculum(CurriculumKey key) {
-        return new Curriculum(key.getCourse(), key.getCode(), getIdealMandatoryCredits(), getIdealOptionalCredits(),
+        return new Curriculum(key.getCourseCode(), key.getCurriculumCode(), getIdealMandatoryCredits(), getIdealOptionalCredits(),
                 getIdealElectiveCredits(), getIdealComplementaryCredits(), getMinMandatoryCreditsNeeded(),
                 getMinOptionalCreditsNeeded(), getMinElectiveCreditsNeeded(), getMinComplementaryCreditsNeeded(),
                 getMinActivitiesNeeded(), getMinNumberOfTerms(), getMaxNumberOfTerms(), getMinNumberOfEnrolledCredits(),

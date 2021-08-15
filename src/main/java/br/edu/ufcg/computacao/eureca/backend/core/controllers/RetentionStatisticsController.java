@@ -21,9 +21,9 @@ public class RetentionStatisticsController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
-    public StudentsRetentionStatisticsResponse getStudentsRetentionStatistics(String courseCode, String from, String to) {
+    public StudentsRetentionStatisticsResponse getStudentsRetentionStatistics(String courseCode, String curriculumCode, String from, String to) {
         Collection<StudentsRetentionPerTermSummary> terms = new TreeSet<>();
-        Map<String, Collection<Student>> retentionPerAdmissionTerm = getStudentsRetentionPerAdmissionTerm(courseCode, from, to);
+        Map<String, Collection<Student>> retentionPerAdmissionTerm = getStudentsRetentionPerAdmissionTerm(courseCode, curriculumCode, from, to);
 
         for (String term: retentionPerAdmissionTerm.keySet()) {
             StudentMetricsSummary metricsSummary = StudentMetricsCalculator.computeMetricsSummary(retentionPerAdmissionTerm.get(term));
@@ -35,57 +35,63 @@ public class RetentionStatisticsController {
         return new StudentsRetentionStatisticsResponse(terms, firstTerm, lastTerm);
     }
 
-    public StudentResponse getStudentsRetentionCSV(String courseCode, String from, String to) {
+    public StudentsResponse getStudentsRetentionCSV(String courseCode, String curriculumCode, String from, String to) {
         Collection<StudentCSV> studentsRetentionData = new TreeSet<>();
-        Collection<Student> studentsRetention = getStudentsRetention(courseCode, from, to);
+        Collection<Student> studentsRetention = getStudentsRetention(courseCode, curriculumCode, from, to);
         studentsRetention.forEach(item -> {
             StudentCSV studentDataResponse = new StudentCSV(item);
             studentsRetentionData.add(studentDataResponse);
         });
-        return new StudentResponse(studentsRetentionData);
+        return new StudentsResponse(studentsRetentionData);
     }
 
-    public SubjectRetentionStatisticsResponse getSubjectsRetentionStatistics(String courseCode, String curriculumCode) throws InvalidParameterException {
-        Collection<SubjectRetentionDigest> digest = this.dataAccessFacade.getSubjectsRetentionSummary(courseCode, curriculumCode);
-        return new SubjectRetentionStatisticsResponse(digest);
+    public SubjectsRetentionStatisticsResponse getSubjectsRetentionStatistics(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+        Collection<SubjectRetentionPerAdmissionTermSummary> subjectRetention = this.dataAccessFacade.getSubjectsRetentionSummary(courseCode, curriculumCode, from, to);
+        return new SubjectsRetentionStatisticsResponse(subjectRetention, from, to);
     }
 
-    public SubjectRetentionResponse getSubjectsRetentionCSV(String courseCode, String curriculumCode) throws InvalidParameterException {
-        Collection<SubjectRetentionCSV> retention = this.dataAccessFacade.getSubjectsRetention(courseCode, curriculumCode);
-        return new SubjectRetentionResponse(retention);
+    public SubjectsRetentionResponse getSubjectsRetentionCSV(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+        Collection<SubjectRetentionCSV> retention = this.dataAccessFacade.getSubjectsRetention(courseCode, curriculumCode, from, to);
+        return new SubjectsRetentionResponse(retention);
     }
 
     public RetentionStatisticsSummaryResponse getRetentionStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
-        Collection<Student> studentsRetention = getStudentsRetention(courseCode, from, to);
+        Collection<Student> studentsRetention = getStudentsRetention(courseCode, curriculumCode, from, to);
         StudentMetricsSummary summary = StudentMetricsCalculator.computeMetricsSummary(studentsRetention);
-        StudentsRetentionSummary studentsRetentionSummary = new StudentsRetentionSummary(from, to, studentsRetention.size(), summary);
+        StudentsRetentionSummary studentsRetentionSummary = new StudentsRetentionSummary(studentsRetention.size(), summary);
 
-        Collection<SubjectRetentionDigest> subjectsRetentionList = this.dataAccessFacade.getSubjectsRetentionSummary(courseCode, curriculumCode);
-        MetricStatistics retentionStatistics = new MetricStatistics(getRetentionSample(subjectsRetentionList));
-        SubjectsRetentionSummary subjectRetentionSummary = new SubjectsRetentionSummary(retentionStatistics);
+        Collection<SubjectRetentionPerAdmissionTermSummary> subjectsRetentionList = this.dataAccessFacade.getSubjectsRetentionSummary(courseCode, curriculumCode, from, to);
+        RetentionSampleList retentionSampleList = getRetentionSample(subjectsRetentionList);
+        MetricStatistics adequate = new MetricStatistics(retentionSampleList.getAdequateList());
+        MetricStatistics possible = new MetricStatistics(retentionSampleList.getPossibleList());
+        SubjectsRetentionSummary subjectRetentionSummary = new SubjectsRetentionSummary(adequate, possible);
 
-        return new RetentionStatisticsSummaryResponse(studentsRetentionSummary, subjectRetentionSummary);
+        return new RetentionStatisticsSummaryResponse(courseCode, curriculumCode, from, to, studentsRetentionSummary, subjectRetentionSummary);
     }
 
-    private List<Double> getRetentionSample(Collection<SubjectRetentionDigest> subjectsRetentionList) {
-        List<Double> retentionSampleList = new ArrayList<>();
-        subjectsRetentionList.forEach(item -> {
-            retentionSampleList.add((double) item.getRetention());
+    private RetentionSampleList getRetentionSample(Collection<SubjectRetentionPerAdmissionTermSummary> subjectsRetentionList) {
+        List<Double> adequateSampleList = new ArrayList<>();
+        List<Double> possibleSampleList = new ArrayList<>();
+        subjectsRetentionList.forEach(subjectSummary -> {
+            subjectSummary.getRetention().forEach(termSummary -> {
+                adequateSampleList.add((double) termSummary.getAdequate());
+                possibleSampleList.add((double) termSummary.getPossible());
+            });
         });
-        return retentionSampleList;
+        return new RetentionSampleList(adequateSampleList, possibleSampleList);
     }
 
-    private Collection<Student> getStudentsRetention(String courseCode, String from, String to) {
-         return this.dataAccessFacade.getActives(courseCode, from, to).stream()
+    private Collection<Student> getStudentsRetention(String courseCode, String curriculumCode, String from, String to) {
+         return this.dataAccessFacade.getActives(courseCode, curriculumCode, from, to).stream()
                 .filter(item -> item.computeRiskClass().equals(RiskClass.AVERAGE) ||
                         item.computeRiskClass().equals(RiskClass.HIGH) ||
                         item.computeRiskClass().equals(RiskClass.UNFEASIBLE))
                 .collect(Collectors.toSet());
     }
 
-    private Map<String, Collection<Student>> getStudentsRetentionPerAdmissionTerm(String courseCode, String from, String to) {
+    private Map<String, Collection<Student>> getStudentsRetentionPerAdmissionTerm(String courseCode, String curriculumCode, String from, String to) {
         Map<String, Collection<Student>> studentsRetentionPerAdmissionTerm = new HashMap<>();
-        Map<String, Collection<Student>> activesPerAdmissionTerm = this.dataAccessFacade.getActivesPerAdmissionTerm(courseCode, from, to);
+        Map<String, Collection<Student>> activesPerAdmissionTerm = this.dataAccessFacade.getActivesPerAdmissionTerm(courseCode, curriculumCode, from, to);
         for (String term: activesPerAdmissionTerm.keySet()) {
             Collection<Student> studentsRetention = activesPerAdmissionTerm.get(term).stream()
                     .filter(item -> item.computeRiskClass().equals(RiskClass.AVERAGE) ||
@@ -95,5 +101,23 @@ public class RetentionStatisticsController {
             studentsRetentionPerAdmissionTerm.put(term, studentsRetention);
         }
         return studentsRetentionPerAdmissionTerm;
+    }
+
+    private class RetentionSampleList {
+        private List<Double> adequateList;
+        private List<Double> possibleList;
+
+        public RetentionSampleList(List<Double> adequateList, List<Double> possibleList) {
+            this.adequateList = adequateList;
+            this.possibleList = possibleList;
+        }
+
+        public List<Double> getAdequateList() {
+            return adequateList;
+        }
+
+        public List<Double> getPossibleList() {
+            return possibleList;
+        }
     }
 }

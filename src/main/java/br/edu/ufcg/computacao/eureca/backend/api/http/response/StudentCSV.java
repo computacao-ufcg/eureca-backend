@@ -5,10 +5,11 @@ import br.edu.ufcg.computacao.eureca.backend.core.util.StudentMetricsCalculator;
 
 public class StudentCSV implements Comparable {
     private String registration;
+    private String courseCode;
+    private String curriculumCode;
     private String name;
     private String gender;
     private String maritalStatus;
-    private String curriculum;
     private String affirmativePolicy;
     private String admissionType;
     private String admissionTerm;
@@ -38,10 +39,11 @@ public class StudentCSV implements Comparable {
 
     public StudentCSV(Student student) {
         this.registration = student.getRegistration().toString();
+        this.courseCode = student.getCourseCode();
+        this.curriculumCode = student.getCurriculumCode();
         this.name = student.getName();
         this.gender = student.getGender();
         this.maritalStatus = student.getMaritalStatus();
-        this.curriculum = student.getCurriculumCode();
         this.affirmativePolicy = student.getAffirmativePolicy();
         this.admissionType = student.getAdmissionStr();
         this.admissionTerm = student.getAdmissionTerm();
@@ -88,6 +90,22 @@ public class StudentCSV implements Comparable {
         this.registration = registration;
     }
 
+    public String getCourseCode() {
+        return courseCode;
+    }
+
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
+    }
+
+    public String getCurriculumCode() {
+        return curriculumCode;
+    }
+
+    public void setCurriculumCode(String curriculumCode) {
+        this.curriculumCode = curriculumCode;
+    }
+
     public String getName() {
         return name;
     }
@@ -110,14 +128,6 @@ public class StudentCSV implements Comparable {
 
     public void setMaritalStatus(String maritalStatus) {
         this.maritalStatus = maritalStatus;
-    }
-
-    public String getCurriculum() {
-        return curriculum;
-    }
-
-    public void setCurriculum(String curriculum) {
-        this.curriculum = curriculum;
     }
 
     public String getAffirmativePolicy() {
