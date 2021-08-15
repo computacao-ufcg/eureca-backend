@@ -1,5 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectRetentionPerAdmissionTerm;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectRetentionCSV;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
@@ -25,12 +26,12 @@ public class IndexesHolder {
     private final Map<AcademicUnitKey, AcademicUnitData> academicUnitsMap;
     // Student indexes
     private Map<String, NationalIdRegistrationKey> registrationMap;
-    private Map<String, Collection<NationalIdRegistrationKey>> activesPerCourseMap;
-    private Map<String, Map<String, Collection<NationalIdRegistrationKey>>> activesPerCoursePerAdmissionTermMap;
-    private Map<String, Collection<NationalIdRegistrationKey>> alumniPerCourseMap;
-    private Map<String, Map<String, Collection<NationalIdRegistrationKey>>> alumniPerCoursePerGraduationTermMap;
-    private Map<String, Collection<NationalIdRegistrationKey>> dropoutsPerCourseMap;
-    private Map<String, Map<String, Collection<NationalIdRegistrationKey>>> dropoutsPerCoursePerDropoutTermMap;
+    private Map<CurriculumKey, Collection<NationalIdRegistrationKey>> activesPerCurriculumMap;
+    private Map<CurriculumKey, Map<String, Collection<NationalIdRegistrationKey>>> activesPerCurriculumPerAdmissionTermMap;
+    private Map<CurriculumKey, Collection<NationalIdRegistrationKey>> alumniPerCurriculumMap;
+    private Map<CurriculumKey, Map<String, Collection<NationalIdRegistrationKey>>> alumniPerCurriculumPerGraduationTermMap;
+    private Map<CurriculumKey, Collection<NationalIdRegistrationKey>> dropoutsPerCurriculumMap;
+    private Map<CurriculumKey, Map<String, Collection<NationalIdRegistrationKey>>> dropoutsPerCurriculumPerDropoutTermMap;
     // Enrollment indexes
     private Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> enrollmentsPerSubjectPerTermPerClass;
     private Map<String, Map<SubjectKey, Map<String, ClassEnrollments>>> enrollmentsPerTermPerSubjectPerClass;
@@ -53,19 +54,24 @@ public class IndexesHolder {
     }
 
     public Collection<NationalIdRegistrationKey> getAlumniPerCourseMap(String courseCode) {
-        return this.alumniPerCourseMap.get(courseCode);
+        Collection<NationalIdRegistrationKey> alumni = new TreeSet<>();
+        Collection<String> currilumCodes = this.getCurricula(courseCode);
+        currilumCodes.forEach(curriculumCode -> {
+            alumni.addAll(this.alumniPerCurriculumMap.get(courseCode + ":" + curriculumCode));
+        });
+        return alumni;
     }
 
-    public Map<String, Collection<NationalIdRegistrationKey>> getActivesPerCoursePerAdmissionTerm(String courseCode) {
-        return this.activesPerCoursePerAdmissionTermMap.get(courseCode);
+    public Map<String, Collection<NationalIdRegistrationKey>> getActivesPerCoursePerAdmissionTerm(String courseCode, String curriculumCode) {
+        return this.activesPerCurriculumPerAdmissionTermMap.get(new CurriculumKey(courseCode, curriculumCode));
     }
 
-    public Map<String, Collection<NationalIdRegistrationKey>> getAlumniPerGraduationTerm(String courseCode) {
-        return this.alumniPerCoursePerGraduationTermMap.get(courseCode);
+    public Map<String, Collection<NationalIdRegistrationKey>> getAlumniPerGraduationTerm(String courseCode, String curriculumCode) {
+        return this.alumniPerCurriculumPerGraduationTermMap.get(new CurriculumKey(courseCode, curriculumCode));
     }
 
-    public Map<String, Collection<NationalIdRegistrationKey>> getDropoutsPerDropoutTerm(String courseCode) {
-        return this.dropoutsPerCoursePerDropoutTermMap.get(courseCode);
+    public Map<String, Collection<NationalIdRegistrationKey>> getDropoutsPerDropoutTerm(String courseCode, String curriculumCode) {
+        return this.dropoutsPerCurriculumPerDropoutTermMap.get(new CurriculumKey(courseCode, curriculumCode));
     }
 
     public Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> getEnrollmentsPerSubjectPerTermPerClass() {
@@ -85,21 +91,21 @@ public class IndexesHolder {
 
     private void buildStudentIndexes() {
         this.registrationMap = new HashMap<>();
-        this.activesPerCourseMap = new HashMap<>();
-        this.activesPerCoursePerAdmissionTermMap = new HashMap<>();
-        this.alumniPerCourseMap = new HashMap<>();
-        this.alumniPerCoursePerGraduationTermMap = new HashMap<>();
-        this.dropoutsPerCourseMap = new HashMap<>();
-        this.dropoutsPerCoursePerDropoutTermMap = new HashMap<>();
+        this.activesPerCurriculumMap = new HashMap<>();
+        this.activesPerCurriculumPerAdmissionTermMap = new HashMap<>();
+        this.alumniPerCurriculumMap = new HashMap<>();
+        this.alumniPerCurriculumPerGraduationTermMap = new HashMap<>();
+        this.dropoutsPerCurriculumMap = new HashMap<>();
+        this.dropoutsPerCurriculumPerDropoutTermMap = new HashMap<>();
         this.studentCurriculumProgressMap = new HashMap<>();
 
         this.studentsMap.forEach((k, v) -> {
             this.registrationMap.put(k.getRegistration(), k);
             if (v.isActive()) {
                 // All actives per course
-                addToStudentIndex(k, v, this.activesPerCourseMap);
+                addToStudentIndex(k, v, this.activesPerCurriculumMap);
                 // Actives per course per term
-                addToStudentPerTermIndex(k, v, v.getAdmissionTerm(), this.activesPerCoursePerAdmissionTermMap);
+                addToStudentPerTermIndex(k, v, v.getAdmissionTerm(), this.activesPerCurriculumPerAdmissionTermMap);
                 // Setup student progress on his/her curriculum
                 this.studentCurriculumProgressMap.put(k, new StudentCurriculumProgress((v.getCompletedTerms() + 1),
                         (v.getMandatoryCredits() + v.getOptionalCredits() + v.getComplementaryCredits()),
@@ -107,35 +113,35 @@ public class IndexesHolder {
             }
             if (v.isAlumnus()) {
                 // All alumni per course
-                addToStudentIndex(k, v, this.alumniPerCourseMap);
+                addToStudentIndex(k, v, this.alumniPerCurriculumMap);
                 // Alumni per course per graduation term
-                addToStudentPerTermIndex(k, v, v.getStatusTerm(), this.alumniPerCoursePerGraduationTermMap);
+                addToStudentPerTermIndex(k, v, v.getStatusTerm(), this.alumniPerCurriculumPerGraduationTermMap);
             }
             if (v.isDropout()) {
                 // All dropouts per course
-                addToStudentIndex(k, v, this.dropoutsPerCourseMap);
+                addToStudentIndex(k, v, this.dropoutsPerCurriculumMap);
                 // Alumni per course per graduation term
-                addToStudentPerTermIndex(k, v, v.getStatusTerm(), this.dropoutsPerCoursePerDropoutTermMap);
+                addToStudentPerTermIndex(k, v, v.getStatusTerm(), this.dropoutsPerCurriculumPerDropoutTermMap);
             }
         });
     }
 
-    private void addToStudentIndex(NationalIdRegistrationKey k, StudentData v, Map<String, Collection<NationalIdRegistrationKey>> map) {
+    private void addToStudentIndex(NationalIdRegistrationKey k, StudentData v, Map<CurriculumKey, Collection<NationalIdRegistrationKey>> map) {
         LOGGER.debug(String.format(Messages.INDEX_ACTIVE_S, v.getName()));
-        Collection<NationalIdRegistrationKey> activesPerCourse = map.get(v.getCourseCode());
+        Collection<NationalIdRegistrationKey> activesPerCourse = map.get(new CurriculumKey(v.getCourseCode(), v.getCurriculumCode()));
         if (activesPerCourse == null) activesPerCourse = new ArrayList<>();
         activesPerCourse.add(k);
-        map.put(v.getCourseCode(), activesPerCourse);
+        map.put(new CurriculumKey(v.getCourseCode(), v.getCurriculumCode()), activesPerCourse);
     }
 
-    private void addToStudentPerTermIndex(NationalIdRegistrationKey k, StudentData v, String term, Map<String, Map<String, Collection<NationalIdRegistrationKey>>> perTermMap) {
-        Map<String, Collection<NationalIdRegistrationKey>> activesPerCoursePerAdmissionTerm = perTermMap.get(v.getCourseCode());
+    private void addToStudentPerTermIndex(NationalIdRegistrationKey k, StudentData v, String term, Map<CurriculumKey, Map<String, Collection<NationalIdRegistrationKey>>> perTermMap) {
+        Map<String, Collection<NationalIdRegistrationKey>> activesPerCoursePerAdmissionTerm = perTermMap.get(new CurriculumKey(v.getCourseCode(), v.getCurriculumCode()));
         if (activesPerCoursePerAdmissionTerm == null) activesPerCoursePerAdmissionTerm = new HashMap<>();
         Collection<NationalIdRegistrationKey> activesPerAdmissionTerm = activesPerCoursePerAdmissionTerm.get(term);
         if (activesPerAdmissionTerm == null) activesPerAdmissionTerm = new ArrayList<>();
         activesPerAdmissionTerm.add(k);
         activesPerCoursePerAdmissionTerm.put(term, activesPerAdmissionTerm);
-        perTermMap.put(v.getCourseCode(), activesPerCoursePerAdmissionTerm);
+        perTermMap.put(new CurriculumKey(v.getCourseCode(), v.getCurriculumCode()), activesPerCoursePerAdmissionTerm);
     }
 
     private void buildEnrollmentIndexes() {
@@ -209,8 +215,10 @@ public class IndexesHolder {
 
     private void buildSubjectIndexes() {
         this.subjectsMap.forEach((subjectKey, subjectData) -> {
-            LOGGER.debug(String.format(Messages.PROCESSING_S_FOR_D_STUDENTS, subjectKey.getSubjectCode(), this.activesPerCourseMap.get(subjectKey.getCourseCode()).size()));
-            this.activesPerCourseMap.get(subjectKey.getCourseCode()).forEach(studentKey -> {
+            LOGGER.debug(String.format(Messages.PROCESSING_S_FOR_D_STUDENTS, subjectKey.getSubjectCode() + ":" +
+                            subjectKey.getCurriculumCode(), this.activesPerCurriculumMap.get(subjectKey.getCourseCode() +
+                            ":" + subjectKey.getCurriculumCode()).size()));
+            this.activesPerCurriculumMap.get(subjectKey.getCourseCode() + ":" + subjectKey.getCurriculumCode()).forEach(studentKey -> {
                 StudentCurriculumProgress studentCurriculumProgress = this.studentCurriculumProgressMap.get(studentKey);
                 if (!hasCompleted(studentCurriculumProgress, subjectKey, subjectData) &&
                             !isDisabled(studentCurriculumProgress, subjectKey) &&
@@ -243,12 +251,12 @@ public class IndexesHolder {
     private void buildCurriculaIndexes() {
         this.courseCurriculaMap = new HashMap<>();
         this.curriculumMap.forEach((k, v) -> {
-            Collection<String> curriculumCodes = this.courseCurriculaMap.get(k.getCourse());
+            Collection<String> curriculumCodes = this.courseCurriculaMap.get(k.getCourseCode());
             if (curriculumCodes == null) {
                 curriculumCodes = new TreeSet<>();
             }
-            curriculumCodes.add(k.getCode());
-            this.courseCurriculaMap.put(k.getCourse(), curriculumCodes);
+            curriculumCodes.add(k.getCurriculumCode());
+            this.courseCurriculaMap.put(k.getCourseCode(), curriculumCodes);
         });
     }
 
@@ -362,18 +370,18 @@ public class IndexesHolder {
         return ret.createCurriculum(key);
     }
 
-    public Collection<Student> getAllActives(String courseCode) {
-        Collection<NationalIdRegistrationKey> actives = this.activesPerCourseMap.get(courseCode);
+    public Collection<Student> getAllActives(String courseCode, String curriculumCode) {
+        Collection<NationalIdRegistrationKey> actives = this.activesPerCurriculumMap.get(courseCode + ":" + curriculumCode);
         return getAllStudents(actives);
     }
 
-    public Collection<Student> getAllAlumni(String courseCode) {
-        Collection<NationalIdRegistrationKey> alumni = this.alumniPerCourseMap.get(courseCode);
+    public Collection<Student> getAllAlumni(String courseCode, String curriculumCode) {
+        Collection<NationalIdRegistrationKey> alumni = this.alumniPerCurriculumMap.get(courseCode + ":" + curriculumCode);
         return getAllStudents(alumni);
     }
 
-    public Collection<Student> getAllDropouts(String courseCode) {
-        Collection<NationalIdRegistrationKey> dropouts = this.dropoutsPerCourseMap.get(courseCode);
+    public Collection<Student> getAllDropouts(String courseCode, String curriculumCode) {
+        Collection<NationalIdRegistrationKey> dropouts = this.dropoutsPerCurriculumMap.get(courseCode + ":" + curriculumCode);
         return getAllStudents(dropouts);
     }
 
@@ -399,43 +407,53 @@ public class IndexesHolder {
         return enrollments;
     }
 
-    public int getRetentionCount(String courseCode, String curriculumCode, String subjectCode) {
-        int retention = 0;
-        for (NationalIdRegistrationKey active : this.activesPerCourseMap.get(courseCode)) {
+    public Collection<SubjectRetentionPerAdmissionTerm> getRetentionCount(String courseCode, String curriculumCode, String subjectCode, String from, String to) {
+        Map<String, SubjectRetentionPerAdmissionTerm> retention = new HashMap<>();
+        for (NationalIdRegistrationKey active : this.activesPerCurriculumMap.get(new CurriculumKey(courseCode, curriculumCode))) {
             StudentCurriculumProgress studentCurriculum = this.studentCurriculumProgressMap.get(active);
             SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
-            if (studentCurriculum.getEnabled().contains(subjectKey)) {
-                StudentData studentData = this.studentsMap.get(active);
-                CurriculumKey curriculumKey = new CurriculumKey(studentData.getCourseCode(), studentData.getCurriculumCode());
-                CurriculumData curriculumData = this.curriculumMap.get(curriculumKey);
-                SubjectData subjectData = this.subjectsMap.get(subjectKey);
-                if (isAdequate(studentCurriculum, curriculumData, subjectData.getIdealTerm())) {
-                    retention++;
+            StudentData studentData = this.studentsMap.get(active);
+            String admissionTerm = studentData.getAdmissionTerm();
+            if (admissionTerm.compareTo(from) >= 0 && admissionTerm.compareTo(to) <= 0) {
+                if (studentCurriculum.getEnabled().contains(subjectKey)) {
+                    CurriculumKey curriculumKey = new CurriculumKey(studentData.getCourseCode(), studentData.getCurriculumCode());
+                    CurriculumData curriculumData = this.curriculumMap.get(curriculumKey);
+                    SubjectData subjectData = this.subjectsMap.get(subjectKey);
+                    SubjectRetentionPerAdmissionTerm retentionPerTerm = retention.get(admissionTerm);
+                    if (retentionPerTerm == null) retentionPerTerm = new SubjectRetentionPerAdmissionTerm(admissionTerm, 0, 0);
+                    retentionPerTerm.incrementPossible();
+                    if (isAdequate(studentCurriculum, curriculumData, subjectData.getIdealTerm())) {
+                        retentionPerTerm.incrementAdequate();
+                    }
+                    retention.put(admissionTerm, retentionPerTerm);
                 }
             }
         }
-        return retention;
+        Collection<SubjectRetentionPerAdmissionTerm> response = new TreeSet<>();
+        response.addAll(retention.values());
+        return response;
     }
 
-    public Collection<SubjectRetentionCSV> getRetention(String courseCode, String curriculumCode, String subjectCode) {
+    public Collection<SubjectRetentionCSV> getRetention(String courseCode, String curriculumCode, String from, String to, String subjectCode) {
         Collection<SubjectRetentionCSV> responses = new TreeSet<>();
         SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
-        for (NationalIdRegistrationKey active : this.activesPerCourseMap.get(courseCode)) {
+        for (NationalIdRegistrationKey active : this.activesPerCurriculumMap.get(new CurriculumKey(courseCode, curriculumCode))) {
             StudentCurriculumProgress studentCurriculum = this.studentCurriculumProgressMap.get(active);
-            StudentData student = studentsMap.get(active);
-            if (!(student.getCourseCode().equals(courseCode) && student.getCurriculumCode().equals(curriculumCode)))
-                continue;
-            if (studentCurriculum.getEnabled().contains(subjectKey)) {
-                SubjectData subject = this.subjectsMap.get(subjectKey);
-                int idealTerm = subject.getIdealTerm();
-                String name = subject.getName();
-                SubjectRetentionCSV response = new SubjectRetentionCSV(courseCode, curriculumCode,
-                        idealTerm, subjectCode, name, active.getRegistration(), student.getAttemptedCredits(),
-                        student.getMandatoryCredits(), 0, student.getOptionalCredits(),
-                        student.getComplementaryCredits(), student.getCompletedTerms(), student.getSuspendedTerms(),
-                        student.getInstitutionalEnrollments(), student.getMobilityTerms(), student.getGpa());
-                responses.add(response);
-                LOGGER.debug(response.toString());
+            StudentData studentData = studentsMap.get(active);
+            String admissionTerm = studentData.getAdmissionTerm();
+            if (admissionTerm.compareTo(from) >= 0 && admissionTerm.compareTo(to) <= 0) {
+                if (studentCurriculum.getEnabled().contains(subjectKey)) {
+                    SubjectData subject = this.subjectsMap.get(subjectKey);
+                    int idealTerm = subject.getIdealTerm();
+                    String name = subject.getName();
+                    SubjectRetentionCSV response = new SubjectRetentionCSV(courseCode, curriculumCode,
+                            idealTerm, subjectCode, name, active.getRegistration(), studentData.getAttemptedCredits(),
+                            studentData.getMandatoryCredits(), 0, studentData.getOptionalCredits(),
+                            studentData.getComplementaryCredits(), studentData.getCompletedTerms(), studentData.getSuspendedTerms(),
+                            studentData.getInstitutionalEnrollments(), studentData.getMobilityTerms(), studentData.getGpa());
+                    responses.add(response);
+                    LOGGER.debug(response.toString());
+                }
             }
         }
         return responses;

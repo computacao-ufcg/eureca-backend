@@ -24,6 +24,9 @@ public class SubjectMetrics {
         this.totalEnrolled = totalEnrolled;
     }
 
+    public SubjectMetrics() {
+    }
+
     public int getFailedDueToAbsences() {
         return failedDueToAbsences;
     }
@@ -94,6 +97,18 @@ public class SubjectMetrics {
 
     public void setTotalEnrolled(int totalEnrolled) {
         this.totalEnrolled = totalEnrolled;
+    }
+
+    public void add(SubjectMetrics other) {
+        this.failedDueToAbsences += other.getFailedDueToAbsences();
+        this.failedDueToGrade += other.getFailedDueToGrade();
+        this.cancelled += other.getCancelled();
+        this.succeeded += other.getSucceeded();
+        this.ongoing += other.getOngoing();
+        this.exempted += other.getExempted();
+        this.suspended += other.getSuspended();
+        this.numberOfClasses += other.getNumberOfClasses();
+        this.totalEnrolled += other.getTotalEnrolled();
     }
 
     @Override

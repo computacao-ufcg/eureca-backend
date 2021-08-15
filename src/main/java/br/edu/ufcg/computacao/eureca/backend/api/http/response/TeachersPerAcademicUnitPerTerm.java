@@ -2,6 +2,7 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class TeachersPerAcademicUnitPerTerm implements Comparable, SummaryPerTerm {
     private String term;
+    private SubjectsStatisticsSummary subjectsSummary;
 
     @Override
     public String getTerm() {

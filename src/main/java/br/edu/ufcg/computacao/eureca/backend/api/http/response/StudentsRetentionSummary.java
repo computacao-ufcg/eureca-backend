@@ -1,32 +1,12 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class StudentsRetentionSummary {
-    private String from;
-    private String to;
     private int studentsRetentionCount;
     private StudentMetricsSummary average;
 
-    public StudentsRetentionSummary(String from, String to, int studentsRetentionCount, StudentMetricsSummary average) {
-        this.from = from;
-        this.to = to;
+    public StudentsRetentionSummary(int studentsRetentionCount, StudentMetricsSummary average) {
         this.studentsRetentionCount = studentsRetentionCount;
         this.average = average;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public String getTo() {
-        return to;
-    }
-
-    public void setTo(String to) {
-        this.to = to;
     }
 
     public int getStudentsRetentionCount() {
