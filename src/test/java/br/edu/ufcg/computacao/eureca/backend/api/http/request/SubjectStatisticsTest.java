@@ -31,7 +31,7 @@ public class SubjectStatisticsTest extends EndpointTest {
 
     private SubjectsStatisticsSummaryResponse getSubjectStatisticsMock() {
         MetricStatistics metrics = new MetricStatistics(1, 3, 5, 7, 9, 6, 100);
-        SubjectMetricsStatistics subjectMetrics = new SubjectMetricsStatistics(metrics, metrics, metrics, metrics, metrics, metrics, metrics, metrics);
+        SubjectMetricsStatistics subjectMetrics = new SubjectMetricsStatistics(metrics, metrics, metrics, metrics, metrics, metrics, metrics, metrics, metrics, metrics);
         SubjectsStatisticsSummary mandatory = new SubjectsStatisticsSummary(30, subjectMetrics);
         SubjectsStatisticsSummary optional = new SubjectsStatisticsSummary(10, subjectMetrics);
         SubjectsStatisticsSummary elective = new SubjectsStatisticsSummary(15, subjectMetrics);

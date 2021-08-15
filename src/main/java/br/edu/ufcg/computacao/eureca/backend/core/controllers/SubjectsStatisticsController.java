@@ -32,7 +32,7 @@ public class SubjectsStatisticsController {
                 if (last.compareTo(lastTerm) > 0) lastTerm = last;
             }
         }
-        SubjectsStatisticsResponse response = new SubjectsStatisticsResponse(metricsPerTerm, firstTerm, lastTerm);
+        SubjectsStatisticsResponse response = new SubjectsStatisticsResponse(metricsPerTerm, courseCode, curriculumCode, firstTerm, lastTerm);
         return response;
     }
 

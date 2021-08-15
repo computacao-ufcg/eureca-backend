@@ -64,7 +64,7 @@ public class StudentsStatisticsController {
 
         String firstTerm = CollectionUtil.getFirstTermFromSummaries(terms);
         String lastTerm = CollectionUtil.getLastTermFromSummaries(terms);
-        return new ActivesStatisticsResponse(terms, firstTerm, lastTerm);
+        return new ActivesStatisticsResponse(terms, courseCode, curriculumCode, firstTerm, lastTerm);
     }
 
     public AlumniStatisticsResponse getAlumniStatistics(String courseCode, String curriculumCode, String from, String to) {
@@ -76,7 +76,7 @@ public class StudentsStatisticsController {
         }
         String firstTerm = CollectionUtil.getFirstTermFromSummaries(terms);
         String lastTerm = CollectionUtil.getLastTermFromSummaries(terms);
-        return new AlumniStatisticsResponse(terms, firstTerm, lastTerm);
+        return new AlumniStatisticsResponse(terms, courseCode, curriculumCode, firstTerm, lastTerm);
     }
 
     public DropoutsStatisticsResponse getDropoutsStatistics(String courseCode, String curriculumCode, String from, String to) {
@@ -89,7 +89,7 @@ public class StudentsStatisticsController {
         }
         String firstTerm = CollectionUtil.getFirstTermFromSummaries(terms);
         String lastTerm = CollectionUtil.getLastTermFromSummaries(terms);
-        return new DropoutsStatisticsResponse(terms, firstTerm, lastTerm);
+        return new DropoutsStatisticsResponse(terms, courseCode, curriculumCode, firstTerm, lastTerm);
     }
 
     public StudentsStatisticsSummaryResponse getStudentsStatisticsSummary(String courseCode, String curriculumCode, String from, String to) {

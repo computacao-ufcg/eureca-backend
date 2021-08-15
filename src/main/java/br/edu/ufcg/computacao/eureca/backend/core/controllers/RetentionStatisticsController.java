@@ -32,7 +32,7 @@ public class RetentionStatisticsController {
         }
         String firstTerm = CollectionUtil.getFirstTermFromSummaries(terms);
         String lastTerm = CollectionUtil.getLastTermFromSummaries(terms);
-        return new StudentsRetentionStatisticsResponse(terms, firstTerm, lastTerm);
+        return new StudentsRetentionStatisticsResponse(terms, courseCode, curriculumCode, firstTerm, lastTerm);
     }
 
     public StudentsResponse getStudentsRetentionCSV(String courseCode, String curriculumCode, String from, String to) {
@@ -47,7 +47,7 @@ public class RetentionStatisticsController {
 
     public SubjectsRetentionStatisticsResponse getSubjectsRetentionStatistics(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         Collection<SubjectRetentionPerAdmissionTermSummary> subjectRetention = this.dataAccessFacade.getSubjectsRetentionSummary(courseCode, curriculumCode, from, to);
-        return new SubjectsRetentionStatisticsResponse(subjectRetention, from, to);
+        return new SubjectsRetentionStatisticsResponse(subjectRetention, courseCode, curriculumCode, from, to);
     }
 
     public SubjectsRetentionResponse getSubjectsRetentionCSV(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
