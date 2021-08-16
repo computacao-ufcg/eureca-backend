@@ -30,10 +30,8 @@ public class MetricsCalculatorTest {
 
     @Before
     public void setUp() {
-        this.studentData = new StudentData("x", "x", "x", "x", "x",
-                "x", "x", "x", "Ativo",
-                "VESTIBULAR 2007.2", "x", "x", "x",
-                "x", "x", 1980,196,840,
+        this.studentData = new StudentData("x", "Ativo", "VESTIBULAR 2007.2", "x", "x", "x", "x",
+                "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", 1980,196,840,
                 56,450,30,5.68,
                 7,1.69,14,1,0,
                 0,0,0);
@@ -56,10 +54,9 @@ public class MetricsCalculatorTest {
 
         // exercise
         int attemptedCredits = this.studentData.getAttemptedCredits();
-        int termsAccounted = this.studentData.getCompletedTerms() + this.studentData.getInstitutionalTerms() + this.studentData.getInstitutionalTerms();
+        int termsAccounted = this.studentData.getCompletedTerms() + this.studentData.getInstitutionalEnrollments() + this.studentData.getInstitutionalEnrollments();
         int completedCredits = this.studentData.getCompletedCredits();
-
-        StudentMetrics result = StudentMetricsCalculator.computeMetrics(attemptedCredits, termsAccounted, completedCredits);
+        StudentMetrics result = StudentMetricsCalculator.computeMetrics(attemptedCredits, termsAccounted, completedCredits, null);
 
         // verify
         Assert.assertEquals(expected.getAttemptedCredits(), result.getAttemptedCredits(), 0.1);
@@ -185,7 +182,7 @@ public class MetricsCalculatorTest {
         RiskClass expected = RiskClass.LOW;
 
         // exercise
-        RiskClass result = StudentMetricsCalculator.computeRiskClass(1);
+        RiskClass result = StudentMetricsCalculator.computeRiskClass(1, 0);
 
         Assert.assertEquals(expected, result);
     }
@@ -197,7 +194,7 @@ public class MetricsCalculatorTest {
         CostClass expected = CostClass.NOT_APPLICABLE;
 
         // exercise
-        CostClass result = StudentMetricsCalculator.computeCostClass(-1);
+        CostClass result = StudentMetricsCalculator.computeCostClass(-1, 0);
 
         // verify
         Assert.assertEquals(expected, result);
@@ -209,7 +206,7 @@ public class MetricsCalculatorTest {
         // set up
         List<Student> students = new ArrayList<>();
         NationalIdRegistrationKey cpfRegistration = new NationalIdRegistrationKey("","");
-        Student student = this.studentData.createStudent(cpfRegistration);
+        Student student = this.studentData.createStudent(cpfRegistration, null);
         students.add(student);
 
         // exercise

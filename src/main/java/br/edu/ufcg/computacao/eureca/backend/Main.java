@@ -7,8 +7,6 @@ import br.edu.ufcg.computacao.eureca.backend.core.ApplicationFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.ScsvFilesDataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.holders.EnviromentVariablesHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.models.EnvironmentVariables;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.PropertiesHolder;
 import br.edu.ufcg.computacao.eureca.common.util.HomeDir;
 import br.edu.ufcg.computacao.eureca.common.util.ServiceAsymmetricKeysHolder;
@@ -36,10 +34,6 @@ public class Main implements ApplicationRunner {
 
             // Setting up plugin
             AuthorizationPlugin authorizationPlugin = PluginInstantiator.getAuthorizationPlugin();
-
-            // Setting environment variables
-            EnvironmentVariables environmentVariables = new EnvironmentVariables("14102100", "2017");
-            EnviromentVariablesHolder.getInstance().setEnvironmentVariables(environmentVariables);
 
             // Setting up Data Access facade
             String mapsListFile = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.MAPS_FILE,

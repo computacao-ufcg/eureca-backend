@@ -1,44 +1,45 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.EnrollmentsGlossaryFields;
-import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
 
 public class EnrollmentsStatisticsSummaryResponse {
-    private String curriculum;
+    private String courseCode;
+    private String curriculumCode;
     private String from;
     private String to;
-    private int subjects;
-    private TermCount max;
-    private TermCount min ;
-    private double averageClassesPerDiscipline;
-    private double averageClassesPerPeriod;
-    private double averageEnrollmentsPerClass;
-    private double averageEnrollmentsPerPeriod;
+    private EnrollmentsSummary mandatory;
+    private EnrollmentsSummary optional;
+    private EnrollmentsSummary elective;
+    private EnrollmentsSummary complementary;
     private EnrollmentsGlossaryFields glossary;
 
-    public EnrollmentsStatisticsSummaryResponse(String curriculum, String from, String to, int subjects, TermCount max, TermCount min, double averageClassesPerDiscipline, double averageClassesPerPeriod, double averageEnrollmentsPerClass, double averageEnrollmentsPerPeriod) {
-        this.curriculum = curriculum;
+    public EnrollmentsStatisticsSummaryResponse(String courseCode, String curriculumCode, String from, String to,
+                                                EnrollmentsSummary mandatory, EnrollmentsSummary optional,
+                                                EnrollmentsSummary elective, EnrollmentsSummary complementary) {
+        this.courseCode = courseCode;
+        this.curriculumCode = curriculumCode;
         this.from = from;
         this.to = to;
-        this.subjects = subjects;
-        this.max = max;
-        this.min = min;
-        this.averageClassesPerDiscipline = averageClassesPerDiscipline;
-        this.averageClassesPerPeriod = averageClassesPerPeriod;
-        this.averageEnrollmentsPerClass = averageEnrollmentsPerClass;
-        this.averageEnrollmentsPerPeriod = averageEnrollmentsPerPeriod;
+        this.mandatory = mandatory;
+        this.optional = optional;
+        this.elective = elective;
+        this.complementary = complementary;
     }
 
-    public int getSubjects() {
-        return subjects;
+    public String getCourseCode() {
+        return courseCode;
     }
 
-    public String getCurriculum() {
-        return curriculum;
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
     }
 
-    public void setCurriculum(String curriculum) {
-        this.curriculum = curriculum;
+    public String getCurriculumCode() {
+        return curriculumCode;
+    }
+
+    public void setCurriculumCode(String curriculumCode) {
+        this.curriculumCode = curriculumCode;
     }
 
     public String getFrom() {
@@ -57,28 +58,36 @@ public class EnrollmentsStatisticsSummaryResponse {
         this.to = to;
     }
 
-    public TermCount getMax() {
-        return max;
+    public EnrollmentsSummary getMandatory() {
+        return mandatory;
     }
 
-    public TermCount getMin() {
-        return min;
+    public void setMandatory(EnrollmentsSummary mandatory) {
+        this.mandatory = mandatory;
     }
 
-    public double getAverageClassesPerDiscipline() {
-        return averageClassesPerDiscipline;
+    public EnrollmentsSummary getOptional() {
+        return optional;
     }
 
-    public double getAverageClassesPerPeriod() {
-        return averageClassesPerPeriod;
+    public void setOptional(EnrollmentsSummary optional) {
+        this.optional = optional;
     }
 
-    public double getAverageEnrollmentsPerClass() {
-        return averageEnrollmentsPerClass;
+    public EnrollmentsSummary getElective() {
+        return elective;
     }
 
-    public double getAverageEnrollmentsPerPeriod() {
-        return averageEnrollmentsPerPeriod;
+    public void setElective(EnrollmentsSummary elective) {
+        this.elective = elective;
+    }
+
+    public EnrollmentsSummary getComplementary() {
+        return complementary;
+    }
+
+    public void setComplementary(EnrollmentsSummary complementary) {
+        this.complementary = complementary;
     }
 
     public EnrollmentsGlossaryFields getGlossary() {
@@ -92,16 +101,15 @@ public class EnrollmentsStatisticsSummaryResponse {
     @Override
     public String toString() {
         return "EnrollmentsStatisticsSummaryResponse{" +
-                "curriculum='" + curriculum + '\'' +
+                "courseCode='" + courseCode + '\'' +
+                ", curriculumCode='" + curriculumCode + '\'' +
                 ", from='" + from + '\'' +
                 ", to='" + to + '\'' +
-                ", subjects=" + subjects +
-                ", max=" + max +
-                ", min=" + min +
-                ", averageClassesPerDiscipline=" + averageClassesPerDiscipline +
-                ", averageClassesPerPeriod=" + averageClassesPerPeriod +
-                ", averageEnrollmentsPerClass=" + averageEnrollmentsPerClass +
-                ", averageEnrollmentsPerPeriod=" + averageEnrollmentsPerPeriod +
+                ", mandatory=" + mandatory +
+                ", optional=" + optional +
+                ", elective=" + elective +
+                ", complementary=" + complementary +
+                ", glossary=" + glossary +
                 '}';
     }
 }

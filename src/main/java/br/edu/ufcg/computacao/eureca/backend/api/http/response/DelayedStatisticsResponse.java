@@ -2,7 +2,7 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import java.util.Collection;
 
-public class DelayedStatisticsResponse extends RangeSummary {
+public class DelayedStatisticsResponse extends Range {
     private Collection<DelayedPerTermSummary> terms;
 
     public DelayedStatisticsResponse(Collection<DelayedPerTermSummary> terms, String from, String to) {

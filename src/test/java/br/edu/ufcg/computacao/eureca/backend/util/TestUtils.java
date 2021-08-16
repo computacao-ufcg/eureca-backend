@@ -4,6 +4,7 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.CommonKeys;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.NationalIdRegistrationKey;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.StudentMetrics;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -48,15 +49,13 @@ public class TestUtils {
     }
 
     public static Collection<StudentCSV> getStudentsCsvResponse() {
-        br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData mockedStudentData = new br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData("x", "x", "x", "x", "x",
-                "x", "x", "x", "Ativo",
-                "VESTIBULAR 2007.2", "x", "x", "x",
-                "x", "x",0,120,0,
-                58,0,26,5.68,
+        StudentData mockedStudentData = new StudentData("x", "Ativo", "VESTIBULAR 2007.2", "x", "x", "x", "x",
+                "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", 1980,196,840,
+                56,450,30,5.68,
                 7,1.69,14,1,0,
                 0,0,0);
         StudentCSV mockedStudentDataResponse = new StudentCSV(mockedStudentData.
-                createStudent(new NationalIdRegistrationKey("fake-national-id", "fake-registration")));
+                createStudent(new NationalIdRegistrationKey("fake-national-id", "fake-registration"), null));
         return Arrays.asList(mockedStudentDataResponse);
     }
 
@@ -96,7 +95,7 @@ public class TestUtils {
     public static DelayedStatisticsResponse getDelayedSummaryResponse() {
         StudentMetrics metrics = new StudentMetrics(0,0,0,
                 0,0,0,0,0);
-        StudentMetricsSummary metricsSummary = new StudentMetricsSummary(0, metrics);
+        StudentMetricsSummary metricsSummary = new StudentMetricsSummary(0, metrics, 0, 0);
         DelayedPerTermSummary delayedPerTermSummary = new DelayedPerTermSummary("", metricsSummary);
         return new DelayedStatisticsResponse(Arrays.asList(delayedPerTermSummary), "x", "y");
     }

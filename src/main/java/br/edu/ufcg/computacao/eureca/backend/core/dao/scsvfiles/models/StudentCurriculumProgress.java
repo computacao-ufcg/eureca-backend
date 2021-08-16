@@ -5,20 +5,24 @@ import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Subje
 import java.util.Collection;
 import java.util.TreeSet;
 
-public class StudentCurriculum {
+public class StudentCurriculumProgress {
     private int currentTerm;
     private int accumulatedCredits;
+    private int enrolledCredits;
     private Collection<SubjectKey> completed;
     private Collection<SubjectKey> enabled;
     private Collection<SubjectKey> disabled;
+    private Collection<SubjectKey> ongoing;
     private Collection<SubjectKey> adequate;
 
-    public StudentCurriculum(int currentTerm, int accumulatedCredits) {
+    public StudentCurriculumProgress(int currentTerm, int accumulatedCredits, int enrolledCredits) {
         this.currentTerm = currentTerm;
         this.accumulatedCredits = accumulatedCredits;
+        this.enrolledCredits = enrolledCredits;
         this.completed = new TreeSet<>();
         this.enabled = new TreeSet<>();
         this.disabled = new TreeSet<>();
+        this.ongoing = new TreeSet<>();
         this.adequate = new TreeSet<>();
     }
 
@@ -36,6 +40,14 @@ public class StudentCurriculum {
 
     public void setAccumulatedCredits(int accumulatedCredits) {
         this.accumulatedCredits = accumulatedCredits;
+    }
+
+    public int getEnrolledCredits() {
+        return enrolledCredits;
+    }
+
+    public void setEnrolledCredits(int enrolledCredits) {
+        this.enrolledCredits = enrolledCredits;
     }
 
     public Collection<SubjectKey> getCompleted() {
@@ -60,6 +72,14 @@ public class StudentCurriculum {
 
     public void setDisabled(Collection<SubjectKey> disabled) {
         this.disabled = disabled;
+    }
+
+    public Collection<SubjectKey> getOngoing() {
+        return ongoing;
+    }
+
+    public void setOngoing(Collection<SubjectKey> ongoing) {
+        this.ongoing = ongoing;
     }
 
     public Collection<SubjectKey> getAdequate() {

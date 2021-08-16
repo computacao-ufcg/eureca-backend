@@ -51,4 +51,9 @@ public class SubjectRetentionDigest implements Comparable {
         if (this.idealTerm != otherValue.idealTerm) return this.idealTerm - otherValue.idealTerm;
         return this.subjectCode.compareTo(otherValue.getSubjectCode());
     }
+
+    @Override
+    public String toString() {
+        return idealTerm + ";" + subjectCode + ";" + subjectName + ";" + retention;
+    }
 }
