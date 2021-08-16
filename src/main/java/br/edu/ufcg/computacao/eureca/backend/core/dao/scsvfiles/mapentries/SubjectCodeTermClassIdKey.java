@@ -2,26 +2,26 @@ package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
 
 import java.util.Objects;
 
-public class CodeTermClassIdKey implements EurecaMapKey {
-    private String code;
+public class SubjectCodeTermClassIdKey implements EurecaMapKey {
+    private String subjectCode;
     private String term;
     private String classId;
 
-    public CodeTermClassIdKey(String code, String term, String classId) {
-        this.code = code;
+    public SubjectCodeTermClassIdKey(String subjectCode, String term, String classId) {
+        this.subjectCode = subjectCode;
         this.term = term;
         this.classId = classId;
     }
 
-    public CodeTermClassIdKey() {
+    public SubjectCodeTermClassIdKey() {
     }
 
-    public String getCode() {
-        return code;
+    public String getSubjectCode() {
+        return subjectCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setSubjectCode(String subjectCode) {
+        this.subjectCode = subjectCode;
     }
 
     public String getTerm() {
@@ -44,14 +44,14 @@ public class CodeTermClassIdKey implements EurecaMapKey {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CodeTermClassIdKey that = (CodeTermClassIdKey) o;
-        return getCode().equals(that.getCode()) &&
+        SubjectCodeTermClassIdKey that = (SubjectCodeTermClassIdKey) o;
+        return getSubjectCode().equals(that.getSubjectCode()) &&
                 getTerm().equals(that.getTerm()) &&
                 getClassId().equals(that.getClassId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCode(), getTerm(), getClassId());
+        return Objects.hash(getSubjectCode(), getTerm(), getClassId());
     }
 }

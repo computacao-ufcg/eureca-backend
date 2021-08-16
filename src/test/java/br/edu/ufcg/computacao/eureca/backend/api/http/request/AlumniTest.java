@@ -24,7 +24,7 @@ public class AlumniTest extends EndpointTest {
     @Test
     public void getAlumniTest() throws Exception {
         Collection<AlumniDigestResponse> response = new ArrayList<>();
-        Mockito.doReturn(response).when(this.facade).getAlumni(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.doReturn(response).when(this.facade).getAlumni(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
 
         HttpHeaders headers = TestUtils.getTokenHeaders();
         RequestBuilder request = TestUtils.createRequestBuilder(HttpMethod.GET, ALUMNI_ENDPOINT, headers, "");

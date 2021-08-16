@@ -29,11 +29,18 @@ public class ApiDocumentation {
         public static final String FROM = "Período inicial";
         public static final String TO = "Período final";
         public static final String LANGUAGE = "Língua";
+        public static final String COURSE = "Código do curso";
+        public static final String CURRICULUM = "Código do currículo";
     }
 
     public static class Alumni {
         public static final String API = "Egressos.";
-        public static final String GET = "Retorna a lista de egressos.";
+        public static final String GET_ALUMNI = "Retorna a lista de egressos.";
+    }
+
+    public static class Profile {
+        public static final String API = "Perfil.";
+        public static final String GET_PROFILE = "Retorna o perfil do usuário.";
     }
 
     public static class Version {
@@ -58,7 +65,14 @@ public class ApiDocumentation {
     public static class EnrollmentsStatistics {
         public static final String API = "Estatísticas de matrículas.";
         public static final String GET_ENROLLMENTS = "Retorna um sumário dos dados das matrículas.";
-        public static final String GET_ENROLLMENTS_CSV = "Retorna os dados completos das matrículas do curso.";
+        public static final String GET_MANDATORY_SUBJECTS_ENROLLMENTS_CSV = "Retorna os dados completos das matrículas em disciplinas obrigatórias.";
+        public static final String GET_MANDATOTY_SUBJECTS_ENROLLMENTS = "Retorna um sumário dos dados das matrículas em disciplinas obrigatórias.";
+        public static final String GET_OPTIONAL_SUBJECTS_ENROLLMENTS_CSV = "Retorna os dados completos das matrículas em disciplinas optativas.";
+        public static final String GET_OPTIONAL_SUBJECTS_ENROLLMENTS = "Retorna um sumário dos dados das matrículas em disciplinas optativas";
+        public static final String GET_ELECTIVE_SUBJECTS_ENROLLMENTS_CSV = "Retorna os dados completos das matrículas em disciplinas eletivas.";
+        public static final String GET_ELECTIVE_SUBJECTS_ENROLLMENTS = "Retorna um sumário dos dados das matrículas em disciplinas eletivas.";
+        public static final String GET_COMPLEMENTARY_SUBJECTS_ENROLLMENTS_CSV = "Retorna os dados completos das matrículas em disciplinas complementares.";
+        public static final String GET_COMPLEMENTARY_SUBJECTS_ENROLLMENTS = "Retorna um sumário dos dados das matrículas em disciplinas complementares.";
     }
 
     public static class RetentionStatistics {

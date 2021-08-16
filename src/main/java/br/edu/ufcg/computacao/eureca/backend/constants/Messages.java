@@ -25,4 +25,18 @@ public class Messages {
     public static final String RECEIVING_GET_SUBJECTS_STATISTICS = "Received get subjects statistics.";
     public static final String RECEIVING_GET_TEACHERS_STATISTICS = "Received get teachers.";
     public static final String STUDENT_S_DISABLED_FOR_SUBJECT_S = "Student %s is not enabled to enroll in subject %s.";
+    public static final String INSERTING_ENROLLMENT_S_S_S_D = "Inserting: (%s, %s, %s) %d.";
+    public static final String PROCESSING_S_FOR_D_STUDENTS = "Processing %s for %d students.";
+    public static final String STUDENT_S_SHOULD_ENROLL_SUBJECT_S = "Student %s should enroll subject %s.";
+    public static final String STUDENT_S_CAN_BUT_SHOULD_NOT_ENROLL_SUBJECT_S = "Student %s can but should not enroll subject %s.";
+    public static final String STUDENT_S_HAS_COMPLETED_SUBJECT_S = "Student %s has completed subject %s.";
+    public static final String NOT_ENABLED_FOR_SUBJECT_S_PRE_REQUIEREMNT_S = "Not enabled for subject %s: %s, %s pre-requirement %s.";
+    public static final String HAS_NOT_COMPLETED = "has not completed";
+    public static final String HAS_COMPLETED = "has completed";
+    public static final String IS_NOT_ENROLLED = "is not enrolled";
+    public static final String IS_ENROLLED = "is enrolled";
+    public static final String STUDENT_S_COMPLETED_S = "Student %s completed %s.";
+    public static final String STUDENT_S_IS_EXEMPTED_S = "Student %s is exempted of %s.";
+    public static final String STUDENT_S_IS_ENROLLED_IN_S = "Student %s is enrolled in %s.";
+    public static final String ADDIND_S_S_D = "Adding: (%s, %s) %d.";
 }

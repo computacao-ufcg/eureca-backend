@@ -20,7 +20,7 @@ public class SubjectStatisticsTest extends EndpointTest {
 
     @Test
     public void getSubjectSummaryTest() throws Exception {
-        Mockito.doReturn(getSubjectStatisticsMock()).when(this.facade).getSubjectsStatisticsSummary(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.doReturn(getSubjectStatisticsMock()).when(this.facade).getSubjectsStatisticsSummary(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         int expectedStatusCode = HttpStatus.OK.value();
 
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, SUBJECT_STATISTICS_ENDPOINT + "/summary", null, "");
@@ -36,7 +36,7 @@ public class SubjectStatisticsTest extends EndpointTest {
         SubjectStatisticsSummary optional = new SubjectStatisticsSummary(10, subjectMetrics);
         SubjectStatisticsSummary elective = new SubjectStatisticsSummary(15, subjectMetrics);
         SubjectStatisticsSummary complementary = new SubjectStatisticsSummary(10, subjectMetrics);
-        SubjectsStatisticsSummaryResponse summary = new SubjectsStatisticsSummaryResponse("14102100", "2017", "1980.1", "2020.1", mandatory, optional, elective, complementary);
+        SubjectsStatisticsSummaryResponse summary = new SubjectsStatisticsSummaryResponse("14102100", "2017", "2018.1", "2020.1", mandatory, optional, elective, complementary);
         return summary;
     }
 }

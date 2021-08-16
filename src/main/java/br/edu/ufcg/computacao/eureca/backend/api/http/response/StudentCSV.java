@@ -41,7 +41,7 @@ public class StudentCSV implements Comparable {
         this.name = student.getName();
         this.gender = student.getGender();
         this.maritalStatus = student.getMaritalStatus();
-        this.curriculum = student.getCurriculum();
+        this.curriculum = student.getCurriculumCode();
         this.affirmativePolicy = student.getAffirmativePolicy();
         this.admissionType = student.getAdmissionStr();
         this.admissionTerm = student.getAdmissionTerm();
@@ -53,10 +53,10 @@ public class StudentCSV implements Comparable {
         this.mc = student.getMc();
         this.mandatoryCredits = student.getMandatoryCredits();
         this.complementaryCredits = student.getComplementaryCredits();
-        this.electiveCredits = student.getElectiveCredits();
+        this.electiveCredits = student.getOptionalCredits();
         this.completedTerms = student.getCompletedTerms();
         this.attemptedCredits = student.getAttemptedCredits();
-        this.institutionalEnrollments = student.getInstitutionalTerms();
+        this.institutionalEnrollments = student.getInstitutionalEnrollments();
         this.mobilityTerms = student.getMobilityTerms();
         this.suspendedTerms = student.getSuspendedTerms();
         StudentMetrics metrics = StudentMetricsCalculator.computeMetrics(student);
@@ -68,11 +68,16 @@ public class StudentCSV implements Comparable {
         this.courseDurationPrediction = metrics.getCourseDurationPrediction();
         this.risk = metrics.getRisk();
         if (student.isActive()) {
-            this.riskClass = StudentMetricsCalculator.computeRiskClass(metrics.getRisk());
+            double desiredAverageDuration = (student.getCurriculum().getMinNumberOfTerms() +
+                    (student.getCurriculum().getMaxNumberOfTerms() - student.getCurriculum().getMinNumberOfTerms()) / 4.0);
+            double lowestRisk = student.getCurriculum().getMinNumberOfTerms() / desiredAverageDuration;
+            this.riskClass = StudentMetricsCalculator.computeRiskClass(metrics.getRisk(), lowestRisk);
         } else {
             this.riskClass = RiskClass.NOT_APPLICABLE;
         }
-        this.costClass = StudentMetricsCalculator.computeCostClass(this.cost);
+        double costIncrement = ((student.getCurriculum().getMinNumberOfTerms() + (student.getCurriculum().getMaxNumberOfTerms() -
+                student.getCurriculum().getMinNumberOfTerms()) / 4.0) / student.getCurriculum().getMinNumberOfTerms()) - 1.0;
+        this.costClass = StudentMetricsCalculator.computeCostClass(this.cost, costIncrement);
     }
 
     public String getRegistration() {

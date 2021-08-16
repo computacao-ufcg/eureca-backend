@@ -1,7 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
-import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Curriculum;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.backend.core.models.StudentStatus;
 import org.apache.log4j.Logger;
@@ -10,66 +10,70 @@ public class StudentData implements EurecaMapValue {
     private Logger LOGGER = Logger.getLogger(StudentData.class);
 
     private String name;
+    private String statusStr;
+    private String admissionStr;
+    private String affirmativePolicy;
     private String birthDate;
+    private String secondarySchool;
+    private String secondarySchoolGraduationYear;
     private String email;
     private String gender;
     private String maritalStatus;
     private String nationality;
+    private String country;
     private String placeOfBirth;
     private String race;
-    private String statusStr;
-    private StudentStatus status;
-    private String statusTerm;
-    private String admissionStr;
-    private String admissionTerm;
-    private String affirmativePolicy;
-    private String secondarySchool;
-    private String secondarySchoolGraduationYear;
-    private String course;
-    private String curriculum;
+    private String disabilities;
+    private String courseCode;
+    private String curriculumCode;
     private int mandatoryHours;
     private int mandatoryCredits;
-    private int electiveHours;
-    private int electiveCredits;
+    private int optionalHours;
+    private int optionalCredits;
     private int complementaryHours;
     private int complementaryCredits;
-    private int attemptedCredits;
     private double gpa;
     private double mc;
     private double iea;
     private int completedTerms;
     private int suspendedTerms;
-    private int institutionalTerms;
+    private int institutionalEnrollments;
     private int mobilityTerms;
     private int enrolledCredits;
     private double admissionGrade;
+    private int attemptedCredits;
+    private StudentStatus status;
+    private String statusTerm;
+    private String admissionTerm;
 
-    public StudentData(String name, String birthDate, String email, String gender, String maritalStatus,
-                       String nationality, String placeOfBirth, String race, String statusStr,
-                       String admissionStr, String affirmativePolicy, String secondarySchool,
-                       String secondarySchoolGraduationYear, String course, String curriculum, int mandatoryHours,
-                       int mandatoryCredits, int electiveHours, int electiveCredits, int complementaryHours,
-                       int complementaryCredits, double gpa, double mc, double iea, int completedTerms, int suspendedTerms,
-                       int institutionalTerms, int mobilityTerms, int enrolledCredits, double admissionGrade) {
+    public StudentData(String name, String statusStr, String admissionStr, String affirmativePolicy, String birthDate,
+                       String secondarySchool, String secondarySchoolGraduationYear, String email, String gender,
+                       String maritalStatus, String nationality, String country, String placeOfBirth, String race,
+                       String disabilities, String courseCode, String curriculumCode, int mandatoryHours, int mandatoryCredits,
+                       int optionalHours, int optionalCredits, int complementaryHours, int complementaryCredits,
+                       double gpa, double mc, double iea, int completedTerms, int suspendedTerms,
+                       int institutionalEnrollments, int mobilityTerms, int enrolledCredits, double admissionGrade) {
         this.name = name;
+        this.statusStr = statusStr;
+        this.admissionStr = admissionStr;
+        this.affirmativePolicy = affirmativePolicy;
         this.birthDate = birthDate;
+        this.secondarySchool = secondarySchool;
+        this.secondarySchoolGraduationYear = secondarySchoolGraduationYear;
         this.email = email;
         this.gender = gender;
         this.maritalStatus = maritalStatus;
         this.nationality = nationality;
+        this.country = country;
         this.placeOfBirth = placeOfBirth;
         this.race = race;
-        this.statusStr = statusStr;
-        this.admissionStr = admissionStr;
-        this.affirmativePolicy = affirmativePolicy;
-        this.secondarySchool = secondarySchool;
-        this.secondarySchoolGraduationYear = secondarySchoolGraduationYear;
-        this.course = course;
-        this.curriculum = curriculum;
+        this.disabilities = disabilities;
+        this.courseCode = courseCode;
+        this.curriculumCode = curriculumCode;
         this.mandatoryHours = mandatoryHours;
         this.mandatoryCredits = mandatoryCredits;
-        this.electiveHours = electiveHours;
-        this.electiveCredits = electiveCredits;
+        this.optionalHours = optionalHours;
+        this.optionalCredits = optionalCredits;
         this.complementaryHours = complementaryHours;
         this.complementaryCredits = complementaryCredits;
         this.gpa = gpa;
@@ -77,7 +81,7 @@ public class StudentData implements EurecaMapValue {
         this.iea = iea;
         this.completedTerms = completedTerms;
         this.suspendedTerms = suspendedTerms;
-        this.institutionalTerms = institutionalTerms;
+        this.institutionalEnrollments = institutionalEnrollments;
         this.mobilityTerms = mobilityTerms;
         this.enrolledCredits = enrolledCredits;
         this.admissionGrade = admissionGrade;
@@ -88,21 +92,6 @@ public class StudentData implements EurecaMapValue {
     public StudentData() {
     }
 
-    public boolean isActive() {
-        if (this.status == null) parseStatusStr(this.statusStr);
-        return this.status.equals(StudentStatus.ACTIVE);
-    }
-
-    public boolean isAlumnus() {
-        if (this.status == null) parseStatusStr(this.statusStr);
-        return this.status.equals(StudentStatus.ALUMNUS);
-    }
-
-    public boolean isDropout() {
-        if (this.status == null) parseStatusStr(this.statusStr);
-        return this.status.equals(StudentStatus.DROPOUT);
-    }
-
     public String getName() {
         return name;
     }
@@ -111,12 +100,54 @@ public class StudentData implements EurecaMapValue {
         this.name = name;
     }
 
+    public String getStatusStr() {
+        if (this.status == null) parseStatusStr(this.statusStr);
+        return statusStr;
+    }
+
+    public void setStatusStr(String statusStr) {
+        this.statusStr = statusStr;
+    }
+
+    public String getAdmissionStr() {
+        if (this.admissionTerm == null) parseAdmissionStr(this.admissionStr);
+        return admissionStr;
+    }
+
+    public void setAdmissionStr(String admissionStr) {
+        this.admissionStr = admissionStr;
+    }
+
+    public String getAffirmativePolicy() {
+        return affirmativePolicy;
+    }
+
+    public void setAffirmativePolicy(String affirmativePolicy) {
+        this.affirmativePolicy = affirmativePolicy;
+    }
+
     public String getBirthDate() {
         return birthDate;
     }
 
     public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public String getSecondarySchool() {
+        return secondarySchool;
+    }
+
+    public void setSecondarySchool(String secondarySchool) {
+        this.secondarySchool = secondarySchool;
+    }
+
+    public String getSecondarySchoolGraduationYear() {
+        return secondarySchoolGraduationYear;
+    }
+
+    public void setSecondarySchoolGraduationYear(String secondarySchoolGraduationYear) {
+        this.secondarySchoolGraduationYear = secondarySchoolGraduationYear;
     }
 
     public String getEmail() {
@@ -151,6 +182,14 @@ public class StudentData implements EurecaMapValue {
         this.nationality = nationality;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     public String getPlaceOfBirth() {
         return placeOfBirth;
     }
@@ -167,85 +206,28 @@ public class StudentData implements EurecaMapValue {
         this.race = race;
     }
 
-    public String getStatusStr() {
-        if (this.status == null) parseStatusStr(this.statusStr);
-        return statusStr;
+    public String getDisabilities() {
+        return disabilities;
     }
 
-    public void setStatusStr(String statusStr) {
-        this.statusStr = statusStr;
+    public void setDisabilities(String disabilities) {
+        this.disabilities = disabilities;
     }
 
-    public String getStatusTerm() {
-        if (this.status == null) parseStatusStr(this.statusStr);
-        return statusTerm;
+    public String getCourseCode() {
+        return courseCode;
     }
 
-    public void setStatusTerm(String statusTerm) {
-        this.statusTerm = statusTerm;
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
     }
 
-    public StudentStatus getStatus() {
-        if (this.status == null) parseStatusStr(this.statusStr);
-        return this.status;
+    public String getCurriculumCode() {
+        return curriculumCode;
     }
 
-    public String getAdmissionStr() {
-        if (this.admissionTerm == null) parseAdmissionStr(this.admissionStr);
-        return admissionStr;
-    }
-
-    public void setAdmissionStr(String admissionStr) {
-        this.admissionStr = admissionStr;
-    }
-
-    public String getAdmissionTerm() {
-        if (this.admissionTerm == null) parseAdmissionStr(this.admissionStr);
-        return admissionTerm;
-    }
-
-    public void setAdmissionTerm(String admissionTerm) {
-        this.admissionTerm = admissionTerm;
-    }
-
-    public String getAffirmativePolicy() {
-        return affirmativePolicy;
-    }
-
-    public void setAffirmativePolicy(String affirmativePolicy) {
-        this.affirmativePolicy = affirmativePolicy;
-    }
-
-    public String getSecondarySchool() {
-        return secondarySchool;
-    }
-
-    public void setSecondarySchool(String secondarySchool) {
-        this.secondarySchool = secondarySchool;
-    }
-
-    public String getSecondarySchoolGraduationYear() {
-        return secondarySchoolGraduationYear;
-    }
-
-    public void setSecondarySchoolGraduationYear(String secondarySchoolGraduationYear) {
-        this.secondarySchoolGraduationYear = secondarySchoolGraduationYear;
-    }
-
-    public String getCourse() {
-        return course;
-    }
-
-    public void setCourse(String course) {
-        this.course = course;
-    }
-
-    public String getCurriculum() {
-        return curriculum;
-    }
-
-    public void setCurriculum(String curriculum) {
-        this.curriculum = curriculum;
+    public void setCurriculumCode(String curriculumCode) {
+        this.curriculumCode = curriculumCode;
     }
 
     public int getMandatoryHours() {
@@ -264,20 +246,20 @@ public class StudentData implements EurecaMapValue {
         this.mandatoryCredits = mandatoryCredits;
     }
 
-    public int getElectiveHours() {
-        return electiveHours;
+    public int getOptionalHours() {
+        return optionalHours;
     }
 
-    public void setElectiveHours(int electiveHours) {
-        this.electiveHours = electiveHours;
+    public void setOptionalHours(int optionalHours) {
+        this.optionalHours = optionalHours;
     }
 
-    public int getElectiveCredits() {
-        return electiveCredits;
+    public int getOptionalCredits() {
+        return optionalCredits;
     }
 
-    public void setElectiveCredits(int electiveCredits) {
-        this.electiveCredits = electiveCredits;
+    public void setOptionalCredits(int optionalCredits) {
+        this.optionalCredits = optionalCredits;
     }
 
     public int getComplementaryHours() {
@@ -294,14 +276,6 @@ public class StudentData implements EurecaMapValue {
 
     public void setComplementaryCredits(int complementaryCredits) {
         this.complementaryCredits = complementaryCredits;
-    }
-
-    public int getAttemptedCredits() {
-        return attemptedCredits;
-    }
-
-    public void setAttemptedCredits(int attemptedCredits) {
-        this.attemptedCredits = attemptedCredits;
     }
 
     public double getGpa() {
@@ -344,12 +318,12 @@ public class StudentData implements EurecaMapValue {
         this.suspendedTerms = suspendedTerms;
     }
 
-    public int getInstitutionalTerms() {
-        return institutionalTerms;
+    public int getInstitutionalEnrollments() {
+        return institutionalEnrollments;
     }
 
-    public void setInstitutionalTerms(int institutionalTerms) {
-        this.institutionalTerms = institutionalTerms;
+    public void setInstitutionalEnrollments(int institutionalEnrollments) {
+        this.institutionalEnrollments = institutionalEnrollments;
     }
 
     public int getMobilityTerms() {
@@ -376,19 +350,69 @@ public class StudentData implements EurecaMapValue {
         this.admissionGrade = admissionGrade;
     }
 
-    public Student createStudent(NationalIdRegistrationKey id) {
+    public int getAttemptedCredits() {
+        return attemptedCredits;
+    }
+
+    public void setAttemptedCredits(int attemptedCredits) {
+        this.attemptedCredits = attemptedCredits;
+    }
+
+    public StudentStatus getStatus() {
+        if (this.status == null) parseStatusStr(this.statusStr);
+        return this.status;
+    }
+
+    public void setStatus(StudentStatus status) {
+        this.status = status;
+    }
+
+    public String getStatusTerm() {
+        if (this.status == null) parseStatusStr(this.statusStr);
+        return statusTerm;
+    }
+
+    public void setStatusTerm(String statusTerm) {
+        this.statusTerm = statusTerm;
+    }
+
+    public String getAdmissionTerm() {
+        if (this.admissionTerm == null) parseAdmissionStr(this.admissionStr);
+        return admissionTerm;
+    }
+
+    public void setAdmissionTerm(String admissionTerm) {
+        this.admissionTerm = admissionTerm;
+    }
+
+    public boolean isActive() {
+        if (this.status == null) parseStatusStr(this.statusStr);
+        return this.status.equals(StudentStatus.ACTIVE);
+    }
+
+    public boolean isAlumnus() {
+        if (this.status == null) parseStatusStr(this.statusStr);
+        return this.status.equals(StudentStatus.ALUMNUS);
+    }
+
+    public boolean isDropout() {
+        if (this.status == null) parseStatusStr(this.statusStr);
+        return this.status.equals(StudentStatus.DROPOUT);
+    }
+
+    public Student createStudent(NationalIdRegistrationKey id, Curriculum curriculum) {
         return new Student(id.getRegistration(), id.getNationalId(), getName(), getBirthDate(), getEmail(), getGender(),
-                getMaritalStatus(), getNationality(), getPlaceOfBirth(), getRace(), getStatusStr(), getStatus(),
-                getStatusTerm(), getAdmissionStr(), getAdmissionTerm(), getAffirmativePolicy(), getSecondarySchool(),
-                getSecondarySchoolGraduationYear(), getCourse(), getCurriculum(), getMandatoryHours(), getMandatoryCredits(),
-                getElectiveHours(), getElectiveCredits(), getComplementaryHours(), getComplementaryCredits(),
+                getMaritalStatus(), getNationality(), getCountry(), getPlaceOfBirth(), getRace(), getStatusStr(),
+                getStatus(), getStatusTerm(), getAdmissionStr(), getAdmissionTerm(), getDisabilities(),
+                getAffirmativePolicy(), getSecondarySchool(), getSecondarySchoolGraduationYear(), getCourseCode(),
+                getCurriculumCode(), curriculum, getMandatoryHours(), getMandatoryCredits(),
+                getOptionalHours(), getOptionalCredits(), getComplementaryHours(), getComplementaryCredits(),
                 getAttemptedCredits(), getGpa(), getMc(), getIea(), getCompletedTerms(), getSuspendedTerms(),
-                getInstitutionalTerms(), getMobilityTerms(), getEnrolledCredits(), getAdmissionGrade());
+                getInstitutionalEnrollments(), getMobilityTerms(), getEnrolledCredits(), getAdmissionGrade());
     }
 
     public int getCompletedCredits() {
-        int complementary = (this.getComplementaryCredits() > 8 ? 8 : this.getComplementaryCredits());
-        return this.getMandatoryCredits() + this.getElectiveCredits() + complementary;
+        return this.getMandatoryCredits() + this.getOptionalCredits() + this.getComplementaryCredits();
     }
 
     private void parseAdmissionStr(String admission) {
@@ -427,28 +451,30 @@ public class StudentData implements EurecaMapValue {
 
     @Override
     public String toString() {
-        return "StudentCSV{" +
+        return "StudentData{" +
                 "name='" + name + '\'' +
                 ", birthDate='" + birthDate + '\'' +
                 ", email='" + email + '\'' +
                 ", gender='" + gender + '\'' +
                 ", maritalStatus='" + maritalStatus + '\'' +
                 ", nationality='" + nationality + '\'' +
+                ", country='" + country + '\'' +
                 ", placeOfBirth='" + placeOfBirth + '\'' +
                 ", race='" + race + '\'' +
                 ", status='" + statusStr + '\'' +
                 ", termStatus='" + statusTerm + '\'' +
                 ", admission='" + admissionStr + '\'' +
                 ", admissionTerm='" + admissionTerm + '\'' +
+                ", disabilities='" + disabilities + '\'' +
                 ", affirmativeAction='" + affirmativePolicy + '\'' +
                 ", secondarySchool='" + secondarySchool + '\'' +
                 ", secondarySchoolGraduationYear='" + secondarySchoolGraduationYear + '\'' +
-                ", course='" + course + '\'' +
-                ", curriculum='" + curriculum + '\'' +
+                ", courseCode='" + courseCode + '\'' +
+                ", curriculumCode='" + curriculumCode + '\'' +
                 ", mandatoryHours=" + mandatoryHours +
                 ", mandatoryCredits=" + mandatoryCredits +
-                ", electiveHours=" + electiveHours +
-                ", electiveCredits=" + electiveCredits +
+                ", optionalHours=" + optionalHours +
+                ", optionalCredits=" + optionalCredits +
                 ", complementaryHours=" + complementaryHours +
                 ", complementaryCredits=" + complementaryCredits +
                 ", gpa=" + gpa +
@@ -456,7 +482,7 @@ public class StudentData implements EurecaMapValue {
                 ", iea=" + iea +
                 ", termsCount=" + completedTerms +
                 ", suspendedTerms=" + suspendedTerms +
-                ", institutionalTerms=" + institutionalTerms +
+                ", institutionalTerms=" + institutionalEnrollments +
                 ", mobilityTerms=" + mobilityTerms +
                 ", enrolledCredits=" + enrolledCredits +
                 ", admissionGrade=" + admissionGrade +

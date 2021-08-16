@@ -310,7 +310,7 @@ public class CurriculumData implements EurecaMapValue {
         return complementaryActivitiesList;
     }
 
-    public Curriculum getCurriculum(CurriculumKey key) {
+    public Curriculum createCurriculum(CurriculumKey key) {
         return new Curriculum(key.getCourse(), key.getCode(), getIdealMandatoryCredits(), getIdealOptionalCredits(),
                 getIdealElectiveCredits(), getIdealComplementaryCredits(), getMinMandatoryCreditsNeeded(),
                 getMinOptionalCreditsNeeded(), getMinElectiveCreditsNeeded(), getMinComplementaryCreditsNeeded(),
