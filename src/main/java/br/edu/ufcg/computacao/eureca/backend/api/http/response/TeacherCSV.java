@@ -6,16 +6,16 @@ public class TeacherCSV implements Comparable {
     private String courseCode;
     private String curriculumCode;
     private String term;
-    private SubjectsStatisticsSummary averageMetrics;
+    private TeacherStatisticsSummary metrics;
 
     public TeacherCSV(String teacherId, String teacherName, String courseCode, String curriculumCode, String term,
-                      SubjectsStatisticsSummary averageMetrics) {
+                      TeacherStatisticsSummary metrics) {
         this.teacherId = teacherId;
         this.teacherName = teacherName;
         this.courseCode = courseCode;
         this.curriculumCode = curriculumCode;
         this.term = term;
-        this.averageMetrics = averageMetrics;
+        this.metrics = metrics;
     }
 
     public String getTeacherId() {
@@ -58,12 +58,12 @@ public class TeacherCSV implements Comparable {
         this.term = term;
     }
 
-    public SubjectsStatisticsSummary getAverageMetrics() {
-        return averageMetrics;
+    public TeacherStatisticsSummary getMetrics() {
+        return metrics;
     }
 
-    public void setAverageMetrics(SubjectsStatisticsSummary averageMetrics) {
-        this.averageMetrics = averageMetrics;
+    public void setMetrics(TeacherStatisticsSummary metrics) {
+        this.metrics = metrics;
     }
 
     @Override
@@ -74,7 +74,7 @@ public class TeacherCSV implements Comparable {
                 ", courseCode='" + courseCode + '\'' +
                 ", curriculumCode='" + curriculumCode + '\'' +
                 ", term='" + term + '\'' +
-                ", averageMetrics=" + averageMetrics +
+                ", metrics=" + metrics +
                 '}';
     }
 

@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.AlumniDigestResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.AlumniDigest;
 import br.edu.ufcg.computacao.eureca.backend.util.TestUtils;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -23,7 +23,7 @@ public class AlumniTest extends EndpointTest {
 
     @Test
     public void getAlumniTest() throws Exception {
-        Collection<AlumniDigestResponse> response = new ArrayList<>();
+        Collection<AlumniDigest> response = new ArrayList<>();
         Mockito.doReturn(response).when(this.facade).getAlumniDigest(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
 
         HttpHeaders headers = TestUtils.getTokenHeaders();

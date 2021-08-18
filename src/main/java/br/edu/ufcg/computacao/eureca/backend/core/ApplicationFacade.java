@@ -62,7 +62,7 @@ public class ApplicationFacade {
     public AlumniResponse getAlumniDigest(String token, String courseCode, String from, String to, String language)
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_DIGEST);
-        Collection<AlumniDigestResponse> digest = this.alumniController.getAlumniDigest(courseCode, from, to);
+        Collection<AlumniDigest> digest = this.alumniController.getAlumniDigest(courseCode, from, to);
         AlumniResponse response = new AlumniResponse(digest);
         AlumniGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.ALUMNI);
         response.setGlossary(glossaryFields);
@@ -186,14 +186,14 @@ public class ApplicationFacade {
         return response;
     }
 
-    public TeachersStatisticsResponse getTeachersStatistics(String token, String courseCode, String curriculumCode, String from, String to) throws EurecaException {
+    public TeachersStatisticsResponse getTeachersStatistics(String token, String courseCode, String curriculumCode, String from, String to, String academicUnitId) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_TEACHERS_STATISTICS);
-        return this.teacherStatisticsController.getTeachersStatistics(courseCode, curriculumCode, from, to);
+        return this.teacherStatisticsController.getTeachersStatistics(courseCode, curriculumCode, from, to, academicUnitId);
     }
 
-    public TeachersResponse getTeachersCSV(String token, String courseCode, String curriculumCode, String from, String to) throws EurecaException {
+    public TeachersResponse getTeachersCSV(String token, String courseCode, String curriculumCode, String from, String to, String academicUnitId) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_TEACHERS_CSV);
-        return this.teacherStatisticsController.getTeachersCSV(courseCode, curriculumCode, from, to);
+        return this.teacherStatisticsController.getTeachersCSV(courseCode, curriculumCode, from, to, academicUnitId);
     }
 
     public TeachersStatisticsSummaryResponse getTeachersStatisticsSummary(String token, String courseCode, String curriculumCode, String from, String to, String language)

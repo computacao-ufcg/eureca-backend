@@ -38,10 +38,12 @@ public class TeachersStatistics {
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Common.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
+            @ApiParam(value = ApiDocumentation.Common.ACADEMIC_UNIT)
+            @RequestParam(required = true, value = "academicUnitId") String academicUnitId,
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
-            TeachersStatisticsResponse teachers = ApplicationFacade.getInstance().getTeachersStatistics(token, courseCode, curriculumCode, from, to);
+            TeachersStatisticsResponse teachers = ApplicationFacade.getInstance().getTeachersStatistics(token, courseCode, curriculumCode, from, to, academicUnitId);
             return new ResponseEntity<>(teachers, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
@@ -60,10 +62,12 @@ public class TeachersStatistics {
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Common.TO)
             @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
+            @ApiParam(value = ApiDocumentation.Common.ACADEMIC_UNIT)
+            @RequestParam(required = true, value = "academicUnitId") String academicUnitId,
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
-            TeachersResponse teachers = ApplicationFacade.getInstance().getTeachersCSV(token, courseCode, curriculumCode, from, to);
+            TeachersResponse teachers = ApplicationFacade.getInstance().getTeachersCSV(token, courseCode, curriculumCode, from, to, academicUnitId);
             return new ResponseEntity<>(teachers, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));

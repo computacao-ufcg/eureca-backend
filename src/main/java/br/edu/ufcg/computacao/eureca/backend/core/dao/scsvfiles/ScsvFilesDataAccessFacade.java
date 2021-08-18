@@ -1,5 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
+import br.edu.ufcg.computacao.eureca.backend.api.http.request.TeachersStatistics;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
@@ -58,17 +59,17 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Collection<AlumniDigestResponse> getAlumniPerStudentSummary(String courseCode, String from, String to) {
+    public Collection<AlumniDigest> getAlumniPerStudentSummary(String courseCode, String from, String to) {
         String parsedFrom = "1" + from.substring(2,4) + from.substring(5,6) + "00000";
         String parsedTo = "1" + to.substring(2,4) + to.substring(5,6) + "99999";
-        Collection<AlumniDigestResponse> alumniBasicData = new TreeSet<>();
+        Collection<AlumniDigest> alumniBasicData = new TreeSet<>();
         Collection<NationalIdRegistrationKey> alumni = this.indexesHolder.getAlumniPerCourseMap(courseCode);
         Map<NationalIdRegistrationKey, StudentData> studentsMap = this.mapsHolder.getMap("students");
         for (NationalIdRegistrationKey item : alumni) {
             if (new Registration(item.getRegistration()).compareTo(new Registration(parsedFrom)) >= 0 &&
                     new Registration(item.getRegistration()).compareTo(new Registration(parsedTo)) <= 0) {
                 StudentData alumnus = studentsMap.get(item);
-                AlumniDigestResponse basicData = new AlumniDigestResponse(item.getRegistration(), alumnus.getName(),
+                AlumniDigest basicData = new AlumniDigest(item.getRegistration(), alumnus.getName(),
                         2, 1, alumnus.getAdmissionTerm(), alumnus.getStatusTerm());
                 alumniBasicData.add(basicData);
             }
@@ -137,12 +138,6 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     public Subject getSubject(String courseCode, String curriculumCode, String subjectCode) {
         SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
         return getSubject(subjectKey);
-    }
-
-    private Subject getSubject(SubjectKey subjectKey) {
-        Map<SubjectKey, SubjectData> subjectMap = this.mapsHolder.getMap("subjects");
-        SubjectData subjectData = subjectMap.get(subjectKey);
-        return subjectData.createSubject(subjectKey);
     }
 
     @Override
@@ -237,6 +232,25 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return response;
     }
 
+    @Override
+    public TeachersStatisticsResponse getTeachersPerTermSummary(String courseCode, String curriculumCode, String from, String to, String academicUnitId) {
+        AcademicUnitData auData = this.indexesHolder.getAuData(new AcademicUnitKey(academicUnitId));
+        Collection<TeacherStatistics> teachers = this.indexesHolder.getTeachersPerTerm(academicUnitId, courseCode, curriculumCode, from, to);
+        return new TeachersStatisticsResponse(academicUnitId, auData.getAcronym(), auData.getName(), courseCode,
+                curriculumCode, from, to, teachers);
+    }
+
+    @Override
+    public Map<String, TeachersStatisticsSummary> getTeachersPerAcademicUnit(String courseCode, String curriculumCode, String from, String to) {
+        return this.indexesHolder.getTeachersPerAcademicUnit(courseCode, curriculumCode, from, to);
+    }
+
+    private Subject getSubject(SubjectKey subjectKey) {
+        Map<SubjectKey, SubjectData> subjectMap = this.mapsHolder.getMap("subjects");
+        SubjectData subjectData = subjectMap.get(subjectKey);
+        return subjectData.createSubject(subjectKey);
+    }
+
     private Map<String, Collection<Student>> getStudentMapFromIndex(String from, String to,
                                                                     Map<String, Collection<NationalIdRegistrationKey>> index) {
         Map<NationalIdRegistrationKey, StudentData> studentsMap = mapsHolder.getMap("students");
@@ -305,7 +319,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     private SubjectsStatisticsSummary buildSubjectSummary(String courseCode, String curriculumCode, String from, String to,
-                                                          Collection<String> subjectCodes) {
+                                                         Collection<String> subjectCodes) {
 
         Collection<SubjectMetrics> metricsPerSubject = new ArrayList<>();
         for(String subjectCode : subjectCodes) {

@@ -1,61 +1,34 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-import br.edu.ufcg.computacao.eureca.backend.constants.TeachersGlossaryFields;
 import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
 
 public class TeachersStatisticsSummary {
-    private String courseCode;
-    private String curriculumCode;
-    private String from;
-    private String to;
+    private double teachersCount;
     private TermCount min;
     private TermCount max;
-    private double averageTeachersCount;
-    private SubjectsStatisticsSummary averageSummary;
+    private double averageSuccessRate;
+    private double averageFailureDueToGradeRate;
+    private double averageFailureDueToAbsenceRate;
+    private double averageSuspendedRate;
 
-    public TeachersStatisticsSummary(String courseCode, String curriculumCode, String from, String to,
-                                     TermCount min, TermCount max, double averageTeachersCount,
-                                     SubjectsStatisticsSummary averageSummary) {
-        this.courseCode = courseCode;
-        this.curriculumCode = curriculumCode;
-        this.from = from;
-        this.to = to;
+    public TeachersStatisticsSummary(double teachersCount, TermCount min, TermCount max,
+                                     double averageSuccessRate, double averageFailureDueToGradeRate,
+                                     double averageFailureDueToAbsenceRate, double averageSuspendedRate) {
+        this.teachersCount = teachersCount;
         this.min = min;
         this.max = max;
-        this.averageTeachersCount = averageTeachersCount;
-        this.averageSummary = averageSummary;
+        this.averageSuccessRate = averageSuccessRate;
+        this.averageFailureDueToGradeRate = averageFailureDueToGradeRate;
+        this.averageFailureDueToAbsenceRate = averageFailureDueToAbsenceRate;
+        this.averageSuspendedRate = averageSuspendedRate;
     }
 
-    public String getCourseCode() {
-        return courseCode;
+    public double getTeachersCount() {
+        return teachersCount;
     }
 
-    public void setCourseCode(String courseCode) {
-        this.courseCode = courseCode;
-    }
-
-    public String getCurriculumCode() {
-        return curriculumCode;
-    }
-
-    public void setCurriculumCode(String curriculumCode) {
-        this.curriculumCode = curriculumCode;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public String getTo() {
-        return to;
-    }
-
-    public void setTo(String to) {
-        this.to = to;
+    public void setTeachersCount(double teachersCount) {
+        this.teachersCount = teachersCount;
     }
 
     public TermCount getMin() {
@@ -74,19 +47,35 @@ public class TeachersStatisticsSummary {
         this.max = max;
     }
 
-    public double getAverageTeachersCount() {
-        return averageTeachersCount;
+    public double getAverageSuccessRate() {
+        return averageSuccessRate;
     }
 
-    public void setAverageTeachersCount(double averageTeachersCount) {
-        this.averageTeachersCount = averageTeachersCount;
+    public void setAverageSuccessRate(double averageSuccessRate) {
+        this.averageSuccessRate = averageSuccessRate;
     }
 
-    public SubjectsStatisticsSummary getAverageSummary() {
-        return averageSummary;
+    public double getAverageFailureDueToGradeRate() {
+        return averageFailureDueToGradeRate;
     }
 
-    public void setAverageSummary(SubjectsStatisticsSummary averageSummary) {
-        this.averageSummary = averageSummary;
+    public void setAverageFailureDueToGradeRate(double averageFailureDueToGradeRate) {
+        this.averageFailureDueToGradeRate = averageFailureDueToGradeRate;
+    }
+
+    public double getAverageFailureDueToAbsenceRate() {
+        return averageFailureDueToAbsenceRate;
+    }
+
+    public void setAverageFailureDueToAbsenceRate(double averageFailureDueToAbsenceRate) {
+        this.averageFailureDueToAbsenceRate = averageFailureDueToAbsenceRate;
+    }
+
+    public double getAverageSuspendedRate() {
+        return averageSuspendedRate;
+    }
+
+    public void setAverageSuspendedRate(double averageSuspendedRate) {
+        this.averageSuspendedRate = averageSuspendedRate;
     }
 }
