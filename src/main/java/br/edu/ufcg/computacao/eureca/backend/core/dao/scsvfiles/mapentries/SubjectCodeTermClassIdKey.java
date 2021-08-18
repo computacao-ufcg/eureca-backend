@@ -54,4 +54,13 @@ public class SubjectCodeTermClassIdKey implements EurecaMapKey {
     public int hashCode() {
         return Objects.hash(getSubjectCode(), getTerm(), getClassId());
     }
+
+    @Override
+    public String toString() {
+        return "SubjectCodeTermClassIdKey{" +
+                "subjectCode='" + subjectCode + '\'' +
+                ", term='" + term + '\'' +
+                ", classId='" + classId + '\'' +
+                '}';
+    }
 }

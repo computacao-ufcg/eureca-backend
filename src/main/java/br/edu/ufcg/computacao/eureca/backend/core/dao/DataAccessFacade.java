@@ -20,7 +20,7 @@ public interface DataAccessFacade {
 
     Map<String, Collection<Student>> getDropoutsPerDropoutTerm(String courseCode, String curriculumCode, String from, String to);
 
-    Collection<AlumniDigestResponse> getAlumniPerStudentSummary(String courseCode, String from, String to);
+    Collection<AlumniDigest> getAlumniPerStudentSummary(String courseCode, String from, String to);
 
     Curriculum getCurriculum(String courseCode, String curriculumCode);
 
@@ -43,4 +43,8 @@ public interface DataAccessFacade {
     Collection<EnrollmentsMetricsPerTermSummary> getEnrollmentsPerTermSummary(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException;
 
     ProfileResponse getProfile(String userId);
+
+    TeachersStatisticsResponse getTeachersPerTermSummary(String courseCode, String curriculumCode, String from, String to, String academicUnitId);
+
+    Map<String, TeachersStatisticsSummary> getTeachersPerAcademicUnit(String courseCode, String curriculumCode, String from, String to);
 }

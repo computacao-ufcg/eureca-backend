@@ -5,18 +5,18 @@ import br.edu.ufcg.computacao.eureca.backend.constants.AlumniGlossaryFields;
 import java.util.Collection;
 
 public class AlumniResponse {
-    private Collection<AlumniDigestResponse> alumniDigest;
+    private Collection<AlumniDigest> alumniDigest;
     private AlumniGlossaryFields glossary;
 
-    public AlumniResponse(Collection<AlumniDigestResponse> alumniDigest) {
+    public AlumniResponse(Collection<AlumniDigest> alumniDigest) {
         this.alumniDigest = alumniDigest;
     }
 
-    public Collection<AlumniDigestResponse> getAlumniDigest() {
+    public Collection<AlumniDigest> getAlumniDigest() {
         return alumniDigest;
     }
 
-    public void setAlumniDigest(Collection<AlumniDigestResponse> alumniDigest) {
+    public void setAlumniDigest(Collection<AlumniDigest> alumniDigest) {
         this.alumniDigest = alumniDigest;
     }
 
