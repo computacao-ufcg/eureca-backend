@@ -2,7 +2,7 @@ package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
 
 import java.util.Objects;
 
-public class TeacherKey implements EurecaMapKey {
+public class TeacherKey implements EurecaMapKey, Comparable {
     private String id;
 
     public TeacherKey(String id) {
@@ -31,5 +31,11 @@ public class TeacherKey implements EurecaMapKey {
     @Override
     public int hashCode() {
         return Objects.hash(getId());
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        TeacherKey other = (TeacherKey) o;
+        return this.getId().compareTo(other.getId());
     }
 }
