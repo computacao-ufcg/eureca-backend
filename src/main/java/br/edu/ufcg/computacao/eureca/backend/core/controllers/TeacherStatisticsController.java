@@ -1,15 +1,11 @@
 package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
-import br.edu.ufcg.computacao.eureca.backend.constants.PortugueseTeachersGlossary;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.models.MetricStatistics;
-import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class TeacherStatisticsController {
     private Logger LOGGER = Logger.getLogger(StudentsStatisticsController.class);
@@ -20,23 +16,28 @@ public class TeacherStatisticsController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
-    public TeachersStatisticsSummaryResponse getTeachersStatisticsMock() {
-        MetricStatistics failedDueToAbsences = new MetricStatistics(3, 5, 9, 11, 15, 10, 25);
-        MetricStatistics failedDueToGrade = new MetricStatistics(3, 5, 9, 11, 15, 10, 25);
-        MetricStatistics failedDueToCanceling = new MetricStatistics(3, 5, 9, 11, 15, 10, 25);
-        MetricStatistics success = new MetricStatistics(3, 5, 9, 11, 15, 10, 25);
-        TermCount min = new TermCount(10,"x");
-        TermCount max = new TermCount(10, "y");
-        TeachersStatisticsSummaryResponse summary = new TeachersStatisticsSummaryResponse("2017","1980.1","2020.1",failedDueToAbsences, failedDueToGrade,
-                failedDueToCanceling, success, min, max, 20);
-        return summary;
+    public TeachersStatisticsResponse getTeachersStatistics(String courseCode, String curriculumCode, String from, String to, String academicUnitId) {
+        return this.dataAccessFacade.getTeachersPerTermSummary(courseCode, curriculumCode, from, to, academicUnitId);
     }
 
-    public TeachersResponse getTeacherCSV() {
-        List<TeachersCSV> response = new ArrayList<>();
-        response.add(new TeachersCSV("fubica", 0.12, 0.03, 0.01, 0.84, 75, "2010.1", "2012.2", new PortugueseTeachersGlossary()));
-        response.add(new TeachersCSV("joao arthur", 0.11, 0.08, 0.01, 0.80, 120, "2010.1", "2012.2", new PortugueseTeachersGlossary()));
-        response.add(new TeachersCSV("massoni", 0.09, 0.01, 0.01, 0.89, 80, "2010.1", "2012.2", new PortugueseTeachersGlossary()));
+    public TeachersResponse getTeachersCSV(String courseCode, String curriculumCode, String from, String to, String academicUnitId) {
+        TeachersStatisticsResponse teachersSummary = this.dataAccessFacade.getTeachersPerTermSummary(courseCode, curriculumCode, from, to, academicUnitId);
+        Collection<TeacherCSV> response = new TreeSet<>();
+        teachersSummary.getTeachers().forEach(teacher -> {
+            teacher.getTerms().forEach(term -> {
+                TeacherStatisticsSummary metrics = term.getTermSummary();
+                TeacherCSV teacherCSV = new TeacherCSV(teacher.getTeacherId(), teacher.getTeacherName(), courseCode,
+                        curriculumCode, term.getTerm(), metrics);
+                response.add(teacherCSV);
+            });
+        });
         return new TeachersResponse(response);
+    }
+
+    public TeachersStatisticsSummaryResponse getTeachersStatisticsSummary(String courseCode, String curriculumCode, String from, String to) {
+        Map<String, TeachersStatisticsSummary> teachersSummaryMap = this.dataAccessFacade.getTeachersPerAcademicUnit(courseCode, curriculumCode, from, to);
+        Collection<String> academicUnitAcronyms = teachersSummaryMap.keySet();
+        TeachersStatisticsSummaryResponse response = new TeachersStatisticsSummaryResponse(courseCode, curriculumCode, from, to, academicUnitAcronyms, teachersSummaryMap);
+        return response;
     }
 }

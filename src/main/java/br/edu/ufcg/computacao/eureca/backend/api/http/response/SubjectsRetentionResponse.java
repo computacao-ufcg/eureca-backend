@@ -2,10 +2,10 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import java.util.Collection;
 
-public class SubjectRetentionResponse {
+public class SubjectsRetentionResponse {
     private Collection<SubjectRetentionCSV> subjectRetention;
 
-    public SubjectRetentionResponse(Collection<SubjectRetentionCSV> subjectRetention) {
+    public SubjectsRetentionResponse(Collection<SubjectRetentionCSV> subjectRetention) {
         this.subjectRetention = subjectRetention;
     }
 

@@ -22,8 +22,8 @@ public class EnrollmentsStatisticsController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
-    public EnrollmentsStatisticsResponse getEnrollments(String courseCode, String curriculumCode, String from, String to,
-                                                        SubjectType subjectType) throws InvalidParameterException {
+    public EnrollmentsStatisticsResponse getSubjectEnrollmentsStatistics(String courseCode, String curriculumCode, String from, String to,
+                                                                         SubjectType subjectType) throws InvalidParameterException {
         Collection<EnrollmentsMetricsPerTermSummary> enrollmentsPerTerm =
                 this.dataAccessFacade.getEnrollmentsPerTermSummary(courseCode, curriculumCode, from, to, subjectType);
         String firstTerm = "9999.9";
@@ -36,12 +36,12 @@ public class EnrollmentsStatisticsController {
                 if (last.compareTo(lastTerm) > 0) lastTerm = last;
             }
         }
-        EnrollmentsStatisticsResponse response = new EnrollmentsStatisticsResponse(enrollmentsPerTerm, firstTerm, lastTerm);
+        EnrollmentsStatisticsResponse response = new EnrollmentsStatisticsResponse(enrollmentsPerTerm, courseCode, curriculumCode, firstTerm, lastTerm);
         return response;
     }
 
-    public EnrollmentsResponse getEnrollmentsCSV(String courseCode, String curriculumCode, String from, String to,
-                                                 SubjectType subjectType) throws InvalidParameterException {
+    public EnrollmentsResponse getSubjectEnrollmentsCSV(String courseCode, String curriculumCode, String from, String to,
+                                                        SubjectType subjectType) throws InvalidParameterException {
         Collection<EnrollmentsCSV> enrollments = new TreeSet<>();
         Collection<EnrollmentsPerSubjectData> enrollmentsPerSubject =
                 this.dataAccessFacade.getEnrollmentsPerSubjectPerTerm(courseCode, curriculumCode, from, to, subjectType);
@@ -63,8 +63,8 @@ public class EnrollmentsStatisticsController {
         return new EnrollmentsResponse(enrollments);
     }
 
-    public EnrollmentsStatisticsSummaryResponse getEnrollmentsStatistics(String courseCode, String curriculumCode,
-                                                         String from, String to) throws InvalidParameterException {
+    public EnrollmentsStatisticsSummaryResponse getSubjectEnrollmentsStatisticsSummary(String courseCode, String curriculumCode,
+                                                                                       String from, String to) throws InvalidParameterException {
         EnrollmentsStatisticsSummaryResponse summary =
                 this.dataAccessFacade.getEnrollmentsStatisticsSummary(courseCode, curriculumCode, from, to);
         return summary;

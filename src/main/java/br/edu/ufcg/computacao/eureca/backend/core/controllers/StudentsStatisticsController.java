@@ -23,39 +23,39 @@ public class StudentsStatisticsController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
-    public StudentResponse getActiveCSV(String courseCode, String from, String to) {
+    public StudentsResponse getActiveCSV(String courseCode, String curriculumCode, String from, String to) {
         Collection<StudentCSV> activeStudentsData = new TreeSet<>();
-        Collection<Student> actives = this.dataAccessFacade.getActives(courseCode, from, to);
+        Collection<Student> actives = this.dataAccessFacade.getActives(courseCode, curriculumCode, from, to);
         actives.forEach(item -> {
             StudentCSV studentDataResponse = new StudentCSV(item);
             activeStudentsData.add(studentDataResponse);
         });
-        return new StudentResponse(activeStudentsData);
+        return new StudentsResponse(activeStudentsData);
     }
 
-    public StudentResponse getAlumniCSV(String courseCode, String from, String to) {
+    public StudentsResponse getAlumniCSV(String courseCode, String curriculumCode, String from, String to) {
         Collection<StudentCSV> alumniData = new TreeSet<>();
-        Collection<Student> actives = this.dataAccessFacade.getAlumni(courseCode, from, to);
+        Collection<Student> actives = this.dataAccessFacade.getAlumni(courseCode, curriculumCode, from, to);
         actives.forEach(item -> {
             StudentCSV studentDataResponse = new StudentCSV(item);
             alumniData.add(studentDataResponse);
         });
-        return new StudentResponse(alumniData);
+        return new StudentsResponse(alumniData);
     }
 
-    public StudentResponse getDropoutsCSV(String courseCode, String from, String to) {
+    public StudentsResponse getDropoutsCSV(String courseCode, String curriculumCode, String from, String to) {
         Collection<StudentCSV> dropoutsData = new TreeSet<>();
-        Collection<Student> dropouts = this.dataAccessFacade.getDropouts(courseCode, from, to);
+        Collection<Student> dropouts = this.dataAccessFacade.getDropouts(courseCode, curriculumCode, from, to);
         dropouts.forEach(item -> {
             StudentCSV studentDataResponse = new StudentCSV(item);
             dropoutsData.add(studentDataResponse);
         });
-        return new StudentResponse(dropoutsData);
+        return new StudentsResponse(dropoutsData);
     }
 
-    public ActivesStatisticsResponse getActivesSummaryResponse(String courseCode, String from, String to) {
+    public ActivesStatisticsResponse getActivesStatistics(String courseCode, String curriculumCode, String from, String to) {
         Collection<ActivesPerTermSummary> terms = new TreeSet<>();
-        Map<String, Collection<Student>> activesPerAdmissionTerm = this.dataAccessFacade.getActivesPerAdmissionTerm(courseCode, from, to);
+        Map<String, Collection<Student>> activesPerAdmissionTerm = this.dataAccessFacade.getActivesPerAdmissionTerm(courseCode, curriculumCode, from, to);
 
         for (String term : activesPerAdmissionTerm.keySet()) {
             Collection<Student> actives = activesPerAdmissionTerm.get(term);
@@ -64,24 +64,24 @@ public class StudentsStatisticsController {
 
         String firstTerm = CollectionUtil.getFirstTermFromSummaries(terms);
         String lastTerm = CollectionUtil.getLastTermFromSummaries(terms);
-        return new ActivesStatisticsResponse(terms, firstTerm, lastTerm);
+        return new ActivesStatisticsResponse(terms, courseCode, curriculumCode, firstTerm, lastTerm);
     }
 
-    public AlumniStatisticsResponse getAlumniSummaryResponse(String courseCode, String from, String to) {
+    public AlumniStatisticsResponse getAlumniStatistics(String courseCode, String curriculumCode, String from, String to) {
         Collection<AlumniPerTermSummary> terms = new TreeSet<>();
-        Map<String, Collection<Student>> alumniPerGraduationTerm = this.dataAccessFacade.getAlumniPerGraduationTerm(courseCode, from, to);
+        Map<String, Collection<Student>> alumniPerGraduationTerm = this.dataAccessFacade.getAlumniPerGraduationTerm(courseCode, curriculumCode, from, to);
         for (String term : alumniPerGraduationTerm.keySet()) {
             Collection<Student> alumni = alumniPerGraduationTerm.get(term);
             terms.add(getAlumniPerTermSummary(term, alumni));
         }
         String firstTerm = CollectionUtil.getFirstTermFromSummaries(terms);
         String lastTerm = CollectionUtil.getLastTermFromSummaries(terms);
-        return new AlumniStatisticsResponse(terms, firstTerm, lastTerm);
+        return new AlumniStatisticsResponse(terms, courseCode, curriculumCode, firstTerm, lastTerm);
     }
 
-    public DropoutsStatisticsResponse getDropoutsSummaryResponse(String courseCode, String from, String to) {
+    public DropoutsStatisticsResponse getDropoutsStatistics(String courseCode, String curriculumCode, String from, String to) {
         Collection<DropoutPerTermSummary> terms = new TreeSet<>();
-        Map<String, Collection<Student>> dropoutsPerDropoutTerm = this.dataAccessFacade.getDropoutsPerDropoutTerm(courseCode, from, to);
+        Map<String, Collection<Student>> dropoutsPerDropoutTerm = this.dataAccessFacade.getDropoutsPerDropoutTerm(courseCode, curriculumCode, from, to);
 
         for (String term : dropoutsPerDropoutTerm.keySet()) {
             Collection<Student> dropouts = dropoutsPerDropoutTerm.get(term);
@@ -89,14 +89,14 @@ public class StudentsStatisticsController {
         }
         String firstTerm = CollectionUtil.getFirstTermFromSummaries(terms);
         String lastTerm = CollectionUtil.getLastTermFromSummaries(terms);
-        return new DropoutsStatisticsResponse(terms, firstTerm, lastTerm);
+        return new DropoutsStatisticsResponse(terms, courseCode, curriculumCode, firstTerm, lastTerm);
     }
 
-    public StudentsStatisticsSummaryResponse getStudentsStatistics(String courseCode, String from, String to) {
-        ActivesSummary activesSummary = getActivesSummary(courseCode, from, to);
-        AlumniSummary alumniSummary = getAlumniSummary(courseCode, from, to);
-        DropoutsSummary dropoutSummary = getDropoutsSummary(courseCode, from, to);
-        return new StudentsStatisticsSummaryResponse(activesSummary, alumniSummary, dropoutSummary);
+    public StudentsStatisticsSummaryResponse getStudentsStatisticsSummary(String courseCode, String curriculumCode, String from, String to) {
+        ActivesSummary activesSummary = getActivesSummary(courseCode, curriculumCode, from, to);
+        AlumniSummary alumniSummary = getAlumniSummary(courseCode, curriculumCode, from, to);
+        DropoutsSummary dropoutSummary = getDropoutsSummary(courseCode, curriculumCode, from, to);
+        return new StudentsStatisticsSummaryResponse(courseCode, curriculumCode, from, to, activesSummary, alumniSummary, dropoutSummary);
     }
 
     private AlumniPerTermSummary getAlumniPerTermSummary(String term, Collection<Student> alumni) {
@@ -191,16 +191,16 @@ public class StudentsStatisticsController {
     }
 
 
-    private ActivesSummary getActivesSummary(String courseCode, String from, String to) {
-        Collection<Student> actives = this.dataAccessFacade.getActives(courseCode, from, to);
+    private ActivesSummary getActivesSummary(String courseCode, String curriculumCode, String from, String to) {
+        Collection<Student> actives = this.dataAccessFacade.getActives(courseCode, curriculumCode, from, to);
         StudentMetricsSummary summary = StudentMetricsCalculator.computeMetricsSummary(actives);
         String firstTerm = CollectionUtil.getFirstTermFromStudents(actives);
         String lastTerm = CollectionUtil.getLastTermFromStudents(actives);
         return new ActivesSummary(firstTerm, lastTerm, actives.size(), summary);
     }
 
-    private AlumniSummary getAlumniSummary(String courseCode, String from, String to) {
-        Collection<Student> alumni = this.dataAccessFacade.getAlumni(courseCode, from, to);
+    private AlumniSummary getAlumniSummary(String courseCode, String curriculumCode, String from, String to) {
+        Collection<Student> alumni = this.dataAccessFacade.getAlumni(courseCode, curriculumCode, from, to);
         double aggregateGPA = 0;
         int aggregateTermsCount = 0;
         double aggregateCostIncrement = 0.0;
@@ -258,8 +258,8 @@ public class StudentsStatisticsController {
                 maxAlumniCount, minAlumniCount, maxAlumniCountTerm, minAlumniCountTerm);
     }
 
-    private DropoutsSummary getDropoutsSummary(String courseCode, String from, String to) {
-        Collection<Student> dropouts = this.dataAccessFacade.getDropouts(courseCode, from, to);
+    private DropoutsSummary getDropoutsSummary(String courseCode, String curriculumCode, String from, String to) {
+        Collection<Student> dropouts = this.dataAccessFacade.getDropouts(courseCode, curriculumCode, from, to);
         int dropoutsCount[] = new int[SystemConstants.DROPOUT_TYPES_COUNT];
         double aggregateTermsCount = 0.0;
         double aggregateCost = 0.0;

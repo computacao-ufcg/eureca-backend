@@ -9,8 +9,6 @@ public class Messages {
     public static final String DATA_S = "Data: [%s].";
     public static final String ERROR_READING_CONFIGURATION_FILE = "Error reading configuration file.";
     public static final String INDEX_ACTIVE_S = "Indexing active student: %s.";
-    public static final String INDEX_ALUMNUS_S = "Indexing alumnus student: %s.";
-    public static final String INDEX_DROPOUT_S = "Indexing dropout student: %s.";
     public static final String INEXISTENT_CURRICULUM_S_S = "Could not find curriculum [%s] for course [%s].";
     public static final String INSERTING_S_S = "Inserting %s : %s.";
     public static final String KEY_S = "Key: [%s].";
@@ -25,7 +23,6 @@ public class Messages {
     public static final String RECEIVING_GET_SUBJECTS_STATISTICS = "Received get subjects statistics.";
     public static final String RECEIVING_GET_TEACHERS_STATISTICS = "Received get teachers.";
     public static final String STUDENT_S_DISABLED_FOR_SUBJECT_S = "Student %s is not enabled to enroll in subject %s.";
-    public static final String INSERTING_ENROLLMENT_S_S_S_D = "Inserting: (%s, %s, %s) %d.";
     public static final String PROCESSING_S_FOR_D_STUDENTS = "Processing %s for %d students.";
     public static final String STUDENT_S_SHOULD_ENROLL_SUBJECT_S = "Student %s should enroll subject %s.";
     public static final String STUDENT_S_CAN_BUT_SHOULD_NOT_ENROLL_SUBJECT_S = "Student %s can but should not enroll subject %s.";
@@ -38,5 +35,7 @@ public class Messages {
     public static final String STUDENT_S_COMPLETED_S = "Student %s completed %s.";
     public static final String STUDENT_S_IS_EXEMPTED_S = "Student %s is exempted of %s.";
     public static final String STUDENT_S_IS_ENROLLED_IN_S = "Student %s is enrolled in %s.";
-    public static final String ADDIND_S_S_D = "Adding: (%s, %s) %d.";
+    public static final String COULD_NOT_FIND_ENTRY_S = "Could not find entry: %s.";
+    public static final String COULD_NOT_FIND_TERM_S = "Could not find term: %s.";
+    public static final String COULD_NOT_FIND_CLASS_S = "Could not find class: %s.";
 }

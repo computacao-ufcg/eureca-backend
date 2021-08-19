@@ -4,7 +4,7 @@ public class PortugueseRetentionGlossary implements Glossary {
 
     @Override
     public RetentionGlossaryFields getGlossary() {
-        Field delayed = new Field("Retido", "Discente com risco de evadir. Esses são os discentes na classe de risco 'Alto' ou 'Inviável'.");
+        Field studentRetention = new Field("Retido", "Discente com risco de evadir. Esses são os discentes na classe de risco 'Alto' ou 'Inviável'.");
         Field averageRisk = new Field("Risco", "Essa métrica indica o risco do discente evadir " +
                 "ou a média desse risco para um grupo de discentes. Ela pode assumir os valores 'Inexistente', " +
                 "'Baixo', 'Médio', 'Alto' ou 'Inviável'. Discentes com risco 'Alto' ou 'Inviável' são considerados "+
@@ -33,7 +33,7 @@ public class PortugueseRetentionGlossary implements Glossary {
         Field abandonCount = new Field("Abandonos", "Número de discentes que abandonaram o curso.");
         Field transferCount = new Field("Transferências", "Número de discentes que foram transferidos.");
 
-        return new RetentionGlossaryFields(delayed, averageRisk, averageLoad, successRate,
+        return new RetentionGlossaryFields(studentRetention, averageRisk, averageLoad, successRate,
                 predictedGraduation, averageCost, averageTime,
                 averageGpa, rejoinCount, canceledCount, abandonCount, transferCount);
     }

@@ -3,22 +3,22 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 import java.util.Collection;
 
 public class EnrollmentsResponse {
-    private Collection<EnrollmentsCSV> enrollmentsSummary;
+    private Collection<EnrollmentsCSV> enrollments;
 
-    public EnrollmentsResponse(Collection<EnrollmentsCSV> enrollmentsSummary) {
-        this.enrollmentsSummary = enrollmentsSummary;
+    public EnrollmentsResponse(Collection<EnrollmentsCSV> enrollments) {
+        this.enrollments = enrollments;
     }
 
-    public Collection<EnrollmentsCSV> getEnrollmentsSummary() {
-        return enrollmentsSummary;
+    public Collection<EnrollmentsCSV> getEnrollments() {
+        return enrollments;
     }
 
-    public void setEnrollmentsSummary(Collection<EnrollmentsCSV> enrollmentsSummary) {
-        this.enrollmentsSummary = enrollmentsSummary;
+    public void setEnrollments(Collection<EnrollmentsCSV> enrollments) {
+        this.enrollments = enrollments;
     }
 
     @Override
     public String toString() {
-        return "EnrollmentsResponse{" + "enrollmentsSummary=" + enrollmentsSummary + '}';
+        return "EnrollmentsResponse{" + "enrollmentsSummary=" + enrollments + '}';
     }
 }
