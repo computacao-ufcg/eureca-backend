@@ -1,23 +1,23 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class EnrollmentsStatisticsSummary {
-    private int subjectsCount;
+    private double averageSubjectsCount;
     private double averageClassesPerSubject;
     private double averageClassesPerTerm;
     private double averageEnrollmentsPerSubject;
     private double averageEnrollmentsPerTerm;
 
-    public EnrollmentsStatisticsSummary(int subjectsCount, double averageClassesPerSubject, double averageClassesPerTerm,
+    public EnrollmentsStatisticsSummary(double averageSubjectsCount, double averageClassesPerSubject, double averageClassesPerTerm,
                                         double averageEnrollmentsPerSubject, double averageEnrollmentsPerTerm) {
-        this.subjectsCount = subjectsCount;
+        this.averageSubjectsCount = averageSubjectsCount;
         this.averageClassesPerSubject = averageClassesPerSubject;
         this.averageClassesPerTerm = averageClassesPerTerm;
         this.averageEnrollmentsPerSubject = averageEnrollmentsPerSubject;
         this.averageEnrollmentsPerTerm = averageEnrollmentsPerTerm;
     }
 
-    public int getSubjectsCount() {
-        return subjectsCount;
+    public double getAverageSubjectsCount() {
+        return averageSubjectsCount;
     }
 
     public double getAverageClassesPerSubject() {
@@ -39,7 +39,7 @@ public class EnrollmentsStatisticsSummary {
     @Override
     public String toString() {
         return "EnrollmentsStatisticsSummaryResponse{" +
-                ", subjectsCount=" + subjectsCount +
+                ", subjectsCount=" + averageSubjectsCount +
                 ", averageClassesPerDiscipline=" + averageClassesPerSubject +
                 ", averageClassesPerPeriod=" + averageClassesPerTerm +
                 ", averageEnrollmentsPerSubject=" + averageEnrollmentsPerSubject +

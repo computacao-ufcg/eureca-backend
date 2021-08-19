@@ -19,7 +19,7 @@ public class SubjectsStatisticsController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
-    public SubjectsStatisticsResponse getSubjectsSummary(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
+    public SubjectsStatisticsResponse getSubjectsStatistics(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
         Collection<SubjectMetricsPerTermSummary> metricsPerTerm =
                 this.dataAccessFacade.getSubjectMetricsPerTermSummary(courseCode, curriculumCode, from, to, subjectType);
         String firstTerm = "9999.9";
@@ -32,11 +32,11 @@ public class SubjectsStatisticsController {
                 if (last.compareTo(lastTerm) > 0) lastTerm = last;
             }
         }
-        SubjectsStatisticsResponse response = new SubjectsStatisticsResponse(metricsPerTerm, firstTerm, lastTerm);
+        SubjectsStatisticsResponse response = new SubjectsStatisticsResponse(metricsPerTerm, courseCode, curriculumCode, firstTerm, lastTerm);
         return response;
     }
 
-    public SubjectResponse getSubjectsCSV(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
+    public SubjectsResponse getSubjectsCSV(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
         Collection<SubjectCSV> subjectDataResponses = new TreeSet<>();
         Collection<SubjectMetricsPerTermSummary> metricsPerTerm =
                 this.dataAccessFacade.getSubjectMetricsPerTermSummary(courseCode, curriculumCode, from, to, subjectType);
@@ -47,10 +47,10 @@ public class SubjectsStatisticsController {
                 subjectDataResponses.add(subjectData);
             });
         });
-        return new SubjectResponse(subjectDataResponses);
+        return new SubjectsResponse(subjectDataResponses);
     }
 
-    public SubjectsStatisticsSummaryResponse getSubjectStatistics(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+    public SubjectsStatisticsSummaryResponse getSubjectsStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         SubjectsStatisticsSummaryResponse summary = this.dataAccessFacade.getSubjectStatisticsSummary(courseCode, curriculumCode, from, to);
         return summary;
     }

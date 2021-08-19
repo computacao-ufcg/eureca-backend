@@ -1,12 +1,12 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 public class SubjectCSV implements Comparable {
-    String courseCode;
-    String curriculumCode;
-    String subjectCode;
-    String subjectName;
-    String term;
-    SubjectMetrics metrics;
+    private String courseCode;
+    private String curriculumCode;
+    private String subjectCode;
+    private String subjectName;
+    private String term;
+    private SubjectMetrics metrics;
 
     public SubjectCSV(String courseCode, String curriculumCode, String subjectCode, String subjectName, String term,
                       SubjectMetrics metrics) {

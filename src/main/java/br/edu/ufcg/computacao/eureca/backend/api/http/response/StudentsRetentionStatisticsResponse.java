@@ -2,24 +2,24 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import java.util.Collection;
 
-public class EnrollmentsStatisticsResponse extends Range {
+public class StudentsRetentionStatisticsResponse extends Range {
     private String courseCode;
     private String curriculumCode;
-    private Collection<EnrollmentsMetricsPerTermSummary> enrollmentsSummary;
+    private Collection<StudentsRetentionPerTermSummary> terms;
 
-    public EnrollmentsStatisticsResponse(Collection<EnrollmentsMetricsPerTermSummary> enrollmentsSummary, String courseCode, String curriculumCode, String from, String to) {
+    public StudentsRetentionStatisticsResponse(Collection<StudentsRetentionPerTermSummary> terms, String courseCode, String curriculumCode, String from, String to) {
         super(from, to);
-        this.enrollmentsSummary = enrollmentsSummary;
+        this.terms = terms;
         this.courseCode = courseCode;
         this.curriculumCode = curriculumCode;
     }
 
-    public Collection<EnrollmentsMetricsPerTermSummary> getEnrollmentsSummary() {
-        return enrollmentsSummary;
+    public Collection<StudentsRetentionPerTermSummary> getTerms() {
+        return terms;
     }
 
-    public void setEnrollmentsSummary(Collection<EnrollmentsMetricsPerTermSummary> enrollmentsSummary) {
-        this.enrollmentsSummary = enrollmentsSummary;
+    public void setTerms(Collection<StudentsRetentionPerTermSummary> terms) {
+        this.terms = terms;
     }
 
     public String getCourseCode() {

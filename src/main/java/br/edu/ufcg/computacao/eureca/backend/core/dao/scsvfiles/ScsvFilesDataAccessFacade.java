@@ -1,5 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
+import br.edu.ufcg.computacao.eureca.backend.api.http.request.TeachersStatistics;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
@@ -25,50 +26,50 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Collection<Student> getActives(String courseCode, String from, String to) {
-        return getFilteredStudents(StudentClassification.ACTIVE, courseCode, from, to);
+    public Collection<Student> getActives(String courseCode, String curriculumCode, String from, String to) {
+        return getFilteredStudents(StudentClassification.ACTIVE, courseCode, curriculumCode, from, to);
     }
 
     @Override
-    public Collection<Student> getAlumni(String courseCode, String from, String to) {
-        return getFilteredStudents(StudentClassification.ALUMNUS, courseCode, from, to);
+    public Collection<Student> getAlumni(String courseCode, String curriculumCode, String from, String to) {
+        return getFilteredStudents(StudentClassification.ALUMNUS, courseCode, curriculumCode, from, to);
     }
 
     @Override
-    public Collection<Student> getDropouts(String courseCode, String from, String to) {
-        return getFilteredStudents(StudentClassification.DROPOUT, courseCode, from, to);
+    public Collection<Student> getDropouts(String courseCode, String curriculumCode, String from, String to) {
+        return getFilteredStudents(StudentClassification.DROPOUT, courseCode, curriculumCode, from, to);
     }
 
     @Override
-    public Map<String, Collection<Student>> getActivesPerAdmissionTerm(String courseCode, String from, String to) {
-        Map<String, Collection<NationalIdRegistrationKey>> index = indexesHolder.getActivesPerCoursePerAdmissionTerm(courseCode);
+    public Map<String, Collection<Student>> getActivesPerAdmissionTerm(String courseCode, String curriculumCode, String from, String to) {
+        Map<String, Collection<NationalIdRegistrationKey>> index = indexesHolder.getActivesPerCoursePerAdmissionTerm(courseCode, curriculumCode);
         return getStudentMapFromIndex(from, to, index);
     }
 
     @Override
-    public Map<String, Collection<Student>> getAlumniPerGraduationTerm(String courseCode, String from, String to) {
-        Map<String, Collection<NationalIdRegistrationKey>> index = indexesHolder.getAlumniPerGraduationTerm(courseCode);
+    public Map<String, Collection<Student>> getAlumniPerGraduationTerm(String courseCode, String curriculumCode, String from, String to) {
+        Map<String, Collection<NationalIdRegistrationKey>> index = indexesHolder.getAlumniPerGraduationTerm(courseCode, curriculumCode);
         return getStudentMapFromIndex(from, to, index);
     }
 
     @Override
-    public Map<String, Collection<Student>> getDropoutsPerDropoutTerm(String courseCode, String from, String to) {
-        Map<String, Collection<NationalIdRegistrationKey>> index = indexesHolder.getDropoutsPerDropoutTerm(courseCode);
+    public Map<String, Collection<Student>> getDropoutsPerDropoutTerm(String courseCode, String curriculumCode, String from, String to) {
+        Map<String, Collection<NationalIdRegistrationKey>> index = indexesHolder.getDropoutsPerDropoutTerm(courseCode, curriculumCode);
         return getStudentMapFromIndex(from, to, index);
     }
 
     @Override
-    public Collection<AlumniDigestResponse> getAlumniPerStudentSummary(String courseCode, String from, String to) {
+    public Collection<AlumniDigest> getAlumniPerStudentSummary(String courseCode, String from, String to) {
         String parsedFrom = "1" + from.substring(2,4) + from.substring(5,6) + "00000";
         String parsedTo = "1" + to.substring(2,4) + to.substring(5,6) + "99999";
-        Collection<AlumniDigestResponse> alumniBasicData = new TreeSet<>();
+        Collection<AlumniDigest> alumniBasicData = new TreeSet<>();
         Collection<NationalIdRegistrationKey> alumni = this.indexesHolder.getAlumniPerCourseMap(courseCode);
         Map<NationalIdRegistrationKey, StudentData> studentsMap = this.mapsHolder.getMap("students");
         for (NationalIdRegistrationKey item : alumni) {
             if (new Registration(item.getRegistration()).compareTo(new Registration(parsedFrom)) >= 0 &&
                     new Registration(item.getRegistration()).compareTo(new Registration(parsedTo)) <= 0) {
                 StudentData alumnus = studentsMap.get(item);
-                AlumniDigestResponse basicData = new AlumniDigestResponse(item.getRegistration(), alumnus.getName(),
+                AlumniDigest basicData = new AlumniDigest(item.getRegistration(), alumnus.getName(),
                         2, 1, alumnus.getAdmissionTerm(), alumnus.getStatusTerm());
                 alumniBasicData.add(basicData);
             }
@@ -120,13 +121,13 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         if (curriculum == null) {
             throw new InvalidParameterException(String.format(Messages.INEXISTENT_CURRICULUM_S_S, courseCode, curriculumCode));
         }
-        SubjectStatisticsSummary mandatory = buildSubjectSummary(courseCode, curriculumCode, from, to,
+        SubjectsStatisticsSummary mandatory = buildSubjectSummary(courseCode, curriculumCode, from, to,
                 curriculum.getMandatorySubjectsList());
-        SubjectStatisticsSummary optional = buildSubjectSummary(courseCode, curriculumCode, from, to,
+        SubjectsStatisticsSummary optional = buildSubjectSummary(courseCode, curriculumCode, from, to,
                 curriculum.getOptionalSubjectsList());
-        SubjectStatisticsSummary elective = buildSubjectSummary(courseCode, curriculumCode, from, to,
+        SubjectsStatisticsSummary elective = buildSubjectSummary(courseCode, curriculumCode, from, to,
                 curriculum.getElectiveSubjectsList());
-        SubjectStatisticsSummary complementary = buildSubjectSummary(courseCode, curriculumCode, from, to,
+        SubjectsStatisticsSummary complementary = buildSubjectSummary(courseCode, curriculumCode, from, to,
                 curriculum.getComplementarySubjectsList());
         SubjectsStatisticsSummaryResponse ret = new SubjectsStatisticsSummaryResponse(courseCode, curriculumCode,
                 from, to, mandatory, optional, elective, complementary);
@@ -137,12 +138,6 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     public Subject getSubject(String courseCode, String curriculumCode, String subjectCode) {
         SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
         return getSubject(subjectKey);
-    }
-
-    private Subject getSubject(SubjectKey subjectKey) {
-        Map<SubjectKey, SubjectData> subjectMap = this.mapsHolder.getMap("subjects");
-        SubjectData subjectData = subjectMap.get(subjectKey);
-        return subjectData.createSubject(subjectKey);
     }
 
     @Override
@@ -216,25 +211,44 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Collection<SubjectRetentionDigest> getSubjectsRetentionSummary(String courseCode, String curriculumCode) throws InvalidParameterException {
-        Collection<SubjectRetentionDigest> response = new TreeSet<>();
+    public Collection<SubjectRetentionPerAdmissionTermSummary> getSubjectsRetentionSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+        Collection<SubjectRetentionPerAdmissionTermSummary> response = new TreeSet<>();
         Collection<String> subjectCodes = getMandatorySubjectsList(courseCode, curriculumCode);
-        subjectCodes.forEach(item -> {
-            int retention = getRetentionCount(courseCode, curriculumCode, item);
-            Subject subject = getSubject(courseCode, curriculumCode, item);
-            response.add(new SubjectRetentionDigest(subject.getIdealTerm(), item, subject.getName(), retention));
+        subjectCodes.forEach(subjectCode -> {
+            Collection<SubjectRetentionPerAdmissionTerm> retentionPerTerm = this.indexesHolder.getRetentionCount(courseCode, curriculumCode, from, to, subjectCode);
+            Subject subject = getSubject(courseCode, curriculumCode, subjectCode);
+            response.add(new SubjectRetentionPerAdmissionTermSummary(subjectCode, subject.getName(), subject.getIdealTerm(), retentionPerTerm));
         });
         return response;
     }
 
     @Override
-    public Collection<SubjectRetentionCSV> getSubjectsRetention(String courseCode, String curriculumCode) throws InvalidParameterException {
+    public Collection<SubjectRetentionCSV> getSubjectsRetention(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         Collection<SubjectRetentionCSV> response = new TreeSet<>();
         Collection<String> subjectCodes = getMandatorySubjectsList(courseCode, curriculumCode);
         subjectCodes.forEach(item -> {
-            response.addAll(this.indexesHolder.getRetention(courseCode, curriculumCode, item));
+            response.addAll(this.indexesHolder.getRetention(courseCode, curriculumCode, from, to, item));
         });
         return response;
+    }
+
+    @Override
+    public TeachersStatisticsResponse getTeachersPerTermSummary(String courseCode, String curriculumCode, String from, String to, String academicUnitId) {
+        AcademicUnitData auData = this.indexesHolder.getAuData(new AcademicUnitKey(academicUnitId));
+        Collection<TeacherStatistics> teachers = this.indexesHolder.getTeachersPerTerm(academicUnitId, courseCode, curriculumCode, from, to);
+        return new TeachersStatisticsResponse(academicUnitId, auData.getAcronym(), auData.getName(), courseCode,
+                curriculumCode, from, to, teachers);
+    }
+
+    @Override
+    public Map<String, TeachersStatisticsSummary> getTeachersPerAcademicUnit(String courseCode, String curriculumCode, String from, String to) {
+        return this.indexesHolder.getTeachersPerAcademicUnit(courseCode, curriculumCode, from, to);
+    }
+
+    private Subject getSubject(SubjectKey subjectKey) {
+        Map<SubjectKey, SubjectData> subjectMap = this.mapsHolder.getMap("subjects");
+        SubjectData subjectData = subjectMap.get(subjectKey);
+        return subjectData.createSubject(subjectKey);
     }
 
     private Map<String, Collection<Student>> getStudentMapFromIndex(String from, String to,
@@ -304,7 +318,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                 succeeded, ongoing, exempted, suspended, numberOfClasses, totalEnrolled);
     }
 
-    private SubjectStatisticsSummary buildSubjectSummary(String courseCode, String curriculumCode, String from, String to,
+    private SubjectsStatisticsSummary buildSubjectSummary(String courseCode, String curriculumCode, String from, String to,
                                                          Collection<String> subjectCodes) {
 
         Collection<SubjectMetrics> metricsPerSubject = new ArrayList<>();
@@ -317,7 +331,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             }
         }
         SubjectMetricsStatistics metrics = computeSubjectMetricsStatistics(metricsPerSubject);
-        return new SubjectStatisticsSummary(subjectCodes.size(), metrics);
+        return new SubjectsStatisticsSummary(subjectCodes.size(), metrics);
     }
 
     private SubjectMetricsStatistics computeSubjectMetricsStatistics(Collection<SubjectMetrics> metricsPerSubject) {
@@ -329,6 +343,9 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         List<Double> exemptedList = new ArrayList<>();
         List<Double> suspendedList = new ArrayList<>();
         List<Double> totalEnrolledList = new ArrayList<>();
+        List<Double> numberOfClassesList = new ArrayList<>();
+        List<Double> averageEnrollmentsPerClassList = new ArrayList<>();
+
         for (SubjectMetrics subjectMetrics : metricsPerSubject) {
             failedDueToAbsencesList.add((double) subjectMetrics.getFailedDueToAbsences());
             failedDueToGradeList.add((double) subjectMetrics.getFailedDueToAbsences());
@@ -337,6 +354,8 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             exemptedList.add((double) subjectMetrics.getExempted());
             suspendedList.add((double) subjectMetrics.getSuspended());
             totalEnrolledList.add((double) subjectMetrics.getTotalEnrolled());
+            numberOfClassesList.add((double) subjectMetrics.getNumberOfClasses());
+            averageEnrollmentsPerClassList.add((double) subjectMetrics.getTotalEnrolled()/subjectMetrics.getNumberOfClasses());
         }
         MetricStatistics failedDueToAbsences = new MetricStatistics(failedDueToAbsencesList);
         MetricStatistics failedDueToGrade = new MetricStatistics(failedDueToGradeList);
@@ -346,9 +365,11 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         MetricStatistics exempted = new MetricStatistics(exemptedList);
         MetricStatistics suspended = new MetricStatistics(suspendedList);
         MetricStatistics totalEnrolled = new MetricStatistics(totalEnrolledList);
+        MetricStatistics numberOfClasses = new MetricStatistics(numberOfClassesList);
+        MetricStatistics averageEnrollmentsPerClass = new MetricStatistics(averageEnrollmentsPerClassList);
 
         return new SubjectMetricsStatistics(failedDueToAbsences, failedDueToGrade, cancelled, succeeded, ongoing,
-                exempted, suspended, totalEnrolled);
+                exempted, suspended, totalEnrolled, numberOfClasses, averageEnrollmentsPerClass);
     }
 
     private EnrollmentsSummary buildEnrollmentSummary(String courseCode, String curriculumCode, String from, String to,
@@ -361,6 +382,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         int classesCount = 0;
         int enrollmentsCount = 0;
         int termsCount = 0;
+        int subjectsCount = 0;
 
         Collection<String> terms = this.indexesHolder.getEnrollmentsPerTermPerSubjectPerClass().keySet();
         for(String term : terms) {
@@ -372,7 +394,8 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                 for(String subjectCode : subjectCodes) {
                     SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
                     Map<String, ClassEnrollments> enrollmentsPerClassData = enrollmentsPerSubject.get(subjectKey);
-                    if (enrollmentsPerClassData != null) {
+                    if (enrollmentsPerClassData != null && enrollmentsPerClassData.size() > 0) {
+                        subjectsCount++;
                         for(String classId : enrollmentsPerClassData.keySet()) {
                             classesCount++;
                             ClassEnrollments enrollmentsData = enrollmentsPerClassData.get(classId);
@@ -391,33 +414,30 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                 }
             }
         }
-        int subjectCount = subjectCodes.size();
-        EnrollmentsStatisticsSummary summary = new EnrollmentsStatisticsSummary(subjectCount,
-                (double) classesCount/subjectCount,
+        EnrollmentsStatisticsSummary summary = new EnrollmentsStatisticsSummary(
+                (double) subjectsCount/termsCount,
+                (double) classesCount/subjectsCount,
                 (double) classesCount/termsCount,
-                (double) enrollmentsCount/subjectCount,
+                (double) enrollmentsCount/subjectsCount,
                 (double) enrollmentsCount/termsCount);
         return new EnrollmentsSummary(new TermCount(min, minTerm), new TermCount(max, maxTerm), summary);
     }
 
-    private int getRetentionCount(String courseCode, String curriculumCode, String subjectCode) {
-        return this.indexesHolder.getRetentionCount(courseCode, curriculumCode, subjectCode);
-    }
-
     private SubjectMetrics getSubjectMetricsStatistics(String from, String to, @NotNull Map<String, Map<String, ClassEnrollments>> enrollments) {
-        SubjectMetrics subjectMetrics = null;
+        SubjectMetrics subjectMetrics = new SubjectMetrics();
         for (String term : enrollments.keySet()) {
             if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
                 Map<String, ClassEnrollments> classes = enrollments.get(term);
-                subjectMetrics = computeSubjectMetrics(classes.values());
+                SubjectMetrics otherSubjectMetrics = computeSubjectMetrics(classes.values());
+                subjectMetrics.add(otherSubjectMetrics);
             }
         }
         return subjectMetrics;
     }
 
-    private Collection<Student> getFilteredStudents(StudentClassification status, String courseCode, String from, String to) {
+    private Collection<Student> getFilteredStudents(StudentClassification status, String courseCode, String curriculumCode, String from, String to) {
         Collection<Student> filteredStudents = new TreeSet<>();
-        Collection<Student> allStudents = getAllStudentsByStatusPerCourse(status, courseCode);
+        Collection<Student> allStudents = getAllStudentsByStatusPerCourse(status, courseCode, curriculumCode);
         allStudents.forEach(item -> {
             String studentTerm = getGroupingTerm(status, item);
             if (studentTerm != null && studentTerm.compareTo(from) >= 0 && studentTerm.compareTo(to) <= 0) {
@@ -441,22 +461,20 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             case DROPOUT:
                 return item.getStatusTerm();
             case ACTIVE:
-            case DELAYED:
             default:
                 return item.getAdmissionTerm();
         }
     }
 
-    private Collection<Student> getAllStudentsByStatusPerCourse(StudentClassification status, String courseCode) {
+    private Collection<Student> getAllStudentsByStatusPerCourse(StudentClassification status, String courseCode, String curriculumCode) {
         switch(status) {
             case ALUMNUS:
-                return this.indexesHolder.getAllAlumni(courseCode);
+                return this.indexesHolder.getAllAlumni(courseCode, curriculumCode);
             case DROPOUT:
-                return this.indexesHolder.getAllDropouts(courseCode);
+                return this.indexesHolder.getAllDropouts(courseCode, curriculumCode);
             case ACTIVE:
-            case DELAYED:
             default:
-                return this.indexesHolder.getAllActives(courseCode);
+                return this.indexesHolder.getAllActives(courseCode, curriculumCode);
         }
     }
 }

@@ -2,10 +2,10 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import java.util.Collection;
 
-public class SubjectResponse {
+public class SubjectsResponse {
     private Collection<SubjectCSV> subjects;
 
-    public SubjectResponse(Collection<SubjectCSV> subjects) {
+    public SubjectsResponse(Collection<SubjectCSV> subjects) {
         this.subjects = subjects;
     }
 

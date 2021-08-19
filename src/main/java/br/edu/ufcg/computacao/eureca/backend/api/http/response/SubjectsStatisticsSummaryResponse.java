@@ -7,15 +7,15 @@ public class SubjectsStatisticsSummaryResponse {
     private String curriculum;
     private String from;
     private String to;
-    private SubjectStatisticsSummary mandatory;
-    private SubjectStatisticsSummary optional;
-    private SubjectStatisticsSummary elective;
-    private SubjectStatisticsSummary complementary;
+    private SubjectsStatisticsSummary mandatory;
+    private SubjectsStatisticsSummary optional;
+    private SubjectsStatisticsSummary elective;
+    private SubjectsStatisticsSummary complementary;
     private SubjectsGlossaryFields glossary;
 
     public SubjectsStatisticsSummaryResponse(String course, String curriculum, String from, String to,
-                                             SubjectStatisticsSummary mandatory, SubjectStatisticsSummary optional,
-                                             SubjectStatisticsSummary elective, SubjectStatisticsSummary complementary) {
+                                             SubjectsStatisticsSummary mandatory, SubjectsStatisticsSummary optional,
+                                             SubjectsStatisticsSummary elective, SubjectsStatisticsSummary complementary) {
         this.course = course;
         this.curriculum = curriculum;
         this.from = from;
@@ -58,35 +58,35 @@ public class SubjectsStatisticsSummaryResponse {
         this.to = to;
     }
 
-    public SubjectStatisticsSummary getMandatory() {
+    public SubjectsStatisticsSummary getMandatory() {
         return mandatory;
     }
 
-    public void setMandatory(SubjectStatisticsSummary mandatory) {
+    public void setMandatory(SubjectsStatisticsSummary mandatory) {
         this.mandatory = mandatory;
     }
 
-    public SubjectStatisticsSummary getOptional() {
+    public SubjectsStatisticsSummary getOptional() {
         return optional;
     }
 
-    public void setOptional(SubjectStatisticsSummary optional) {
+    public void setOptional(SubjectsStatisticsSummary optional) {
         this.optional = optional;
     }
 
-    public SubjectStatisticsSummary getElective() {
+    public SubjectsStatisticsSummary getElective() {
         return elective;
     }
 
-    public void setElective(SubjectStatisticsSummary elective) {
+    public void setElective(SubjectsStatisticsSummary elective) {
         this.elective = elective;
     }
 
-    public SubjectStatisticsSummary getComplementary() {
+    public SubjectsStatisticsSummary getComplementary() {
         return complementary;
     }
 
-    public void setComplementary(SubjectStatisticsSummary complementary) {
+    public void setComplementary(SubjectsStatisticsSummary complementary) {
         this.complementary = complementary;
     }
 

@@ -1,35 +1,35 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.TeachersGlossaryFields;
-import br.edu.ufcg.computacao.eureca.backend.core.models.MetricStatistics;
-import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
+
+import java.util.Collection;
+import java.util.Map;
 
 public class TeachersStatisticsSummaryResponse {
+    private String course;
     private String curriculum;
     private String from;
     private String to;
-    private MetricStatistics failedDueToAbsences;
-    private MetricStatistics failedDueToGrade;
-    private MetricStatistics failedDueToCanceling;
-    private MetricStatistics success;
-    private TermCount min;
-    private TermCount max;
-    private int total;
+    private Collection<String> academicUnits;
+    private Map<String, TeachersStatisticsSummary> summaryMap;
     private TeachersGlossaryFields glossary;
 
-    public TeachersStatisticsSummaryResponse(String curriculum, String from, String to, MetricStatistics failedDueToAbsences,
-                                             MetricStatistics failedDueToGrade, MetricStatistics failedDueToCanceling,
-                                             MetricStatistics success, TermCount min, TermCount max, int total) {
+    public TeachersStatisticsSummaryResponse(String course, String curriculum, String from, String to,
+                          Collection<String> academicUnits, Map<String, TeachersStatisticsSummary> summaryMap) {
+        this.course = course;
         this.curriculum = curriculum;
         this.from = from;
         this.to = to;
-        this.failedDueToAbsences = failedDueToAbsences;
-        this.failedDueToGrade = failedDueToGrade;
-        this.failedDueToCanceling = failedDueToCanceling;
-        this.success = success;
-        this.min = min;
-        this.max = max;
-        this.total = total;
+        this.academicUnits = academicUnits;
+        this.summaryMap = summaryMap;
+    }
+
+    public String getCourse() {
+        return course;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
     }
 
     public String getCurriculum() {
@@ -56,32 +56,20 @@ public class TeachersStatisticsSummaryResponse {
         this.to = to;
     }
 
-    public MetricStatistics getFailedDueToAbsences() {
-        return failedDueToAbsences;
+    public Collection<String> getAcademicUnits() {
+        return academicUnits;
     }
 
-    public MetricStatistics getFailedDueToGrade() {
-        return failedDueToGrade;
+    public void setAcademicUnits(Collection<String> academicUnits) {
+        this.academicUnits = academicUnits;
     }
 
-    public MetricStatistics getFailedDueToCanceling() {
-        return failedDueToCanceling;
+    public Map<String, TeachersStatisticsSummary> getSummaryMap() {
+        return summaryMap;
     }
 
-    public MetricStatistics getSuccess() {
-        return success;
-    }
-
-    public TermCount getMin() {
-        return min;
-    }
-
-    public TermCount getMax() {
-        return max;
-    }
-
-    public int getTotal() {
-        return total;
+    public void setSummaryMap(Map<String, TeachersStatisticsSummary> summaryMap) {
+        this.summaryMap = summaryMap;
     }
 
     public TeachersGlossaryFields getGlossary() {

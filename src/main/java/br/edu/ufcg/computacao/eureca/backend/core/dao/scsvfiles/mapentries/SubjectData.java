@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class SubjectData implements EurecaMapValue {
-    private String academicUnit;
+    private String academicUnitId;
     private String type;
     private int credits;
     private int hours;
@@ -17,9 +17,9 @@ public class SubjectData implements EurecaMapValue {
     private String preRequirements;
     private Collection<String> preRequirementsList;
 
-    public SubjectData(String academicUnit, String type, int credits, int hours, String name, String equivalentCodes,
+    public SubjectData(String academicUnitId, String type, int credits, int hours, String name, String equivalentCodes,
                        int idealTerm, String preRequirements) {
-        this.academicUnit = academicUnit;
+        this.academicUnitId = academicUnitId;
         this.type = type;
         this.credits = credits;
         this.hours = hours;
@@ -34,12 +34,12 @@ public class SubjectData implements EurecaMapValue {
     public SubjectData() {
     }
 
-    public String getAcademicUnit() {
-        return academicUnit;
+    public String getAcademicUnitId() {
+        return academicUnitId;
     }
 
-    public void setAcademicUnit(String academicUnit) {
-        this.academicUnit = academicUnit;
+    public void setAcademicUnitId(String academicUnitId) {
+        this.academicUnitId = academicUnitId;
     }
 
     public String getType() {
@@ -106,7 +106,7 @@ public class SubjectData implements EurecaMapValue {
     }
 
     public Subject createSubject(SubjectKey key) {
-        return new Subject(key.getCourseCode(), key.getCurriculumCode(), key.getSubjectCode(), getAcademicUnit(),
+        return new Subject(key.getCourseCode(), key.getCurriculumCode(), key.getSubjectCode(), getAcademicUnitId(),
                 getType(), getCredits(), getHours(), getName(), getEquivalentCodes(), getIdealTerm(),
                 getPreRequirements());
     }
@@ -131,7 +131,7 @@ public class SubjectData implements EurecaMapValue {
     @Override
     public String toString() {
         return "SubjectCSV{" +
-                "academicUnit='" + academicUnit + '\'' +
+                "academicUnit='" + academicUnitId + '\'' +
                 ", type='" + type + '\'' +
                 ", credits=" + credits +
                 ", hours=" + hours +

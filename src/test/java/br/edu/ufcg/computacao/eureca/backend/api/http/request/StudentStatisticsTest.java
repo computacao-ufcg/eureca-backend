@@ -23,7 +23,7 @@ public class StudentStatisticsTest extends EndpointTest {
     public void testGetActives() throws Exception {
         // set up
         ActivesStatisticsResponse response = getActivesSummaryResponse();
-        Mockito.doReturn(response).when(this.facade).getActivesStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.doReturn(response).when(this.facade).getActivesStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/actives", null, "");
 
         // exercise
@@ -39,7 +39,7 @@ public class StudentStatisticsTest extends EndpointTest {
     public void testGetActivesCsv() throws Exception {
         // set up
         Collection<StudentCSV> response = getStudentsCsvResponse();
-        Mockito.doReturn(response).when(this.facade).getActivesCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.doReturn(response).when(this.facade).getActivesCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/actives/csv", null, "");
 
         // exercise
@@ -55,7 +55,7 @@ public class StudentStatisticsTest extends EndpointTest {
     public void testGetAlumni() throws Exception {
         // set up
         AlumniStatisticsResponse response = getAlumniSummaryResponse();
-        Mockito.doReturn(response).when(this.facade).getAlumniStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.doReturn(response).when(this.facade).getAlumniStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/alumni", null, "");
 
         // exercise
@@ -71,7 +71,7 @@ public class StudentStatisticsTest extends EndpointTest {
     public void testGetAlumniCsv() throws Exception {
         // set up
         Collection<StudentCSV> response = getStudentsCsvResponse();
-        Mockito.doReturn(response).when(this.facade).getAlumniCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.doReturn(response).when(this.facade).getAlumniCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/alumni/csv", null, "");
 
         // exercise
@@ -86,7 +86,7 @@ public class StudentStatisticsTest extends EndpointTest {
     public void getDropoutsTest() throws Exception {
         // set up
         DropoutsStatisticsResponse response = getDropoutsSummaryResponse();
-        Mockito.doReturn(response).when(this.facade).getDropoutsStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.doReturn(response).when(this.facade).getDropoutsStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         RequestBuilder requestBuilder = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/dropouts", null, "");
 
         // exercise
@@ -101,7 +101,7 @@ public class StudentStatisticsTest extends EndpointTest {
     public void getDropoutsCsvTest() throws Exception {
         // set up
         Collection<StudentCSV> response = getStudentsCsvResponse();
-        Mockito.doReturn(response).when(this.facade).getDropoutsCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.doReturn(response).when(this.facade).getDropoutsCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/dropouts/csv", null, "");
 
         // exercise
@@ -116,8 +116,8 @@ public class StudentStatisticsTest extends EndpointTest {
     @Test
     public void getDelayedTest() throws Exception {
         // set up
-        DelayedStatisticsResponse response = getDelayedSummaryResponse();
-        Mockito.doReturn(response).when(this.facade).getDelayedStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        StudentsRetentionStatisticsResponse response = getDelayedSummaryResponse();
+        Mockito.doReturn(response).when(this.facade).getStudentsRetentionStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         RequestBuilder requestBuilder = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/delayed", null, "");
 
         // exercise
@@ -132,7 +132,7 @@ public class StudentStatisticsTest extends EndpointTest {
     public void getDelayedCsvTest() throws Exception {
         // set up
         Collection<StudentCSV> response = getStudentsCsvResponse();
-        Mockito.doReturn(response).when(this.facade).getDelayedCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        Mockito.doReturn(response).when(this.facade).getStudentsRetentionCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/delayed/csv", null, "");
 
         // exercise
@@ -144,8 +144,8 @@ public class StudentStatisticsTest extends EndpointTest {
 
     @Test
     public void getStudentStatisticsTest() throws Exception {
-        StudentsStatisticsSummaryResponse response = new StudentsStatisticsSummaryResponse(null, null, null);
-        Mockito.doReturn(response).when(this.facade).getStudentsStatisticsSummary(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        StudentsStatisticsSummaryResponse response = new StudentsStatisticsSummaryResponse("", "", "", "", null, null, null);
+        Mockito.doReturn(response).when(this.facade).getStudentsStatisticsSummary(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
 
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/summary", null, "");
         MvcResult res = this.mockMvc.perform(req).andReturn();

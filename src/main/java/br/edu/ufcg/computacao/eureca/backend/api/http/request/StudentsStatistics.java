@@ -27,9 +27,11 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "actives", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_ACTIVES)
-    public ResponseEntity<ActivesStatisticsResponse> getActives(
+    public ResponseEntity<ActivesStatisticsResponse> getActivesStatistics(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
+            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Common.TO)
@@ -40,7 +42,7 @@ public class StudentsStatistics {
 
         try {
             LOGGER.info(Messages.RECEIVING_GET_STUDENTS_STATISTICS);
-            ActivesStatisticsResponse ret = ApplicationFacade.getInstance().getActivesStatistics(token, courseCode, from, to);
+            ActivesStatisticsResponse ret = ApplicationFacade.getInstance().getActivesStatistics(token, courseCode, curriculumCode, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -50,9 +52,11 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "actives/csv", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_ACTIVES_CSV)
-    public ResponseEntity<StudentResponse> getActivesCSV(
+    public ResponseEntity<StudentsResponse> getActivesCSV(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
+            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Common.TO)
@@ -62,7 +66,7 @@ public class StudentsStatistics {
             throws EurecaException {
 
         try {
-            StudentResponse ret = ApplicationFacade.getInstance().getActivesCSV(token, courseCode, from, to);
+            StudentsResponse ret = ApplicationFacade.getInstance().getActivesCSV(token, courseCode, curriculumCode, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -72,9 +76,11 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "alumni", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_ALUMNI)
-    public ResponseEntity<AlumniStatisticsResponse> getAlumni(
+    public ResponseEntity<AlumniStatisticsResponse> getAlumniStatistics(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
+            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Common.TO)
@@ -86,7 +92,7 @@ public class StudentsStatistics {
             throws EurecaException {
 
         try {
-            AlumniStatisticsResponse ret = ApplicationFacade.getInstance().getAlumniStatistics(token, courseCode, from, to, lang);
+            AlumniStatisticsResponse ret = ApplicationFacade.getInstance().getAlumniStatistics(token, courseCode, curriculumCode, from, to, lang);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -96,9 +102,11 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "alumni/csv", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_ALUMNI_CSV)
-    public ResponseEntity<StudentResponse> getAlumniCSV(
+    public ResponseEntity<StudentsResponse> getAlumniCSV(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
+            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Common.TO)
@@ -108,7 +116,7 @@ public class StudentsStatistics {
             throws EurecaException {
 
         try {
-            StudentResponse ret = ApplicationFacade.getInstance().getAlumniCSV(token, courseCode, from, to);
+            StudentsResponse ret = ApplicationFacade.getInstance().getAlumniCSV(token, courseCode, curriculumCode, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -118,9 +126,11 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "dropouts", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_DROPOUT)
-    public ResponseEntity<DropoutsStatisticsResponse> getDropouts(
+    public ResponseEntity<DropoutsStatisticsResponse> getDropoutsStatistics(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
+            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Common.TO)
@@ -130,7 +140,7 @@ public class StudentsStatistics {
             throws EurecaException {
 
         try {
-            DropoutsStatisticsResponse ret = ApplicationFacade.getInstance().getDropoutsStatistics(token, courseCode, from, to);
+            DropoutsStatisticsResponse ret = ApplicationFacade.getInstance().getDropoutsStatistics(token, courseCode, curriculumCode, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -140,9 +150,11 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "dropouts/csv", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_DROPOUT_CSV)
-    public ResponseEntity<StudentResponse> getDropoutsCSV(
+    public ResponseEntity<StudentsResponse> getDropoutsCSV(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
+            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Common.TO)
@@ -152,7 +164,7 @@ public class StudentsStatistics {
             throws EurecaException {
 
         try {
-            StudentResponse ret = ApplicationFacade.getInstance().getDropoutsCSV(token, courseCode, from, to);
+            StudentsResponse ret = ApplicationFacade.getInstance().getDropoutsCSV(token, courseCode, curriculumCode, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
@@ -162,9 +174,11 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "summary", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_SUMMARY)
-    public ResponseEntity<StudentsStatisticsSummaryResponse> getStudentsSummary(
+    public ResponseEntity<StudentsStatisticsSummaryResponse> getStudentsStatisticsSummary(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
+            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Common.TO)
@@ -174,7 +188,7 @@ public class StudentsStatistics {
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
-            StudentsStatisticsSummaryResponse summary = ApplicationFacade.getInstance().getStudentsStatisticsSummary(token, courseCode, from, to, lang);
+            StudentsStatisticsSummaryResponse summary = ApplicationFacade.getInstance().getStudentsStatisticsSummary(token, courseCode, curriculumCode, from, to, lang);
             return new ResponseEntity<>(summary, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));

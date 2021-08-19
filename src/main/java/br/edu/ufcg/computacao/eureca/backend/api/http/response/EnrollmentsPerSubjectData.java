@@ -7,7 +7,7 @@ import java.util.Map;
 public class EnrollmentsPerSubjectData implements Comparable {
     private String subjectCode;
     private String subjectName;
-    Map<String, Map<String, ClassEnrollments>> enrollmentsPerTerm;
+    private Map<String, Map<String, ClassEnrollments>> enrollmentsPerTerm;
 
     public EnrollmentsPerSubjectData(String subjectCode, String subjectName, Map<String, Map<String, ClassEnrollments>> enrollmentsPerTerm) {
         this.subjectCode = subjectCode;

@@ -1,20 +1,29 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
 
 public class TeacherData implements EurecaMapValue {
-    private String teachers;
-
-    public TeacherData(String teachers) {
-        this.teachers = teachers;
-    }
+    private String academicUnitId;
+    private String name;
 
     public TeacherData() {
     }
 
-    public String getTeachers() {
-        return teachers;
+    public String getAcademicUnitId() {
+        return academicUnitId;
     }
 
-    public void setTeachers(String teachers) {
-        this.teachers = teachers;
+    public void setAcademicUnitId(String academicUnitId) {
+        this.academicUnitId = academicUnitId;
+    }
+
+    public TeacherData(String acronym, String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
