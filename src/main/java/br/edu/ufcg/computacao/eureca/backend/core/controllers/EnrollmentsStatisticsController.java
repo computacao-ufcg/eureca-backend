@@ -22,8 +22,8 @@ public class EnrollmentsStatisticsController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
-    public EnrollmentsStatisticsResponse getSubjectEnrollmentsStatistics(String courseCode, String curriculumCode, String from, String to,
-                                                                         SubjectType subjectType) throws InvalidParameterException {
+    public EnrollmentsStatisticsResponse getSubjectEnrollmentsStatistics(String courseCode, String curriculumCode,
+                                String from, String to, SubjectType subjectType) throws InvalidParameterException {
         Collection<EnrollmentsMetricsPerTermSummary> enrollmentsPerTerm =
                 this.dataAccessFacade.getEnrollmentsPerTermSummary(courseCode, curriculumCode, from, to, subjectType);
         String firstTerm = "9999.9";

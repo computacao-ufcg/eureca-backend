@@ -36,7 +36,7 @@ public class Curricula {
             CurriculumCodesResponse curriculumCodes = ApplicationFacade.getInstance().getCurriculumCodes(token, courseCode);
             return new ResponseEntity<>(curriculumCodes, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.error(Messages.SOMETHING_WENT_WRONG);
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }

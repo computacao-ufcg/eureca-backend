@@ -45,7 +45,7 @@ public class SubjectsStatistics {
             SubjectsStatisticsResponse ret = ApplicationFacade.getInstance().getSubjectsStatistics(token, courseCode, curriculumCode, from, to, SubjectType.MANDATORY);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }
@@ -69,7 +69,7 @@ public class SubjectsStatistics {
             SubjectsResponse ret = ApplicationFacade.getInstance().getSubjectsCSV(token, courseCode, curriculumCode, from, to, SubjectType.MANDATORY);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }
@@ -93,7 +93,7 @@ public class SubjectsStatistics {
             SubjectsStatisticsResponse ret = ApplicationFacade.getInstance().getSubjectsStatistics(token, courseCode, curriculumCode, from, to, SubjectType.OPTIONAL);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }
@@ -117,7 +117,7 @@ public class SubjectsStatistics {
             SubjectsResponse ret = ApplicationFacade.getInstance().getSubjectsCSV(token, courseCode, curriculumCode, from, to, SubjectType.OPTIONAL);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }
@@ -141,7 +141,7 @@ public class SubjectsStatistics {
             SubjectsStatisticsResponse ret = ApplicationFacade.getInstance().getSubjectsStatistics(token, courseCode, curriculumCode, from, to, SubjectType.ELECTIVE);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }
@@ -165,7 +165,7 @@ public class SubjectsStatistics {
             SubjectsResponse ret = ApplicationFacade.getInstance().getSubjectsCSV(token, courseCode, curriculumCode, from, to, SubjectType.ELECTIVE);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }
@@ -189,7 +189,7 @@ public class SubjectsStatistics {
             SubjectsStatisticsResponse ret = ApplicationFacade.getInstance().getSubjectsStatistics(token, courseCode, curriculumCode, from, to, SubjectType.COMPLEMENTARY);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }
@@ -213,7 +213,7 @@ public class SubjectsStatistics {
             SubjectsResponse ret = ApplicationFacade.getInstance().getSubjectsCSV(token, courseCode, curriculumCode, from, to, SubjectType.COMPLEMENTARY);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }
@@ -238,7 +238,7 @@ public class SubjectsStatistics {
             SubjectsStatisticsSummaryResponse summary = ApplicationFacade.getInstance().getSubjectsStatisticsSummary(token, courseCode, curriculumCode, from, to, lang);
             return new ResponseEntity<>(summary, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }

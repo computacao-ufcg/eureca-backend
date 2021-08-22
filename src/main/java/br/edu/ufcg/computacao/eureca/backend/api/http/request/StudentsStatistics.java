@@ -45,7 +45,7 @@ public class StudentsStatistics {
             ActivesStatisticsResponse ret = ApplicationFacade.getInstance().getActivesStatistics(token, courseCode, curriculumCode, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }
@@ -69,7 +69,7 @@ public class StudentsStatistics {
             StudentsResponse ret = ApplicationFacade.getInstance().getActivesCSV(token, courseCode, curriculumCode, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }
@@ -95,7 +95,7 @@ public class StudentsStatistics {
             AlumniStatisticsResponse ret = ApplicationFacade.getInstance().getAlumniStatistics(token, courseCode, curriculumCode, from, to, lang);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }
@@ -119,7 +119,7 @@ public class StudentsStatistics {
             StudentsResponse ret = ApplicationFacade.getInstance().getAlumniCSV(token, courseCode, curriculumCode, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }
@@ -143,7 +143,7 @@ public class StudentsStatistics {
             DropoutsStatisticsResponse ret = ApplicationFacade.getInstance().getDropoutsStatistics(token, courseCode, curriculumCode, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }
@@ -167,7 +167,7 @@ public class StudentsStatistics {
             StudentsResponse ret = ApplicationFacade.getInstance().getDropoutsCSV(token, courseCode, curriculumCode, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }
@@ -191,7 +191,7 @@ public class StudentsStatistics {
             StudentsStatisticsSummaryResponse summary = ApplicationFacade.getInstance().getStudentsStatisticsSummary(token, courseCode, curriculumCode, from, to, lang);
             return new ResponseEntity<>(summary, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }

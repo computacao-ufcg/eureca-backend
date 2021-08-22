@@ -21,12 +21,15 @@ public class RetentionStatisticsController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
-    public StudentsRetentionStatisticsResponse getStudentsRetentionStatistics(String courseCode, String curriculumCode, String from, String to) {
+    public StudentsRetentionStatisticsResponse getStudentsRetentionStatistics(String courseCode, String curriculumCode,
+                                                            String from, String to) throws InvalidParameterException {
         Collection<StudentsRetentionPerTermSummary> terms = new TreeSet<>();
-        Map<String, Collection<Student>> retentionPerAdmissionTerm = getStudentsRetentionPerAdmissionTerm(courseCode, curriculumCode, from, to);
+        Map<String, Collection<Student>> retentionPerAdmissionTerm =
+                getStudentsRetentionPerAdmissionTerm(courseCode, curriculumCode, from, to);
 
         for (String term: retentionPerAdmissionTerm.keySet()) {
-            StudentMetricsSummary metricsSummary = StudentMetricsCalculator.computeMetricsSummary(retentionPerAdmissionTerm.get(term));
+            StudentMetricsSummary metricsSummary =
+                    StudentMetricsCalculator.computeMetricsSummary(retentionPerAdmissionTerm.get(term));
             StudentsRetentionPerTermSummary termData = new StudentsRetentionPerTermSummary(term, metricsSummary);
             terms.add(termData);
         }
@@ -35,7 +38,7 @@ public class RetentionStatisticsController {
         return new StudentsRetentionStatisticsResponse(terms, courseCode, curriculumCode, firstTerm, lastTerm);
     }
 
-    public StudentsResponse getStudentsRetentionCSV(String courseCode, String curriculumCode, String from, String to) {
+    public StudentsResponse getStudentsRetentionCSV(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         Collection<StudentCSV> studentsRetentionData = new TreeSet<>();
         Collection<Student> studentsRetention = getStudentsRetention(courseCode, curriculumCode, from, to);
         studentsRetention.forEach(item -> {
@@ -81,7 +84,7 @@ public class RetentionStatisticsController {
         return new RetentionSampleList(adequateSampleList, possibleSampleList);
     }
 
-    private Collection<Student> getStudentsRetention(String courseCode, String curriculumCode, String from, String to) {
+    private Collection<Student> getStudentsRetention(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
          return this.dataAccessFacade.getActives(courseCode, curriculumCode, from, to).stream()
                 .filter(item -> item.computeRiskClass().equals(RiskClass.AVERAGE) ||
                         item.computeRiskClass().equals(RiskClass.HIGH) ||
@@ -89,7 +92,8 @@ public class RetentionStatisticsController {
                 .collect(Collectors.toSet());
     }
 
-    private Map<String, Collection<Student>> getStudentsRetentionPerAdmissionTerm(String courseCode, String curriculumCode, String from, String to) {
+    private Map<String, Collection<Student>> getStudentsRetentionPerAdmissionTerm(String courseCode,
+                                     String curriculumCode, String from, String to) throws InvalidParameterException {
         Map<String, Collection<Student>> studentsRetentionPerAdmissionTerm = new HashMap<>();
         Map<String, Collection<Student>> activesPerAdmissionTerm = this.dataAccessFacade.getActivesPerAdmissionTerm(courseCode, curriculumCode, from, to);
         for (String term: activesPerAdmissionTerm.keySet()) {
