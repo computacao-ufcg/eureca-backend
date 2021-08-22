@@ -8,23 +8,23 @@ import java.util.Collection;
 import java.util.Map;
 
 public interface DataAccessFacade {
-    Collection<Student> getActives(String courseCode, String curriculumCode, String from, String to);
+    Collection<Student> getActives(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 
-    Collection<Student> getAlumni(String courseCode, String curriculumCode, String from, String to);
+    Collection<Student> getAlumni(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 
-    Collection<Student> getDropouts(String courseCode, String curriculumCode, String from, String to);
+    Collection<Student> getDropouts(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 
-    Map<String, Collection<Student>> getActivesPerAdmissionTerm(String courseCode, String curriculumCode, String from, String to);
+    Map<String, Collection<Student>> getActivesPerAdmissionTerm(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 
-    Map<String, Collection<Student>> getAlumniPerGraduationTerm(String courseCode, String curriculumCode, String from, String to);
+    Map<String, Collection<Student>> getAlumniPerGraduationTerm(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 
-    Map<String, Collection<Student>> getDropoutsPerDropoutTerm(String courseCode, String curriculumCode, String from, String to);
+    Map<String, Collection<Student>> getDropoutsPerDropoutTerm(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 
-    Collection<AlumniDigest> getAlumniPerStudentSummary(String courseCode, String from, String to);
+    Collection<AlumniDigest> getAlumniPerStudentSummary(String courseCode, String from, String to) throws InvalidParameterException;
 
-    Curriculum getCurriculum(String courseCode, String curriculumCode);
+    Curriculum getCurriculum(String courseCode, String curriculumCode) throws InvalidParameterException;
 
-    Collection<String> getCurriculumCodes(String courseCode);
+    Collection<String> getCurriculumCodes(String courseCode) throws InvalidParameterException;
 
     Subject getSubject(String courseCode, String curriculumCode, String subjectCode);
 
@@ -42,9 +42,9 @@ public interface DataAccessFacade {
 
     Collection<EnrollmentsMetricsPerTermSummary> getEnrollmentsPerTermSummary(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException;
 
-    ProfileResponse getProfile(String userId);
+    ProfileResponse getProfile(String userId) throws InvalidParameterException;
 
-    TeachersStatisticsResponse getTeachersPerTermSummary(String courseCode, String curriculumCode, String from, String to, String academicUnitId);
+    TeachersStatisticsResponse getTeachersPerTermSummary(String courseCode, String curriculumCode, String from, String to, String academicUnitId) throws InvalidParameterException;
 
-    Map<String, TeachersStatisticsSummary> getTeachersPerAcademicUnit(String courseCode, String curriculumCode, String from, String to);
+    Map<String, TeachersStatisticsSummary> getTeachersPerAcademicUnit(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 }

@@ -44,7 +44,7 @@ public class Alumni {
             AlumniResponse alumniBasicData = ApplicationFacade.getInstance().getAlumniDigest(token, courseCode, from, to, lang);
             return new ResponseEntity<>(alumniBasicData, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }

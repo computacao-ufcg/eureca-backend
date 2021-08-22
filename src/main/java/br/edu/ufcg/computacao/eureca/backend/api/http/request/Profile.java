@@ -34,7 +34,7 @@ public class Profile {
             ProfileResponse profile = ApplicationFacade.getInstance().getProfile(token);
             return new ResponseEntity<>(profile, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.error(Messages.SOMETHING_WENT_WRONG);
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }

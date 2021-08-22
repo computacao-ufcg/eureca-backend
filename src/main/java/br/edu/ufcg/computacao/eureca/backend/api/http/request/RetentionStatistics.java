@@ -44,7 +44,7 @@ public class RetentionStatistics {
             StudentsRetentionStatisticsResponse ret = ApplicationFacade.getInstance().getStudentsRetentionStatistics(token, courseCode, curriculumCode, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }
@@ -68,7 +68,7 @@ public class RetentionStatistics {
             StudentsResponse studentsRetentionCSV = ApplicationFacade.getInstance().getStudentsRetentionCSV(token, courseCode, curriculumCode, from, to);
             return new ResponseEntity<>(studentsRetentionCSV, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }
@@ -92,7 +92,7 @@ public class RetentionStatistics {
             SubjectsRetentionStatisticsResponse ret = ApplicationFacade.getInstance().getSubjectsRetentionStatistics(token, courseCode, curriculumCode, from, to);
             return new ResponseEntity<>(ret, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage()), e);
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }
@@ -116,7 +116,7 @@ public class RetentionStatistics {
             SubjectsRetentionResponse subjectsRetention = ApplicationFacade.getInstance().getSubjectsRetentionCSV(token, courseCode, curriculumCode, from, to);
             return new ResponseEntity<>(subjectsRetention, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }
@@ -141,7 +141,7 @@ public class RetentionStatistics {
             RetentionStatisticsSummaryResponse summary = ApplicationFacade.getInstance().getRetentionStatisticsSummary(token, courseCode, curriculumCode, from, to, lang);
             return new ResponseEntity<>(summary, HttpStatus.OK);
         } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.SOMETHING_WENT_WRONG, e.getMessage(), e));
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
     }

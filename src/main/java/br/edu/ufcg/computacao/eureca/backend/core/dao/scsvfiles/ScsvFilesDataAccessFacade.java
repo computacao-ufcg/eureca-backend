@@ -1,6 +1,5 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.request.TeachersStatistics;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
@@ -26,40 +25,42 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Collection<Student> getActives(String courseCode, String curriculumCode, String from, String to) {
+    public Collection<Student> getActives(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         return getFilteredStudents(StudentClassification.ACTIVE, courseCode, curriculumCode, from, to);
     }
 
     @Override
-    public Collection<Student> getAlumni(String courseCode, String curriculumCode, String from, String to) {
+    public Collection<Student> getAlumni(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         return getFilteredStudents(StudentClassification.ALUMNUS, courseCode, curriculumCode, from, to);
     }
 
     @Override
-    public Collection<Student> getDropouts(String courseCode, String curriculumCode, String from, String to) {
+    public Collection<Student> getDropouts(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         return getFilteredStudents(StudentClassification.DROPOUT, courseCode, curriculumCode, from, to);
     }
 
     @Override
-    public Map<String, Collection<Student>> getActivesPerAdmissionTerm(String courseCode, String curriculumCode, String from, String to) {
-        Map<String, Collection<NationalIdRegistrationKey>> index = indexesHolder.getActivesPerCoursePerAdmissionTerm(courseCode, curriculumCode);
+    public Map<String, Collection<Student>> getActivesPerAdmissionTerm(String courseCode, String curriculumCode,
+                                                        String from, String to) throws InvalidParameterException {
+        Map<String, Collection<NationalIdRegistrationKey>> index =
+                indexesHolder.getActivesPerCoursePerAdmissionTerm(courseCode, curriculumCode);
         return getStudentMapFromIndex(from, to, index);
     }
 
     @Override
-    public Map<String, Collection<Student>> getAlumniPerGraduationTerm(String courseCode, String curriculumCode, String from, String to) {
+    public Map<String, Collection<Student>> getAlumniPerGraduationTerm(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         Map<String, Collection<NationalIdRegistrationKey>> index = indexesHolder.getAlumniPerGraduationTerm(courseCode, curriculumCode);
         return getStudentMapFromIndex(from, to, index);
     }
 
     @Override
-    public Map<String, Collection<Student>> getDropoutsPerDropoutTerm(String courseCode, String curriculumCode, String from, String to) {
+    public Map<String, Collection<Student>> getDropoutsPerDropoutTerm(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         Map<String, Collection<NationalIdRegistrationKey>> index = indexesHolder.getDropoutsPerDropoutTerm(courseCode, curriculumCode);
         return getStudentMapFromIndex(from, to, index);
     }
 
     @Override
-    public Collection<AlumniDigest> getAlumniPerStudentSummary(String courseCode, String from, String to) {
+    public Collection<AlumniDigest> getAlumniPerStudentSummary(String courseCode, String from, String to) throws InvalidParameterException {
         String parsedFrom = "1" + from.substring(2,4) + from.substring(5,6) + "00000";
         String parsedTo = "1" + to.substring(2,4) + to.substring(5,6) + "99999";
         Collection<AlumniDigest> alumniBasicData = new TreeSet<>();
@@ -78,25 +79,28 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Curriculum getCurriculum(String courseCode, String curriculumCode) {
+    public Curriculum getCurriculum(String courseCode, String curriculumCode) throws InvalidParameterException {
         return this.indexesHolder.getCurriculum(courseCode, curriculumCode);
     }
 
     @Override
-    public Collection<String> getCurriculumCodes(String courseCode) {
-        return this.indexesHolder.getCurricula(courseCode);
+    public Collection<String> getCurriculumCodes(String courseCode) throws InvalidParameterException {
+        return this.indexesHolder.getCurriculumCodes(courseCode);
     }
 
     @Override
-    public ProfileResponse getProfile(String userId) {
+    public ProfileResponse getProfile(String userId) throws InvalidParameterException {
         Map<UserKey, ProfileData> profileMap = this.mapsHolder.getMap("profile");
         ProfileData profileData = profileMap.get(new UserKey(userId));
+        if (profileData == null) throw new InvalidParameterException(String.format(Messages.INVALID_USER_S, userId));
         return new ProfileResponse(profileData.getCourseCode(), profileData.getCourseName());
     }
 
     @Override
-    public Collection<SubjectMetricsPerTermSummary> getSubjectMetricsPerTermSummary(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
+    public Collection<SubjectMetricsPerTermSummary> getSubjectMetricsPerTermSummary(String courseCode,
+             String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
         Collection<String> subjectCodes = getSubjectCodes(courseCode, curriculumCode, subjectType);
+        if (subjectCodes == null) throw new InvalidParameterException(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode);
         Collection<SubjectMetricsPerTermSummary> subjectMetricsPerTerms = new TreeSet<>();
         for (String subjectCode : subjectCodes) {
             Collection<SubjectMetricsPerTerm> response = new TreeSet<>();
@@ -118,9 +122,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     @Override
     public SubjectsStatisticsSummaryResponse getSubjectStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         Curriculum curriculum = getCurriculum(courseCode, curriculumCode);
-        if (curriculum == null) {
-            throw new InvalidParameterException(String.format(Messages.INEXISTENT_CURRICULUM_S_S, courseCode, curriculumCode));
-        }
+        if (curriculum == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
         SubjectsStatisticsSummary mandatory = buildSubjectSummary(courseCode, curriculumCode, from, to,
                 curriculum.getMandatorySubjectsList());
         SubjectsStatisticsSummary optional = buildSubjectSummary(courseCode, curriculumCode, from, to,
@@ -164,11 +166,10 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public EnrollmentsStatisticsSummaryResponse getEnrollmentsStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+    public EnrollmentsStatisticsSummaryResponse getEnrollmentsStatisticsSummary(String courseCode, String curriculumCode,
+                                                              String from, String to) throws InvalidParameterException {
         Curriculum curriculum = getCurriculum(courseCode, curriculumCode);
-        if (curriculum == null) {
-            throw new InvalidParameterException(String.format(Messages.INEXISTENT_CURRICULUM_S_S, courseCode, curriculumCode));
-        }
+        if (curriculum == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
         EnrollmentsSummary mandatory = buildEnrollmentSummary(courseCode, curriculumCode, from, to,
                 curriculum.getMandatorySubjectsList());
         EnrollmentsSummary optional = buildEnrollmentSummary(courseCode, curriculumCode, from, to,
@@ -183,29 +184,33 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Collection<EnrollmentsMetricsPerTermSummary> getEnrollmentsPerTermSummary(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
+    public Collection<EnrollmentsMetricsPerTermSummary> getEnrollmentsPerTermSummary(String courseCode,
+             String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
         Collection<String> subjectCodes = getSubjectCodes(courseCode, curriculumCode, subjectType);
+        if (subjectCodes == null) throw new InvalidParameterException(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode);
         Collection<EnrollmentsMetricsPerTermSummary> enrollmentsMetricsPerTerms = new TreeSet<>();
         for (String subjectCode : subjectCodes) {
-            Collection<EnrollmentsMetricsPerTerm> response = new TreeSet<>();
+            Collection<EnrollmentsMetricsPerTerm> metricsPerTerms = new TreeSet<>();
             SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
             Map<String, Map<String, ClassEnrollments>> terms = this.indexesHolder.getEnrollmentsPerSubjectPerTermPerClass().get(subjectKey);
-            for (String term : terms.keySet()) {
-                if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
-                    Map<String, ClassEnrollments> classes = terms.get(term);
-                    int classesCount = classes.keySet().size();
-                    int enrollmentsCount = 0;
-                    for (String classId : classes.keySet()) {
-                        ClassEnrollments classEnrollments = classes.get(classId);
-                        enrollmentsCount += classEnrollments.getNumberOfEnrolleds();
+            if (terms != null) {
+                for (String term : terms.keySet()) {
+                    if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
+                        Map<String, ClassEnrollments> classes = terms.get(term);
+                        int classesCount = classes.keySet().size();
+                        int enrollmentsCount = 0;
+                        for (String classId : classes.keySet()) {
+                            ClassEnrollments classEnrollments = classes.get(classId);
+                            enrollmentsCount += classEnrollments.getNumberOfEnrolleds();
+                        }
+                        EnrollmentsMetricsPerTerm metricsPerTerm = new EnrollmentsMetricsPerTerm(term, enrollmentsCount,
+                                classesCount, (double) enrollmentsCount / classesCount);
+                        metricsPerTerms.add(metricsPerTerm);
                     }
-                    EnrollmentsMetricsPerTerm metricsPerTerm = new EnrollmentsMetricsPerTerm(term, enrollmentsCount,
-                            classesCount, (double) enrollmentsCount/classesCount);
-                    response.add(metricsPerTerm);
                 }
             }
             Subject subject = getSubject(courseCode, curriculumCode, subjectCode);
-            enrollmentsMetricsPerTerms.add(new EnrollmentsMetricsPerTermSummary(subjectCode, subject.getName(), response));
+            enrollmentsMetricsPerTerms.add(new EnrollmentsMetricsPerTermSummary(subjectCode, subject.getName(), metricsPerTerms));
         }
         return enrollmentsMetricsPerTerms;
     }
@@ -213,35 +218,41 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     @Override
     public Collection<SubjectRetentionPerAdmissionTermSummary> getSubjectsRetentionSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         Collection<SubjectRetentionPerAdmissionTermSummary> response = new TreeSet<>();
-        Collection<String> subjectCodes = getMandatorySubjectsList(courseCode, curriculumCode);
-        subjectCodes.forEach(subjectCode -> {
+        Collection<String> subjectCodes = getSubjectsList(courseCode, curriculumCode);
+
+        for(String subjectCode : subjectCodes) {
             Collection<SubjectRetentionPerAdmissionTerm> retentionPerTerm = this.indexesHolder.getRetentionCount(courseCode, curriculumCode, from, to, subjectCode);
+            if (retentionPerTerm == null) continue;
             Subject subject = getSubject(courseCode, curriculumCode, subjectCode);
             response.add(new SubjectRetentionPerAdmissionTermSummary(subjectCode, subject.getName(), subject.getIdealTerm(), retentionPerTerm));
-        });
+        }
         return response;
     }
 
     @Override
     public Collection<SubjectRetentionCSV> getSubjectsRetention(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         Collection<SubjectRetentionCSV> response = new TreeSet<>();
-        Collection<String> subjectCodes = getMandatorySubjectsList(courseCode, curriculumCode);
-        subjectCodes.forEach(item -> {
-            response.addAll(this.indexesHolder.getRetention(courseCode, curriculumCode, from, to, item));
-        });
+        Collection<String> subjectCodes = getSubjectsList(courseCode, curriculumCode);
+
+        for(String subjectCode : subjectCodes) {
+            Collection<SubjectRetentionCSV> partialList = this.indexesHolder.getRetention(courseCode, curriculumCode, from, to, subjectCode);
+            if (partialList == null) continue;
+            response.addAll(partialList);
+        }
         return response;
     }
 
     @Override
-    public TeachersStatisticsResponse getTeachersPerTermSummary(String courseCode, String curriculumCode, String from, String to, String academicUnitId) {
+    public TeachersStatisticsResponse getTeachersPerTermSummary(String courseCode, String curriculumCode, String from, String to, String academicUnitId) throws InvalidParameterException {
         AcademicUnitData auData = this.indexesHolder.getAuData(new AcademicUnitKey(academicUnitId));
+        if (auData == null) throw new InvalidParameterException(String.format(Messages.INVALID_ACADEMIC_UNIT_S, academicUnitId));
         Collection<TeacherStatistics> teachers = this.indexesHolder.getTeachersPerTerm(academicUnitId, courseCode, curriculumCode, from, to);
         return new TeachersStatisticsResponse(academicUnitId, auData.getAcronym(), auData.getName(), courseCode,
                 curriculumCode, from, to, teachers);
     }
 
     @Override
-    public Map<String, TeachersStatisticsSummary> getTeachersPerAcademicUnit(String courseCode, String curriculumCode, String from, String to) {
+    public Map<String, TeachersStatisticsSummary> getTeachersPerAcademicUnit(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         return this.indexesHolder.getTeachersPerAcademicUnit(courseCode, curriculumCode, from, to);
     }
 
@@ -252,18 +263,18 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     private Map<String, Collection<Student>> getStudentMapFromIndex(String from, String to,
-                                                                    Map<String, Collection<NationalIdRegistrationKey>> index) {
+                         Map<String, Collection<NationalIdRegistrationKey>> index) throws InvalidParameterException {
         Map<NationalIdRegistrationKey, StudentData> studentsMap = mapsHolder.getMap("students");
         Map<String, Collection<Student>> termsMap = new HashMap<>();
         for (Map.Entry<String, Collection<NationalIdRegistrationKey>> entry : index.entrySet()) {
             String term = entry.getKey();
             if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
                 Collection<Student> actives = new TreeSet<>();
-                entry.getValue().forEach(cpfRegistration -> {
+                for (NationalIdRegistrationKey cpfRegistration : entry.getValue()) {
                     StudentData studentData = studentsMap.get(cpfRegistration);
                     Curriculum curriculum = getCurriculum(studentData.getCourseCode(), studentData.getCurriculumCode());
                     actives.add(studentData.createStudent(cpfRegistration, curriculum));
-                });
+                }
                 termsMap.put(term, actives);
             }
         }
@@ -272,9 +283,8 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
     private Collection<String> getSubjectCodes(String courseCode, String curriculumCode, SubjectType subjectType) throws InvalidParameterException {
         Curriculum curriculum = getCurriculum(courseCode, curriculumCode);
-        if (curriculum == null) {
-            throw new InvalidParameterException(String.format(Messages.INEXISTENT_CURRICULUM_S_S, curriculumCode, courseCode));
-        }        Collection<String> subjectCodes = null;
+        if (curriculum == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, curriculumCode, courseCode));
+        Collection<String> subjectCodes = null;
         switch (subjectType) {
             case MANDATORY:
                 subjectCodes = curriculum.getMandatorySubjectsList();
@@ -435,7 +445,8 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return subjectMetrics;
     }
 
-    private Collection<Student> getFilteredStudents(StudentClassification status, String courseCode, String curriculumCode, String from, String to) {
+    private Collection<Student> getFilteredStudents(StudentClassification status, String courseCode,
+                                   String curriculumCode, String from, String to) throws InvalidParameterException {
         Collection<Student> filteredStudents = new TreeSet<>();
         Collection<Student> allStudents = getAllStudentsByStatusPerCourse(status, courseCode, curriculumCode);
         allStudents.forEach(item -> {
@@ -447,12 +458,13 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return filteredStudents;
     }
 
-    private Collection<String> getMandatorySubjectsList(String courseCode, String curriculumCode) throws InvalidParameterException {
+    private Collection<String> getSubjectsList(String courseCode, String curriculumCode) throws InvalidParameterException {
+        Collection<String> subjectList;
         Curriculum curriculum = this.getCurriculum(courseCode, curriculumCode);
-        if (curriculum == null) {
-            throw new InvalidParameterException(String.format(Messages.INEXISTENT_CURRICULUM_S_S, courseCode, curriculumCode));
-        }
-        return curriculum.getMandatorySubjectsList();
+        if (curriculum == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
+        subjectList = curriculum.getMandatorySubjectsList();
+        subjectList.addAll(curriculum.getComplementarySubjectsList());
+        return subjectList;
     }
 
     private String getGroupingTerm(StudentClassification status, Student item) {
@@ -466,7 +478,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         }
     }
 
-    private Collection<Student> getAllStudentsByStatusPerCourse(StudentClassification status, String courseCode, String curriculumCode) {
+    private Collection<Student> getAllStudentsByStatusPerCourse(StudentClassification status, String courseCode, String curriculumCode) throws InvalidParameterException {
         switch(status) {
             case ALUMNUS:
                 return this.indexesHolder.getAllAlumni(courseCode, curriculumCode);

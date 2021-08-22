@@ -10,6 +10,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.StudentCu
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.TeachersSetAndEnrollments;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 
+import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
 import java.util.*;
 
@@ -61,28 +62,38 @@ public class IndexesHolder {
         buildIndexes();
     }
 
-    public Collection<NationalIdRegistrationKey> getAlumniPerCourseMap(String courseCode) {
+    public Collection<NationalIdRegistrationKey> getAlumniPerCourseMap(String courseCode) throws InvalidParameterException {
         Collection<NationalIdRegistrationKey> alumni = new ArrayList<>();
-        Collection<String> currilumCodes = this.getCurricula(courseCode);
-        currilumCodes.forEach(curriculumCode -> {
-            alumni.addAll(this.alumniPerCurriculumMap.get(new CurriculumKey(courseCode, curriculumCode)));
-        });
+        Collection<String> currilumCodes = this.getCurriculumCodes(courseCode);
+        if (currilumCodes == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_S, courseCode));
+        for (String curriculumCode : currilumCodes) {
+            Collection<NationalIdRegistrationKey> partialList = this.alumniPerCurriculumMap.get(new CurriculumKey(courseCode, curriculumCode));
+            if (partialList == null) continue;
+            alumni.addAll(partialList);
+        }
         return alumni;
     }
 
     public Map<String, Collection<NationalIdRegistrationKey>> getActivesPerCoursePerAdmissionTerm(String courseCode,
-                                                                                               String curriculumCode) {
-        return this.activesPerCurriculumPerAdmissionTermMap.get(new CurriculumKey(courseCode, curriculumCode));
+                                                             String curriculumCode) throws InvalidParameterException {
+        Map<String, Collection<NationalIdRegistrationKey>> ret =
+                this.activesPerCurriculumPerAdmissionTermMap.get(new CurriculumKey(courseCode, curriculumCode));
+        if (ret == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
+        return ret;
     }
 
     public Map<String, Collection<NationalIdRegistrationKey>> getAlumniPerGraduationTerm(String courseCode,
-                                                                                         String curriculumCode) {
-        return this.alumniPerCurriculumPerGraduationTermMap.get(new CurriculumKey(courseCode, curriculumCode));
+                                                            String curriculumCode) throws InvalidParameterException {
+        Map<String, Collection<NationalIdRegistrationKey>> alumniMap = this.alumniPerCurriculumPerGraduationTermMap.get(new CurriculumKey(courseCode, curriculumCode));
+        if (alumniMap == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
+        return alumniMap;
     }
 
     public Map<String, Collection<NationalIdRegistrationKey>> getDropoutsPerDropoutTerm(String courseCode,
-                                                                                        String curriculumCode) {
-        return this.dropoutsPerCurriculumPerDropoutTermMap.get(new CurriculumKey(courseCode, curriculumCode));
+                                                                                        String curriculumCode) throws InvalidParameterException {
+        Map<String, Collection<NationalIdRegistrationKey>> dropoutMap = this.dropoutsPerCurriculumPerDropoutTermMap.get(new CurriculumKey(courseCode, curriculumCode));
+        if (dropoutMap == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
+        return dropoutMap;
     }
 
     public Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> getEnrollmentsPerSubjectPerTermPerClass() {
@@ -93,53 +104,50 @@ public class IndexesHolder {
         return this.enrollmentsPerTermPerSubjectPerClass;
     }
 
-    public Collection<String> getCurricula(String courseCode) {
-        return this.courseCurriculaMap.get(courseCode);
+    public Collection<String> getCurriculumCodes(String courseCode) throws InvalidParameterException {
+        Collection<String> curriculumCodes = this.courseCurriculaMap.get(courseCode);
+        if (curriculumCodes == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_S, courseCode));
+        return curriculumCodes;
     }
 
-    public Curriculum getCurriculum(String course, String code) {
+    public Curriculum getCurriculum(String courseCode, String curriculumCode) throws InvalidParameterException {
         Map<CurriculumKey, CurriculumData> curriculumMap = this.mapsHolder.getMap("curriculum");
-        CurriculumKey key = new CurriculumKey(course, code);
+        CurriculumKey key = new CurriculumKey(courseCode, curriculumCode);
         CurriculumData ret = curriculumMap.get(key);
+        if (ret == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
         return ret.createCurriculum(key);
     }
 
-    public Collection<Student> getAllActives(String courseCode, String curriculumCode) {
+    public Collection<Student> getAllActives(String courseCode, String curriculumCode) throws InvalidParameterException {
         Collection<NationalIdRegistrationKey> actives = this.activesPerCurriculumMap.get(new
                 CurriculumKey(courseCode, curriculumCode));
+        if (actives == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
         return getAllStudents(actives);
     }
 
-    public Collection<Student> getAllAlumni(String courseCode, String curriculumCode) {
+    public Collection<Student> getAllAlumni(String courseCode, String curriculumCode) throws InvalidParameterException {
         Collection<NationalIdRegistrationKey> alumni = this.alumniPerCurriculumMap.get(new
                 CurriculumKey(courseCode, curriculumCode));
+        if (alumni == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
         return getAllStudents(alumni);
     }
 
-    public Collection<Student> getAllDropouts(String courseCode, String curriculumCode) {
+    public Collection<Student> getAllDropouts(String courseCode, String curriculumCode) throws InvalidParameterException {
         Collection<NationalIdRegistrationKey> dropouts = this.dropoutsPerCurriculumMap.get(new
                 CurriculumKey(courseCode, curriculumCode));
+        if (dropouts == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
         return getAllStudents(dropouts);
     }
 
-    public Collection<Enrollment> getAllEnrollments() {
-        Collection<Enrollment> enrollments = new ArrayList<>();
-        for (Map.Entry<RegistrationSubjectCodeTermKey, EnrollmentData> entry : this.enrollmentsMap.entrySet()) {
-            RegistrationSubjectCodeTermKey key = entry.getKey();
-            EnrollmentData data = entry.getValue();
-            Enrollment enrollment = data.createEnrollment(key);
-            enrollments.add(enrollment);
-        }
-        return enrollments;
-    }
-
     public Collection<SubjectRetentionPerAdmissionTerm> getRetentionCount(String courseCode, String curriculumCode,
-                                                                          String subjectCode, String from, String to) {
+                                         String from, String to, String subjectCode) throws InvalidParameterException {
+        SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
         Map<String, SubjectRetentionPerAdmissionTerm> retention = new HashMap<>();
-        for (NationalIdRegistrationKey active : this.activesPerCurriculumMap.get(new
-                CurriculumKey(courseCode, curriculumCode))) {
+        Collection<NationalIdRegistrationKey> actives = this.activesPerCurriculumMap.get(new CurriculumKey(courseCode, curriculumCode));
+        if (actives == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
+
+        for (NationalIdRegistrationKey active : actives) {
             StudentCurriculumProgress studentCurriculum = this.studentCurriculumProgressMap.get(active);
-            SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
             StudentData studentData = this.studentsMap.get(active);
             String admissionTerm = studentData.getAdmissionTerm();
             if (admissionTerm.compareTo(from) >= 0 && admissionTerm.compareTo(to) <= 0) {
@@ -163,11 +171,15 @@ public class IndexesHolder {
     }
 
     public Collection<SubjectRetentionCSV> getRetention(String courseCode, String curriculumCode, String from,
-                                                        String to, String subjectCode) {
+                                               String to, String subjectCode) throws InvalidParameterException {
         Collection<SubjectRetentionCSV> responses = new TreeSet<>();
         SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
-        for (NationalIdRegistrationKey active : this.activesPerCurriculumMap.get(new
-                CurriculumKey(courseCode, curriculumCode))) {
+
+        Collection<NationalIdRegistrationKey> actives = this.activesPerCurriculumMap.get(new
+                CurriculumKey(courseCode, curriculumCode));
+        if (actives == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
+
+        for (NationalIdRegistrationKey active : actives) {
             StudentCurriculumProgress studentCurriculum = this.studentCurriculumProgressMap.get(active);
             StudentData studentData = studentsMap.get(active);
             String admissionTerm = studentData.getAdmissionTerm();
@@ -257,10 +269,12 @@ public class IndexesHolder {
     }
 
     public Map<String, TeachersStatisticsSummary> getTeachersPerAcademicUnit(String courseCode, String curriculumCode,
-                                                                             String from, String to) {
+                                                           String from, String to) throws InvalidParameterException {
         Map<String, TeachersStatisticsSummary> response = new HashMap<>();
         CurriculumKey curriculumKey = new CurriculumKey(courseCode, curriculumCode);
         Collection<AcademicUnitKey> academicUnitKeys = this.academicUnitKeysPerCurriculum.get(curriculumKey);
+        if (academicUnitKeys == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, curriculumCode, courseCode));
+
         academicUnitKeys.forEach(academicUnitKey -> {
             Map<String, TeachersSetAndEnrollments> enrollmentsIndexMap = this.enrollmentsPerAcademicUnitPerTerm.get(academicUnitKey);
             int aggregateTeachersCount = 0;
@@ -274,21 +288,23 @@ public class IndexesHolder {
             String maxTerm = "0000.0";
             int numTerms = enrollmentsIndexMap.keySet().size();
             for (String term : enrollmentsIndexMap.keySet()) {
-                TeachersSetAndEnrollments teachersAndEnrollments = enrollmentsIndexMap.get(term);
-                int teachersCount = teachersAndEnrollments.getTeachers().size();
-                aggregateTeachersCount += teachersCount;
-                if (teachersCount < min) {
-                    min = teachersCount;
-                    minTerm = term;
+                if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
+                    TeachersSetAndEnrollments teachersAndEnrollments = enrollmentsIndexMap.get(term);
+                    int teachersCount = teachersAndEnrollments.getTeachers().size();
+                    aggregateTeachersCount += teachersCount;
+                    if (teachersCount < min) {
+                        min = teachersCount;
+                        minTerm = term;
+                    }
+                    if (teachersCount > max) {
+                        max = teachersCount;
+                        maxTerm = term;
+                    }
+                    aggreateSuccess += teachersAndEnrollments.getSucceededCount();
+                    aggregateFailedDueToGrade += teachersAndEnrollments.getFailedDueToGradeCount();
+                    aggregateFailedDueToAbsence += teachersAndEnrollments.getFailedDueToAbsenceCount();
+                    aggregateSuspended += teachersAndEnrollments.getSuspendedCount();
                 }
-                if (teachersCount > max) {
-                    max = teachersCount;
-                    maxTerm = term;
-                }
-                aggreateSuccess += teachersAndEnrollments.getSucceededCount();
-                aggregateFailedDueToGrade += teachersAndEnrollments.getFailedDueToGradeCount();
-                aggregateFailedDueToAbsence += teachersAndEnrollments.getFailedDueToAbsenceCount();
-                aggregateSuspended += teachersAndEnrollments.getSuspendedCount();
             }
             TeachersStatisticsSummary teacherStatisticsSummary = new TeachersStatisticsSummary(
                     (double) aggregateTeachersCount/numTerms,
@@ -697,14 +713,14 @@ public class IndexesHolder {
         this.studentsMap.replace(studentKey, student);
     }
 
-    private Collection<Student> getAllStudents(Collection<NationalIdRegistrationKey> studentKeys) {
+    private Collection<Student> getAllStudents(Collection<NationalIdRegistrationKey> studentKeys) throws InvalidParameterException {
         Collection<Student> allStudents = new ArrayList<>();
         Map<NationalIdRegistrationKey, StudentData> mapStudents = this.mapsHolder.getMap("students");
-        studentKeys.forEach(k -> {
+        for (NationalIdRegistrationKey k : studentKeys) {
             StudentData studentData = mapStudents.get(k);
             Curriculum curriculum = getCurriculum(studentData.getCourseCode(), studentData.getCurriculumCode());
             allStudents.add(studentData.createStudent(k, curriculum));
-        });
+        }
         return allStudents;
     }
 }
