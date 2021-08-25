@@ -179,7 +179,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         EnrollmentsSummary complementary = buildEnrollmentSummary(courseCode, curriculumCode, from, to,
                 curriculum.getComplementarySubjectsList());
         EnrollmentsStatisticsSummaryResponse ret = new EnrollmentsStatisticsSummaryResponse(courseCode, curriculumCode,
-                from, to, mandatory, optional, elective, complementary);
+                mandatory, optional, elective, complementary);
         return ret;
     }
 
@@ -393,12 +393,13 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         int enrollmentsCount = 0;
         int termsCount = 0;
         int subjectsCount = 0;
+        ArrayList<String> termsList = new ArrayList();
 
         Collection<String> terms = this.indexesHolder.getEnrollmentsPerTermPerSubjectPerClass().keySet();
         for(String term : terms) {
             if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
                 int enrollmentsPerTerm = 0;
-                termsCount++;
+
                 Map<SubjectKey, Map<String, ClassEnrollments>> enrollmentsPerSubject =
                         this.indexesHolder.getEnrollmentsPerTermPerSubjectPerClass().get(term);
                 for(String subjectCode : subjectCodes) {
@@ -413,14 +414,18 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                         }
                     }
                 }
-                enrollmentsCount += enrollmentsPerTerm;
-                if (enrollmentsPerTerm < min) {
-                    minTerm = term;
-                    min = enrollmentsPerTerm;
-                }
-                if (enrollmentsPerTerm < max) {
-                    maxTerm = term;
-                    max = enrollmentsPerTerm;
+                if (enrollmentsPerTerm > 0) {
+                    termsList.add(term);
+                    termsCount++;
+                    enrollmentsCount += enrollmentsPerTerm;
+                    if (enrollmentsPerTerm < min) {
+                        minTerm = term;
+                        min = enrollmentsPerTerm;
+                    }
+                    if (enrollmentsPerTerm > max) {
+                        maxTerm = term;
+                        max = enrollmentsPerTerm;
+                    }
                 }
             }
         }
@@ -430,7 +435,10 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                 (double) classesCount/termsCount,
                 (double) enrollmentsCount/subjectsCount,
                 (double) enrollmentsCount/termsCount);
-        return new EnrollmentsSummary(new TermCount(min, minTerm), new TermCount(max, maxTerm), summary);
+        Collections.sort(termsList);
+        String first = termsList.get(0);
+        String last = (termsList.size() == 0 ? termsList.get(0) : termsList.get(termsList.size() - 1));
+        return new EnrollmentsSummary(first, last, new TermCount(min, minTerm), new TermCount(max, maxTerm), summary);
     }
 
     private SubjectMetrics getSubjectMetricsStatistics(String from, String to, @NotNull Map<String, Map<String, ClassEnrollments>> enrollments) {

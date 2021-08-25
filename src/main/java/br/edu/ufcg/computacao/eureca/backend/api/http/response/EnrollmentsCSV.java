@@ -150,9 +150,9 @@ public class EnrollmentsCSV implements Comparable {
 
     @Override
     public int compareTo(Object o) {
-        String thisValue = this.getCourseCode() + this.getCurriculumCode() + this.getSubjectCode();
+        String thisValue = this.getCourseCode() + this.getCurriculumCode() + this.getSubjectCode() + this.getTerm() + this.getClassId();
         EnrollmentsCSV other = (EnrollmentsCSV) o;
-        String otherValue = other.getCourseCode() + other.getCurriculumCode() + other.getSubjectCode();
+        String otherValue = other.getCourseCode() + other.getCurriculumCode() + other.getSubjectCode() + other.getTerm() + other.getClassId();
         return thisValue.compareTo(otherValue);
     }
 
