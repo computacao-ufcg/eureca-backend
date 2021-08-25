@@ -100,7 +100,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     public Collection<SubjectMetricsPerTermSummary> getSubjectMetricsPerTermSummary(String courseCode,
              String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
         Collection<String> subjectCodes = getSubjectCodes(courseCode, curriculumCode, subjectType);
-        if (subjectCodes == null) throw new InvalidParameterException(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode);
+        if (subjectCodes == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
         Collection<SubjectMetricsPerTermSummary> subjectMetricsPerTerms = new TreeSet<>();
         for (String subjectCode : subjectCodes) {
             Collection<SubjectMetricsPerTerm> response = new TreeSet<>();
@@ -187,7 +187,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     public Collection<EnrollmentsMetricsPerTermSummary> getEnrollmentsPerTermSummary(String courseCode,
              String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
         Collection<String> subjectCodes = getSubjectCodes(courseCode, curriculumCode, subjectType);
-        if (subjectCodes == null) throw new InvalidParameterException(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode);
+        if (subjectCodes == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
         Collection<EnrollmentsMetricsPerTermSummary> enrollmentsMetricsPerTerms = new TreeSet<>();
         for (String subjectCode : subjectCodes) {
             Collection<EnrollmentsMetricsPerTerm> metricsPerTerms = new TreeSet<>();
