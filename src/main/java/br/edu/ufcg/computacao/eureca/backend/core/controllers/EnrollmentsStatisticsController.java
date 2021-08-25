@@ -49,7 +49,8 @@ public class EnrollmentsStatisticsController {
             Map<String, Map<String, ClassEnrollments>> enrollmentsPerTerm = subject.getEnrollmentsPerTerm();
             enrollmentsPerTerm.keySet().forEach(term -> {
                 Map<String, ClassEnrollments> classes = enrollmentsPerTerm.get(term);
-                classes.forEach((classId, classEnrollment) -> {
+                classes.keySet().forEach(classId -> {
+                    ClassEnrollments classEnrollment = classes.get(classId);
                     EnrollmentsCSV enrollmentsData = new EnrollmentsCSV(courseCode, curriculumCode,
                             subject.getSubjectCode(), subject.getSubjectName(), term, classId,
                             classEnrollment.getNumberOfEnrolleds(), classEnrollment.getNumberSucceeded(),

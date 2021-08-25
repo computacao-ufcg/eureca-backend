@@ -5,21 +5,17 @@ import br.edu.ufcg.computacao.eureca.backend.constants.EnrollmentsGlossaryFields
 public class EnrollmentsStatisticsSummaryResponse {
     private String courseCode;
     private String curriculumCode;
-    private String from;
-    private String to;
     private EnrollmentsSummary mandatory;
     private EnrollmentsSummary optional;
     private EnrollmentsSummary elective;
     private EnrollmentsSummary complementary;
     private EnrollmentsGlossaryFields glossary;
 
-    public EnrollmentsStatisticsSummaryResponse(String courseCode, String curriculumCode, String from, String to,
+    public EnrollmentsStatisticsSummaryResponse(String courseCode, String curriculumCode,
                                                 EnrollmentsSummary mandatory, EnrollmentsSummary optional,
                                                 EnrollmentsSummary elective, EnrollmentsSummary complementary) {
         this.courseCode = courseCode;
         this.curriculumCode = curriculumCode;
-        this.from = from;
-        this.to = to;
         this.mandatory = mandatory;
         this.optional = optional;
         this.elective = elective;
@@ -40,22 +36,6 @@ public class EnrollmentsStatisticsSummaryResponse {
 
     public void setCurriculumCode(String curriculumCode) {
         this.curriculumCode = curriculumCode;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public String getTo() {
-        return to;
-    }
-
-    public void setTo(String to) {
-        this.to = to;
     }
 
     public EnrollmentsSummary getMandatory() {
@@ -103,8 +83,6 @@ public class EnrollmentsStatisticsSummaryResponse {
         return "EnrollmentsStatisticsSummaryResponse{" +
                 "courseCode='" + courseCode + '\'' +
                 ", curriculumCode='" + curriculumCode + '\'' +
-                ", from='" + from + '\'' +
-                ", to='" + to + '\'' +
                 ", mandatory=" + mandatory +
                 ", optional=" + optional +
                 ", elective=" + elective +
