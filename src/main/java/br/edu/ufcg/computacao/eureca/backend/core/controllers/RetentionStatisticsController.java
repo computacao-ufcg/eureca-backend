@@ -102,7 +102,7 @@ public class RetentionStatisticsController {
                     item.computeRiskClass().equals(RiskClass.HIGH) ||
                     item.computeRiskClass().equals(RiskClass.UNFEASIBLE))
                     .collect(Collectors.toSet());
-            studentsRetentionPerAdmissionTerm.put(term, studentsRetention);
+            if (studentsRetention.size() > 0) studentsRetentionPerAdmissionTerm.put(term, studentsRetention);
         }
         return studentsRetentionPerAdmissionTerm;
     }
