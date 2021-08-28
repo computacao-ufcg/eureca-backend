@@ -5,7 +5,6 @@ import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.ClassEnrollments;
 import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectType;
-import br.edu.ufcg.computacao.eureca.backend.core.util.CollectionUtil;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
 
@@ -26,17 +25,7 @@ public class EnrollmentsStatisticsController {
                                 String from, String to, SubjectType subjectType) throws InvalidParameterException {
         Collection<EnrollmentsMetricsPerTermSummary> enrollmentsPerTerm =
                 this.dataAccessFacade.getEnrollmentsPerTermSummary(courseCode, curriculumCode, from, to, subjectType);
-        String firstTerm = "9999.9";
-        String lastTerm = "0000.0";
-        for (EnrollmentsMetricsPerTermSummary metricsSummary : enrollmentsPerTerm) {
-            if (metricsSummary != null && metricsSummary.getTerms() != null) {
-                String first = CollectionUtil.getFirstTermFromSummaries(metricsSummary.getTerms());
-                if (first.compareTo(firstTerm) < 0) firstTerm = first;
-                String last = CollectionUtil.getLastTermFromSummaries(metricsSummary.getTerms());
-                if (last.compareTo(lastTerm) > 0) lastTerm = last;
-            }
-        }
-        EnrollmentsStatisticsResponse response = new EnrollmentsStatisticsResponse(enrollmentsPerTerm, courseCode, curriculumCode, firstTerm, lastTerm);
+        EnrollmentsStatisticsResponse response = new EnrollmentsStatisticsResponse(enrollmentsPerTerm, courseCode, curriculumCode);
         return response;
     }
 

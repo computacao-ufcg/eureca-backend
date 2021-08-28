@@ -1,6 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class EnrollmentsMetricsPerTerm implements Comparable, SummaryPerTerm {
+import br.edu.ufcg.computacao.eureca.backend.core.models.Term;
+
+public class EnrollmentsMetricsPerTerm implements Comparable, Term {
     private String term;
     private int enrollmentsCount;
     private int classesCount;

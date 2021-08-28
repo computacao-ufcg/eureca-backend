@@ -5,19 +5,15 @@ import br.edu.ufcg.computacao.eureca.backend.constants.StudentsGlossaryFields;
 public class StudentsStatisticsSummaryResponse {
     private String courseCode;
     private String curriculumCode;
-    private String from;
-    private String to;
     private ActivesSummary activesSummary;
     private AlumniSummary alumniSummary;
     private DropoutsSummary dropoutsSummary;
     private StudentsGlossaryFields glossary;
 
-    public StudentsStatisticsSummaryResponse(String courseCode, String curriculumCode, String from, String to,
+    public StudentsStatisticsSummaryResponse(String courseCode, String curriculumCode,
                         ActivesSummary activesSummary, AlumniSummary alumniSummary, DropoutsSummary dropoutsSummary) {
         this.courseCode = courseCode;
         this.curriculumCode = curriculumCode;
-        this.from = from;
-        this.to = to;
         this.activesSummary = activesSummary;
         this.alumniSummary = alumniSummary;
         this.dropoutsSummary = dropoutsSummary;
@@ -37,22 +33,6 @@ public class StudentsStatisticsSummaryResponse {
 
     public void setCurriculumCode(String curriculumCode) {
         this.curriculumCode = curriculumCode;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public String getTo() {
-        return to;
-    }
-
-    public void setTo(String to) {
-        this.to = to;
     }
 
     public ActivesSummary getActivesSummary() {

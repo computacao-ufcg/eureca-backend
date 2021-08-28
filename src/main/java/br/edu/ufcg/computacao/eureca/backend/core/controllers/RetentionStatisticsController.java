@@ -4,7 +4,6 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
-import br.edu.ufcg.computacao.eureca.backend.core.util.CollectionUtil;
 import br.edu.ufcg.computacao.eureca.backend.core.util.StudentMetricsCalculator;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
@@ -27,14 +26,17 @@ public class RetentionStatisticsController {
         Map<String, Collection<Student>> retentionPerAdmissionTerm =
                 getStudentsRetentionPerAdmissionTerm(courseCode, curriculumCode, from, to);
 
+        ArrayList<String> termsList = new ArrayList<>();
         for (String term: retentionPerAdmissionTerm.keySet()) {
             StudentMetricsSummary metricsSummary =
                     StudentMetricsCalculator.computeMetricsSummary(retentionPerAdmissionTerm.get(term));
             StudentsRetentionPerTermSummary termData = new StudentsRetentionPerTermSummary(term, metricsSummary);
             terms.add(termData);
+            termsList.add(term);
         }
-        String firstTerm = CollectionUtil.getFirstTermFromSummaries(terms);
-        String lastTerm = CollectionUtil.getLastTermFromSummaries(terms);
+        Collections.sort(termsList);
+        String firstTerm = termsList.get(0);
+        String lastTerm = termsList.get(termsList.size() - 1);
         return new StudentsRetentionStatisticsResponse(terms, courseCode, curriculumCode, firstTerm, lastTerm);
     }
 
@@ -50,7 +52,7 @@ public class RetentionStatisticsController {
 
     public SubjectsRetentionStatisticsResponse getSubjectsRetentionStatistics(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         Collection<SubjectRetentionPerAdmissionTermSummary> subjectRetention = this.dataAccessFacade.getSubjectsRetentionSummary(courseCode, curriculumCode, from, to);
-        return new SubjectsRetentionStatisticsResponse(subjectRetention, courseCode, curriculumCode, from, to);
+        return new SubjectsRetentionStatisticsResponse(subjectRetention, courseCode, curriculumCode);
     }
 
     public SubjectsRetentionResponse getSubjectsRetentionCSV(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
@@ -61,27 +63,45 @@ public class RetentionStatisticsController {
     public RetentionStatisticsSummaryResponse getRetentionStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         Collection<Student> studentsRetention = getStudentsRetention(courseCode, curriculumCode, from, to);
         StudentMetricsSummary summary = StudentMetricsCalculator.computeMetricsSummary(studentsRetention);
-        StudentsRetentionSummary studentsRetentionSummary = new StudentsRetentionSummary(studentsRetention.size(), summary);
+        Range limits = getRange(studentsRetention);
+        StudentsRetentionSummary studentsRetentionSummary = new StudentsRetentionSummary(limits.getFrom(), limits.getTo(),
+                studentsRetention.size(), summary);
 
         Collection<SubjectRetentionPerAdmissionTermSummary> subjectsRetentionList = this.dataAccessFacade.getSubjectsRetentionSummary(courseCode, curriculumCode, from, to);
         RetentionSampleList retentionSampleList = getRetentionSample(subjectsRetentionList);
         MetricStatistics adequate = new MetricStatistics(retentionSampleList.getAdequateList());
         MetricStatistics possible = new MetricStatistics(retentionSampleList.getPossibleList());
-        SubjectsRetentionSummary subjectRetentionSummary = new SubjectsRetentionSummary(adequate, possible);
+        SubjectsRetentionSummary subjectRetentionSummary = new SubjectsRetentionSummary(retentionSampleList.getFrom(),
+                retentionSampleList.getTo(), adequate, possible);
 
-        return new RetentionStatisticsSummaryResponse(courseCode, curriculumCode, from, to, studentsRetentionSummary, subjectRetentionSummary);
+        return new RetentionStatisticsSummaryResponse(courseCode, curriculumCode, studentsRetentionSummary, subjectRetentionSummary);
+    }
+
+    private Range getRange(Collection<Student> collection) {
+        String first = "9999.9";
+        String last = "0000.0";
+        for (Student item : collection) {
+            String term = item.getAdmissionTerm();
+            if (term.compareTo(first) < 0) first = term;
+            if (term.compareTo(last) > 0) last = term;
+        }
+        return new Range(first, last);
     }
 
     private RetentionSampleList getRetentionSample(Collection<SubjectRetentionPerAdmissionTermSummary> subjectsRetentionList) {
+        String from = "9999.9";
+        String to = "0000.0";
         List<Double> adequateSampleList = new ArrayList<>();
         List<Double> possibleSampleList = new ArrayList<>();
-        subjectsRetentionList.forEach(subjectSummary -> {
+        for (SubjectRetentionPerAdmissionTermSummary subjectSummary : subjectsRetentionList) {
+            if (subjectSummary.getFrom().compareTo(from) < 0) from = subjectSummary.getFrom();
+            if (subjectSummary.getTo().compareTo(to) > 0) to = subjectSummary.getTo();
             subjectSummary.getRetention().forEach(termSummary -> {
                 adequateSampleList.add((double) termSummary.getAdequate());
                 possibleSampleList.add((double) termSummary.getPossible());
             });
-        });
-        return new RetentionSampleList(adequateSampleList, possibleSampleList);
+        }
+        return new RetentionSampleList(from, to, adequateSampleList, possibleSampleList);
     }
 
     private Collection<Student> getStudentsRetention(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
@@ -108,12 +128,24 @@ public class RetentionStatisticsController {
     }
 
     private class RetentionSampleList {
+        private String from;
+        private String to;
         private List<Double> adequateList;
         private List<Double> possibleList;
 
-        public RetentionSampleList(List<Double> adequateList, List<Double> possibleList) {
+        public RetentionSampleList(String from, String to, List<Double> adequateList, List<Double> possibleList) {
+            this.from = from;
+            this.to = to;
             this.adequateList = adequateList;
             this.possibleList = possibleList;
+        }
+
+        public String getFrom() {
+            return from;
+        }
+
+        public String getTo() {
+            return to;
         }
 
         public List<Double> getAdequateList() {

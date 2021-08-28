@@ -1,6 +1,6 @@
-package br.edu.ufcg.computacao.eureca.backend.api.http.response;
+package br.edu.ufcg.computacao.eureca.backend.core.models;
 
-public abstract class Range {
+public class Range {
     private String from;
     private String to;
 

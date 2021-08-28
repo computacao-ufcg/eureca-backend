@@ -225,6 +225,7 @@ public class IndexesHolder {
                     enrollmentsPerCurriuclum.get(curriculumKey);
             if (enrollmentsPerTerm == null) continue;
             Collection<TeacherStatisticsPerTerm> terms = new ArrayList<>();
+            ArrayList<String> termsList = new ArrayList<>();
             enrollmentsPerTerm.keySet().forEach(term -> {
                 Map<SubjectKey, Map<String, ClassEnrollments>> enrollmentsPerSubject = enrollmentsPerTerm.get(term);
                 int subjectsCount = enrollmentsPerSubject.keySet().size();
@@ -260,10 +261,19 @@ public class IndexesHolder {
                         (double) ongoing/totalEnrolled, (double) exempted/totalEnrolled,
                         (double) suspended/totalEnrolled);
                 terms.add(new TeacherStatisticsPerTerm(term, teacherStatisticsSummary));
+                termsList.add(term);
             });
-            TeacherData teacherData = this.teachersMap.get(teacherKey);
-            TeacherStatistics teachersData = new TeacherStatistics(teacherKey.getId(), teacherData.getName(), terms);
-            response.add(teachersData);
+            int termsListSize = termsList.size();
+            if (termsListSize > 0) {
+                Collections.sort(termsList);
+                String first = termsList.get(0);
+                String last = termsList.get(termsListSize - 1);
+
+                TeacherData teacherData = this.teachersMap.get(teacherKey);
+                TeacherStatistics teachersData = new TeacherStatistics(first, last, teacherKey.getId(),
+                        teacherData.getName(), terms);
+                response.add(teachersData);
+            }
         }
         return response;
     }
@@ -284,8 +294,9 @@ public class IndexesHolder {
             int aggregateSuspended = 0;
             int min = Integer.MAX_VALUE;
             int max = Integer.MIN_VALUE;
-            String minTerm = "9999.9";
-            String maxTerm = "0000.0";
+            String minTerm = "";
+            String maxTerm = "";
+            ArrayList<String> termsList = new ArrayList<>();
             int numTerms = enrollmentsIndexMap.keySet().size();
             for (String term : enrollmentsIndexMap.keySet()) {
                 if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
@@ -304,17 +315,25 @@ public class IndexesHolder {
                     aggregateFailedDueToGrade += teachersAndEnrollments.getFailedDueToGradeCount();
                     aggregateFailedDueToAbsence += teachersAndEnrollments.getFailedDueToAbsenceCount();
                     aggregateSuspended += teachersAndEnrollments.getSuspendedCount();
+                    termsList.add(term);
                 }
             }
-            TeachersStatisticsSummary teacherStatisticsSummary = new TeachersStatisticsSummary(
-                    (double) aggregateTeachersCount/numTerms,
-                    new TermCount(min, minTerm),
-                    new TermCount(max, maxTerm),
-                    (double) aggreateSuccess/numTerms,
-                    (double) aggregateFailedDueToGrade/numTerms,
-                    (double) aggregateFailedDueToAbsence/numTerms,
-                    (double) aggregateSuspended/numTerms);
-            response.put(academicUnitKey.getCode(), teacherStatisticsSummary);
+            int termsListSize = termsList.size();
+            if (termsListSize > 0) {
+                Collections.sort(termsList);
+                String first = termsList.get(0);
+                String last = termsList.get(termsListSize - 1);
+
+                TeachersStatisticsSummary teacherStatisticsSummary = new TeachersStatisticsSummary(first, last,
+                        (double) aggregateTeachersCount / numTerms,
+                        new TermCount(min, minTerm),
+                        new TermCount(max, maxTerm),
+                        (double) aggreateSuccess / numTerms,
+                        (double) aggregateFailedDueToGrade / numTerms,
+                        (double) aggregateFailedDueToAbsence / numTerms,
+                        (double) aggregateSuspended / numTerms);
+                response.put(academicUnitKey.getCode(), teacherStatisticsSummary);
+            }
         });
         return response;
     }

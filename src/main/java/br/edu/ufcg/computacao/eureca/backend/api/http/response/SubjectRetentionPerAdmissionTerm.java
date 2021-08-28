@@ -1,6 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class SubjectRetentionPerAdmissionTerm implements Comparable, SummaryPerTerm {
+import br.edu.ufcg.computacao.eureca.backend.core.models.Term;
+
+public class SubjectRetentionPerAdmissionTerm implements Comparable, Term {
     private String admissionTerm;
     private int adequate;
     private int possible;

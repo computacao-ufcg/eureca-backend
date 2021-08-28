@@ -144,7 +144,7 @@ public class StudentStatisticsTest extends EndpointTest {
 
     @Test
     public void getStudentStatisticsTest() throws Exception {
-        StudentsStatisticsSummaryResponse response = new StudentsStatisticsSummaryResponse("", "", "", "", null, null, null);
+        StudentsStatisticsSummaryResponse response = new StudentsStatisticsSummaryResponse("", "", null, null, null);
         Mockito.doReturn(response).when(this.facade).getStudentsStatisticsSummary(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
 
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/summary", null, "");

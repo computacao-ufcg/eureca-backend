@@ -103,6 +103,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         if (subjectCodes == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
         Collection<SubjectMetricsPerTermSummary> subjectMetricsPerTerms = new TreeSet<>();
         for (String subjectCode : subjectCodes) {
+            ArrayList<String> termsList = new ArrayList<>();
             Collection<SubjectMetricsPerTerm> response = new TreeSet<>();
             Map<String, Map<String, ClassEnrollments>> terms = this.indexesHolder.getSubjectMetricsPerTerm(courseCode, curriculumCode, subjectCode);
             for (String term : terms.keySet()) {
@@ -111,10 +112,17 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                     SubjectMetrics metrics = computeSubjectMetrics(classes.values());
                     SubjectMetricsPerTerm metricsPerTerm = new SubjectMetricsPerTerm(term, metrics);
                     response.add(metricsPerTerm);
+                    termsList.add(term);
                 }
             }
-            Subject subject = getSubject(courseCode, curriculumCode, subjectCode);
-            subjectMetricsPerTerms.add(new SubjectMetricsPerTermSummary(subjectCode, subject.getName(), response));
+            int termsListSize = termsList.size();
+            if (termsListSize > 0) {
+                Collections.sort(termsList);
+                String first = termsList.get(0);
+                String last = termsList.get(termsListSize - 1);
+                Subject subject = getSubject(courseCode, curriculumCode, subjectCode);
+                subjectMetricsPerTerms.add(new SubjectMetricsPerTermSummary(first, last, subjectCode, subject.getName(), response));
+            }
         }
         return subjectMetricsPerTerms;
     }
@@ -132,7 +140,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         SubjectsStatisticsSummary complementary = buildSubjectSummary(courseCode, curriculumCode, from, to,
                 curriculum.getComplementarySubjectsList());
         SubjectsStatisticsSummaryResponse ret = new SubjectsStatisticsSummaryResponse(courseCode, curriculumCode,
-                from, to, mandatory, optional, elective, complementary);
+                mandatory, optional, elective, complementary);
         return ret;
     }
 
@@ -146,23 +154,30 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     public Collection<EnrollmentsPerSubjectData> getEnrollmentsPerSubjectPerTerm(String courseCode, String curriculumCode,
                                      String from, String to, SubjectType subjectType) throws InvalidParameterException {
 
-        Collection<String> subjectCodes = getSubjectCodes(courseCode, curriculumCode, subjectType);
-        Collection<EnrollmentsPerSubjectData> enrollmentsPerTerm = new TreeSet<>();
-        for (String subjectCode : subjectCodes) {
-            SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
-            Subject subject = getSubject(subjectKey);
-            Map<String, Map<String, ClassEnrollments>> enrollments =
-                    this.indexesHolder.getEnrollmentsPerSubjectPerTermPerClass().get(subjectKey);
-            Map<String, Map<String, ClassEnrollments>> filteredEnrollments = new HashMap();
-            enrollments.keySet().forEach(term -> {
-                if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
-                    Map<String, ClassEnrollments> classes = enrollments.get(term);
-                    filteredEnrollments.put(term, classes);
+        try {
+            Collection<String> subjectCodes = getSubjectCodes(courseCode, curriculumCode, subjectType);
+            Collection<EnrollmentsPerSubjectData> enrollmentsPerTerm = new TreeSet<>();
+            for (String subjectCode : subjectCodes) {
+                SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
+                Subject subject = getSubject(subjectKey);
+                Map<String, Map<String, ClassEnrollments>> enrollments =
+                        this.indexesHolder.getEnrollmentsPerSubjectPerTermPerClass().get(subjectKey);
+                Map<String, Map<String, ClassEnrollments>> filteredEnrollments = new HashMap();
+                if (enrollments != null) {
+                    enrollments.keySet().forEach(term -> {
+                        if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
+                            Map<String, ClassEnrollments> classes = enrollments.get(term);
+                            filteredEnrollments.put(term, classes);
+                        }
+                    });
+                    enrollmentsPerTerm.add(new EnrollmentsPerSubjectData(subjectCode, subject.getName(), filteredEnrollments));
                 }
-            });
-            enrollmentsPerTerm.add(new EnrollmentsPerSubjectData(subjectCode, subject.getName(), filteredEnrollments));
+            }
+            return enrollmentsPerTerm;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
-        return enrollmentsPerTerm;
     }
 
     @Override
@@ -193,6 +208,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             Collection<EnrollmentsMetricsPerTerm> metricsPerTerms = new TreeSet<>();
             SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
             Map<String, Map<String, ClassEnrollments>> terms = this.indexesHolder.getEnrollmentsPerSubjectPerTermPerClass().get(subjectKey);
+            ArrayList<String> termsList = new ArrayList<>();
             if (terms != null) {
                 for (String term : terms.keySet()) {
                     if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
@@ -206,11 +222,19 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                         EnrollmentsMetricsPerTerm metricsPerTerm = new EnrollmentsMetricsPerTerm(term, enrollmentsCount,
                                 classesCount, (double) enrollmentsCount / classesCount);
                         metricsPerTerms.add(metricsPerTerm);
+                        termsList.add(term);
                     }
                 }
+                int termsListSize = termsList.size();
+                if (termsListSize > 0) {
+                    Collections.sort(termsList);
+                    String first = termsList.get(0);
+                    String last = termsList.get(termsListSize - 1);
+                    Subject subject = getSubject(courseCode, curriculumCode, subjectCode);
+                    enrollmentsMetricsPerTerms.add(new EnrollmentsMetricsPerTermSummary(first, last, subjectCode,
+                            subject.getName(), metricsPerTerms));
+                }
             }
-            Subject subject = getSubject(courseCode, curriculumCode, subjectCode);
-            enrollmentsMetricsPerTerms.add(new EnrollmentsMetricsPerTermSummary(subjectCode, subject.getName(), metricsPerTerms));
         }
         return enrollmentsMetricsPerTerms;
     }
@@ -224,7 +248,14 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             Collection<SubjectRetentionPerAdmissionTerm> retentionPerTerm = this.indexesHolder.getRetentionCount(courseCode, curriculumCode, from, to, subjectCode);
             if (retentionPerTerm == null) continue;
             Subject subject = getSubject(courseCode, curriculumCode, subjectCode);
-            response.add(new SubjectRetentionPerAdmissionTermSummary(subjectCode, subject.getName(), subject.getIdealTerm(), retentionPerTerm));
+            ArrayList<String> termsList = getTermsList(retentionPerTerm);
+            int termsListSize = termsList.size();
+            if (termsListSize > 0) {
+                String first = termsList.get(0);
+                String last = termsList.get(termsListSize - 1);
+                response.add(new SubjectRetentionPerAdmissionTermSummary(first, last, subjectCode, subject.getName(),
+                        subject.getIdealTerm(), retentionPerTerm));
+            }
         }
         return response;
     }
@@ -332,16 +363,22 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                                                          Collection<String> subjectCodes) {
 
         Collection<SubjectMetrics> metricsPerSubject = new ArrayList<>();
+        String first = to;
+        String last = from;
         for(String subjectCode : subjectCodes) {
             SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
             Map<String, Map<String, ClassEnrollments>> enrollments = this.indexesHolder.getEnrollmentsPerSubjectPerTermPerClass().get(subjectKey);
             if (enrollments != null) {
-                SubjectMetrics subjectMetrics = getSubjectMetricsStatistics(from, to, enrollments);
-                if (subjectMetrics != null) metricsPerSubject.add(subjectMetrics);
+                SubjectMetricsPerRange subjectMetricsPerRange = getSubjectMetricsStatistics(from, to, enrollments);
+                if (subjectMetricsPerRange != null) {
+                    if (subjectMetricsPerRange.getMetrics() != null) metricsPerSubject.add(subjectMetricsPerRange.getMetrics());
+                    if (subjectMetricsPerRange.getFrom().compareTo(first) < 0) first = subjectMetricsPerRange.getFrom();
+                    if (subjectMetricsPerRange.getTo().compareTo(last) > 0) last = subjectMetricsPerRange.getFrom();
+                }
             }
         }
         SubjectMetricsStatistics metrics = computeSubjectMetricsStatistics(metricsPerSubject);
-        return new SubjectsStatisticsSummary(subjectCodes.size(), metrics);
+        return new SubjectsStatisticsSummary(first, last, subjectCodes.size(), metrics);
     }
 
     private SubjectMetricsStatistics computeSubjectMetricsStatistics(Collection<SubjectMetrics> metricsPerSubject) {
@@ -429,28 +466,48 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                 }
             }
         }
-        EnrollmentsStatisticsSummary summary = new EnrollmentsStatisticsSummary(
-                (double) subjectsCount/termsCount,
-                (double) classesCount/subjectsCount,
-                (double) classesCount/termsCount,
-                (double) enrollmentsCount/subjectsCount,
-                (double) enrollmentsCount/termsCount);
-        Collections.sort(termsList);
-        String first = termsList.get(0);
-        String last = (termsList.size() == 0 ? termsList.get(0) : termsList.get(termsList.size() - 1));
-        return new EnrollmentsSummary(first, last, new TermCount(min, minTerm), new TermCount(max, maxTerm), summary);
+        int termsListSize = termsList.size();
+        if (termsListSize > 0) {
+            EnrollmentsStatisticsSummary summary = new EnrollmentsStatisticsSummary(
+                    (double) subjectsCount / termsCount,
+                    (double) classesCount / subjectsCount,
+                    (double) classesCount / termsCount,
+                    (double) enrollmentsCount / subjectsCount,
+                    (double) enrollmentsCount / termsCount);
+            Collections.sort(termsList);
+            String first = termsList.get(0);
+            String last = termsList.get(termsListSize - 1);
+            return new EnrollmentsSummary(first, last, new TermCount(max, maxTerm), new TermCount(min, minTerm), summary);
+        }
+        return null;
     }
 
-    private SubjectMetrics getSubjectMetricsStatistics(String from, String to, @NotNull Map<String, Map<String, ClassEnrollments>> enrollments) {
+    private SubjectMetricsPerRange getSubjectMetricsStatistics(String from, String to, @NotNull Map<String, Map<String, ClassEnrollments>> enrollments) {
         SubjectMetrics subjectMetrics = new SubjectMetrics();
+        ArrayList<String> termsList = new ArrayList<>();
         for (String term : enrollments.keySet()) {
             if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
                 Map<String, ClassEnrollments> classes = enrollments.get(term);
                 SubjectMetrics otherSubjectMetrics = computeSubjectMetrics(classes.values());
                 subjectMetrics.add(otherSubjectMetrics);
+                termsList.add(term);
             }
         }
-        return subjectMetrics;
+        int termsListSize = termsList.size();
+        if (termsListSize > 0) {
+            Collections.sort(termsList);
+            String first = termsList.get(0);
+            String last = termsList.get(termsListSize - 1);
+            return new SubjectMetricsPerRange(first, last, subjectMetrics);
+        } else {
+            return null;
+        }
+    }
+
+    private ArrayList<String> getTermsList(Collection<SubjectRetentionPerAdmissionTerm> retentionPerTerm) {
+        ArrayList<String> termsList = new ArrayList<>();
+        retentionPerTerm.forEach(term -> { termsList.add(term.getAdmissionTerm()); });
+        return termsList;
     }
 
     private Collection<Student> getFilteredStudents(StudentClassification status, String courseCode,
@@ -495,6 +552,30 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             case ACTIVE:
             default:
                 return this.indexesHolder.getAllActives(courseCode, curriculumCode);
+        }
+    }
+
+    private class SubjectMetricsPerRange {
+        private String from;
+        private String to;
+        private SubjectMetrics metrics;
+
+        public SubjectMetricsPerRange(String from, String to, SubjectMetrics metrics) {
+            this.from = from;
+            this.to = to;
+            this.metrics = metrics;
+        }
+
+        public String getFrom() {
+            return from;
+        }
+
+        public String getTo() {
+            return to;
+        }
+
+        public SubjectMetrics getMetrics() {
+            return metrics;
         }
     }
 }

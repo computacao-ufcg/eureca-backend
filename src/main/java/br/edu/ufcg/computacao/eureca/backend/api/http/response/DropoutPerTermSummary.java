@@ -1,6 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class DropoutPerTermSummary implements Comparable, SummaryPerTerm {
+import br.edu.ufcg.computacao.eureca.backend.core.models.Term;
+
+public class DropoutPerTermSummary implements Comparable, Term {
     private String dropoutTerm;
     private int dropoutCount;
     private DropoutReasonSummary reasons;

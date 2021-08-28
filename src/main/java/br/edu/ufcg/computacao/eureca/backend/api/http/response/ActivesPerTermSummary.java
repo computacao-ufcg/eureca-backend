@@ -1,6 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
-public class ActivesPerTermSummary implements Comparable, SummaryPerTerm {
+import br.edu.ufcg.computacao.eureca.backend.core.models.Term;
+
+public class ActivesPerTermSummary implements Comparable, Term {
     private String admissionTerm;
     private RiskClassCountSummary riskClassCount;
 
