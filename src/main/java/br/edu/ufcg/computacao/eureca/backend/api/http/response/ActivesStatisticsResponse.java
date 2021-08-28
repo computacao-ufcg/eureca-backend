@@ -1,5 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
+import br.edu.ufcg.computacao.eureca.backend.core.models.Range;
+
 import java.util.Collection;
 
 public class ActivesStatisticsResponse extends Range {

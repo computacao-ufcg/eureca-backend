@@ -37,8 +37,7 @@ public class TeacherStatisticsController {
 
     public TeachersStatisticsSummaryResponse getTeachersStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         Map<String, TeachersStatisticsSummary> teachersSummaryMap = this.dataAccessFacade.getTeachersPerAcademicUnit(courseCode, curriculumCode, from, to);
-        Collection<String> academicUnitAcronyms = teachersSummaryMap.keySet();
-        TeachersStatisticsSummaryResponse response = new TeachersStatisticsSummaryResponse(courseCode, curriculumCode, from, to, academicUnitAcronyms, teachersSummaryMap);
+        TeachersStatisticsSummaryResponse response = new TeachersStatisticsSummaryResponse(courseCode, curriculumCode, teachersSummaryMap);
         return response;
     }
 }

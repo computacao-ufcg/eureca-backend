@@ -1,13 +1,17 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
+import br.edu.ufcg.computacao.eureca.backend.core.models.Range;
+
 import java.util.Collection;
 
-public class TeacherStatistics implements Comparable {
+public class TeacherStatistics extends Range implements Comparable {
     private String teacherId;
     private String teacherName;
     Collection<TeacherStatisticsPerTerm> terms;
 
-    public TeacherStatistics(String teacherId, String teacherName, Collection<TeacherStatisticsPerTerm> terms) {
+    public TeacherStatistics(String from, String to, String teacherId, String teacherName,
+                             Collection<TeacherStatisticsPerTerm> terms) {
+        super(from, to);
         this.teacherId = teacherId;
         this.teacherName = teacherName;
         this.terms = terms;

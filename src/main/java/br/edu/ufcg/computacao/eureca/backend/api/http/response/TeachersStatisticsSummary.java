@@ -3,6 +3,8 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
 
 public class TeachersStatisticsSummary {
+    private String from;
+    private String to;
     private double teachersCount;
     private TermCount min;
     private TermCount max;
@@ -11,9 +13,11 @@ public class TeachersStatisticsSummary {
     private double averageFailureDueToAbsenceRate;
     private double averageSuspendedRate;
 
-    public TeachersStatisticsSummary(double teachersCount, TermCount min, TermCount max,
+    public TeachersStatisticsSummary(String from, String to, double teachersCount, TermCount min, TermCount max,
                                      double averageSuccessRate, double averageFailureDueToGradeRate,
                                      double averageFailureDueToAbsenceRate, double averageSuspendedRate) {
+        this.from = from;
+        this.to = to;
         this.teachersCount = teachersCount;
         this.min = min;
         this.max = max;
@@ -21,6 +25,22 @@ public class TeachersStatisticsSummary {
         this.averageFailureDueToGradeRate = averageFailureDueToGradeRate;
         this.averageFailureDueToAbsenceRate = averageFailureDueToAbsenceRate;
         this.averageSuspendedRate = averageSuspendedRate;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
     }
 
     public double getTeachersCount() {

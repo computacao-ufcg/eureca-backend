@@ -5,18 +5,14 @@ import br.edu.ufcg.computacao.eureca.backend.constants.RetentionGlossaryFields;
 public class RetentionStatisticsSummaryResponse {
     private String courseCode;
     private String curriculumCode;
-    private String from;
-    private String to;
     private StudentsRetentionSummary studentsRetentionSummary;
     private SubjectsRetentionSummary subjectsRetentionSummary;
     private RetentionGlossaryFields glossary;
 
-    public RetentionStatisticsSummaryResponse(String courseCode, String curriculumCode, String from, String to,
+    public RetentionStatisticsSummaryResponse(String courseCode, String curriculumCode,
                 StudentsRetentionSummary studentsRetentionSummary, SubjectsRetentionSummary subjectsRetentionSummary) {
         this.courseCode = courseCode;
         this.curriculumCode = curriculumCode;
-        this.from = from;
-        this.to = to;
         this.studentsRetentionSummary = studentsRetentionSummary;
         this.subjectsRetentionSummary = subjectsRetentionSummary;
     }
@@ -35,22 +31,6 @@ public class RetentionStatisticsSummaryResponse {
 
     public void setCurriculumCode(String curriculumCode) {
         this.curriculumCode = curriculumCode;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public String getTo() {
-        return to;
-    }
-
-    public void setTo(String to) {
-        this.to = to;
     }
 
     public StudentsRetentionSummary getStudentsRetentionSummary() {

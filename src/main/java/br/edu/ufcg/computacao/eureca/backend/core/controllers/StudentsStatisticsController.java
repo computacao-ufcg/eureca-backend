@@ -4,11 +4,7 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.models.CostClass;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Curriculum;
-import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
-import br.edu.ufcg.computacao.eureca.backend.core.util.CollectionUtil;
+import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.backend.core.util.StudentMetricsCalculator;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
@@ -60,25 +56,31 @@ public class StudentsStatisticsController {
         Map<String, Collection<Student>> activesPerAdmissionTerm =
                 this.dataAccessFacade.getActivesPerAdmissionTerm(courseCode, curriculumCode, from, to);
 
+        ArrayList<String> termsList = new ArrayList<>();
         for (String term : activesPerAdmissionTerm.keySet()) {
             Collection<Student> actives = activesPerAdmissionTerm.get(term);
             terms.add(getActivesPerTermSummary(term, actives));
+            termsList.add(term);
         }
-
-        String firstTerm = CollectionUtil.getFirstTermFromSummaries(terms);
-        String lastTerm = CollectionUtil.getLastTermFromSummaries(terms);
+        Collections.sort(termsList);
+        String firstTerm = termsList.get(0);
+        String lastTerm = termsList.get(termsList.size() - 1);
         return new ActivesStatisticsResponse(terms, courseCode, curriculumCode, firstTerm, lastTerm);
     }
 
     public AlumniStatisticsResponse getAlumniStatistics(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         Collection<AlumniPerTermSummary> terms = new TreeSet<>();
         Map<String, Collection<Student>> alumniPerGraduationTerm = this.dataAccessFacade.getAlumniPerGraduationTerm(courseCode, curriculumCode, from, to);
+
+        ArrayList<String> termsList = new ArrayList<>();
         for (String term : alumniPerGraduationTerm.keySet()) {
             Collection<Student> alumni = alumniPerGraduationTerm.get(term);
             terms.add(getAlumniPerTermSummary(term, alumni));
+            termsList.add(term);
         }
-        String firstTerm = CollectionUtil.getFirstTermFromSummaries(terms);
-        String lastTerm = CollectionUtil.getLastTermFromSummaries(terms);
+        Collections.sort(termsList);
+        String firstTerm = termsList.get(0);
+        String lastTerm = termsList.get(termsList.size() - 1);
         return new AlumniStatisticsResponse(terms, courseCode, curriculumCode, firstTerm, lastTerm);
     }
 
@@ -86,12 +88,15 @@ public class StudentsStatisticsController {
         Collection<DropoutPerTermSummary> terms = new TreeSet<>();
         Map<String, Collection<Student>> dropoutsPerDropoutTerm = this.dataAccessFacade.getDropoutsPerDropoutTerm(courseCode, curriculumCode, from, to);
 
+        ArrayList<String> termsList = new ArrayList();
         for (String term : dropoutsPerDropoutTerm.keySet()) {
             Collection<Student> dropouts = dropoutsPerDropoutTerm.get(term);
             terms.add(getDropoutsPerTermSummary(term, dropouts));
+            termsList.add(term);
         }
-        String firstTerm = CollectionUtil.getFirstTermFromSummaries(terms);
-        String lastTerm = CollectionUtil.getLastTermFromSummaries(terms);
+        Collections.sort(termsList);
+        String firstTerm = termsList.get(0);
+        String lastTerm = termsList.get(termsList.size() - 1);
         return new DropoutsStatisticsResponse(terms, courseCode, curriculumCode, firstTerm, lastTerm);
     }
 
@@ -99,7 +104,7 @@ public class StudentsStatisticsController {
         ActivesSummary activesSummary = getActivesSummary(courseCode, curriculumCode, from, to);
         AlumniSummary alumniSummary = getAlumniSummary(courseCode, curriculumCode, from, to);
         DropoutsSummary dropoutSummary = getDropoutsSummary(courseCode, curriculumCode, from, to);
-        return new StudentsStatisticsSummaryResponse(courseCode, curriculumCode, from, to, activesSummary, alumniSummary, dropoutSummary);
+        return new StudentsStatisticsSummaryResponse(courseCode, curriculumCode, activesSummary, alumniSummary, dropoutSummary);
     }
 
     private AlumniPerTermSummary getAlumniPerTermSummary(String term, Collection<Student> alumni) {
@@ -197,9 +202,15 @@ public class StudentsStatisticsController {
     private ActivesSummary getActivesSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         Collection<Student> actives = this.dataAccessFacade.getActives(courseCode, curriculumCode, from, to);
         StudentMetricsSummary summary = StudentMetricsCalculator.computeMetricsSummary(actives);
-        String firstTerm = CollectionUtil.getFirstTermFromStudents(actives);
-        String lastTerm = CollectionUtil.getLastTermFromStudents(actives);
-        return new ActivesSummary(firstTerm, lastTerm, actives.size(), summary);
+        Range limits = getRange(actives);
+        return new ActivesSummary(limits.getFrom(), limits.getTo(), actives.size(), summary);
+    }
+
+    private Range getRange(Collection<Student> actives) {
+        ArrayList<String> terms = new ArrayList<>();
+        actives.forEach(active -> { terms.add(active.getAdmissionTerm()); });
+        Collections.sort(terms);
+        return new Range(terms.get(0), terms.get(terms.size() - 1));
     }
 
     private AlumniSummary getAlumniSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
@@ -233,8 +244,8 @@ public class StudentsStatisticsController {
         String maxAlumniCountTerm = "";
         int minAlumniCount = Integer.MAX_VALUE;
         String minAlumniCountTerm = "";
-        String firstTerm = "0000.0";
-        String lastTerm = "9999.9";
+        String firstTerm = "9999.9";
+        String lastTerm = "0000.0";
         int totalTermsCount = alumniPerTermMap.keySet().size();
 
         for(String term : alumniPerTermMap.keySet()) {
@@ -251,7 +262,6 @@ public class StudentsStatisticsController {
                 minAlumniCountTerm = term;
             }
         }
-
         return new AlumniSummary(firstTerm, lastTerm, totalAlumniCount,
                 (totalAlumniCount == 0 ? -1.0 : (double) aggregateTermsCount/totalAlumniCount),
                 (totalAlumniCount == 0 ? -1.0 : aggregateCost/totalAlumniCount),
@@ -267,8 +277,8 @@ public class StudentsStatisticsController {
         double aggregateTermsCount = 0.0;
         double aggregateCost = 0.0;
         double aggregateLowestCost = 0.0;
-        String firstTerm = "0000.0";
-        String lastTerm = "9999.9";
+        String firstTerm = "9999.9";
+        String lastTerm = "0000.0";
 
         for(Student dropout : dropouts) {
             aggregateTermsCount += dropout.getCompletedTerms();

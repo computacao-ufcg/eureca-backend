@@ -1,13 +1,17 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
+import br.edu.ufcg.computacao.eureca.backend.core.models.Range;
+
 import java.util.Collection;
 
-public class SubjectMetricsPerTermSummary implements Comparable {
+public class SubjectMetricsPerTermSummary extends Range implements Comparable {
     private String subjectCode;
     private String subjectName;
     private Collection<SubjectMetricsPerTerm> terms;
 
-    public SubjectMetricsPerTermSummary(String subjectCode, String subjectName, Collection<SubjectMetricsPerTerm> terms) {
+    public SubjectMetricsPerTermSummary(String from, String to, String subjectCode, String subjectName,
+                                        Collection<SubjectMetricsPerTerm> terms) {
+        super(from, to);
         this.subjectCode = subjectCode;
         this.subjectName = subjectName;
         this.terms = terms;

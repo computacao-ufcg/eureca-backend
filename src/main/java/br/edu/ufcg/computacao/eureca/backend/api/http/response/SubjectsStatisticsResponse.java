@@ -2,13 +2,12 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
 import java.util.Collection;
 
-public class SubjectsStatisticsResponse extends Range {
+public class SubjectsStatisticsResponse {
     private String courseCode;
     private String curriculumCode;
     private Collection<SubjectMetricsPerTermSummary> subjects;
 
-    public SubjectsStatisticsResponse(Collection<SubjectMetricsPerTermSummary> subjects, String courseCode, String curriculumCode, String from, String to) {
-        super(from, to);
+    public SubjectsStatisticsResponse(Collection<SubjectMetricsPerTermSummary> subjects, String courseCode, String curriculumCode) {
         this.subjects = subjects;
         this.courseCode = courseCode;
         this.curriculumCode = curriculumCode;

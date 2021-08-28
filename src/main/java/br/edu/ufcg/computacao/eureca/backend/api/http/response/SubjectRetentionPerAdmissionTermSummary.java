@@ -1,14 +1,18 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response;
 
+import br.edu.ufcg.computacao.eureca.backend.core.models.Range;
+
 import java.util.Collection;
 
-public class SubjectRetentionPerAdmissionTermSummary implements Comparable {
+public class SubjectRetentionPerAdmissionTermSummary extends Range implements Comparable {
     private String subjectCode;
     private String subjectName;
     private int idealTerm;
     private Collection<SubjectRetentionPerAdmissionTerm> retention;
 
-    public SubjectRetentionPerAdmissionTermSummary(String subjectCode, String subjectName, int idealTerm, Collection<SubjectRetentionPerAdmissionTerm> retention) {
+    public SubjectRetentionPerAdmissionTermSummary(String from, String to, String subjectCode, String subjectName,
+                                             int idealTerm, Collection<SubjectRetentionPerAdmissionTerm> retention) {
+        super(from, to);
         this.subjectCode = subjectCode;
         this.subjectName = subjectName;
         this.idealTerm = idealTerm;
