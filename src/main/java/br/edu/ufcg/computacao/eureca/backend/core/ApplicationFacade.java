@@ -6,13 +6,12 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.constants.*;
 import br.edu.ufcg.computacao.eureca.backend.core.controllers.*;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EurecaAsPublicKeyHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.models.EurecaOperation;
-import br.edu.ufcg.computacao.eureca.backend.core.models.GlossaryType;
-import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectType;
+import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.backend.core.plugins.AuthorizationPlugin;
 import br.edu.ufcg.computacao.eureca.backend.core.util.GlossaryFactory;
 import br.edu.ufcg.computacao.eureca.common.exceptions.ConfigurationErrorException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
+import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import br.edu.ufcg.computacao.eureca.common.util.CryptoUtil;
 import br.edu.ufcg.computacao.eureca.common.util.ServiceAsymmetricKeysHolder;
 import org.apache.log4j.Logger;
@@ -135,6 +134,14 @@ public class ApplicationFacade {
         StudentsGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.STUDENT);
         response.setGlossary(glossaryFields);
         return response;
+    }
+
+    public Student getStudentByRegistration(String courseCode, String curriculumCode, String registration) throws InvalidParameterException {
+        return this.studentsStatisticsController.getStudentByRegistration(courseCode, curriculumCode, registration);
+    }
+
+    public PreEnrollment getConcludedSubjects(String courseCode, String curriculumCode, String registration) throws InvalidParameterException {
+        return this.studentsStatisticsController.getPreEnrollment(courseCode, curriculumCode, registration);
     }
 
     public StudentsRetentionStatisticsResponse getStudentsRetentionStatistics(String token, String courseCode, String curriculumCode, String from, String to) throws EurecaException {
