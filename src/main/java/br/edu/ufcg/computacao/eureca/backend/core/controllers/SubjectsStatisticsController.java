@@ -19,10 +19,14 @@ public class SubjectsStatisticsController {
     }
 
     public SubjectsStatisticsResponse getSubjectsStatistics(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
-        Collection<SubjectMetricsPerTermSummary> metricsPerTerm =
-                this.dataAccessFacade.getSubjectMetricsPerTermSummary(courseCode, curriculumCode, from, to, subjectType);
+        List<SubjectMetricsPerTermSummary> metricsPerTerm = new ArrayList<>(this.dataAccessFacade.getSubjectMetricsPerTermSummary(courseCode, curriculumCode, from, to, subjectType));
+        metricsPerTerm.sort(orderSubjectsByNameComparator());
         SubjectsStatisticsResponse response = new SubjectsStatisticsResponse(metricsPerTerm, courseCode, curriculumCode);
         return response;
+    }
+
+    private Comparator<SubjectMetricsPerTermSummary> orderSubjectsByNameComparator() {
+        return Comparator.comparing(SubjectMetricsPerTermSummary::getSubjectName);
     }
 
     public SubjectsResponse getSubjectsCSV(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
