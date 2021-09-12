@@ -44,6 +44,6 @@ public class SubjectMetricsPerTermSummary extends Range implements Comparable {
     @Override
     public int compareTo(Object o) {
         SubjectMetricsPerTermSummary other = (SubjectMetricsPerTermSummary) o;
-        return subjectCode.compareTo(other.getSubjectCode());
+        return subjectName.compareTo(other.getSubjectName());
     }
 }

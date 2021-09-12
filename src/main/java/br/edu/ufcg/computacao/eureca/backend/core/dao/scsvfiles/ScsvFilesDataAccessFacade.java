@@ -277,14 +277,9 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     public TeachersStatisticsResponse getTeachersPerTermSummary(String courseCode, String curriculumCode, String from, String to, String academicUnitId) throws InvalidParameterException {
         AcademicUnitData auData = this.indexesHolder.getAuData(new AcademicUnitKey(academicUnitId));
         if (auData == null) throw new InvalidParameterException(String.format(Messages.INVALID_ACADEMIC_UNIT_S, academicUnitId));
-        List<TeacherStatistics> teachers = new ArrayList<>(this.indexesHolder.getTeachersPerTerm(academicUnitId, courseCode, curriculumCode, from, to));
-        teachers.sort(orderTeachersByNameComparator());
+        Collection<TeacherStatistics> teachers = this.indexesHolder.getTeachersPerTerm(academicUnitId, courseCode, curriculumCode, from, to);
         return new TeachersStatisticsResponse(academicUnitId, auData.getAcronym(), auData.getName(), courseCode,
                 curriculumCode, from, to, teachers);
-    }
-
-    private Comparator<TeacherStatistics> orderTeachersByNameComparator() {
-        return Comparator.comparing(TeacherStatistics::getTeacherName);
     }
 
     @Override
