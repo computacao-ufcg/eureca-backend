@@ -44,6 +44,6 @@ public class TeacherStatistics extends Range implements Comparable {
     @Override
     public int compareTo(Object o) {
         TeacherStatistics other = (TeacherStatistics) o;
-        return this.getTeacherId().compareTo(other.getTeacherId());
+        return this.getTeacherName().compareTo(other.getTeacherName());
     }
 }

@@ -19,8 +19,7 @@ public class SubjectsStatisticsController {
     }
 
     public SubjectsStatisticsResponse getSubjectsStatistics(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
-        Collection<SubjectMetricsPerTermSummary> metricsPerTerm =
-                this.dataAccessFacade.getSubjectMetricsPerTermSummary(courseCode, curriculumCode, from, to, subjectType);
+        Collection<SubjectMetricsPerTermSummary> metricsPerTerm = this.dataAccessFacade.getSubjectMetricsPerTermSummary(courseCode, curriculumCode, from, to, subjectType);
         SubjectsStatisticsResponse response = new SubjectsStatisticsResponse(metricsPerTerm, courseCode, curriculumCode);
         return response;
     }
