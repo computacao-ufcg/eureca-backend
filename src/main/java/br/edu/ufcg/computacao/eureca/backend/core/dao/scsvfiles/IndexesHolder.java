@@ -224,7 +224,7 @@ public class IndexesHolder {
             Map<String, Map<SubjectKey, Map<String, ClassEnrollments>>> enrollmentsPerTerm =
                     enrollmentsPerCurriuclum.get(curriculumKey);
             if (enrollmentsPerTerm == null) continue;
-            Collection<TeacherStatisticsPerTerm> terms = new ArrayList<>();
+            Collection<TeacherStatisticsPerTerm> terms = new TreeSet<>();
             ArrayList<String> termsList = new ArrayList<>();
             enrollmentsPerTerm.keySet().forEach(term -> {
                 Map<SubjectKey, Map<String, ClassEnrollments>> enrollmentsPerSubject = enrollmentsPerTerm.get(term);
