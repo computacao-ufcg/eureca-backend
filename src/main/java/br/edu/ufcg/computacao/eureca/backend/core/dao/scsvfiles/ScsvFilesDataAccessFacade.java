@@ -79,6 +79,69 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
+    public Student getActiveByRegistration(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
+        Collection<Student> allActives = this.getFilteredStudents(StudentClassification.ACTIVE, courseCode, curriculumCode);
+        for (Student student : allActives) {
+            if (student.getRegistration().getRegistration().equals(studentRegistration))
+                return student;
+        }
+        throw new InvalidParameterException("Inexistent active!");
+    }
+
+    private Collection<String> getStudentConcludedSubjects(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
+        Student student = this.getActiveByRegistration(courseCode, curriculumCode, studentRegistration);
+
+        Collection<String> concludedSubjectsCodes = new HashSet<>();
+        concludedSubjectsCodes.addAll(student.getCurriculum().getMandatorySubjectsList());
+        concludedSubjectsCodes.addAll(student.getCurriculum().getComplementarySubjectsList());
+        concludedSubjectsCodes.addAll(student.getCurriculum().getOptionalSubjectsList());
+        concludedSubjectsCodes.addAll(student.getCurriculum().getElectiveSubjectsList());
+
+        return concludedSubjectsCodes;
+    }
+
+    @Override
+    public Collection<Subject> getMandatorySubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
+        return this.getSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration, SubjectType.MANDATORY);
+    }
+
+    @Override
+    public Collection<Subject> getOptionalSubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
+        return this.getSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration, SubjectType.OPTIONAL);
+    }
+
+    @Override
+    public Collection<Subject> getElectiveSubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
+        return this.getSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration, SubjectType.ELECTIVE);
+    }
+
+    @Override
+    public Collection<Subject> getComplementarySubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
+        return this.getSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration, SubjectType.COMPLEMENTARY);
+    }
+
+    private Collection<Subject> getSubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration, SubjectType subjectType) throws InvalidParameterException {
+        Collection<String> concludedSubjects = this.getStudentConcludedSubjects(courseCode, curriculumCode, studentRegistration);
+        Set<Subject> availableSubjects = new HashSet<>();
+        Collection<String> subjectCodes = this.getSubjectCodes(courseCode, curriculumCode, subjectType);
+
+        for (String subjectCode : subjectCodes) {
+            Subject subject = this.getSubject(courseCode, curriculumCode, subjectCode);
+            if (!concludedSubjects.contains(subjectCode) && concludedSubjects.containsAll(subject.getPreRequirementsList()))
+                availableSubjects.add(subject);
+        }
+
+        List<Subject> availableSubjectsList = new ArrayList<>(availableSubjects);
+        availableSubjectsList.sort(orderByIdealTerm());
+
+        return availableSubjectsList;
+    }
+
+    private Comparator<Subject> orderByIdealTerm() {
+        return Comparator.comparingInt(Subject::getIdealTerm);
+    }
+
+    @Override
     public Curriculum getCurriculum(String courseCode, String curriculumCode) throws InvalidParameterException {
         return this.indexesHolder.getCurriculum(courseCode, curriculumCode);
     }
@@ -315,7 +378,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     private Collection<String> getSubjectCodes(String courseCode, String curriculumCode, SubjectType subjectType) throws InvalidParameterException {
         Curriculum curriculum = getCurriculum(courseCode, curriculumCode);
         if (curriculum == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, curriculumCode, courseCode));
-        Collection<String> subjectCodes = null;
+        Collection<String> subjectCodes = new HashSet<>();
         switch (subjectType) {
             case MANDATORY:
                 subjectCodes = curriculum.getMandatorySubjectsList();
@@ -329,11 +392,20 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             case COMPLEMENTARY:
                 subjectCodes = curriculum.getComplementarySubjectsList();
                 break;
+            default:
+                subjectCodes.addAll(curriculum.getElectiveSubjectsList());
+                subjectCodes.addAll(curriculum.getMandatorySubjectsList());
+                subjectCodes.addAll(curriculum.getComplementarySubjectsList());
+                subjectCodes.addAll(curriculum.getOptionalSubjectsList());
         }
         return subjectCodes;
     }
 
-    private SubjectMetrics computeSubjectMetrics(Collection<ClassEnrollments> classes) {
+    private Collection<String> getSubjectCodes(String courseCode, String curriculumCode) throws InvalidParameterException {
+        return this.getSubjectCodes(courseCode, curriculumCode, null);
+    }
+
+        private SubjectMetrics computeSubjectMetrics(Collection<ClassEnrollments> classes) {
         int failedDueToAbsences = 0;
         int failedDueToGrade = 0;
         int cancelled = 0;
@@ -521,6 +593,10 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             }
         });
         return filteredStudents;
+    }
+
+    private Collection<Student> getFilteredStudents(StudentClassification status, String courseCode, String curriculumCode) throws InvalidParameterException {
+        return this.getFilteredStudents(status, courseCode, curriculumCode, "1949.2", "2050.1");
     }
 
     private Collection<String> getSubjectsList(String courseCode, String curriculumCode) throws InvalidParameterException {
