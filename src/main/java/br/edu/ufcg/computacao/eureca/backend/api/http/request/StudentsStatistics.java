@@ -31,7 +31,7 @@ public class StudentsStatistics {
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
-            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
+            @RequestParam(required = false, value = "curriculumCode", defaultValue = SystemConstants.ALL) String curriculumCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Common.TO)
@@ -56,7 +56,7 @@ public class StudentsStatistics {
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
-            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
+            @RequestParam(required = false, value = "curriculumCode", defaultValue = SystemConstants.ALL) String curriculumCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Common.TO)
@@ -80,7 +80,7 @@ public class StudentsStatistics {
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
-            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
+            @RequestParam(required = false, value = "curriculumCode", defaultValue = SystemConstants.ALL) String curriculumCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Common.TO)
@@ -106,7 +106,7 @@ public class StudentsStatistics {
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
-            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
+            @RequestParam(required = false, value = "curriculumCode", defaultValue = SystemConstants.ALL) String curriculumCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Common.TO)
@@ -130,7 +130,7 @@ public class StudentsStatistics {
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
-            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
+            @RequestParam(required = false, value = "curriculumCode", defaultValue = SystemConstants.ALL) String curriculumCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Common.TO)
@@ -154,7 +154,7 @@ public class StudentsStatistics {
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
-            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
+            @RequestParam(required = false, value = "curriculumCode", defaultValue = SystemConstants.ALL) String curriculumCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Common.TO)
@@ -178,7 +178,7 @@ public class StudentsStatistics {
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
-            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
+            @RequestParam(required = false, value = "curriculumCode", defaultValue = SystemConstants.ALL) String curriculumCode,
             @ApiParam(value = ApiDocumentation.Common.FROM)
             @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
             @ApiParam(value = ApiDocumentation.Common.TO)

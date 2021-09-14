@@ -1,6 +1,5 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class Subject {
@@ -12,14 +11,13 @@ public class Subject {
     private int credits;
     private int hours;
     private String name;
-    private String equivalentCodes;
     private Collection<String> equivalentCodesList;
     private int idealTerm;
-    private String preRequirements;
     private Collection<String> preRequirementsList;
 
     public Subject(String courseCode, String curriculumCode, String subjectCode, String academicUnit, String type,
-                   int credits, int hours, String name, String equivalentCodes, int idealTerm, String preRequirements) {
+                   int credits, int hours, String name, Collection<String> equivalentCodesList, int idealTerm,
+                   Collection<String> preRequirementsList) {
         this.courseCode = courseCode;
         this.curriculumCode = curriculumCode;
         this.subjectCode = subjectCode;
@@ -28,9 +26,9 @@ public class Subject {
         this.credits = credits;
         this.hours = hours;
         this.name = name;
-        this.equivalentCodes = equivalentCodes;
+        this.equivalentCodesList = equivalentCodesList;
         this.idealTerm = idealTerm;
-        this.preRequirements = preRequirements;
+        this.preRequirementsList = preRequirementsList;
     }
 
     public String getCourseCode() {
@@ -97,14 +95,6 @@ public class Subject {
         this.name = name;
     }
 
-    public String getEquivalentCodes() {
-        return equivalentCodes;
-    }
-
-    public void setEquivalentCodes(String equivalentCodes) {
-        this.equivalentCodes = equivalentCodes;
-    }
-
     public int getIdealTerm() {
         return idealTerm;
     }
@@ -113,36 +103,12 @@ public class Subject {
         this.idealTerm = idealTerm;
     }
 
-    public String getPreRequirements() {
-        return preRequirements;
-    }
-
-    public void setPreRequirements(String preRequirements) {
-        this.preRequirements = preRequirements;
-    }
-
     public Collection<String> getEquivalentCodesList() {
-        if (equivalentCodesList == null) {
-            equivalentCodesList = extractStrList(equivalentCodes);
-        }
         return equivalentCodesList;
     }
 
     public Collection<String> getPreRequirementsList() {
-        if (preRequirementsList == null) {
-            preRequirementsList = extractStrList(preRequirements);
-        }
         return preRequirementsList;
-    }
-
-    private Collection<String> extractStrList(String subjectsStr) {
-        ArrayList<String> ret = new ArrayList<>();
-        if (subjectsStr.equals("")) return ret;
-        String creditsArray[] = subjectsStr.split(",");
-        for (int i =0; i < creditsArray.length; i++) {
-            ret.add(creditsArray[i]);
-        }
-        return ret;
     }
 
     @Override
@@ -156,10 +122,8 @@ public class Subject {
                 ", credits=" + credits +
                 ", hours=" + hours +
                 ", name='" + name + '\'' +
-                ", equivalentCodes='" + equivalentCodes + '\'' +
                 ", equivalentCodesList=" + equivalentCodesList +
                 ", idealTerm='" + idealTerm + '\'' +
-                ", preRequirements='" + preRequirements + '\'' +
                 ", preRequirementsList=" + preRequirementsList +
                 '}';
     }
