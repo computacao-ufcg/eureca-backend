@@ -3,7 +3,7 @@ package br.edu.ufcg.computacao.eureca.backend.core.models;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PreEnrollment {
+public class StudentPreEnrollment {
 
     private String studentRegistration;
     private Set<Subject> subjects;
@@ -14,7 +14,7 @@ public class PreEnrollment {
     private int complementaryCredits;
     private int electiveCredits;
 
-    public PreEnrollment(String studentRegistration, Set<Subject> subjects, int maxCredits) {
+    public StudentPreEnrollment(String studentRegistration, Set<Subject> subjects, int maxCredits) {
         this.studentRegistration = studentRegistration;
         this.subjects = subjects;
         this.maxCredits = maxCredits;
@@ -25,7 +25,7 @@ public class PreEnrollment {
         this.electiveCredits = 0;
     }
 
-    public PreEnrollment(String studentRegistration, int maxCredits) {
+    public StudentPreEnrollment(String studentRegistration, int maxCredits) {
         this(studentRegistration, new HashSet<>(), maxCredits);
     }
 

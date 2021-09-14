@@ -8,7 +8,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.controllers.*;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EurecaAsPublicKeyHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.backend.core.plugins.AuthorizationPlugin;
-import br.edu.ufcg.computacao.eureca.backend.core.util.GlossaryFactory;
+import br.edu.ufcg.computacao.eureca.backend.core.util.factory.GlossaryFactory;
 import br.edu.ufcg.computacao.eureca.common.exceptions.ConfigurationErrorException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
@@ -27,6 +27,7 @@ public class ApplicationFacade {
     private AlumniController alumniController;
     private ProfileController profileController;
     private CurriculaController curriculaController;
+    private PreEnrollmentController preEnrollmentController;
     private StudentsStatisticsController studentsStatisticsController;
     private SubjectsStatisticsController subjectsStatisticsController;
     private EnrollmentsStatisticsController enrollmentsStatisticsController;
@@ -38,6 +39,7 @@ public class ApplicationFacade {
         this.alumniController = new AlumniController();
         this.profileController = new ProfileController();
         this.curriculaController = new CurriculaController();
+        this.preEnrollmentController = new PreEnrollmentController();
         this.studentsStatisticsController = new StudentsStatisticsController();
         this.subjectsStatisticsController = new SubjectsStatisticsController();
         this.enrollmentsStatisticsController = new EnrollmentsStatisticsController();
@@ -140,8 +142,8 @@ public class ApplicationFacade {
         return this.studentsStatisticsController.getStudentByRegistration(courseCode, curriculumCode, registration);
     }
 
-    public PreEnrollment getConcludedSubjects(String courseCode, String curriculumCode, String registration) throws InvalidParameterException {
-        return this.studentsStatisticsController.getPreEnrollment(courseCode, curriculumCode, registration);
+    public StudentPreEnrollment getConcludedSubjects(String courseCode, String curriculumCode, String registration) throws InvalidParameterException {
+        return this.preEnrollmentController.createStudentPreEnrollment(courseCode, curriculumCode, registration);
     }
 
     public StudentsRetentionStatisticsResponse getStudentsRetentionStatistics(String token, String courseCode, String curriculumCode, String from, String to) throws EurecaException {

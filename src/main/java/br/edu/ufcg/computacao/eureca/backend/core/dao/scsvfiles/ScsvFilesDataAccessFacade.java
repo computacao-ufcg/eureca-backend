@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     private final Logger LOGGER = Logger.getLogger(ScsvFilesDataAccessFacade.class);
@@ -89,15 +90,43 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     private Collection<String> getStudentConcludedSubjects(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
-        Student student = this.getActiveByRegistration(courseCode, curriculumCode, studentRegistration);
+        return this.getConcludedSubjects(courseCode, curriculumCode, studentRegistration)
+                .stream()
+                .map(Subject::getSubjectCode)
+                .collect(Collectors.toSet());
+    }
 
-        Collection<String> concludedSubjectsCodes = new HashSet<>();
-        concludedSubjectsCodes.addAll(student.getCurriculum().getMandatorySubjectsList());
-        concludedSubjectsCodes.addAll(student.getCurriculum().getComplementarySubjectsList());
-        concludedSubjectsCodes.addAll(student.getCurriculum().getOptionalSubjectsList());
-        concludedSubjectsCodes.addAll(student.getCurriculum().getElectiveSubjectsList());
+    private Collection<Subject> getConcludedSubjects(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
+        Collection<SubjectKey> concludedSubjectKeys = this.indexesHolder.getCompletedSubjects(studentRegistration);
+        Collection<Subject> concludedSubjects = new HashSet<>();
+        for (SubjectKey subjectKey : concludedSubjectKeys) {
+            Subject subject = this.getSubject(subjectKey);
+            concludedSubjects.add(subject);
+        }
+        return concludedSubjects;
+    }
 
-        return concludedSubjectsCodes;
+    private Collection<Subject> getConcludedSubjectsByType(String courseCode, String curriculumCode, String studentRegistration, String subjectType) throws InvalidParameterException {
+        return this.getConcludedSubjects(courseCode, curriculumCode, studentRegistration)
+                .stream()
+                .filter(subject -> subject.getType().equals(subjectType))
+                .collect(Collectors.toSet());
+    }
+
+    private Collection<Subject> getMandatoryConcludedSubjects(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
+        return this.getConcludedSubjectsByType(courseCode, curriculumCode, studentRegistration, "M");
+    }
+
+    private Collection<Subject> getOptionalConcludedSubjects(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
+        return this.getConcludedSubjectsByType(courseCode, curriculumCode, studentRegistration, "O");
+    }
+
+    private Collection<Subject> getElectiveConcludedSubjects(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
+        return this.getConcludedSubjectsByType(courseCode, curriculumCode, studentRegistration, "E");
+    }
+
+    private Collection<Subject> getComplementaryConcludedSubjects(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
+        return this.getConcludedSubjectsByType(courseCode, curriculumCode, studentRegistration, "C");
     }
 
     @Override
