@@ -469,6 +469,10 @@ public class Student implements Comparable {
         }
     }
 
+    public int getPossibleTerm() {
+        return (int) Math.floor((double) this.attemptedCredits / 24);
+    }
+
     @Override
     public int compareTo(Object o) {
         Student other = (Student) o;

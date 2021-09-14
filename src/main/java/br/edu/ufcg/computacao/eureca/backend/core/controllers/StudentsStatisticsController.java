@@ -20,6 +20,36 @@ public class StudentsStatisticsController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
+    public Student getStudentByRegistration(String course, String curriculum, String registration) throws InvalidParameterException {
+        return this.dataAccessFacade.getActiveByRegistration(course, curriculum, registration);
+    }
+
+    public PreEnrollment getPreEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException{
+        PreEnrollment preEnrollment = new PreEnrollment(studentRegistration, 24);
+        Collection<Subject> availableMandatorySubjects = this.dataAccessFacade.getMandatorySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
+        Collection<Subject> availableComplementarySubjects = this.dataAccessFacade.getComplementarySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
+        Collection<Subject> availableElectiveSubjects = this.dataAccessFacade.getElectiveSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
+        Collection<Subject> availableOptionalSubjects = this.dataAccessFacade.getOptionalSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
+
+        while(!preEnrollment.isFull()) {
+            for (Subject s : availableMandatorySubjects)
+                preEnrollment.addSubject(s);
+
+            for (Subject s : availableOptionalSubjects)
+                preEnrollment.addSubject(s);
+
+            for (Subject s : availableComplementarySubjects)
+                preEnrollment.addSubject(s);
+
+            for (Subject s : availableElectiveSubjects)
+                preEnrollment.addSubject(s);
+
+            if (preEnrollment.getSubjects().isEmpty()) break;
+        }
+
+        return preEnrollment;
+    }
+
     public StudentsResponse getActiveCSV(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         Collection<StudentCSV> activeStudentsData = new TreeSet<>();
         Collection<Student> actives = this.dataAccessFacade.getActives(courseCode, curriculumCode, from, to);

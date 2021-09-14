@@ -22,6 +22,16 @@ public interface DataAccessFacade {
 
     Collection<AlumniDigest> getAlumniPerStudentSummary(String courseCode, String from, String to) throws InvalidParameterException;
 
+    Student getActiveByRegistration(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
+
+    Collection<Subject> getMandatorySubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
+
+    Collection<Subject> getOptionalSubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
+
+    Collection<Subject> getElectiveSubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
+
+    Collection<Subject> getComplementarySubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
+
     Curriculum getCurriculum(String courseCode, String curriculumCode) throws InvalidParameterException;
 
     Collection<String> getCurriculumCodes(String courseCode) throws InvalidParameterException;
