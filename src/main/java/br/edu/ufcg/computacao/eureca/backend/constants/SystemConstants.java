@@ -38,4 +38,5 @@ public class SystemConstants {
     public static final String STATUS_FAILED_DUE_GRADE = "Reprovado";
     public static final String STATUS_FAILED_DUE_ABSENCE = "Reprovado por Falta";
     public static final String STATUS_SUSPENDED = "Trancado";
+    public static final String ALL = "All";
 }

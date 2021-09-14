@@ -520,10 +520,7 @@ public class IndexesHolder {
 
             Collection<AcademicUnitKey> academicUnitIds = new ArrayList<>();
             Collection<String> subjectCodes = new TreeSet<>();
-            subjectCodes.addAll(curriculumData.getMandatorySubjectsList());
-            subjectCodes.addAll(curriculumData.getOptionalSubjectsList());
-            subjectCodes.addAll(curriculumData.getElectiveSubjectsList());
-            subjectCodes.addAll(curriculumData.getComplementarySubjectsList());
+            subjectCodes.addAll(curriculumData.getAllSubjectsList());
             for (String subjectCode : subjectCodes) {
                 SubjectKey subjectKey = new SubjectKey(curriculumKey.getCourseCode(),
                         curriculumKey.getCurriculumCode(), subjectCode);
@@ -668,7 +665,7 @@ public class IndexesHolder {
                                int subjectIdealTerm) {
         int potentiallyAccumulatedCredits = studentCurriculum.getAccumulatedCredits() +
                 studentCurriculum.getEnrolledCredits();
-        int expectedAccumulatedCredits = curriculumData.getExpectedMinAccumulatedCreditsList(subjectIdealTerm);
+        int expectedAccumulatedCredits = curriculumData.getExpectedMinAccumulatedCredits(subjectIdealTerm);
         return potentiallyAccumulatedCredits >= expectedAccumulatedCredits;
     }
 

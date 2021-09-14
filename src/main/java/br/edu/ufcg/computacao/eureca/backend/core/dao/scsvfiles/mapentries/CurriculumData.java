@@ -6,16 +6,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class CurriculumData implements EurecaMapValue {
-    private String idealMandatoryCredits;
-    private ArrayList<Integer> idealMandatoryCreditsList;
-    private String idealOptionalCredits;
-    private ArrayList<Integer> idealOptionalCreditsList;
-    private String idealElectiveCredits;
-    private ArrayList<Integer> idealElectiveCreditsList;
-    private String idealComplementaryCredits;
-    private ArrayList<Integer> idealComplementaryCreditsList;
-    private String expectedMinAccumulatedCredits;
-    private ArrayList<Integer> expectedMinAccumulatedCreditsList;
+    private String idealMandatoryCreditsList;
+    private String idealOptionalCreditsList;
+    private String idealElectiveCreditsList;
+    private String idealComplementaryCreditsList;
+    private String expectedMinAccumulatedCreditsList;
     private int minMandatoryCreditsNeeded;
     private int minOptionalCreditsNeeded;
     private int minElectiveCreditsNeeded;
@@ -26,30 +21,25 @@ public class CurriculumData implements EurecaMapValue {
     private int minNumberOfEnrolledCredits;
     private int maxNumberOfEnrolledCredits;
     private int exceptionalAdditionalEnrolledCredits;
-    private String mandatorySubjects;
-    private Collection<String> mandatorySubjectsList;
-    private String optionalSubjects;
-    private Collection<String> optionalSubjectsList;
-    private String electiveSubjects;
-    private Collection<String> electiveSubjectsList;
-    private String complementarySubjects;
-    private Collection<String> complementarySubjectsList;
-    private String complementaryActivities;
-    private Collection<String> complementaryActivitiesList;
+    private String mandatorySubjectCodes;
+    private String optionalSubjectCodes;
+    private String electiveSubjectCodes;
+    private String complementarySubjectCodes;
+    private String complementaryActivitiesCodes;
 
-    public CurriculumData(String idealMandatoryCredits, String idealOptionalCredits, String idealElectiveCredits,
-                          String idealComplementaryCredits, String expectedMinAccumulatedCredits,
+    public CurriculumData(String idealMandatoryCreditsList, String idealOptionalCreditsList, String idealElectiveCreditsList,
+                          String idealComplementaryCreditsList, String expectedMinAccumulatedCreditsList,
                           int minMandatoryCreditsNeeded, int minOptionalCreditsNeeded,
                           int minElectiveCreditsNeeded, int minComplementaryCreditsNeeded, int minActivitiesNeeded,
                           int minNumberOfTerms, int maxNumberOfTerms, int minNumberOfEnrolledCredits,
                           int maxNumberOfEnrolledCredits, int exceptionalAdditionalEnrolledCredits,
-                          String mandatorySubjects, String optionalSubjects, String electiveSubjects,
-                          String complementarySubjects, String complementaryActivities) {
-        this.idealMandatoryCredits = idealMandatoryCredits;
-        this.idealOptionalCredits = idealOptionalCredits;
-        this.idealElectiveCredits = idealElectiveCredits;
-        this.idealComplementaryCredits = idealComplementaryCredits;
-        this.expectedMinAccumulatedCredits = expectedMinAccumulatedCredits;
+                          String mandatorySubjectCodes, String optionalSubjectCodes, String electiveSubjectCodes,
+                          String complementarySubjectCodes, String complementaryActivitiesCodes) {
+        this.idealMandatoryCreditsList = idealMandatoryCreditsList;
+        this.idealOptionalCreditsList = idealOptionalCreditsList;
+        this.idealElectiveCreditsList = idealElectiveCreditsList;
+        this.idealComplementaryCreditsList = idealComplementaryCreditsList;
+        this.expectedMinAccumulatedCreditsList = expectedMinAccumulatedCreditsList;
         this.minMandatoryCreditsNeeded = minMandatoryCreditsNeeded;
         this.minOptionalCreditsNeeded = minOptionalCreditsNeeded;
         this.minElectiveCreditsNeeded = minElectiveCreditsNeeded;
@@ -60,56 +50,46 @@ public class CurriculumData implements EurecaMapValue {
         this.minNumberOfEnrolledCredits = minNumberOfEnrolledCredits;
         this.maxNumberOfEnrolledCredits = maxNumberOfEnrolledCredits;
         this.exceptionalAdditionalEnrolledCredits = exceptionalAdditionalEnrolledCredits;
-        this.mandatorySubjects = mandatorySubjects;
-        this.optionalSubjects = optionalSubjects;
-        this.electiveSubjects = electiveSubjects;
-        this.complementarySubjects = complementarySubjects;
-        this.complementaryActivities = complementaryActivities;
-        this.idealMandatoryCreditsList = extractIntegerList(idealMandatoryCredits);
-        this.idealOptionalCreditsList = extractIntegerList(idealOptionalCredits);
-        this.idealElectiveCreditsList = extractIntegerList(idealElectiveCredits);
-        this.idealComplementaryCreditsList = extractIntegerList(idealComplementaryCredits);
-        this.expectedMinAccumulatedCreditsList = extractIntegerList(expectedMinAccumulatedCredits);
-        this.mandatorySubjectsList = null;
-        this.optionalSubjectsList = null;
-        this.electiveSubjectsList = null;
-        this.complementarySubjectsList = null;
-        this.complementaryActivitiesList = null;
+        this.mandatorySubjectCodes = mandatorySubjectCodes;
+        this.optionalSubjectCodes = optionalSubjectCodes;
+        this.electiveSubjectCodes = electiveSubjectCodes;
+        this.complementarySubjectCodes = complementarySubjectCodes;
+        this.complementaryActivitiesCodes = complementaryActivitiesCodes;
     }
 
     public CurriculumData() {
     }
 
-    public String getIdealMandatoryCredits() {
-        return idealMandatoryCredits;
+    public String getIdealMandatoryCreditsList() {
+        return idealMandatoryCreditsList;
     }
 
-    public void setIdealMandatoryCredits(String idealMandatoryCredits) {
-        this.idealMandatoryCredits = idealMandatoryCredits;
+    public void setIdealMandatoryCreditsList(String idealMandatoryCreditsList) {
+        this.idealMandatoryCreditsList = idealMandatoryCreditsList;
     }
 
-    public String getIdealOptionalCredits() {
-        return idealOptionalCredits;
+    public String getIdealOptionalCreditsList() {
+        return idealOptionalCreditsList;
     }
 
-    public void setIdealOptionalCredits(String idealOptionalCredits) {
-        this.idealOptionalCredits = idealOptionalCredits;
+    public void setIdealOptionalCreditsList(String idealOptionalCreditsList) {
+        this.idealOptionalCreditsList = idealOptionalCreditsList;
     }
 
-    public String getIdealElectiveCredits() {
-        return idealElectiveCredits;
+    public String getIdealElectiveCreditsList() {
+        return idealElectiveCreditsList;
     }
 
-    public void setIdealElectiveCredits(String idealElectiveCredits) {
-        this.idealElectiveCredits = idealElectiveCredits;
+    public void setIdealElectiveCreditsList(String idealElectiveCreditsList) {
+        this.idealElectiveCreditsList = idealElectiveCreditsList;
     }
 
-    public String getIdealComplementaryCredits() {
-        return idealComplementaryCredits;
+    public String getIdealComplementaryCreditsList() {
+        return idealComplementaryCreditsList;
     }
 
-    public void setIdealComplementaryCredits(String idealComplementaryCredits) {
-        this.idealComplementaryCredits = idealComplementaryCredits;
+    public void setIdealComplementaryCreditsList(String idealComplementaryCreditsList) {
+        this.idealComplementaryCreditsList = idealComplementaryCreditsList;
     }
 
     public int getMinMandatoryCreditsNeeded() {
@@ -192,131 +172,74 @@ public class CurriculumData implements EurecaMapValue {
         this.exceptionalAdditionalEnrolledCredits = exceptionalAdditionalEnrolledCredits;
     }
 
-    public String getMandatorySubjects() {
-        return mandatorySubjects;
+    public String getMandatorySubjectCodes() {
+        return mandatorySubjectCodes;
     }
 
-    public void setMandatorySubjects(String mandatorySubjects) {
-        this.mandatorySubjects = mandatorySubjects;
+    public void setMandatorySubjectCodes(String mandatorySubjectCodes) {
+        this.mandatorySubjectCodes = mandatorySubjectCodes;
     }
 
-    public String getOptionalSubjects() {
-        return optionalSubjects;
+    public String getOptionalSubjectCodes() {
+        return optionalSubjectCodes;
     }
 
-    public void setOptionalSubjects(String optionalSubjects) {
-        this.optionalSubjects = optionalSubjects;
+    public void setOptionalSubjectCodes(String optionalSubjectCodes) {
+        this.optionalSubjectCodes = optionalSubjectCodes;
     }
 
-    public String getElectiveSubjects() {
-        return electiveSubjects;
+    public String getElectiveSubjectCodes() {
+        return electiveSubjectCodes;
     }
 
-    public void setElectiveSubjects(String electiveSubjects) {
-        this.electiveSubjects = electiveSubjects;
+    public void setElectiveSubjectCodes(String electiveSubjectCodes) {
+        this.electiveSubjectCodes = electiveSubjectCodes;
     }
 
-    public String getComplementarySubjects() {
-        return complementarySubjects;
+    public String getComplementarySubjectCodes() {
+        return complementarySubjectCodes;
     }
 
-    public void setComplementarySubjects(String complementarySubjects) {
-        this.complementarySubjects = complementarySubjects;
+    public void setComplementarySubjectCodes(String complementarySubjectCodes) {
+        this.complementarySubjectCodes = complementarySubjectCodes;
     }
 
-    public String getComplementaryActivities() {
-        return complementaryActivities;
+    public String getComplementaryActivitiesCodes() {
+        return complementaryActivitiesCodes;
     }
 
-    public void setComplementaryActivities(String complementaryActivities) {
-        this.complementaryActivities = complementaryActivities;
+    public void setComplementaryActivitiesCodes(String complementaryActivitiesCodes) {
+        this.complementaryActivitiesCodes = complementaryActivitiesCodes;
     }
 
-    public String getExpectedMinAccumulatedCredits() {
-        return expectedMinAccumulatedCredits;
+    public String getExpectedMinAccumulatedCreditsList() {
+        return expectedMinAccumulatedCreditsList;
     }
 
-    public void setExpectedMinAccumulatedCredits(String expectedMinAccumulatedCredits) {
-        this.expectedMinAccumulatedCredits = expectedMinAccumulatedCredits;
+    public void setExpectedMinAccumulatedCreditsList(String expectedMinAccumulatedCreditsList) {
+        this.expectedMinAccumulatedCreditsList = expectedMinAccumulatedCreditsList;
     }
 
-    public int getIdealMandatoryCreditsList(int index) {
-        if (idealMandatoryCreditsList == null) {
-            idealMandatoryCreditsList = extractIntegerList(this.idealMandatoryCredits);
-        }
-        return idealMandatoryCreditsList.get(index - 1).intValue();
-    }
-
-    public int getIdealOptionalCreditsList(int index) {
-        if (idealOptionalCreditsList == null) {
-            idealOptionalCreditsList = extractIntegerList(this.idealOptionalCredits);
-        }
-        return idealOptionalCreditsList.get(index - 1).intValue();
-    }
-
-    public int getIdealElectiveCreditsList(int index) {
-        if (idealElectiveCreditsList == null) {
-            idealElectiveCreditsList = extractIntegerList(this.idealElectiveCredits);
-        }
-        return idealElectiveCreditsList.get(index - 1).intValue();
-    }
-
-    public int getIdealComplementaryCreditsList(int index) {
-        if (idealComplementaryCreditsList == null) {
-            idealComplementaryCreditsList = extractIntegerList(this.idealComplementaryCredits);
-        }
-        return idealComplementaryCreditsList.get(index - 1).intValue();
-    }
-
-    public int getExpectedMinAccumulatedCreditsList(int index) {
-        if (expectedMinAccumulatedCreditsList == null) {
-            expectedMinAccumulatedCreditsList = extractIntegerList(this.expectedMinAccumulatedCredits);
-        }
-        return expectedMinAccumulatedCreditsList.get(index - 1).intValue();
-    }
-
-    public Collection<String> getMandatorySubjectsList() {
-        if (mandatorySubjectsList == null) {
-            mandatorySubjectsList = extractStrList(mandatorySubjects);
-        }
-        return mandatorySubjectsList;
-    }
-
-    public Collection<String> getOptionalSubjectsList() {
-        if (optionalSubjectsList == null) {
-            optionalSubjectsList = extractStrList(optionalSubjects);
-        }
-        return optionalSubjectsList;
-    }
-
-    public Collection<String> getElectiveSubjectsList() {
-        if (electiveSubjectsList == null) {
-            electiveSubjectsList = extractStrList(electiveSubjects);
-        }
-        return electiveSubjectsList;
-    }
-
-    public Collection<String> getComplementarySubjectsList() {
-        if (complementarySubjectsList == null) {
-            complementarySubjectsList = extractStrList(complementarySubjects);
-        }
-        return complementarySubjectsList;
-    }
-
-    public Collection<String> getComplementaryActivitiesList() {
-        if (complementaryActivitiesList == null) {
-            complementaryActivitiesList = extractStrList(complementaryActivities);
-        }
-        return complementaryActivitiesList;
+    public int getExpectedMinAccumulatedCredits(int subjectIdealTerm) {
+        ArrayList<Integer> expectedMinAccumulatedCreditsList = extractIntegerList(this.expectedMinAccumulatedCreditsList);
+        return (subjectIdealTerm > expectedMinAccumulatedCreditsList.size() ? -1 : expectedMinAccumulatedCreditsList.get(subjectIdealTerm));
     }
 
     public Curriculum createCurriculum(CurriculumKey key) {
-        return new Curriculum(key.getCourseCode(), key.getCurriculumCode(), getIdealMandatoryCredits(), getIdealOptionalCredits(),
-                getIdealElectiveCredits(), getIdealComplementaryCredits(), getMinMandatoryCreditsNeeded(),
-                getMinOptionalCreditsNeeded(), getMinElectiveCreditsNeeded(), getMinComplementaryCreditsNeeded(),
-                getMinActivitiesNeeded(), getMinNumberOfTerms(), getMaxNumberOfTerms(), getMinNumberOfEnrolledCredits(),
-                getMaxNumberOfEnrolledCredits(), getExceptionalAdditionalEnrolledCredits(), getMandatorySubjects(),
-                getOptionalSubjects(), getElectiveSubjects(), getComplementarySubjects(), getComplementaryActivities());
+        return new Curriculum(key.getCourseCode(), key.getCurriculumCode(), extractIntegerList(getIdealMandatoryCreditsList()),
+                extractIntegerList(getIdealOptionalCreditsList()), extractIntegerList(getIdealElectiveCreditsList()),
+                extractIntegerList(getIdealComplementaryCreditsList()), extractIntegerList(getExpectedMinAccumulatedCreditsList()),
+                getMinMandatoryCreditsNeeded(), getMinOptionalCreditsNeeded(), getMinElectiveCreditsNeeded(),
+                getMinComplementaryCreditsNeeded(), getMinActivitiesNeeded(), getMinNumberOfTerms(), getMaxNumberOfTerms(),
+                getMinNumberOfEnrolledCredits(), getMaxNumberOfEnrolledCredits(), getExceptionalAdditionalEnrolledCredits(),
+                extractStrList(getMandatorySubjectCodes()), extractStrList(getOptionalSubjectCodes()),
+                extractStrList(getElectiveSubjectCodes()), extractStrList(getComplementarySubjectCodes()),
+                extractStrList(getComplementaryActivitiesCodes()));
+    }
+
+    public Collection<String> getAllSubjectsList() {
+        return extractStrList(getMandatorySubjectCodes() + "," + getOptionalSubjectCodes() + "," +
+                getElectiveSubjectCodes() + "," + getComplementarySubjectCodes());
     }
 
     private ArrayList<Integer> extractIntegerList(String idealCreditsStr) {

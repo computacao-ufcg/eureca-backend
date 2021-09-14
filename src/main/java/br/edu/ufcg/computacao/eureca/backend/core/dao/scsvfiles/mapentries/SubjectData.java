@@ -12,10 +12,8 @@ public class SubjectData implements EurecaMapValue {
     private int hours;
     private String name;
     private String equivalentCodes;
-    private Collection<String> equivalentCodesList;
     private int idealTerm;
     private String preRequirements;
-    private Collection<String> preRequirementsList;
 
     public SubjectData(String academicUnitId, String type, int credits, int hours, String name, String equivalentCodes,
                        int idealTerm, String preRequirements) {
@@ -27,8 +25,6 @@ public class SubjectData implements EurecaMapValue {
         this.equivalentCodes = equivalentCodes;
         this.idealTerm = idealTerm;
         this.preRequirements = preRequirements;
-        this.equivalentCodesList = null;
-        this.preRequirementsList = null;
     }
 
     public SubjectData() {
@@ -99,23 +95,17 @@ public class SubjectData implements EurecaMapValue {
     }
 
     public Collection<String> getEquivalentCodesList() {
-        if (equivalentCodesList == null) {
-            equivalentCodesList = extractStrList(equivalentCodes);
-        }
-        return equivalentCodesList;
+        return extractStrList(getEquivalentCodes());
+    }
+
+    public Collection<String> getPreRequirementsList() {
+        return extractStrList(getPreRequirements());
     }
 
     public Subject createSubject(SubjectKey key) {
         return new Subject(key.getCourseCode(), key.getCurriculumCode(), key.getSubjectCode(), getAcademicUnitId(),
-                getType(), getCredits(), getHours(), getName(), getEquivalentCodes(), getIdealTerm(),
-                getPreRequirements());
-    }
-
-    public Collection<String> getPreRequirementsList() {
-        if (preRequirementsList == null) {
-            preRequirementsList = extractStrList(preRequirements);
-        }
-        return preRequirementsList;
+                getType(), getCredits(), getHours(), getName(), extractStrList(getEquivalentCodes()), getIdealTerm(),
+                extractStrList(getPreRequirements()));
     }
 
     private Collection<String> extractStrList(String subjectsStr) {
@@ -137,10 +127,8 @@ public class SubjectData implements EurecaMapValue {
                 ", hours=" + hours +
                 ", name='" + name + '\'' +
                 ", equivalentCodes='" + equivalentCodes + '\'' +
-                ", equivalentCodesList=" + getEquivalentCodesList() +
                 ", idealTerm='" + idealTerm + '\'' +
                 ", preRequirements='" + preRequirements + '\'' +
-                ", preRequirementsList=" + getPreRequirementsList() +
                 '}';
     }
 }
