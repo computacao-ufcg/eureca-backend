@@ -3,7 +3,7 @@ package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.core.util.loaders.GenericLoadMapFromScsvFile;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
-import br.edu.ufcg.computacao.eureca.backend.core.util.ClassFactory;
+import br.edu.ufcg.computacao.eureca.backend.core.util.factory.ClassFactory;
 import br.edu.ufcg.computacao.eureca.common.exceptions.FatalErrorException;
 import br.edu.ufcg.computacao.eureca.common.util.HomeDir;
 import org.apache.log4j.Logger;

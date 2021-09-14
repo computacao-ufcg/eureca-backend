@@ -6,9 +6,8 @@ import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.ApplicationFacade;
-import br.edu.ufcg.computacao.eureca.backend.core.models.PreEnrollment;
+import br.edu.ufcg.computacao.eureca.backend.core.models.StudentPreEnrollment;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Subject;
 import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,8 +16,6 @@ import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
 
 @CrossOrigin
 @RestController
@@ -224,7 +221,7 @@ public class StudentsStatistics {
 
     @RequestMapping(value = "concluded/subjects", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_SUMMARY)
-    public ResponseEntity<PreEnrollment> getConcludedSubjects(
+    public ResponseEntity<StudentPreEnrollment> getConcludedSubjects(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
@@ -232,7 +229,7 @@ public class StudentsStatistics {
             @RequestParam(value = "student registration") String studentRegistration
     ) throws EurecaException {
         try {
-            PreEnrollment summary = ApplicationFacade.getInstance().getConcludedSubjects(courseCode, curriculumCode, studentRegistration);
+            StudentPreEnrollment summary = ApplicationFacade.getInstance().getConcludedSubjects(courseCode, curriculumCode, studentRegistration);
             return new ResponseEntity<>(summary, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));

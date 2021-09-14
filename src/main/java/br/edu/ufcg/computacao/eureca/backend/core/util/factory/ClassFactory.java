@@ -1,4 +1,4 @@
-package br.edu.ufcg.computacao.eureca.backend.core.util;
+package br.edu.ufcg.computacao.eureca.backend.core.util.factory;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.common.exceptions.FatalErrorException;
