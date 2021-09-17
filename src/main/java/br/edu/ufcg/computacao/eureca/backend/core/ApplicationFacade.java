@@ -138,11 +138,7 @@ public class ApplicationFacade {
         return response;
     }
 
-    public Student getStudentByRegistration(String courseCode, String curriculumCode, String registration) throws InvalidParameterException {
-        return this.studentsStatisticsController.getStudentByRegistration(courseCode, curriculumCode, registration);
-    }
-
-    public StudentPreEnrollment getConcludedSubjects(String courseCode, String curriculumCode, String registration) throws InvalidParameterException {
+    public StudentPreEnrollment createPreEnrollment(String courseCode, String curriculumCode, String registration) throws InvalidParameterException {
         return this.preEnrollmentController.createStudentPreEnrollment(courseCode, curriculumCode, registration);
     }
 

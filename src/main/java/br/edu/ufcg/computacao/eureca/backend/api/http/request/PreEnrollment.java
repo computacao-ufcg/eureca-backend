@@ -24,7 +24,7 @@ public class PreEnrollment {
             @RequestParam String curriculumCode
     ) throws InvalidParameterException {
         try {
-            StudentPreEnrollment preEnrollment = ApplicationFacade.getInstance().getConcludedSubjects(courseCode, curriculumCode, studentRegistration);
+            StudentPreEnrollment preEnrollment = ApplicationFacade.getInstance().createPreEnrollment(courseCode, curriculumCode, studentRegistration);
             return new ResponseEntity<>(preEnrollment, HttpStatus.OK);
         } catch (InvalidParameterException e) {
             LOGGER.info(e);

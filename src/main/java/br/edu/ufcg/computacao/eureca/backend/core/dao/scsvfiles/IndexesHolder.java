@@ -75,6 +75,12 @@ public class IndexesHolder {
         return alumni;
     }
 
+    public StudentCurriculumProgress getStudentCurriculumProgress(String registration) {
+        NationalIdRegistrationKey studentId = this.registrationMap.get(registration);
+        if (studentId == null) throw new NullPointerException();
+        return this.studentCurriculumProgressMap.get(studentId);
+    }
+
     public Map<String, Collection<NationalIdRegistrationKey>> getActivesPerCoursePerAdmissionTerm(String courseCode,
                                                              String curriculumCode) throws InvalidParameterException {
         Map<String, Collection<NationalIdRegistrationKey>> ret =
