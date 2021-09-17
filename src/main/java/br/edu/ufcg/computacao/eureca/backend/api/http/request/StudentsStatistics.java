@@ -198,42 +198,4 @@ public class StudentsStatistics {
         }
     }
 
-    @RequestMapping(value = "studentreg", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_SUMMARY)
-    public ResponseEntity<Student> getStudentByRegistration(
-            @ApiParam(value = ApiDocumentation.Common.COURSE)
-            @RequestParam(required = true, value = "courseCode") String courseCode,
-            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
-            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
-            @RequestParam(value = "student registration") String studentRegistration,
-            @ApiParam(value = ApiDocumentation.Common.LANGUAGE)
-            @RequestParam(required = false, value = "language", defaultValue = SystemConstants.PORTUGUESE) String lang
-//            @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
-    ) throws EurecaException {
-        try {
-            Student summary = ApplicationFacade.getInstance().getStudentByRegistration(courseCode, curriculumCode, studentRegistration);
-            return new ResponseEntity<>(summary, HttpStatus.OK);
-        } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
-            throw e;
-        }
-    }
-
-    @RequestMapping(value = "concluded/subjects", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_SUMMARY)
-    public ResponseEntity<StudentPreEnrollment> getConcludedSubjects(
-            @ApiParam(value = ApiDocumentation.Common.COURSE)
-            @RequestParam(required = true, value = "courseCode") String courseCode,
-            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
-            @RequestParam(required = true, value = "curriculumCode") String curriculumCode,
-            @RequestParam(value = "student registration") String studentRegistration
-    ) throws EurecaException {
-        try {
-            StudentPreEnrollment summary = ApplicationFacade.getInstance().getConcludedSubjects(courseCode, curriculumCode, studentRegistration);
-            return new ResponseEntity<>(summary, HttpStatus.OK);
-        } catch (EurecaException e) {
-            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
-            throw e;
-        }
-    }
 }
