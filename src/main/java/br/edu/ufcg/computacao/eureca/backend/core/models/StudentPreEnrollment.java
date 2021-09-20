@@ -98,24 +98,44 @@ public class StudentPreEnrollment {
     }
 
     public void addSubject(Subject subject) {
-        if (!this.subjects.contains(subject) && this.totalCredits + subject.getCredits() <= this.maxCredits) {
-            this.subjects.add(subject);
-
-            switch (subject.getType()) {
-                case "M":
-                    this.mandatoryCredits += subject.getCredits();
-                    break;
-                case "O":
-                    this.optionalCredits += subject.getCredits();
-                    break;
-                case "C":
-                    this.complementaryCredits += subject.getCredits();
-                    break;
-                case "E":
-                    this.electiveCredits += subject.getCredits();
-            }
-
-            this.totalCredits += subject.getCredits();
+        if (subject.isComposed()) {
+            this.addComposedSubject(subject);
+        } else {
+            this.addSimpleSubject(subject);
         }
+    }
+
+    private void addSimpleSubject(Subject subject) {
+        if (this.totalCredits + subject.getCredits() <= this.maxCredits) {
+            this.subjects.add(subject);
+            this.incrementCredits(subject);
+        }
+    }
+
+    private void addComposedSubject(Subject subject) {
+        Subject complementarySubject = subject.getComplementarySubject();
+        if (this.totalCredits + subject.getCredits() + complementarySubject.getCredits() <= this.maxCredits) {
+            this.subjects.add(subject);
+            this.subjects.add(complementarySubject);
+            this.incrementCredits(subject);
+            this.incrementCredits(subject);
+        }
+    }
+
+    private void incrementCredits(Subject subject) {
+        switch (subject.getType()) {
+            case "M":
+                this.mandatoryCredits += subject.getCredits();
+                break;
+            case "O":
+                this.optionalCredits += subject.getCredits();
+                break;
+            case "C":
+                this.complementaryCredits += subject.getCredits();
+                break;
+            case "E":
+                this.electiveCredits += subject.getCredits();
+        }
+        this.totalCredits += subject.getCredits();
     }
 }
