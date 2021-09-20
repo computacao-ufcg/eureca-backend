@@ -104,8 +104,8 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         StudentCurriculumProgress studentCurriculumProgress = this.indexesHolder.getStudentCurriculumProgress(studentRegistration);
         Collection<SubjectKey> concludedSubjects = studentCurriculumProgress.getCompleted();
         Collection<SubjectKey> ongoingSubjects = studentCurriculumProgress.getOngoing();
-        Collection<String> ongoingSubjectsCode = ongoingSubjects.stream().map(SubjectKey::getSubjectCode).collect(Collectors.toSet());
-        Collection<String> concludedSubjectsCode = concludedSubjects.stream().map(SubjectKey::getSubjectCode).collect(Collectors.toSet());
+        Collection<String> ongoingSubjectsCode = this.mapSubjectsToCodes(ongoingSubjects);
+        Collection<String> concludedSubjectsCode = this.mapSubjectsToCodes(concludedSubjects);
 
         Set<Subject> availableSubjects = new HashSet<>();
         Collection<String> subjectCodes = this.getSubjectCodes(courseCode, curriculumCode, subjectType);
@@ -122,6 +122,12 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         availableSubjectsList.sort(orderByIdealTerm);
 
         return availableSubjectsList;
+    }
+    
+    private Collection<String> mapSubjectsToCodes(Collection<SubjectKey> subjects) {
+        return subjects.stream()
+                .map(SubjectKey::getSubjectCode)
+                .collect(Collectors.toSet());
     }
 
     @Override
