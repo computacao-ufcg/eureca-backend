@@ -34,7 +34,6 @@ public class IndexesHolder {
     private Map<CurriculumKey, Map<String, Collection<NationalIdRegistrationKey>>> alumniPerCurriculumPerGraduationTermMap;
     private Map<CurriculumKey, Collection<NationalIdRegistrationKey>> dropoutsPerCurriculumMap;
     private Map<CurriculumKey, Map<String, Collection<NationalIdRegistrationKey>>> dropoutsPerCurriculumPerDropoutTermMap;
-    private Map<NationalIdRegistrationKey, Collection<SubjectKey>> completedSubjectsPerStudent;
     // Enrollment indexes
     private Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> enrollmentsPerSubjectPerTermPerClass;
     private Map<String, Map<SubjectKey, Map<String, ClassEnrollments>>> enrollmentsPerTermPerSubjectPerClass;
@@ -75,9 +74,9 @@ public class IndexesHolder {
         return alumni;
     }
 
-    public StudentCurriculumProgress getStudentCurriculumProgress(String registration) {
+    public StudentCurriculumProgress getStudentCurriculumProgress(String registration) throws InvalidParameterException {
         NationalIdRegistrationKey studentId = this.registrationMap.get(registration);
-        if (studentId == null) throw new NullPointerException();
+        if (studentId == null) throw new InvalidParameterException(String.format(Messages.INVALID_STUDENT_S, registration));
         return this.studentCurriculumProgressMap.get(studentId);
     }
 
@@ -144,12 +143,6 @@ public class IndexesHolder {
                 CurriculumKey(courseCode, curriculumCode));
         if (dropouts == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
         return getAllStudents(dropouts);
-    }
-
-    public Collection<SubjectKey> getCompletedSubjects(String studentRegistration) throws InvalidParameterException {
-        NationalIdRegistrationKey studentId = this.registrationMap.get(studentRegistration);
-        if (studentId == null) throw new InvalidParameterException(String.format(Messages.INVALID_USER_S, ""));
-        return this.completedSubjectsPerStudent.get(studentId);
     }
 
     public Collection<SubjectRetentionPerAdmissionTerm> getRetentionCount(String courseCode, String curriculumCode,
@@ -400,7 +393,6 @@ public class IndexesHolder {
     private void buildEnrollmentIndexes() {
         this.enrollmentsPerSubjectPerTermPerClass = new HashMap<>();
         this.enrollmentsPerTermPerSubjectPerClass = new HashMap<>();
-        this.completedSubjectsPerStudent = new HashMap<>();
         Map<Registration, Integer> attemptsSummary = new HashMap<>();
 
         this.enrollmentsMap.forEach((enrollmentKey, enrollmentData) -> {
@@ -683,21 +675,11 @@ public class IndexesHolder {
         return potentiallyAccumulatedCredits >= expectedAccumulatedCredits;
     }
 
-    private void addCompletedSubject(NationalIdRegistrationKey studentId, SubjectKey subjectKey) {
-        Collection<SubjectKey> completedSubjects = this.completedSubjectsPerStudent.get(studentId);
-        if (completedSubjects == null) {
-            completedSubjects = new HashSet<>();
-        }
-        completedSubjects.add(subjectKey);
-        this.completedSubjectsPerStudent.put(studentId, completedSubjects);
-    }
-
     private void updateClassEnrollments(ClassEnrollments classEnrollments, NationalIdRegistrationKey studentId,
                                         SubjectKey subjectKey, String status) {
         StudentCurriculumProgress studentCurriculumProgress;
         switch(status) {
             case SystemConstants.STATUS_SUCCEEDED:
-                this.addCompletedSubject(studentId, subjectKey);
                 classEnrollments.getSucceeded().add(studentId.getRegistration());
                 if ((studentCurriculumProgress = retrieveCurriculum(studentId)) != null) {
                     studentCurriculumProgress.getCompleted().add(subjectKey);
