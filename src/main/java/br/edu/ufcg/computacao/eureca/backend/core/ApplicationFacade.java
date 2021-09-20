@@ -138,7 +138,8 @@ public class ApplicationFacade {
         return response;
     }
 
-    public StudentPreEnrollment createPreEnrollment(String courseCode, String curriculumCode, String registration) throws InvalidParameterException {
+    public StudentPreEnrollment createPreEnrollment(String token, String courseCode, String curriculumCode, String registration) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.CREATE_PRE_ENROLLMENT);
         return this.preEnrollmentController.createStudentPreEnrollment(courseCode, curriculumCode, registration);
     }
 
