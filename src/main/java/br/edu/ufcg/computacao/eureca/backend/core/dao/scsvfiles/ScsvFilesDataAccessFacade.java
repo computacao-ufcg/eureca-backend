@@ -81,16 +81,6 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Student getActiveByRegistration(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
-        Collection<Student> allActives = this.getFilteredStudents(StudentClassification.ACTIVE, courseCode, curriculumCode);
-        for (Student student : allActives) {
-            if (student.getRegistration().getRegistration().equals(studentRegistration))
-                return student;
-        }
-        throw new InvalidParameterException("Inexistent active!");
-    }
-
-    @Override
     public List<Subject> getMandatorySubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
         return this.getSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration, SubjectType.MANDATORY);
     }
@@ -411,11 +401,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return subjectCodes;
     }
 
-    private Collection<String> getSubjectCodes(String courseCode, String curriculumCode) throws InvalidParameterException {
-        return this.getSubjectCodes(courseCode, curriculumCode, null);
-    }
-
-        private SubjectMetrics computeSubjectMetrics(Collection<ClassEnrollments> classes) {
+    private SubjectMetrics computeSubjectMetrics(Collection<ClassEnrollments> classes) {
         int failedDueToAbsences = 0;
         int failedDueToGrade = 0;
         int cancelled = 0;
