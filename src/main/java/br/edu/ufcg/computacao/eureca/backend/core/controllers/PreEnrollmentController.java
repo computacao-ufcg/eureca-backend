@@ -1,13 +1,11 @@
 package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.StudentCurriculumProgress;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.StudentPreEnrollment;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Subject;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 
-import java.util.Collection;
 import java.util.List;
 
 public class PreEnrollmentController {
