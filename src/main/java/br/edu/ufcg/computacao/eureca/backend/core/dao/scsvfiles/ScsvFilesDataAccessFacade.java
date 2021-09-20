@@ -347,8 +347,8 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     public int getStudentIdealCredits(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
         Curriculum curriculum = this.getCurriculum(courseCode, curriculumCode);
         StudentCurriculumProgress studentCurriculumProgress = this.indexesHolder.getStudentCurriculumProgress(studentRegistration);
-        int studentCurrentTerm = studentCurriculumProgress.getCurrentTerm();
-        return this.getIdealCredits(--studentCurrentTerm, curriculum);
+        int studentCurrentTerm = studentCurriculumProgress.getCurrentTerm() - 1;
+        return this.getIdealCredits(studentCurrentTerm, curriculum);
     }
 
     private int getIdealCredits(int term, Curriculum curriculum) {
