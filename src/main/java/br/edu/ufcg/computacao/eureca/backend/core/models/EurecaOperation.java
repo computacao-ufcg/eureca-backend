@@ -24,7 +24,8 @@ public enum EurecaOperation {
     GET_SUBJECT_ENROLLMENTS_CSV("getSubjectEnrollmentsCSV"),
     GET_SUBJECT_ENROLLMENTS_STATISTICS_SUMMARY("getSubjectEnrollmentsStatisticsSummary"),
     GET_CURRICULUM_CODES("getCurriculumCodes"),
-    GET_PROFILE("getProfile");
+    GET_PROFILE("getProfile"),
+    CREATE_PRE_ENROLLMENT("createPreEnrollment");
 
     private String value;
 
