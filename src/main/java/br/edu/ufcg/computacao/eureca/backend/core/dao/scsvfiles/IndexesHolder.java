@@ -225,49 +225,50 @@ public class IndexesHolder {
                     enrollmentsPerCurriuclum.get(curriculumKey);
             if (enrollmentsPerTerm == null) continue;
             Collection<TeacherStatisticsPerTerm> terms = new TreeSet<>();
-            ArrayList<String> termsList = new ArrayList<>();
+            TreeSet<String> termsSet = new TreeSet<>();
             enrollmentsPerTerm.keySet().forEach(term -> {
-                Map<SubjectKey, Map<String, ClassEnrollments>> enrollmentsPerSubject = enrollmentsPerTerm.get(term);
-                int subjectsCount = enrollmentsPerSubject.keySet().size();
-                int classesCount = 0;
-                int totalEnrolled = 0;
-                int failedDueToAbsence = 0;
-                int failedDueToGrade = 0;
-                int cancelled = 0;
-                int succeeded = 0;
-                int ongoing = 0;
-                int exempted = 0;
-                int suspended = 0;
-                for (SubjectKey subjectKey : enrollmentsPerSubject.keySet()) {
-                    Map<String, ClassEnrollments> enrollmentsPerClass = enrollmentsPerSubject.get(subjectKey);
-                    classesCount += enrollmentsPerClass.keySet().size();
-                    for (String classId : enrollmentsPerClass.keySet()) {
-                        ClassEnrollments classEnrollments = enrollmentsPerClass.get(classId);
-                        totalEnrolled += classEnrollments.getNumberOfEnrolleds();
-                        failedDueToAbsence += classEnrollments.getNumberFailedDueToAbsence();
-                        failedDueToGrade += classEnrollments.getNumberFailedDueToGrade();
-                        cancelled += classEnrollments.getNumberCancelled();
-                        succeeded += classEnrollments.getNumberSucceeded();
-                        ongoing += classEnrollments.getNumberOngoing();
-                        exempted += classEnrollments.getNumberExempted();
-                        suspended += classEnrollments.getNumberSuspended();
+                if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
+                    Map<SubjectKey, Map<String, ClassEnrollments>> enrollmentsPerSubject = enrollmentsPerTerm.get(term);
+                    int subjectsCount = enrollmentsPerSubject.keySet().size();
+                    int classesCount = 0;
+                    int totalEnrolled = 0;
+                    int failedDueToAbsence = 0;
+                    int failedDueToGrade = 0;
+                    int cancelled = 0;
+                    int succeeded = 0;
+                    int ongoing = 0;
+                    int exempted = 0;
+                    int suspended = 0;
+                    for (SubjectKey subjectKey : enrollmentsPerSubject.keySet()) {
+                        Map<String, ClassEnrollments> enrollmentsPerClass = enrollmentsPerSubject.get(subjectKey);
+                        classesCount += enrollmentsPerClass.keySet().size();
+                        for (String classId : enrollmentsPerClass.keySet()) {
+                            ClassEnrollments classEnrollments = enrollmentsPerClass.get(classId);
+                            totalEnrolled += classEnrollments.getNumberOfEnrolleds();
+                            failedDueToAbsence += classEnrollments.getNumberFailedDueToAbsence();
+                            failedDueToGrade += classEnrollments.getNumberFailedDueToGrade();
+                            cancelled += classEnrollments.getNumberCancelled();
+                            succeeded += classEnrollments.getNumberSucceeded();
+                            ongoing += classEnrollments.getNumberOngoing();
+                            exempted += classEnrollments.getNumberExempted();
+                            suspended += classEnrollments.getNumberSuspended();
+                        }
                     }
+                    TeacherStatisticsSummary teacherStatisticsSummary = new TeacherStatisticsSummary(subjectsCount,
+                            classesCount, totalEnrolled, (double) totalEnrolled/classesCount,
+                            (double) failedDueToAbsence/totalEnrolled,
+                            (double) failedDueToGrade/totalEnrolled,
+                            (double) cancelled/totalEnrolled, (double) succeeded/totalEnrolled,
+                            (double) ongoing/totalEnrolled, (double) exempted/totalEnrolled,
+                            (double) suspended/totalEnrolled);
+                    terms.add(new TeacherStatisticsPerTerm(term, teacherStatisticsSummary));
+                    termsSet.add(term);
                 }
-                TeacherStatisticsSummary teacherStatisticsSummary = new TeacherStatisticsSummary(subjectsCount,
-                        classesCount, totalEnrolled, (double) totalEnrolled/classesCount,
-                        (double) failedDueToAbsence/totalEnrolled,
-                        (double) failedDueToGrade/totalEnrolled,
-                        (double) cancelled/totalEnrolled, (double) succeeded/totalEnrolled,
-                        (double) ongoing/totalEnrolled, (double) exempted/totalEnrolled,
-                        (double) suspended/totalEnrolled);
-                terms.add(new TeacherStatisticsPerTerm(term, teacherStatisticsSummary));
-                termsList.add(term);
             });
-            int termsListSize = termsList.size();
+            int termsListSize = termsSet.size();
             if (termsListSize > 0) {
-                Collections.sort(termsList);
-                String first = termsList.get(0);
-                String last = termsList.get(termsListSize - 1);
+                String first = termsSet.first();
+                String last = termsSet.last();
 
                 TeacherData teacherData = this.teachersMap.get(teacherKey);
                 TeacherStatistics teachersData = new TeacherStatistics(first, last, teacherKey.getId(),
