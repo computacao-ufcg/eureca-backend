@@ -14,6 +14,7 @@ public class Subject {
     private Collection<String> equivalentCodesList;
     private int idealTerm;
     private Collection<String> preRequirementsList;
+    private Subject complementarySubject;
 
     public Subject(String courseCode, String curriculumCode, String subjectCode, String academicUnit, String type,
                    int credits, int hours, String name, Collection<String> equivalentCodesList, int idealTerm,
@@ -29,6 +30,11 @@ public class Subject {
         this.equivalentCodesList = equivalentCodesList;
         this.idealTerm = idealTerm;
         this.preRequirementsList = preRequirementsList;
+    }
+
+    public Subject(String courseCode, String curriculumCode, String subjectCode, String academicUnit, String type, int credits, int hours, String name, Collection<String> equivalentCodesList, int idealTerm, Collection<String> preRequirementsList, Subject complementarySubject) {
+        this(courseCode, curriculumCode, subjectCode, academicUnit, type, credits, hours, name, equivalentCodesList, idealTerm, preRequirementsList);
+        this.complementarySubject = complementarySubject;
     }
 
     public String getCourseCode() {
@@ -111,11 +117,23 @@ public class Subject {
         return preRequirementsList;
     }
 
+    public boolean isComposed() {
+        return this.complementarySubject != null;
+    }
+
+    public Subject getComplementarySubject() {
+        return complementarySubject;
+    }
+
+    public void setComplementarySubject(Subject complementarySubject) {
+        this.complementarySubject = complementarySubject;
+    }
+
     @Override
     public String toString() {
         return "Subject{" +
                 "courseCode='" + courseCode + '\'' +
-                "curriculumCode='" + curriculumCode + '\'' +
+                ", curriculumCode='" + curriculumCode + '\'' +
                 ", subjectCode='" + subjectCode + '\'' +
                 ", academicUnit='" + academicUnit + '\'' +
                 ", type='" + type + '\'' +
@@ -123,8 +141,9 @@ public class Subject {
                 ", hours=" + hours +
                 ", name='" + name + '\'' +
                 ", equivalentCodesList=" + equivalentCodesList +
-                ", idealTerm='" + idealTerm + '\'' +
+                ", idealTerm=" + idealTerm +
                 ", preRequirementsList=" + preRequirementsList +
+                ", complementarySubject=" + (complementarySubject != null ? complementarySubject.getName() : null) +
                 '}';
     }
 }

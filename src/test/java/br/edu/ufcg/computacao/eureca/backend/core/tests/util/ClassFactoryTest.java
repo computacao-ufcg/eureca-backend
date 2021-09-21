@@ -3,7 +3,7 @@ package br.edu.ufcg.computacao.eureca.backend.core.tests.util;
 import br.edu.ufcg.computacao.eureca.backend.constants.ConfigurationPropertyKeys;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.PropertiesHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.plugins.AuthorizationPlugin;
-import br.edu.ufcg.computacao.eureca.backend.core.util.ClassFactory;
+import br.edu.ufcg.computacao.eureca.backend.core.util.factory.ClassFactory;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import br.edu.ufcg.computacao.eureca.common.exceptions.FatalErrorException;
 import org.junit.Before;

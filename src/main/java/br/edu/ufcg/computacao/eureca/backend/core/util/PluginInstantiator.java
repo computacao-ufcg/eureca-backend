@@ -1,6 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.core.util;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.ConfigurationPropertyKeys;
+import br.edu.ufcg.computacao.eureca.backend.core.util.factory.ClassFactory;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.PropertiesHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.plugins.AuthorizationPlugin;
 

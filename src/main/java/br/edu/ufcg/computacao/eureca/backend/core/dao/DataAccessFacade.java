@@ -1,10 +1,14 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
-import br.edu.ufcg.computacao.eureca.backend.core.models.*;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Curriculum;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Subject;
+import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectType;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public interface DataAccessFacade {
@@ -21,6 +25,14 @@ public interface DataAccessFacade {
     Map<String, Collection<Student>> getDropoutsPerDropoutTerm(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 
     Collection<AlumniDigest> getAlumniPerStudentSummary(String courseCode, String from, String to) throws InvalidParameterException;
+
+    List<Subject> getMandatorySubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
+
+    List<Subject> getOptionalSubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
+
+    List<Subject> getElectiveSubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
+
+    List<Subject> getComplementarySubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
 
     Curriculum getCurriculum(String courseCode, String curriculumCode) throws InvalidParameterException;
 
@@ -47,4 +59,6 @@ public interface DataAccessFacade {
     TeachersStatisticsResponse getTeachersPerTermSummary(String courseCode, String curriculumCode, String from, String to, String academicUnitId) throws InvalidParameterException;
 
     Map<String, TeachersStatisticsSummary> getTeachersPerAcademicUnit(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
+
+    int getStudentIdealCredits(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
 }
