@@ -222,7 +222,7 @@ public class CurriculumData implements EurecaMapValue {
 
     public int getExpectedMinAccumulatedCredits(int subjectIdealTerm) {
         ArrayList<Integer> expectedMinAccumulatedCreditsList = extractIntegerList(this.expectedMinAccumulatedCreditsList);
-        return (subjectIdealTerm >= expectedMinAccumulatedCreditsList.size() ? -1 : expectedMinAccumulatedCreditsList.get(subjectIdealTerm));
+        return (subjectIdealTerm > expectedMinAccumulatedCreditsList.size() ? -1 : expectedMinAccumulatedCreditsList.get(subjectIdealTerm));
     }
 
     public Curriculum createCurriculum(CurriculumKey key) {

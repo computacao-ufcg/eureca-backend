@@ -672,7 +672,7 @@ public class IndexesHolder {
                                int subjectIdealTerm) {
         int potentiallyAccumulatedCredits = studentCurriculum.getAccumulatedCredits() +
                 studentCurriculum.getEnrolledCredits();
-        int expectedAccumulatedCredits = curriculumData.getExpectedMinAccumulatedCredits(subjectIdealTerm);
+        int expectedAccumulatedCredits = curriculumData.getExpectedMinAccumulatedCredits(subjectIdealTerm - 1);
         return potentiallyAccumulatedCredits >= expectedAccumulatedCredits;
     }
 
