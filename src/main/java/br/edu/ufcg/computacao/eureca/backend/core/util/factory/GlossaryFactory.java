@@ -1,4 +1,4 @@
-package br.edu.ufcg.computacao.eureca.backend.core.util;
+package br.edu.ufcg.computacao.eureca.backend.core.util.factory;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.*;
 import br.edu.ufcg.computacao.eureca.backend.core.models.GlossaryType;

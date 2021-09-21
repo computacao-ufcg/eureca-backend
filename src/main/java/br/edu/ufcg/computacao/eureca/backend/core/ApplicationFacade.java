@@ -6,13 +6,12 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.constants.*;
 import br.edu.ufcg.computacao.eureca.backend.core.controllers.*;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.EurecaAsPublicKeyHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.models.EurecaOperation;
-import br.edu.ufcg.computacao.eureca.backend.core.models.GlossaryType;
-import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectType;
+import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.backend.core.plugins.AuthorizationPlugin;
-import br.edu.ufcg.computacao.eureca.backend.core.util.GlossaryFactory;
+import br.edu.ufcg.computacao.eureca.backend.core.util.factory.GlossaryFactory;
 import br.edu.ufcg.computacao.eureca.common.exceptions.ConfigurationErrorException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
+import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import br.edu.ufcg.computacao.eureca.common.util.CryptoUtil;
 import br.edu.ufcg.computacao.eureca.common.util.ServiceAsymmetricKeysHolder;
 import org.apache.log4j.Logger;
@@ -28,6 +27,7 @@ public class ApplicationFacade {
     private AlumniController alumniController;
     private ProfileController profileController;
     private CurriculaController curriculaController;
+    private PreEnrollmentController preEnrollmentController;
     private StudentsStatisticsController studentsStatisticsController;
     private SubjectsStatisticsController subjectsStatisticsController;
     private EnrollmentsStatisticsController enrollmentsStatisticsController;
@@ -39,6 +39,7 @@ public class ApplicationFacade {
         this.alumniController = new AlumniController();
         this.profileController = new ProfileController();
         this.curriculaController = new CurriculaController();
+        this.preEnrollmentController = new PreEnrollmentController();
         this.studentsStatisticsController = new StudentsStatisticsController();
         this.subjectsStatisticsController = new SubjectsStatisticsController();
         this.enrollmentsStatisticsController = new EnrollmentsStatisticsController();
@@ -135,6 +136,11 @@ public class ApplicationFacade {
         StudentsGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.STUDENT);
         response.setGlossary(glossaryFields);
         return response;
+    }
+
+    public StudentPreEnrollment createPreEnrollment(String token, String courseCode, String curriculumCode, String registration) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.CREATE_PRE_ENROLLMENT);
+        return this.preEnrollmentController.createStudentPreEnrollment(courseCode, curriculumCode, registration);
     }
 
     public StudentsRetentionStatisticsResponse getStudentsRetentionStatistics(String token, String courseCode, String curriculumCode, String from, String to) throws EurecaException {

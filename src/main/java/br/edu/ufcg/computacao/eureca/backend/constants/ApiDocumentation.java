@@ -32,6 +32,7 @@ public class ApiDocumentation {
         public static final String COURSE = "Código do curso";
         public static final String CURRICULUM = "Código do currículo";
         public static final String ACADEMIC_UNIT = "Código da Unidade Acadêmica";
+        public static final String STUDENT_REGISTRATION = "Matrícula do aluno.";
     }
 
     public static class Alumni {
@@ -113,5 +114,10 @@ public class ApiDocumentation {
         public static final String API = "Estatísticas dos docentes.";
         public static final String GET_TEACHERS = "Retorna um sumário dos dados dos docentes.";
         public static final String GET_TEACHERS_CSV = "Retorna os dados completos dos docentes.";
+    }
+
+    public static class PreEnrollment {
+        public static final String API = "Pré-matrícula de um aluno.";
+        public static final String GET_PRE_ENROLLMENT = "Retorna uma possível pré-matrícula de um aluno específico.";
     }
 }
