@@ -2,6 +2,7 @@ package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
+import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
@@ -10,6 +11,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.StudentCl
 import br.edu.ufcg.computacao.eureca.backend.core.models.StudentCurriculumProgress;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
+import io.swagger.models.auth.In;
 import org.apache.log4j.Logger;
 
 import javax.validation.constraints.NotNull;
@@ -344,6 +346,127 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     @Override
     public StudentCurriculumProgress getStudentCurriculumProgress(String studentRegistration) throws InvalidParameterException {
         return this.indexesHolder.getStudentCurriculumProgress(studentRegistration);
+    }
+
+    @Override
+    public StudentPreEnrollment getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
+        Curriculum curriculum = this.getCurriculum(courseCode, curriculumCode);
+        StudentCurriculumProgress progress = this.getStudentCurriculumProgress(studentRegistration);
+        // ToDo: mudar essa lógica para considerar o número ideal de créditos por tipo
+        int idealNumberOfCredits = getIdealNumberOfCredits(curriculum, progress);
+        int actualTerm = progress.getCompletedTerms() + (progress.getEnrolledCredits() > 0 ? 2 : 1);
+        StudentPreEnrollment studentPreEnrollment = new StudentPreEnrollment(studentRegistration, actualTerm, idealNumberOfCredits);
+
+        List<Subject> availableMandatorySubjects = this.getMandatorySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
+        List<Subject> availableComplementarySubjects = this.getComplementarySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
+        List<Subject> availableElectiveSubjects = this.getElectiveSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
+        List<Subject> availableOptionalSubjects = this.getOptionalSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
+
+        // ToDo: mudar essa lógica para matricular no número ideal de créditos por tipo (sem considerar co-requisitos, por enquanto)
+        while(!studentPreEnrollment.isFull()) {
+            for (Subject s : availableMandatorySubjects)
+                studentPreEnrollment.addSubject(s);
+
+            if (!studentPreEnrollment.isFull()) {
+                for (Subject s : availableOptionalSubjects)
+                    studentPreEnrollment.addSubject(s);
+            }
+
+            if (!studentPreEnrollment.isFull()) {
+                for (Subject s : availableComplementarySubjects)
+                    studentPreEnrollment.addSubject(s);
+            }
+
+            if (!studentPreEnrollment.isFull()) {
+                for (Subject s : availableElectiveSubjects)
+                    studentPreEnrollment.addSubject(s);
+            }
+
+            if (studentPreEnrollment.getSubjects().isEmpty()) break;
+        }
+
+        return studentPreEnrollment;
+    }
+
+    @Override
+    public ActivesPreEnrollmentResponse getActivesPreEnrollment(String courseCode, String curriculumCode) throws InvalidParameterException {
+        Collection<Student> actives = this.getActives(courseCode, curriculumCode, SystemConstants.FIRST_POSSIBLE_TERM, SystemConstants.LAST_POSSIBLE_TERM);
+        Collection<String> registrations = actives.stream().map(student -> student.getRegistration().getRegistration()).collect(Collectors.toSet());
+        Collection<StudentPreEnrollment> preEnrollments = new HashSet<>();
+
+        for (String registration : registrations) {
+            StudentPreEnrollment preEnrollment = this.getStudentPreEnrollment(courseCode, curriculumCode, registration);
+            preEnrollments.add(preEnrollment);
+        }
+        SubjectDemandSummary subjectDemandSummary = this.getSubjectDemandSummary(preEnrollments);
+
+        return new ActivesPreEnrollmentResponse(preEnrollments, subjectDemandSummary);
+    }
+
+    private SubjectDemandSummary getSubjectDemandSummary(Collection<StudentPreEnrollment> preEnrollments) {
+        Collection<SubjectDemand> mandatoryDemand = getSubjectDemand("M", preEnrollments);
+        Collection<SubjectDemand> optionalDemand = getSubjectDemand("O", preEnrollments);
+        Collection<SubjectDemand> complementaryDemand = getSubjectDemand("C", preEnrollments);
+        Collection<SubjectDemand> electiveDemand = getSubjectDemand("E", preEnrollments);
+
+        return new SubjectDemandSummary(mandatoryDemand, optionalDemand, complementaryDemand, electiveDemand);
+    }
+
+    private Collection<SubjectDemand> getSubjectDemand(String subjectType, Collection<StudentPreEnrollment> preEnrollments) {
+        Collection<SubjectDemand> response = new ArrayList<>();
+        Map<Subject, Map<Integer, Integer>> subjectDemandByTerm = new HashMap<>();
+
+        for (StudentPreEnrollment preEnrollment : preEnrollments) {
+            Set<Subject> proposedSubjects = preEnrollment.getSubjects();
+            int studentCurrentTerm = preEnrollment.getActualTerm();
+
+            for (Subject subject : proposedSubjects) {
+                if (subject.getType().equals(subjectType)) {
+                    if (!subjectDemandByTerm.containsKey(subject)) {
+                        subjectDemandByTerm.put(subject, new HashMap<>());
+                    }
+                    Map<Integer, Integer> demandByTerm = subjectDemandByTerm.get(subject);
+
+                    if (!demandByTerm.containsKey(studentCurrentTerm)) {
+                        demandByTerm.put(studentCurrentTerm, 0);
+                    }
+
+                    int currentDemand = demandByTerm.get(studentCurrentTerm);
+                    subjectDemandByTerm.get(subject).put(studentCurrentTerm, currentDemand + 1);
+                }
+            }
+        }
+
+        for (Map.Entry<Subject, Map<Integer, Integer>> entry : subjectDemandByTerm.entrySet()) {
+            Subject subject = entry.getKey();
+            Map<Integer, Integer> demandByTerm = entry.getValue();
+
+            response.add(new SubjectDemand(subject, demandByTerm));
+        }
+
+        return response;
+    }
+
+    private int getIdealNumberOfCredits(Curriculum curriculum, StudentCurriculumProgress progress) {
+        // ToDo: calcular nextTerm levando em consideração o número de créditos integralizados e
+        // o campo expectedMinAccumulatedCreditsList de currículo
+        int nextTerm = this.getNextTerm(curriculum, progress);
+        int idealMandatoryCredits = curriculum.getIdealMandatoryCredits(nextTerm);
+        int idealOptionalCredits = curriculum.getIdealOptionalCredits(nextTerm);
+        int idealComplementaryCredits = curriculum.getIdealComplementaryCredits(nextTerm);
+        return idealMandatoryCredits + idealOptionalCredits + idealComplementaryCredits;
+    }
+
+    private int getNextTerm(Curriculum curriculum, StudentCurriculumProgress progress) {
+        List<Integer> expectedMinAccumulatedCredits = curriculum.getExpectedMinAccumulatedCreditsList();
+        int accumulatedCredits = progress.getCompletedCredits();
+
+        for (int i = 0; i < expectedMinAccumulatedCredits.size(); i++) {
+            int minAccumulatedCredits = expectedMinAccumulatedCredits.get(i);
+            if (minAccumulatedCredits >= accumulatedCredits)
+                return i;
+        }
+        return 8;
     }
 
     private Subject getSubject(SubjectKey subjectKey) {

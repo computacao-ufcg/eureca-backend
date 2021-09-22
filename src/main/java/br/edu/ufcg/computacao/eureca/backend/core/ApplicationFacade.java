@@ -143,6 +143,10 @@ public class ApplicationFacade {
         return this.preEnrollmentController.createStudentPreEnrollment(courseCode, curriculumCode, registration);
     }
 
+    public ActivesPreEnrollmentResponse getActivesPreEnrollments(String token, String courseCode, String curriculumCode) throws InvalidParameterException {
+        return this.preEnrollmentController.getActivesPreEnrollmentResponse(courseCode, curriculumCode);
+    }
+
     public StudentsRetentionStatisticsResponse getStudentsRetentionStatistics(String token, String courseCode, String curriculumCode, String from, String to) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_RETENTION_STATISTICS);
         return this.retentionStatisticsController.getStudentsRetentionStatistics(courseCode, curriculumCode, from, to);
