@@ -7,7 +7,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.SubjectData;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.StudentClassification;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.StudentCurriculumProgress;
+import br.edu.ufcg.computacao.eureca.backend.core.models.StudentCurriculumProgress;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
@@ -103,8 +103,9 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     private List<Subject> getSubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration, SubjectType subjectType) throws InvalidParameterException {
         StudentCurriculumProgress studentCurriculumProgress = this.indexesHolder.getStudentCurriculumProgress(studentRegistration);
         Collection<SubjectKey> concludedSubjects = studentCurriculumProgress.getCompleted();
-        Collection<SubjectKey> ongoingSubjects = studentCurriculumProgress.getOngoing();
-        Collection<String> ongoingSubjectsCode = this.mapSubjectsToCodes(ongoingSubjects);
+        // If the student is currently registered, we take the optimistic approach and consider that he/she
+        // will complete the ongoing subjects successfully
+        concludedSubjects.addAll(studentCurriculumProgress.getOngoing());
         Collection<String> concludedSubjectsCode = this.mapSubjectsToCodes(concludedSubjects);
 
         Set<Subject> availableSubjects = new HashSet<>();
@@ -112,7 +113,8 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
         for (String subjectCode : subjectCodes) {
             Subject subject = this.getSubject(courseCode, curriculumCode, subjectCode);
-            if (!concludedSubjectsCode.contains(subjectCode) && !ongoingSubjectsCode.contains(subjectCode) && concludedSubjectsCode.containsAll(subject.getPreRequirementsList())) {
+            if (!concludedSubjectsCode.contains(subjectCode) &&
+                    concludedSubjectsCode.containsAll(subject.getPreRequirementsList())) {
                 availableSubjects.add(subject);
             }
         }
@@ -123,7 +125,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
         return availableSubjectsList;
     }
-    
+
     private Collection<String> mapSubjectsToCodes(Collection<SubjectKey> subjects) {
         return subjects.stream()
                 .map(SubjectKey::getSubjectCode)
@@ -340,20 +342,8 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public int getStudentIdealCredits(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
-        Curriculum curriculum = this.getCurriculum(courseCode, curriculumCode);
-        StudentCurriculumProgress studentCurriculumProgress = this.indexesHolder.getStudentCurriculumProgress(studentRegistration);
-        int studentCurrentTerm = studentCurriculumProgress.getCurrentTerm() - 1;
-        return this.getIdealCredits(studentCurrentTerm, curriculum);
-    }
-
-    private int getIdealCredits(int term, Curriculum curriculum) {
-        int mandatoryCredits = curriculum.getIdealMandatoryCredits(term);
-        int optionalCredits = curriculum.getIdealOptionalCredits(term);
-        int electiveCredits = curriculum.getIdealElectiveCredits(term);
-        int complementaryCredits = curriculum.getIdealComplementaryCredits(term);
-
-        return mandatoryCredits + optionalCredits + electiveCredits + complementaryCredits;
+    public StudentCurriculumProgress getStudentCurriculumProgress(String studentRegistration) throws InvalidParameterException {
+        return this.indexesHolder.getStudentCurriculumProgress(studentRegistration);
     }
 
     private Subject getSubject(SubjectKey subjectKey) {

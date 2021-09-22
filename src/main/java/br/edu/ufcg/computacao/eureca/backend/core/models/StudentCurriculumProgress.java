@@ -1,4 +1,4 @@
-package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models;
+package br.edu.ufcg.computacao.eureca.backend.core.models;
 
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.SubjectKey;
 
@@ -6,8 +6,10 @@ import java.util.Collection;
 import java.util.TreeSet;
 
 public class StudentCurriculumProgress {
-    private int currentTerm;
-    private int accumulatedCredits;
+    private int completedTerms;
+    private int completedMandatoryCredits;
+    private int completedOptionalCredits;
+    private int completedComplementaryCredits;
     private int enrolledCredits;
     private Collection<SubjectKey> completed;
     private Collection<SubjectKey> enabled;
@@ -15,9 +17,12 @@ public class StudentCurriculumProgress {
     private Collection<SubjectKey> ongoing;
     private Collection<SubjectKey> adequate;
 
-    public StudentCurriculumProgress(int currentTerm, int accumulatedCredits, int enrolledCredits) {
-        this.currentTerm = currentTerm;
-        this.accumulatedCredits = accumulatedCredits;
+    public StudentCurriculumProgress(int completedTerms, int completedMandatoryCredits, int completedOptionalCredits,
+                                     int completedComplementaryCredits, int enrolledCredits) {
+        this.completedTerms = completedTerms;
+        this.completedMandatoryCredits = completedMandatoryCredits;
+        this.completedOptionalCredits = completedOptionalCredits;
+        this.completedComplementaryCredits = completedComplementaryCredits;
         this.enrolledCredits = enrolledCredits;
         this.completed = new TreeSet<>();
         this.enabled = new TreeSet<>();
@@ -26,20 +31,36 @@ public class StudentCurriculumProgress {
         this.adequate = new TreeSet<>();
     }
 
-    public int getCurrentTerm() {
-        return currentTerm;
+    public int getCompletedTerms() {
+        return completedTerms;
     }
 
-    public void setCurrentTerm(int currentTerm) {
-        this.currentTerm = currentTerm;
+    public void setCompletedTerms(int completedTerms) {
+        this.completedTerms = completedTerms;
     }
 
-    public int getAccumulatedCredits() {
-        return accumulatedCredits;
+    public int getCompletedMandatoryCredits() {
+        return completedMandatoryCredits;
     }
 
-    public void setAccumulatedCredits(int accumulatedCredits) {
-        this.accumulatedCredits = accumulatedCredits;
+    public void setCompletedMandatoryCredits(int completedMandatoryCredits) {
+        this.completedMandatoryCredits = completedMandatoryCredits;
+    }
+
+    public int getCompletedOptionalCredits() {
+        return completedOptionalCredits;
+    }
+
+    public void setCompletedOptionalCredits(int completedOptionalCredits) {
+        this.completedOptionalCredits = completedOptionalCredits;
+    }
+
+    public int getCompletedComplementaryCredits() {
+        return completedComplementaryCredits;
+    }
+
+    public void setCompletedComplementaryCredits(int completedComplementaryCredits) {
+        this.completedComplementaryCredits = completedComplementaryCredits;
     }
 
     public int getEnrolledCredits() {
