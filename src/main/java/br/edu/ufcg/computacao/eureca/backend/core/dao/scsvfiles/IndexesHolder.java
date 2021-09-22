@@ -671,6 +671,7 @@ public class IndexesHolder {
     private boolean isAdequate(StudentCurriculumProgress studentCurriculum, CurriculumData curriculumData,
                                int subjectIdealTerm) {
         int potentiallyAccumulatedCredits = studentCurriculum.getCompletedMandatoryCredits() +
+                studentCurriculum.getCompletedOptionalCredits() + studentCurriculum.getCompletedComplementaryCredits() +
                 studentCurriculum.getEnrolledCredits();
         int expectedAccumulatedCredits = curriculumData.getExpectedMinAccumulatedCredits(subjectIdealTerm);
         return potentiallyAccumulatedCredits >= expectedAccumulatedCredits;
