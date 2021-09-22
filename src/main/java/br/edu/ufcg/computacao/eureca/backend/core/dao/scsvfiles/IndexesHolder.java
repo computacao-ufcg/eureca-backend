@@ -6,7 +6,7 @@ import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.TeacherData;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.TeachersListData;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.StudentCurriculumProgress;
+import br.edu.ufcg.computacao.eureca.backend.core.models.StudentCurriculumProgress;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.TeachersSetAndEnrollments;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 
@@ -372,9 +372,9 @@ public class IndexesHolder {
                 // Actives per course per term
                 addToStudentPerTermIndex(k, v, v.getAdmissionTerm(), this.activesPerCurriculumPerAdmissionTermMap);
                 // Setup student progress on his/her curriculum
-                this.studentCurriculumProgressMap.put(k, new StudentCurriculumProgress((v.getCompletedTerms() + 1),
-                        (v.getMandatoryCredits() + v.getOptionalCredits() + v.getComplementaryCredits()),
-                                v.getEnrolledCredits()));
+                this.studentCurriculumProgressMap.put(k, new StudentCurriculumProgress(v.getCompletedTerms(),
+                        v.getMandatoryCredits(), v.getOptionalCredits(), v.getComplementaryCredits(),
+                        v.getEnrolledCredits()));
             }
             if (v.isAlumnus()) {
                 // All alumni per course
@@ -670,9 +670,10 @@ public class IndexesHolder {
 
     private boolean isAdequate(StudentCurriculumProgress studentCurriculum, CurriculumData curriculumData,
                                int subjectIdealTerm) {
-        int potentiallyAccumulatedCredits = studentCurriculum.getAccumulatedCredits() +
+        int potentiallyAccumulatedCredits = studentCurriculum.getCompletedMandatoryCredits() +
+                studentCurriculum.getCompletedOptionalCredits() + studentCurriculum.getCompletedComplementaryCredits() +
                 studentCurriculum.getEnrolledCredits();
-        int expectedAccumulatedCredits = curriculumData.getExpectedMinAccumulatedCredits(subjectIdealTerm - 1);
+        int expectedAccumulatedCredits = curriculumData.getExpectedMinAccumulatedCredits(subjectIdealTerm);
         return potentiallyAccumulatedCredits >= expectedAccumulatedCredits;
     }
 
