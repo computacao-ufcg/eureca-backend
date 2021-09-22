@@ -48,9 +48,9 @@ public class PreEnrollment {
         }
     }
 
-    @ApiOperation(value = ApiDocumentation.PreEnrollment.GET_PRE_ENROLLMENT)
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ResponseEntity<ActivesPreEnrollmentResponse> getAllPreEnrollments(
+    @ApiOperation(value = ApiDocumentation.PreEnrollment.GET_ACTIVES_PRE_ENROLLMENTS)
+    @RequestMapping(value = "/actives", method = RequestMethod.GET)
+    public ResponseEntity<ActivesPreEnrollmentResponse> getActivesPreEnrollments(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam String courseCode,
             @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
