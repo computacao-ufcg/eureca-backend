@@ -464,7 +464,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             if (minAccumulatedCredits >= accumulatedCredits)
                 return i;
         }
-        return 8;
+        return 8; // o que fazer quando itera sobre a lista de créditos esperados e não 'casar' com nenhum? (está retornando o ultimo periodo)
     }
 
     private Subject getSubject(SubjectKey subjectKey) {
