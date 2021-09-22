@@ -44,4 +44,6 @@ public class PreEnrollment {
             throw e;
         }
     }
+
+    // ToDo: criar um endpoint que não recebe a matrícula como parâmetro e calcula a pre-matrícula para todos os alunos ativos
 }
