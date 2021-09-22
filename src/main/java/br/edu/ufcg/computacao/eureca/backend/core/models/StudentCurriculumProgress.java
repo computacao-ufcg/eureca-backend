@@ -43,6 +43,10 @@ public class StudentCurriculumProgress {
         return completedMandatoryCredits;
     }
 
+    public int getCompletedCredits() {
+        return completedComplementaryCredits + completedMandatoryCredits + completedOptionalCredits;
+    }
+
     public void setCompletedMandatoryCredits(int completedMandatoryCredits) {
         this.completedMandatoryCredits = completedMandatoryCredits;
     }
