@@ -7,6 +7,7 @@ public class StudentPreEnrollment {
 
     private String studentRegistration;
     private Set<Subject> subjects;
+    private int actualTerm;
     private int maxCredits;
     private int totalCredits;
     private int mandatoryCredits;
@@ -14,9 +15,10 @@ public class StudentPreEnrollment {
     private int complementaryCredits;
     private int electiveCredits;
 
-    public StudentPreEnrollment(String studentRegistration, Set<Subject> subjects, int maxCredits) {
+    public StudentPreEnrollment(String studentRegistration, Set<Subject> subjects, int actualTerm, int maxCredits) {
         this.studentRegistration = studentRegistration;
         this.subjects = subjects;
+        this.actualTerm = actualTerm;
         this.maxCredits = maxCredits;
         this.totalCredits = 0;
         this.mandatoryCredits = 0;
@@ -25,8 +27,8 @@ public class StudentPreEnrollment {
         this.electiveCredits = 0;
     }
 
-    public StudentPreEnrollment(String studentRegistration, int maxCredits) {
-        this(studentRegistration, new HashSet<>(), maxCredits);
+    public StudentPreEnrollment(String studentRegistration, int actualTerm, int maxCredits) {
+        this(studentRegistration, new HashSet<>(), actualTerm, maxCredits);
     }
 
     public boolean isFull() {
@@ -47,6 +49,14 @@ public class StudentPreEnrollment {
 
     public void setSubjects(Set<Subject> subjects) {
         this.subjects = subjects;
+    }
+
+    public int getActualTerm() {
+        return actualTerm;
+    }
+
+    public void setActualTerm(int actualTerm) {
+        this.actualTerm = actualTerm;
     }
 
     public int getMaxCredits() {
@@ -98,26 +108,8 @@ public class StudentPreEnrollment {
     }
 
     public void addSubject(Subject subject) {
-        if (subject.isComposed()) {
-            this.addComposedSubject(subject);
-        } else {
-            this.addSimpleSubject(subject);
-        }
-    }
-
-    private void addSimpleSubject(Subject subject) {
         if (this.totalCredits + subject.getCredits() <= this.maxCredits) {
             this.subjects.add(subject);
-            this.incrementCredits(subject);
-        }
-    }
-
-    private void addComposedSubject(Subject subject) {
-        Subject complementarySubject = subject.getComplementarySubject();
-        if (this.totalCredits + subject.getCredits() + complementarySubject.getCredits() <= this.maxCredits) {
-            this.subjects.add(subject);
-            this.subjects.add(complementarySubject);
-            this.incrementCredits(subject);
             this.incrementCredits(subject);
         }
     }
