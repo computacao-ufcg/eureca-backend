@@ -448,8 +448,6 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     private int getIdealNumberOfCredits(Curriculum curriculum, StudentCurriculumProgress progress) {
-        // ToDo: calcular nextTerm levando em consideração o número de créditos integralizados e
-        // o campo expectedMinAccumulatedCreditsList de currículo
         int nextTerm = this.getNextTerm(curriculum, progress);
         int idealMandatoryCredits = curriculum.getIdealMandatoryCredits(nextTerm);
         int idealOptionalCredits = curriculum.getIdealOptionalCredits(nextTerm);

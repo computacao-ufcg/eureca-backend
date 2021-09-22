@@ -119,5 +119,6 @@ public class ApiDocumentation {
     public static class PreEnrollment {
         public static final String API = "Pré-matrícula de um aluno.";
         public static final String GET_PRE_ENROLLMENT = "Retorna uma possível pré-matrícula de um aluno específico.";
+        public static final String GET_ACTIVES_PRE_ENROLLMENTS = "Retorna todas as pre-matriculas dos ativos e, juntamente, um sumario com a demanda de cada disciplina.";
     }
 }
