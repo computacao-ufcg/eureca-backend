@@ -1,9 +1,9 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.CommonKeys;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.TeachersResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.TeachersStatisticsResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.TeachersStatisticsSummaryResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsSummaryResponse;
 import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
