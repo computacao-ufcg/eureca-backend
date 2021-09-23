@@ -361,32 +361,36 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     public StudentPreEnrollment getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
         Curriculum curriculum = this.getCurriculum(courseCode, curriculumCode);
         StudentCurriculumProgress progress = this.getStudentCurriculumProgress(studentRegistration);
-        // ToDo: mudar essa lógica para considerar o número ideal de créditos por tipo
-        int idealNumberOfCredits = getIdealNumberOfCredits(curriculum, progress);
+        int idealMandatoryCredits = this.getIdealMandatoryCredits(curriculum, progress);
+        int idealOptionalCredits = this.getIdealOptionalCredits(curriculum, progress);
+        int idealComplementaryCredits = this.getIdealComplementaryCredits(curriculum, progress);
+        int idealElectiveCredits = this.getIdealElectiveCredits(curriculum, progress);
         int actualTerm = progress.getCompletedTerms() + (progress.getEnrolledCredits() > 0 ? 2 : 1);
-        StudentPreEnrollment studentPreEnrollment = new StudentPreEnrollment(studentRegistration, actualTerm, idealNumberOfCredits);
+
+        StudentPreEnrollment studentPreEnrollment = new StudentPreEnrollment(studentRegistration, actualTerm, idealMandatoryCredits, idealOptionalCredits, idealComplementaryCredits, idealElectiveCredits);
 
         List<Subject> availableMandatorySubjects = this.getMandatorySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
         List<Subject> availableComplementarySubjects = this.getComplementarySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
         List<Subject> availableElectiveSubjects = this.getElectiveSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
         List<Subject> availableOptionalSubjects = this.getOptionalSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
 
-        // ToDo: mudar essa lógica para matricular no número ideal de créditos por tipo (sem considerar co-requisitos, por enquanto)
         while(!studentPreEnrollment.isFull()) {
-            for (Subject s : availableMandatorySubjects)
-                studentPreEnrollment.addSubject(s);
+            if (!studentPreEnrollment.isMandatoryFull()) {
+                for (Subject s : availableMandatorySubjects)
+                    studentPreEnrollment.addSubject(s);
+            }
 
-            if (!studentPreEnrollment.isFull()) {
+            if (!studentPreEnrollment.isOptionalFull()) {
                 for (Subject s : availableOptionalSubjects)
                     studentPreEnrollment.addSubject(s);
             }
 
-            if (!studentPreEnrollment.isFull()) {
+            if (!studentPreEnrollment.isComplementaryFull()) {
                 for (Subject s : availableComplementarySubjects)
                     studentPreEnrollment.addSubject(s);
             }
 
-            if (!studentPreEnrollment.isFull()) {
+            if (!studentPreEnrollment.isElectiveFull()) {
                 for (Subject s : availableElectiveSubjects)
                     studentPreEnrollment.addSubject(s);
             }
@@ -456,12 +460,24 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return response;
     }
 
-    private int getIdealNumberOfCredits(Curriculum curriculum, StudentCurriculumProgress progress) {
+    private int getIdealMandatoryCredits(Curriculum curriculum, StudentCurriculumProgress progress) {
         int nextTerm = this.getNextTerm(curriculum, progress);
-        int idealMandatoryCredits = curriculum.getIdealMandatoryCredits(nextTerm);
-        int idealOptionalCredits = curriculum.getIdealOptionalCredits(nextTerm);
-        int idealComplementaryCredits = curriculum.getIdealComplementaryCredits(nextTerm);
-        return idealMandatoryCredits + idealOptionalCredits + idealComplementaryCredits;
+        return curriculum.getIdealMandatoryCredits(nextTerm);
+    }
+
+    private int getIdealOptionalCredits(Curriculum curriculum, StudentCurriculumProgress progress) {
+        int nextTerm = this.getNextTerm(curriculum, progress);
+        return curriculum.getIdealOptionalCredits(nextTerm);
+    }
+
+    private int getIdealComplementaryCredits(Curriculum curriculum, StudentCurriculumProgress progress) {
+        int nextTerm = this.getNextTerm(curriculum, progress);
+        return curriculum.getIdealComplementaryCredits(nextTerm);
+    }
+
+    private int getIdealElectiveCredits(Curriculum curriculum, StudentCurriculumProgress progress) {
+        int nextTerm = this.getNextTerm(curriculum, progress);
+        return curriculum.getIdealElectiveCredits(nextTerm);
     }
 
     private int getNextTerm(Curriculum curriculum, StudentCurriculumProgress progress) {
