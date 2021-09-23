@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.StudentMetrics;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentMetrics;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.util.StudentMetricsCalculator;
 
