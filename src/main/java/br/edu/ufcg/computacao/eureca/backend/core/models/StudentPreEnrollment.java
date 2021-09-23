@@ -211,21 +211,4 @@ public class StudentPreEnrollment {
         }
         return isPossibleToAdd;
     }
-
-    private void incrementCredits(Subject subject) {
-        switch (subject.getType()) {
-            case "M":
-                this.mandatoryCredits += subject.getCredits();
-                break;
-            case "O":
-                this.optionalCredits += subject.getCredits();
-                break;
-            case "C":
-                this.complementaryCredits += subject.getCredits();
-                break;
-            case "E":
-                this.electiveCredits += subject.getCredits();
-        }
-        this.totalCredits += subject.getCredits();
-    }
 }
