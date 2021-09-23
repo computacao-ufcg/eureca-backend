@@ -1,11 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
-import br.edu.ufcg.computacao.eureca.backend.core.models.StudentCurriculumProgress;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Curriculum;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Subject;
-import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectType;
+import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 
 import java.util.Collection;
@@ -62,4 +58,8 @@ public interface DataAccessFacade {
     Map<String, TeachersStatisticsSummary> getTeachersPerAcademicUnit(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 
     StudentCurriculumProgress getStudentCurriculumProgress(String studentRegistration) throws InvalidParameterException;
+
+    StudentPreEnrollment getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
+
+    ActivesPreEnrollmentResponse getActivesPreEnrollment(String courseCode, String curriculumCode) throws InvalidParameterException;
 }
