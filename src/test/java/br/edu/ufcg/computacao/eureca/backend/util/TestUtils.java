@@ -2,8 +2,17 @@ package br.edu.ufcg.computacao.eureca.backend.util;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.CommonKeys;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.active.ActivesPerTermSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.active.ActivesStatisticsResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.alumni.AlumniPerTermSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.alumni.AlumniStatisticsResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutPerTermSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutReasonSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutsStatisticsResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.student.StudentsRetentionPerTermSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.student.StudentsRetentionStatisticsResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.NationalIdRegistrationKey;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.StudentMetrics;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;

@@ -1,10 +1,9 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectMetricsStatistics;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsStatisticsSummary;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.SubjectsStatisticsSummaryResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectMetricsStatistics;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectsStatisticsSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectsStatisticsSummaryResponse;
 import br.edu.ufcg.computacao.eureca.backend.core.models.MetricStatistics;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.TeacherStatisticsSummary;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;

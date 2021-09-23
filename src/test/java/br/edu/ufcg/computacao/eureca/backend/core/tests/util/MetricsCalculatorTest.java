@@ -1,12 +1,12 @@
 package br.edu.ufcg.computacao.eureca.backend.core.tests.util;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.StudentMetricsSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentMetricsSummary;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.NationalIdRegistrationKey;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.CostClass;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.StudentMetrics;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentMetrics;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
 import br.edu.ufcg.computacao.eureca.backend.core.util.StudentMetricsCalculator;

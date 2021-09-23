@@ -1,6 +1,11 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.SubjectRetentionCSV;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.SubjectRetentionPerAdmissionTerm;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeacherStatistics;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeacherStatisticsPerTerm;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeacherStatisticsSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsSummary;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
@@ -146,7 +151,7 @@ public class IndexesHolder {
     }
 
     public Collection<SubjectRetentionPerAdmissionTerm> getRetentionCount(String courseCode, String curriculumCode,
-                                         String from, String to, String subjectCode) throws InvalidParameterException {
+                                                                          String from, String to, String subjectCode) throws InvalidParameterException {
         SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
         Map<String, SubjectRetentionPerAdmissionTerm> retention = new HashMap<>();
         Collection<NationalIdRegistrationKey> actives = this.activesPerCurriculumMap.get(new CurriculumKey(courseCode, curriculumCode));
@@ -177,7 +182,7 @@ public class IndexesHolder {
     }
 
     public Collection<SubjectRetentionCSV> getRetention(String courseCode, String curriculumCode, String from,
-                                               String to, String subjectCode) throws InvalidParameterException {
+                                                        String to, String subjectCode) throws InvalidParameterException {
         Collection<SubjectRetentionCSV> responses = new TreeSet<>();
         SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
 
@@ -286,7 +291,7 @@ public class IndexesHolder {
     }
 
     public Map<String, TeachersStatisticsSummary> getTeachersPerAcademicUnit(String courseCode, String curriculumCode,
-                                                           String from, String to) throws InvalidParameterException {
+                                                                             String from, String to) throws InvalidParameterException {
         Map<String, TeachersStatisticsSummary> response = new HashMap<>();
         CurriculumKey curriculumKey = new CurriculumKey(courseCode, curriculumCode);
         Collection<AcademicUnitKey> academicUnitKeys = this.academicUnitKeysPerCurriculum.get(curriculumKey);
