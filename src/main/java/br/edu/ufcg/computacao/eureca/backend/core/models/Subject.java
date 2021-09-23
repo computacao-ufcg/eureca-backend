@@ -1,6 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
 import java.util.Collection;
+import java.util.Objects;
 
 public class Subject {
     private String courseCode;
@@ -109,6 +110,19 @@ public class Subject {
 
     public Collection<String> getPreRequirementsList() {
         return preRequirementsList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Subject subject = (Subject) o;
+        return courseCode.equals(subject.courseCode) && curriculumCode.equals(subject.curriculumCode) && subjectCode.equals(subject.subjectCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(courseCode, curriculumCode, subjectCode);
     }
 
     @Override
