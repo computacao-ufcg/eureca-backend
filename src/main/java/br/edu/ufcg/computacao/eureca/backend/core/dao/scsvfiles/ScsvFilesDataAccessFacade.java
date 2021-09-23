@@ -1,6 +1,16 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.active.ActivesPreEnrollmentResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.alumni.AlumniDigest;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.*;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.profile.ProfileResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.SubjectRetentionCSV;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.SubjectRetentionPerAdmissionTerm;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.SubjectRetentionPerAdmissionTermSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.*;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeacherStatistics;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsSummary;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
@@ -11,7 +21,6 @@ import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.StudentCl
 import br.edu.ufcg.computacao.eureca.backend.core.models.StudentCurriculumProgress;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
-import io.swagger.models.auth.In;
 import org.apache.log4j.Logger;
 
 import javax.validation.constraints.NotNull;
@@ -154,7 +163,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
     @Override
     public Collection<SubjectMetricsPerTermSummary> getSubjectMetricsPerTermSummary(String courseCode,
-             String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
+                                                                                    String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
         Collection<String> subjectCodes = getSubjectCodes(courseCode, curriculumCode, subjectType);
         if (subjectCodes == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
         Collection<SubjectMetricsPerTermSummary> subjectMetricsPerTerms = new TreeSet<>();
@@ -208,7 +217,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
     @Override
     public Collection<EnrollmentsPerSubjectData> getEnrollmentsPerSubjectPerTerm(String courseCode, String curriculumCode,
-                                     String from, String to, SubjectType subjectType) throws InvalidParameterException {
+                                                                                 String from, String to, SubjectType subjectType) throws InvalidParameterException {
 
         try {
             Collection<String> subjectCodes = getSubjectCodes(courseCode, curriculumCode, subjectType);
@@ -238,7 +247,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
     @Override
     public EnrollmentsStatisticsSummaryResponse getEnrollmentsStatisticsSummary(String courseCode, String curriculumCode,
-                                                              String from, String to) throws InvalidParameterException {
+                                                                                String from, String to) throws InvalidParameterException {
         Curriculum curriculum = getCurriculum(courseCode, curriculumCode);
         if (curriculum == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
         EnrollmentsSummary mandatory = buildEnrollmentSummary(courseCode, curriculumCode, from, to,
@@ -256,7 +265,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
     @Override
     public Collection<EnrollmentsMetricsPerTermSummary> getEnrollmentsPerTermSummary(String courseCode,
-             String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
+                                                                                     String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
         Collection<String> subjectCodes = getSubjectCodes(courseCode, curriculumCode, subjectType);
         if (subjectCodes == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
         Collection<EnrollmentsMetricsPerTermSummary> enrollmentsMetricsPerTerms = new TreeSet<>();

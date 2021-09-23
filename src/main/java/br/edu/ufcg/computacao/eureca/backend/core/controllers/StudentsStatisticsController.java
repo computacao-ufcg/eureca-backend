@@ -1,6 +1,20 @@
 package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.active.ActivesPerTermSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.active.ActivesStatisticsResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.active.ActivesSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.alumni.AlumniPerTermSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.alumni.AlumniStatisticsResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.alumni.AlumniSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutPerTermSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutReasonSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutsStatisticsResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutsSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentCSV;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentMetricsSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentsResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentsStatisticsSummaryResponse;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;

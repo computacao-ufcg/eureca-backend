@@ -1,7 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.core.util;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.StudentMetrics;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.StudentMetricsSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentMetrics;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentMetricsSummary;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 
 import org.apache.log4j.Logger;

@@ -1,6 +1,11 @@
 package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.*;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.student.StudentsRetentionPerTermSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.student.StudentsRetentionStatisticsResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.student.StudentsRetentionSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.*;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
@@ -21,7 +26,7 @@ public class RetentionStatisticsController {
     }
 
     public StudentsRetentionStatisticsResponse getStudentsRetentionStatistics(String courseCode, String curriculumCode,
-                                                            String from, String to) throws InvalidParameterException {
+                                                                              String from, String to) throws InvalidParameterException {
         Collection<StudentsRetentionPerTermSummary> terms = new TreeSet<>();
         Map<String, Collection<Student>> retentionPerAdmissionTerm =
                 getStudentsRetentionPerAdmissionTerm(courseCode, curriculumCode, from, to);

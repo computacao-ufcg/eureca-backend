@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.AlumniDigest;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.alumni.AlumniDigest;
 import br.edu.ufcg.computacao.eureca.backend.util.TestUtils;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
