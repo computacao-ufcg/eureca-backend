@@ -158,7 +158,7 @@ public class ApplicationFacade {
     }
 
     public StudentPreEnrollment createPreEnrollment(String token, String courseCode, String curriculumCode, String registration) throws EurecaException {
-        authenticateAndAuthorize(token, EurecaOperation.CREATE_PRE_ENROLLMENT);
+//        authenticateAndAuthorize(token, EurecaOperation.CREATE_PRE_ENROLLMENT);
         return this.preEnrollmentController.createStudentPreEnrollment(courseCode, curriculumCode, registration);
     }
 
