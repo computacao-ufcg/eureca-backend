@@ -34,10 +34,6 @@ public class StudentPreEnrollment {
         return this.totalCredits >= this.maxCredits;
     }
 
-    public boolean isMandatoryFull() {
-        return this.isFull() || this.mandatoryCredits >= this.maxMandatoryCredits;
-    }
-
     public boolean isOptionalFull() {
         return this.isFull() || this.optionalCredits >= this.maxOptionalCredits;
     }
