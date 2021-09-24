@@ -7,7 +7,7 @@ public class StudentPreEnrollment {
 
     private String studentRegistration;
     private Set<Subject> subjects;
-    private int actualTerm;
+    private int nextTerm;
     private int maxCredits;
     private int totalCredits;
     private int maxMandatoryCredits;
@@ -19,10 +19,10 @@ public class StudentPreEnrollment {
     private int maxElectiveCredits;
     private int electiveCredits;
 
-    public StudentPreEnrollment(String studentRegistration, int actualTerm, int maxMandatoryCredits, int maxOptionalCredits, int maxComplementaryCredits, int maxElectiveCredits) {
+    public StudentPreEnrollment(String studentRegistration, int nextTerm, int maxMandatoryCredits, int maxOptionalCredits, int maxComplementaryCredits, int maxElectiveCredits) {
         this.studentRegistration = studentRegistration;
         this.subjects = new HashSet<>();
-        this.actualTerm = actualTerm;
+        this.nextTerm = nextTerm;
         this.maxMandatoryCredits = maxMandatoryCredits;
         this.maxOptionalCredits = maxOptionalCredits;
         this.maxComplementaryCredits = maxComplementaryCredits;
@@ -66,12 +66,12 @@ public class StudentPreEnrollment {
         this.subjects = subjects;
     }
 
-    public int getActualTerm() {
-        return actualTerm;
+    public int getNextTerm() {
+        return nextTerm;
     }
 
-    public void setActualTerm(int actualTerm) {
-        this.actualTerm = actualTerm;
+    public void setNextTerm(int nextTerm) {
+        this.nextTerm = nextTerm;
     }
 
     public int getMaxCredits() {

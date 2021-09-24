@@ -361,41 +361,38 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     public StudentPreEnrollment getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
         Curriculum curriculum = this.getCurriculum(courseCode, curriculumCode);
         StudentCurriculumProgress progress = this.getStudentCurriculumProgress(studentRegistration);
-        int idealMandatoryCredits = this.getIdealMandatoryCredits(curriculum, progress);
-        int idealOptionalCredits = this.getIdealOptionalCredits(curriculum, progress);
-        int idealComplementaryCredits = this.getIdealComplementaryCredits(curriculum, progress);
-        int idealElectiveCredits = this.getIdealElectiveCredits(curriculum, progress);
-        int actualTerm = progress.getCompletedTerms() + (progress.getEnrolledCredits() > 0 ? 2 : 1);
 
-        StudentPreEnrollment studentPreEnrollment = new StudentPreEnrollment(studentRegistration, actualTerm, idealMandatoryCredits, idealOptionalCredits, idealComplementaryCredits, idealElectiveCredits);
+        int actualTerm = this.getActualTerm(curriculum, progress);
+        int nextTerm = this.getNextTerm(actualTerm, progress);
+
+        int idealMandatoryCredits = this.getIdealMandatoryCredits(curriculum, nextTerm);
+        int idealOptionalCredits = this.getIdealOptionalCredits(curriculum, nextTerm);
+        int idealComplementaryCredits = this.getIdealComplementaryCredits(curriculum, nextTerm);
+        int idealElectiveCredits = this.getIdealElectiveCredits(curriculum, nextTerm);
+
+        StudentPreEnrollment studentPreEnrollment = new StudentPreEnrollment(studentRegistration, nextTerm, idealMandatoryCredits, idealOptionalCredits, idealComplementaryCredits, idealElectiveCredits);
 
         List<Subject> availableMandatorySubjects = this.getMandatorySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
         List<Subject> availableComplementarySubjects = this.getComplementarySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
         List<Subject> availableElectiveSubjects = this.getElectiveSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
         List<Subject> availableOptionalSubjects = this.getOptionalSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
 
-        while(!studentPreEnrollment.isFull()) {
-            if (!studentPreEnrollment.isMandatoryFull()) {
-                for (Subject s : availableMandatorySubjects)
-                    studentPreEnrollment.addSubject(s);
-            }
+        for (Subject s : availableMandatorySubjects)
+            studentPreEnrollment.addSubject(s);
 
-            if (!studentPreEnrollment.isOptionalFull()) {
-                for (Subject s : availableOptionalSubjects)
-                    studentPreEnrollment.addSubject(s);
-            }
+        if (!studentPreEnrollment.isComplementaryFull()) {
+            for (Subject s : availableComplementarySubjects)
+                studentPreEnrollment.addSubject(s);
+        }
 
-            if (!studentPreEnrollment.isComplementaryFull()) {
-                for (Subject s : availableComplementarySubjects)
-                    studentPreEnrollment.addSubject(s);
-            }
+        if (!studentPreEnrollment.isOptionalFull()) {
+            for (Subject s : availableOptionalSubjects)
+                studentPreEnrollment.addSubject(s);
+        }
 
-            if (!studentPreEnrollment.isElectiveFull()) {
-                for (Subject s : availableElectiveSubjects)
-                    studentPreEnrollment.addSubject(s);
-            }
-
-            if (studentPreEnrollment.getSubjects().isEmpty()) break;
+        if (!studentPreEnrollment.isElectiveFull()) {
+            for (Subject s : availableElectiveSubjects)
+                studentPreEnrollment.addSubject(s);
         }
 
         return studentPreEnrollment;
@@ -431,7 +428,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
         for (StudentPreEnrollment preEnrollment : preEnrollments) {
             Set<Subject> proposedSubjects = preEnrollment.getSubjects();
-            int studentCurrentTerm = preEnrollment.getActualTerm();
+            int studentCurrentTerm = preEnrollment.getNextTerm();
 
             for (Subject subject : proposedSubjects) {
                 if (subject.getType().equals(subjectType)) {
@@ -460,27 +457,23 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return response;
     }
 
-    private int getIdealMandatoryCredits(Curriculum curriculum, StudentCurriculumProgress progress) {
-        int nextTerm = this.getNextTerm(curriculum, progress);
+    private int getIdealMandatoryCredits(Curriculum curriculum, int nextTerm) {
         return curriculum.getIdealMandatoryCredits(nextTerm);
     }
 
-    private int getIdealOptionalCredits(Curriculum curriculum, StudentCurriculumProgress progress) {
-        int nextTerm = this.getNextTerm(curriculum, progress);
+    private int getIdealOptionalCredits(Curriculum curriculum, int nextTerm) {
         return curriculum.getIdealOptionalCredits(nextTerm);
     }
 
-    private int getIdealComplementaryCredits(Curriculum curriculum, StudentCurriculumProgress progress) {
-        int nextTerm = this.getNextTerm(curriculum, progress);
+    private int getIdealComplementaryCredits(Curriculum curriculum, int nextTerm) {
         return curriculum.getIdealComplementaryCredits(nextTerm);
     }
 
-    private int getIdealElectiveCredits(Curriculum curriculum, StudentCurriculumProgress progress) {
-        int nextTerm = this.getNextTerm(curriculum, progress);
+    private int getIdealElectiveCredits(Curriculum curriculum, int nextTerm) {
         return curriculum.getIdealElectiveCredits(nextTerm);
     }
 
-    private int getNextTerm(Curriculum curriculum, StudentCurriculumProgress progress) {
+    private int getActualTerm(Curriculum curriculum, StudentCurriculumProgress progress) {
         List<Integer> expectedMinAccumulatedCredits = curriculum.getExpectedMinAccumulatedCreditsList();
         int accumulatedCredits = progress.getCompletedCredits();
 
@@ -489,7 +482,11 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             if (minAccumulatedCredits >= accumulatedCredits)
                 return i;
         }
-        return 8; // o que fazer quando itera sobre a lista de créditos esperados e não 'casar' com nenhum? (está retornando o ultimo periodo)
+        return expectedMinAccumulatedCredits.size() - 1;
+    }
+
+    private int getNextTerm(int actualTerm, StudentCurriculumProgress progress) {
+        return actualTerm + (progress.getEnrolledCredits() > 0 ? 1 : 0);
     }
 
     private Subject getSubject(SubjectKey subjectKey) {
