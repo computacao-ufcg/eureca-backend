@@ -7,32 +7,43 @@ public class StudentPreEnrollment {
 
     private String studentRegistration;
     private Set<Subject> subjects;
-    private int actualTerm;
+    private int nextTerm;
     private int maxCredits;
     private int totalCredits;
+    private int maxMandatoryCredits;
     private int mandatoryCredits;
+    private int maxOptionalCredits;
     private int optionalCredits;
+    private int maxComplementaryCredits;
     private int complementaryCredits;
+    private int maxElectiveCredits;
     private int electiveCredits;
 
-    public StudentPreEnrollment(String studentRegistration, Set<Subject> subjects, int actualTerm, int maxCredits) {
+    public StudentPreEnrollment(String studentRegistration, int nextTerm, int maxMandatoryCredits, int maxOptionalCredits, int maxComplementaryCredits, int maxElectiveCredits) {
         this.studentRegistration = studentRegistration;
-        this.subjects = subjects;
-        this.actualTerm = actualTerm;
-        this.maxCredits = maxCredits;
-        this.totalCredits = 0;
-        this.mandatoryCredits = 0;
-        this.optionalCredits = 0;
-        this.complementaryCredits = 0;
-        this.electiveCredits = 0;
-    }
-
-    public StudentPreEnrollment(String studentRegistration, int actualTerm, int maxCredits) {
-        this(studentRegistration, new HashSet<>(), actualTerm, maxCredits);
+        this.subjects = new HashSet<>();
+        this.nextTerm = nextTerm;
+        this.maxMandatoryCredits = maxMandatoryCredits;
+        this.maxOptionalCredits = maxOptionalCredits;
+        this.maxComplementaryCredits = maxComplementaryCredits;
+        this.maxElectiveCredits = maxElectiveCredits;
+        this.maxCredits = this.maxMandatoryCredits + this.maxOptionalCredits + this.maxComplementaryCredits + this.maxElectiveCredits;
     }
 
     public boolean isFull() {
         return this.totalCredits >= this.maxCredits;
+    }
+
+    public boolean isOptionalFull() {
+        return this.isFull() || this.optionalCredits >= this.maxOptionalCredits;
+    }
+
+    public boolean isComplementaryFull() {
+        return this.isFull() || this.complementaryCredits >= this.maxComplementaryCredits;
+    }
+
+    public boolean isElectiveFull() {
+        return this.isFull() || this.electiveCredits >= this.maxElectiveCredits;
     }
 
     public String getStudentRegistration() {
@@ -51,12 +62,12 @@ public class StudentPreEnrollment {
         this.subjects = subjects;
     }
 
-    public int getActualTerm() {
-        return actualTerm;
+    public int getNextTerm() {
+        return nextTerm;
     }
 
-    public void setActualTerm(int actualTerm) {
-        this.actualTerm = actualTerm;
+    public void setNextTerm(int nextTerm) {
+        this.nextTerm = nextTerm;
     }
 
     public int getMaxCredits() {
@@ -69,6 +80,38 @@ public class StudentPreEnrollment {
 
     public int getTotalCredits() {
         return totalCredits;
+    }
+
+    public int getMaxMandatoryCredits() {
+        return maxMandatoryCredits;
+    }
+
+    public void setMaxMandatoryCredits(int maxMandatoryCredits) {
+        this.maxMandatoryCredits = maxMandatoryCredits;
+    }
+
+    public int getMaxOptionalCredits() {
+        return maxOptionalCredits;
+    }
+
+    public void setMaxOptionalCredits(int maxOptionalCredits) {
+        this.maxOptionalCredits = maxOptionalCredits;
+    }
+
+    public int getMaxComplementaryCredits() {
+        return maxComplementaryCredits;
+    }
+
+    public void setMaxComplementaryCredits(int maxComplementaryCredits) {
+        this.maxComplementaryCredits = maxComplementaryCredits;
+    }
+
+    public int getMaxElectiveCredits() {
+        return maxElectiveCredits;
+    }
+
+    public void setMaxElectiveCredits(int maxElectiveCredits) {
+        this.maxElectiveCredits = maxElectiveCredits;
     }
 
     public void setTotalCredits(int totalCredits) {
@@ -108,26 +151,60 @@ public class StudentPreEnrollment {
     }
 
     public void addSubject(Subject subject) {
-        if (this.totalCredits + subject.getCredits() <= this.maxCredits) {
-            this.subjects.add(subject);
-            this.incrementCredits(subject);
+        boolean added = false;
+        switch (subject.getType()) {
+            case "M":
+                added = this.addMandatorySubject(subject);
+                break;
+            case "O":
+                added = this.addOptionalSubject(subject);
+                break;
+            case "C":
+                added = this.addComplementarySubject(subject);
+                break;
+            case "E":
+                added = this.addElectiveSubject(subject);
+                break;
+        }
+
+        if (added) {
+            this.totalCredits += subject.getCredits();
         }
     }
 
-    private void incrementCredits(Subject subject) {
-        switch (subject.getType()) {
-            case "M":
-                this.mandatoryCredits += subject.getCredits();
-                break;
-            case "O":
-                this.optionalCredits += subject.getCredits();
-                break;
-            case "C":
-                this.complementaryCredits += subject.getCredits();
-                break;
-            case "E":
-                this.electiveCredits += subject.getCredits();
+    private boolean addMandatorySubject(Subject subject) {
+        boolean isPossibleToAdd = subject.getCredits() + this.mandatoryCredits <= this.maxMandatoryCredits;
+        if (isPossibleToAdd) {
+            this.subjects.add(subject);
+            this.mandatoryCredits += subject.getCredits();
         }
-        this.totalCredits += subject.getCredits();
+        return isPossibleToAdd;
+    }
+
+    private boolean addOptionalSubject(Subject subject) {
+        boolean isPossibleToAdd = subject.getCredits() + this.optionalCredits <= this.maxOptionalCredits;
+        if (isPossibleToAdd) {
+            this.subjects.add(subject);
+            this.optionalCredits += subject.getCredits();
+        }
+        return isPossibleToAdd;
+    }
+
+    private boolean addComplementarySubject(Subject subject) {
+        boolean isPossibleToAdd = subject.getCredits() + this.complementaryCredits <= this.maxComplementaryCredits;
+        if (isPossibleToAdd) {
+            this.subjects.add(subject);
+            this.complementaryCredits += subject.getCredits();
+        }
+        return isPossibleToAdd;
+    }
+
+    private boolean addElectiveSubject(Subject subject) {
+        boolean isPossibleToAdd = subject.getCredits() + this.electiveCredits <= this.maxElectiveCredits;
+        if (isPossibleToAdd) {
+            this.subjects.add(subject);
+            this.electiveCredits += subject.getCredits();
+        }
+        return isPossibleToAdd;
     }
 }
