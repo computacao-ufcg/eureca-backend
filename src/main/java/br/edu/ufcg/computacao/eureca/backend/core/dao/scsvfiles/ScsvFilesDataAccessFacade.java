@@ -361,37 +361,38 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     public StudentPreEnrollment getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
         Curriculum curriculum = this.getCurriculum(courseCode, curriculumCode);
         StudentCurriculumProgress progress = this.getStudentCurriculumProgress(studentRegistration);
-        // ToDo: mudar essa lógica para considerar o número ideal de créditos por tipo
-        int idealNumberOfCredits = getIdealNumberOfCredits(curriculum, progress);
-        int actualTerm = progress.getCompletedTerms() + (progress.getEnrolledCredits() > 0 ? 2 : 1);
-        StudentPreEnrollment studentPreEnrollment = new StudentPreEnrollment(studentRegistration, actualTerm, idealNumberOfCredits);
+
+        int actualTerm = this.getActualTerm(curriculum, progress);
+        int nextTerm = this.getNextTerm(actualTerm, progress);
+
+        int idealMandatoryCredits = this.getIdealMandatoryCredits(curriculum, nextTerm);
+        int idealOptionalCredits = this.getIdealOptionalCredits(curriculum, nextTerm);
+        int idealComplementaryCredits = this.getIdealComplementaryCredits(curriculum, nextTerm);
+        int idealElectiveCredits = this.getIdealElectiveCredits(curriculum, nextTerm);
+
+        StudentPreEnrollment studentPreEnrollment = new StudentPreEnrollment(studentRegistration, nextTerm, idealMandatoryCredits, idealOptionalCredits, idealComplementaryCredits, idealElectiveCredits);
 
         List<Subject> availableMandatorySubjects = this.getMandatorySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
         List<Subject> availableComplementarySubjects = this.getComplementarySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
         List<Subject> availableElectiveSubjects = this.getElectiveSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
         List<Subject> availableOptionalSubjects = this.getOptionalSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
 
-        // ToDo: mudar essa lógica para matricular no número ideal de créditos por tipo (sem considerar co-requisitos, por enquanto)
-        while(!studentPreEnrollment.isFull()) {
-            for (Subject s : availableMandatorySubjects)
+        for (Subject s : availableMandatorySubjects)
+            studentPreEnrollment.addSubject(s);
+
+        if (!studentPreEnrollment.isComplementaryFull()) {
+            for (Subject s : availableComplementarySubjects)
                 studentPreEnrollment.addSubject(s);
+        }
 
-            if (!studentPreEnrollment.isFull()) {
-                for (Subject s : availableOptionalSubjects)
-                    studentPreEnrollment.addSubject(s);
-            }
+        if (!studentPreEnrollment.isOptionalFull()) {
+            for (Subject s : availableOptionalSubjects)
+                studentPreEnrollment.addSubject(s);
+        }
 
-            if (!studentPreEnrollment.isFull()) {
-                for (Subject s : availableComplementarySubjects)
-                    studentPreEnrollment.addSubject(s);
-            }
-
-            if (!studentPreEnrollment.isFull()) {
-                for (Subject s : availableElectiveSubjects)
-                    studentPreEnrollment.addSubject(s);
-            }
-
-            if (studentPreEnrollment.getSubjects().isEmpty()) break;
+        if (!studentPreEnrollment.isElectiveFull()) {
+            for (Subject s : availableElectiveSubjects)
+                studentPreEnrollment.addSubject(s);
         }
 
         return studentPreEnrollment;
@@ -427,7 +428,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
         for (StudentPreEnrollment preEnrollment : preEnrollments) {
             Set<Subject> proposedSubjects = preEnrollment.getSubjects();
-            int studentCurrentTerm = preEnrollment.getActualTerm();
+            int studentCurrentTerm = preEnrollment.getNextTerm();
 
             for (Subject subject : proposedSubjects) {
                 if (subject.getType().equals(subjectType)) {
@@ -456,15 +457,23 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return response;
     }
 
-    private int getIdealNumberOfCredits(Curriculum curriculum, StudentCurriculumProgress progress) {
-        int nextTerm = this.getNextTerm(curriculum, progress);
-        int idealMandatoryCredits = curriculum.getIdealMandatoryCredits(nextTerm);
-        int idealOptionalCredits = curriculum.getIdealOptionalCredits(nextTerm);
-        int idealComplementaryCredits = curriculum.getIdealComplementaryCredits(nextTerm);
-        return idealMandatoryCredits + idealOptionalCredits + idealComplementaryCredits;
+    private int getIdealMandatoryCredits(Curriculum curriculum, int nextTerm) {
+        return curriculum.getIdealMandatoryCredits(nextTerm);
     }
 
-    private int getNextTerm(Curriculum curriculum, StudentCurriculumProgress progress) {
+    private int getIdealOptionalCredits(Curriculum curriculum, int nextTerm) {
+        return curriculum.getIdealOptionalCredits(nextTerm);
+    }
+
+    private int getIdealComplementaryCredits(Curriculum curriculum, int nextTerm) {
+        return curriculum.getIdealComplementaryCredits(nextTerm);
+    }
+
+    private int getIdealElectiveCredits(Curriculum curriculum, int nextTerm) {
+        return curriculum.getIdealElectiveCredits(nextTerm);
+    }
+
+    private int getActualTerm(Curriculum curriculum, StudentCurriculumProgress progress) {
         List<Integer> expectedMinAccumulatedCredits = curriculum.getExpectedMinAccumulatedCreditsList();
         int accumulatedCredits = progress.getCompletedCredits();
 
@@ -473,7 +482,11 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             if (minAccumulatedCredits >= accumulatedCredits)
                 return i;
         }
-        return 8; // o que fazer quando itera sobre a lista de créditos esperados e não 'casar' com nenhum? (está retornando o ultimo periodo)
+        return expectedMinAccumulatedCredits.size() - 1;
+    }
+
+    private int getNextTerm(int actualTerm, StudentCurriculumProgress progress) {
+        return actualTerm + (progress.getEnrolledCredits() > 0 ? 1 : 0);
     }
 
     private Subject getSubject(SubjectKey subjectKey) {
