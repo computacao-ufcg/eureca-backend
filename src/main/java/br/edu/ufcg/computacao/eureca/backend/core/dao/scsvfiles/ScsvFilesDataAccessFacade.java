@@ -363,12 +363,12 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         StudentCurriculumProgress progress = this.getStudentCurriculumProgress(studentRegistration);
 
         int actualTerm = this.getActualTerm(curriculum, progress);
-        int nextTerm = this.getNextTerm(actualTerm, progress);
+        int nextTerm = getNextTerm(actualTerm, progress.getEnrolledCredits(), curriculum.getMinNumberOfTerms());
 
-        int idealMandatoryCredits = this.getIdealMandatoryCredits(curriculum, nextTerm);
-        int idealOptionalCredits = this.getIdealOptionalCredits(curriculum, nextTerm);
-        int idealComplementaryCredits = this.getIdealComplementaryCredits(curriculum, nextTerm);
-        int idealElectiveCredits = this.getIdealElectiveCredits(curriculum, nextTerm);
+        int idealMandatoryCredits = curriculum.getIdealMandatoryCredits(nextTerm);
+        int idealOptionalCredits = curriculum.getIdealOptionalCredits(nextTerm);
+        int idealComplementaryCredits = curriculum.getIdealComplementaryCredits(nextTerm);
+        int idealElectiveCredits = curriculum.getIdealElectiveCredits(nextTerm);
 
         StudentPreEnrollment studentPreEnrollment = new StudentPreEnrollment(studentRegistration, nextTerm, idealMandatoryCredits, idealOptionalCredits, idealComplementaryCredits, idealElectiveCredits);
 
@@ -422,13 +422,18 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return new SubjectDemandSummary(mandatoryDemand, optionalDemand, complementaryDemand, electiveDemand);
     }
 
+    private int getNextTerm(int actualTerm, int enrolledCredits, int minTerms) {
+        int nextTerm = actualTerm + (enrolledCredits > 0 ? 1 : 0);
+        return (nextTerm > minTerms ? minTerms : nextTerm);
+    }
+
     private Collection<SubjectDemand> getSubjectDemand(String subjectType, Collection<StudentPreEnrollment> preEnrollments) {
         Collection<SubjectDemand> response = new ArrayList<>();
         Map<Subject, Map<Integer, Integer>> subjectDemandByTerm = new HashMap<>();
 
         for (StudentPreEnrollment preEnrollment : preEnrollments) {
             Set<Subject> proposedSubjects = preEnrollment.getSubjects();
-            int studentCurrentTerm = preEnrollment.getNextTerm();
+            int studentCurrentTerm = preEnrollment.getTerm();
 
             for (Subject subject : proposedSubjects) {
                 if (subject.getType().equals(subjectType)) {
@@ -457,36 +462,12 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return response;
     }
 
-    private int getIdealMandatoryCredits(Curriculum curriculum, int nextTerm) {
-        return curriculum.getIdealMandatoryCredits(nextTerm);
-    }
-
-    private int getIdealOptionalCredits(Curriculum curriculum, int nextTerm) {
-        return curriculum.getIdealOptionalCredits(nextTerm);
-    }
-
-    private int getIdealComplementaryCredits(Curriculum curriculum, int nextTerm) {
-        return curriculum.getIdealComplementaryCredits(nextTerm);
-    }
-
-    private int getIdealElectiveCredits(Curriculum curriculum, int nextTerm) {
-        return curriculum.getIdealElectiveCredits(nextTerm);
-    }
-
     private int getActualTerm(Curriculum curriculum, StudentCurriculumProgress progress) {
-        List<Integer> expectedMinAccumulatedCredits = curriculum.getExpectedMinAccumulatedCreditsList();
         int accumulatedCredits = progress.getCompletedCredits();
-
-        for (int i = 0; i < expectedMinAccumulatedCredits.size(); i++) {
-            int minAccumulatedCredits = expectedMinAccumulatedCredits.get(i);
-            if (minAccumulatedCredits >= accumulatedCredits)
-                return i;
+        for (int i = 1; i < curriculum.getMinNumberOfTerms() + 1; i++) {
+            if (accumulatedCredits <= curriculum.getExpectedMinAccumulatedCredits(i)) return i;
         }
-        return expectedMinAccumulatedCredits.size() - 1;
-    }
-
-    private int getNextTerm(int actualTerm, StudentCurriculumProgress progress) {
-        return actualTerm + (progress.getEnrolledCredits() > 0 ? 1 : 0);
+        return curriculum.getMinNumberOfTerms();
     }
 
     private Subject getSubject(SubjectKey subjectKey) {
