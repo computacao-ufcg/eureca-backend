@@ -10,7 +10,7 @@ public class Curriculum {
     private ArrayList<Integer> idealOptionalCreditsList;
     private ArrayList<Integer> idealElectiveCreditsList;
     private ArrayList<Integer> idealComplementaryCreditsList;
-    private ArrayList<Integer> expectedMinAccumulatedCredits;
+    private ArrayList<Integer> expectedMinAccumulatedCreditsList;
     private int minMandatoryCreditsNeeded;
     private int minOptionalCreditsNeeded;
     private int minElectiveCreditsNeeded;
@@ -29,7 +29,7 @@ public class Curriculum {
 
     public Curriculum(String courseCode, String curriculumCode, ArrayList<Integer> idealMandatoryCreditsList,
                       ArrayList<Integer> idealOptionalCreditsList, ArrayList<Integer> idealElectiveCreditsList,
-                      ArrayList<Integer> idealComplementaryCreditsList, ArrayList<Integer> expectedMinAccumulatedCredits,
+                      ArrayList<Integer> idealComplementaryCreditsList, ArrayList<Integer> expectedMinAccumulatedCreditsList,
                       int minMandatoryCreditsNeeded, int minOptionalCreditsNeeded, int minElectiveCreditsNeeded,
                       int minComplementaryCreditsNeeded, int minActivitiesNeeded, int minNumberOfTerms,
                       int maxNumberOfTerms, int minNumberOfEnrolledCredits, int maxNumberOfEnrolledCredits,
@@ -42,7 +42,7 @@ public class Curriculum {
         this.idealOptionalCreditsList = idealOptionalCreditsList;
         this.idealElectiveCreditsList = idealElectiveCreditsList;
         this.idealComplementaryCreditsList = idealComplementaryCreditsList;
-        this.expectedMinAccumulatedCredits = expectedMinAccumulatedCredits;
+        this.expectedMinAccumulatedCreditsList = expectedMinAccumulatedCreditsList;
         this.minMandatoryCreditsNeeded = minMandatoryCreditsNeeded;
         this.minOptionalCreditsNeeded = minOptionalCreditsNeeded;
         this.minElectiveCreditsNeeded = minElectiveCreditsNeeded;
@@ -80,8 +80,8 @@ public class Curriculum {
         return idealMandatoryCreditsList;
     }
 
-    public Integer getIdealMandatoryCredits(int index) {
-        return idealMandatoryCreditsList.get(index);
+    public Integer getIdealMandatoryCredits(int term) {
+        return idealMandatoryCreditsList.get(term - 1);
     }
 
     public void setIdealMandatoryCreditsList(ArrayList<Integer> idealMandatoryCreditsList) {
@@ -92,8 +92,8 @@ public class Curriculum {
         return idealOptionalCreditsList;
     }
 
-    public Integer getIdealOptionalCredits(int index) {
-        return idealOptionalCreditsList.get(index);
+    public Integer getIdealOptionalCredits(int term) {
+        return idealOptionalCreditsList.get(term - 1);
     }
 
     public void setIdealOptionalCreditsList(ArrayList<Integer> idealOptionalCreditsList) {
@@ -104,8 +104,8 @@ public class Curriculum {
         return idealElectiveCreditsList;
     }
 
-    public Integer getIdealElectiveCredits(int index) {
-        return idealElectiveCreditsList.get(index);
+    public Integer getIdealElectiveCredits(int term) {
+        return idealElectiveCreditsList.get(term - 1);
     }
 
     public void setIdealElectiveCreditsList(ArrayList<Integer> idealElectiveCreditsList) {
@@ -116,8 +116,8 @@ public class Curriculum {
         return idealComplementaryCreditsList;
     }
 
-    public Integer getIdealComplementaryCredits(int index) {
-        return idealComplementaryCreditsList.get(index);
+    public Integer getIdealComplementaryCredits(int term) {
+        return idealComplementaryCreditsList.get(term - 1);
     }
 
     public void setIdealComplementaryCreditsList(ArrayList<Integer> idealComplementaryCreditsList) {
@@ -125,15 +125,15 @@ public class Curriculum {
     }
 
     public ArrayList<Integer> getExpectedMinAccumulatedCreditsList() {
-        return expectedMinAccumulatedCredits;
+        return expectedMinAccumulatedCreditsList;
     }
 
-    public Integer getExpectedMinAccumulatedCredits(int index) {
-        return expectedMinAccumulatedCredits.get(index);
+    public Integer getExpectedMinAccumulatedCredits(int term) {
+        return this.expectedMinAccumulatedCreditsList.get(term - 1);
     }
 
-    public void setExpectedMinAccumulatedCredits(ArrayList<Integer> expectedMinAccumulatedCredits) {
-        this.expectedMinAccumulatedCredits = expectedMinAccumulatedCredits;
+    public void setExpectedMinAccumulatedCreditsList(ArrayList<Integer> expectedMinAccumulatedCreditsList) {
+        this.expectedMinAccumulatedCreditsList = expectedMinAccumulatedCreditsList;
     }
 
     public int getMinMandatoryCreditsNeeded() {
@@ -270,7 +270,7 @@ public class Curriculum {
                 ", idealOptionalCreditsList=" + idealOptionalCreditsList +
                 ", idealElectiveCreditsList=" + idealElectiveCreditsList +
                 ", idealComplementaryCreditsList=" + idealComplementaryCreditsList +
-                ", expectedMinAccumulatedCredits=" + expectedMinAccumulatedCredits +
+                ", expectedMinAccumulatedCreditsList=" + expectedMinAccumulatedCreditsList +
                 ", minMandatoryCreditsNeeded=" + minMandatoryCreditsNeeded +
                 ", minOptionalCreditsNeeded=" + minOptionalCreditsNeeded +
                 ", minElectiveCreditsNeeded=" + minElectiveCreditsNeeded +
