@@ -1,9 +1,11 @@
-package br.edu.ufcg.computacao.eureca.backend.core.models;
+package br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment;
+
+import br.edu.ufcg.computacao.eureca.backend.core.models.Subject;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class StudentPreEnrollment {
+public class StudentPreEnrollmentResponse {
 
     private String studentRegistration;
     private Set<Subject> subjects;
@@ -19,7 +21,7 @@ public class StudentPreEnrollment {
     private int maxElectiveCredits;
     private int electiveCredits;
 
-    public StudentPreEnrollment(String studentRegistration, int term, int maxMandatoryCredits, int maxOptionalCredits, int maxComplementaryCredits, int maxElectiveCredits) {
+    public StudentPreEnrollmentResponse(String studentRegistration, int term, int maxMandatoryCredits, int maxOptionalCredits, int maxComplementaryCredits, int maxElectiveCredits) {
         this.studentRegistration = studentRegistration;
         this.subjects = new HashSet<>();
         this.term = term;
