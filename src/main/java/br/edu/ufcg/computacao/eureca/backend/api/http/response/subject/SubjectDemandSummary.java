@@ -1,52 +1,52 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response.subject;
 
-import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectDemand;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment.DetailedSubjectDemand;
 
 import java.util.Collection;
 
 public class SubjectDemandSummary {
 
-    private Collection<SubjectDemand> mandatoryDemand;
-    private Collection<SubjectDemand> optionalDemand;
-    private Collection<SubjectDemand> complementaryDemand;
-    private Collection<SubjectDemand> electiveDemand;
+    private Collection<DetailedSubjectDemand> mandatoryDemand;
+    private Collection<DetailedSubjectDemand> optionalDemand;
+    private Collection<DetailedSubjectDemand> complementaryDemand;
+    private Collection<DetailedSubjectDemand> electiveDemand;
 
-    public SubjectDemandSummary(Collection<SubjectDemand> mandatoryDemand, Collection<SubjectDemand> optionalDemand, Collection<SubjectDemand> complementaryDemand, Collection<SubjectDemand> electiveDemand) {
+    public SubjectDemandSummary(Collection<DetailedSubjectDemand> mandatoryDemand, Collection<DetailedSubjectDemand> optionalDemand, Collection<DetailedSubjectDemand> complementaryDemand, Collection<DetailedSubjectDemand> electiveDemand) {
         this.mandatoryDemand = mandatoryDemand;
         this.optionalDemand = optionalDemand;
         this.complementaryDemand = complementaryDemand;
         this.electiveDemand = electiveDemand;
     }
 
-    public Collection<SubjectDemand> getMandatoryDemand() {
+    public Collection<DetailedSubjectDemand> getMandatoryDemand() {
         return mandatoryDemand;
     }
 
-    public void setMandatoryDemand(Collection<SubjectDemand> mandatoryDemand) {
+    public void setMandatoryDemand(Collection<DetailedSubjectDemand> mandatoryDemand) {
         this.mandatoryDemand = mandatoryDemand;
     }
 
-    public Collection<SubjectDemand> getOptionalDemand() {
+    public Collection<DetailedSubjectDemand> getOptionalDemand() {
         return optionalDemand;
     }
 
-    public void setOptionalDemand(Collection<SubjectDemand> optionalDemand) {
+    public void setOptionalDemand(Collection<DetailedSubjectDemand> optionalDemand) {
         this.optionalDemand = optionalDemand;
     }
 
-    public Collection<SubjectDemand> getComplementaryDemand() {
+    public Collection<DetailedSubjectDemand> getComplementaryDemand() {
         return complementaryDemand;
     }
 
-    public void setComplementaryDemand(Collection<SubjectDemand> complementaryDemand) {
+    public void setComplementaryDemand(Collection<DetailedSubjectDemand> complementaryDemand) {
         this.complementaryDemand = complementaryDemand;
     }
 
-    public Collection<SubjectDemand> getElectiveDemand() {
+    public Collection<DetailedSubjectDemand> getElectiveDemand() {
         return electiveDemand;
     }
 
-    public void setElectiveDemand(Collection<SubjectDemand> electiveDemand) {
+    public void setElectiveDemand(Collection<DetailedSubjectDemand> electiveDemand) {
         this.electiveDemand = electiveDemand;
     }
 
