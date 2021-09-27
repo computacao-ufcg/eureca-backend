@@ -1,25 +1,24 @@
-package br.edu.ufcg.computacao.eureca.backend.api.http.response.active;
+package br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectDemandSummary;
-import br.edu.ufcg.computacao.eureca.backend.core.models.StudentPreEnrollment;
 
 import java.util.Collection;
 
-public class ActivesPreEnrollmentResponse {
+public class PreEnrollmentsResponse {
 
-    private Collection<StudentPreEnrollment> activesPreEnrollment;
+    private Collection<StudentPreEnrollmentResponse> activesPreEnrollment;
     private SubjectDemandSummary subjectDemandSummary;
 
-    public ActivesPreEnrollmentResponse(Collection<StudentPreEnrollment> activesPreEnrollment, SubjectDemandSummary subjectDemandSummary) {
+    public PreEnrollmentsResponse(Collection<StudentPreEnrollmentResponse> activesPreEnrollment, SubjectDemandSummary subjectDemandSummary) {
         this.activesPreEnrollment = activesPreEnrollment;
         this.subjectDemandSummary = subjectDemandSummary;
     }
 
-    public Collection<StudentPreEnrollment> getActivesPreEnrollment() {
+    public Collection<StudentPreEnrollmentResponse> getActivesPreEnrollment() {
         return activesPreEnrollment;
     }
 
-    public void setActivesPreEnrollment(Collection<StudentPreEnrollment> activesPreEnrollment) {
+    public void setActivesPreEnrollment(Collection<StudentPreEnrollmentResponse> activesPreEnrollment) {
         this.activesPreEnrollment = activesPreEnrollment;
     }
 
@@ -33,7 +32,7 @@ public class ActivesPreEnrollmentResponse {
 
     @Override
     public String toString() {
-        return "ActivesPreEnrollmentResponse{" +
+        return "PreEnrollmentsResponse{" +
                 "activesPreEnrollment=" + activesPreEnrollment +
                 ", subjectDemandSummary=" + subjectDemandSummary +
                 '}';

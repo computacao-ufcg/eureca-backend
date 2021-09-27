@@ -1,13 +1,15 @@
-package br.edu.ufcg.computacao.eureca.backend.core.models;
+package br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment;
+
+import br.edu.ufcg.computacao.eureca.backend.core.models.Subject;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class StudentPreEnrollment {
+public class StudentPreEnrollmentResponse {
 
     private String studentRegistration;
     private Set<Subject> subjects;
-    private int nextTerm;
+    private int term;
     private int maxCredits;
     private int totalCredits;
     private int maxMandatoryCredits;
@@ -19,10 +21,10 @@ public class StudentPreEnrollment {
     private int maxElectiveCredits;
     private int electiveCredits;
 
-    public StudentPreEnrollment(String studentRegistration, int nextTerm, int maxMandatoryCredits, int maxOptionalCredits, int maxComplementaryCredits, int maxElectiveCredits) {
+    public StudentPreEnrollmentResponse(String studentRegistration, int term, int maxMandatoryCredits, int maxOptionalCredits, int maxComplementaryCredits, int maxElectiveCredits) {
         this.studentRegistration = studentRegistration;
         this.subjects = new HashSet<>();
-        this.nextTerm = nextTerm;
+        this.term = term;
         this.maxMandatoryCredits = maxMandatoryCredits;
         this.maxOptionalCredits = maxOptionalCredits;
         this.maxComplementaryCredits = maxComplementaryCredits;
@@ -62,12 +64,12 @@ public class StudentPreEnrollment {
         this.subjects = subjects;
     }
 
-    public int getNextTerm() {
-        return nextTerm;
+    public int getTerm() {
+        return term;
     }
 
-    public void setNextTerm(int nextTerm) {
-        this.nextTerm = nextTerm;
+    public void setTerm(int term) {
+        this.term = term;
     }
 
     public int getMaxCredits() {
