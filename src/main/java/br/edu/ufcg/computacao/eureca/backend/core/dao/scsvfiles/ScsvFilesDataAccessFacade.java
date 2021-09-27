@@ -1,8 +1,10 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.active.ActivesPreEnrollmentResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment.DetailedSubjectDemand;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment.PreEnrollmentsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.alumni.AlumniDigest;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.*;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment.StudentPreEnrollmentResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.profile.ProfileResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.SubjectRetentionCSV;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.SubjectRetentionPerAdmissionTerm;
@@ -358,19 +360,19 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public StudentPreEnrollment getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
+    public StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
         Curriculum curriculum = this.getCurriculum(courseCode, curriculumCode);
         StudentCurriculumProgress progress = this.getStudentCurriculumProgress(studentRegistration);
 
         int actualTerm = this.getActualTerm(curriculum, progress);
-        int nextTerm = this.getNextTerm(actualTerm, progress);
+        int nextTerm = getNextTerm(actualTerm, progress.getEnrolledCredits(), curriculum.getMinNumberOfTerms());
 
-        int idealMandatoryCredits = this.getIdealMandatoryCredits(curriculum, nextTerm);
-        int idealOptionalCredits = this.getIdealOptionalCredits(curriculum, nextTerm);
-        int idealComplementaryCredits = this.getIdealComplementaryCredits(curriculum, nextTerm);
-        int idealElectiveCredits = this.getIdealElectiveCredits(curriculum, nextTerm);
+        int idealMandatoryCredits = curriculum.getIdealMandatoryCredits(nextTerm);
+        int idealOptionalCredits = curriculum.getIdealOptionalCredits(nextTerm);
+        int idealComplementaryCredits = curriculum.getIdealComplementaryCredits(nextTerm);
+        int idealElectiveCredits = curriculum.getIdealElectiveCredits(nextTerm);
 
-        StudentPreEnrollment studentPreEnrollment = new StudentPreEnrollment(studentRegistration, nextTerm, idealMandatoryCredits, idealOptionalCredits, idealComplementaryCredits, idealElectiveCredits);
+        StudentPreEnrollmentResponse studentPreEnrollment = new StudentPreEnrollmentResponse(studentRegistration, nextTerm, idealMandatoryCredits, idealOptionalCredits, idealComplementaryCredits, idealElectiveCredits);
 
         List<Subject> availableMandatorySubjects = this.getMandatorySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
         List<Subject> availableComplementarySubjects = this.getComplementarySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
@@ -399,36 +401,41 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public ActivesPreEnrollmentResponse getActivesPreEnrollment(String courseCode, String curriculumCode) throws InvalidParameterException {
+    public PreEnrollmentsResponse getActivesPreEnrollment(String courseCode, String curriculumCode) throws InvalidParameterException {
         Collection<Student> actives = this.getActives(courseCode, curriculumCode, SystemConstants.FIRST_POSSIBLE_TERM, SystemConstants.LAST_POSSIBLE_TERM);
         Collection<String> registrations = actives.stream().map(student -> student.getRegistration().getRegistration()).collect(Collectors.toSet());
-        Collection<StudentPreEnrollment> preEnrollments = new HashSet<>();
+        Collection<StudentPreEnrollmentResponse> preEnrollments = new HashSet<>();
 
         for (String registration : registrations) {
-            StudentPreEnrollment preEnrollment = this.getStudentPreEnrollment(courseCode, curriculumCode, registration);
+            StudentPreEnrollmentResponse preEnrollment = this.getStudentPreEnrollment(courseCode, curriculumCode, registration);
             preEnrollments.add(preEnrollment);
         }
         SubjectDemandSummary subjectDemandSummary = this.getSubjectDemandSummary(preEnrollments);
 
-        return new ActivesPreEnrollmentResponse(preEnrollments, subjectDemandSummary);
+        return new PreEnrollmentsResponse(preEnrollments, subjectDemandSummary);
     }
 
-    private SubjectDemandSummary getSubjectDemandSummary(Collection<StudentPreEnrollment> preEnrollments) {
-        Collection<SubjectDemand> mandatoryDemand = getSubjectDemand("M", preEnrollments);
-        Collection<SubjectDemand> optionalDemand = getSubjectDemand("O", preEnrollments);
-        Collection<SubjectDemand> complementaryDemand = getSubjectDemand("C", preEnrollments);
-        Collection<SubjectDemand> electiveDemand = getSubjectDemand("E", preEnrollments);
+    private SubjectDemandSummary getSubjectDemandSummary(Collection<StudentPreEnrollmentResponse> preEnrollments) {
+        Collection<DetailedSubjectDemand> mandatoryDemand = getSubjectDemand("M", preEnrollments);
+        Collection<DetailedSubjectDemand> optionalDemand = getSubjectDemand("O", preEnrollments);
+        Collection<DetailedSubjectDemand> complementaryDemand = getSubjectDemand("C", preEnrollments);
+        Collection<DetailedSubjectDemand> electiveDemand = getSubjectDemand("E", preEnrollments);
 
         return new SubjectDemandSummary(mandatoryDemand, optionalDemand, complementaryDemand, electiveDemand);
     }
 
-    private Collection<SubjectDemand> getSubjectDemand(String subjectType, Collection<StudentPreEnrollment> preEnrollments) {
-        Collection<SubjectDemand> response = new ArrayList<>();
+    private int getNextTerm(int actualTerm, int enrolledCredits, int minTerms) {
+        int nextTerm = actualTerm + (enrolledCredits > 0 ? 1 : 0);
+        return (nextTerm > minTerms ? minTerms : nextTerm);
+    }
+
+    private Collection<DetailedSubjectDemand> getSubjectDemand(String subjectType, Collection<StudentPreEnrollmentResponse> preEnrollments) {
+        Collection<DetailedSubjectDemand> response = new ArrayList<>();
         Map<Subject, Map<Integer, Integer>> subjectDemandByTerm = new HashMap<>();
 
-        for (StudentPreEnrollment preEnrollment : preEnrollments) {
+        for (StudentPreEnrollmentResponse preEnrollment : preEnrollments) {
             Set<Subject> proposedSubjects = preEnrollment.getSubjects();
-            int studentCurrentTerm = preEnrollment.getNextTerm();
+            int studentCurrentTerm = preEnrollment.getTerm();
 
             for (Subject subject : proposedSubjects) {
                 if (subject.getType().equals(subjectType)) {
@@ -451,42 +458,18 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             Subject subject = entry.getKey();
             Map<Integer, Integer> demandByTerm = entry.getValue();
 
-            response.add(new SubjectDemand(subject, demandByTerm));
+            response.add(new DetailedSubjectDemand(subject, demandByTerm));
         }
 
         return response;
     }
 
-    private int getIdealMandatoryCredits(Curriculum curriculum, int nextTerm) {
-        return curriculum.getIdealMandatoryCredits(nextTerm);
-    }
-
-    private int getIdealOptionalCredits(Curriculum curriculum, int nextTerm) {
-        return curriculum.getIdealOptionalCredits(nextTerm);
-    }
-
-    private int getIdealComplementaryCredits(Curriculum curriculum, int nextTerm) {
-        return curriculum.getIdealComplementaryCredits(nextTerm);
-    }
-
-    private int getIdealElectiveCredits(Curriculum curriculum, int nextTerm) {
-        return curriculum.getIdealElectiveCredits(nextTerm);
-    }
-
     private int getActualTerm(Curriculum curriculum, StudentCurriculumProgress progress) {
-        List<Integer> expectedMinAccumulatedCredits = curriculum.getExpectedMinAccumulatedCreditsList();
         int accumulatedCredits = progress.getCompletedCredits();
-
-        for (int i = 0; i < expectedMinAccumulatedCredits.size(); i++) {
-            int minAccumulatedCredits = expectedMinAccumulatedCredits.get(i);
-            if (minAccumulatedCredits >= accumulatedCredits)
-                return i;
+        for (int i = 1; i < curriculum.getMinNumberOfTerms() + 1; i++) {
+            if (accumulatedCredits <= curriculum.getExpectedMinAccumulatedCredits(i)) return i;
         }
-        return expectedMinAccumulatedCredits.size() - 1;
-    }
-
-    private int getNextTerm(int actualTerm, StudentCurriculumProgress progress) {
-        return actualTerm + (progress.getEnrolledCredits() > 0 ? 1 : 0);
+        return curriculum.getMinNumberOfTerms();
     }
 
     private Subject getSubject(SubjectKey subjectKey) {
