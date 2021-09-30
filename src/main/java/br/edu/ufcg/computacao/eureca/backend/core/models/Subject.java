@@ -15,10 +15,11 @@ public class Subject {
     private Collection<String> equivalentCodesList;
     private int idealTerm;
     private Collection<String> preRequirementsList;
+    private Collection<String> coRequirementsList;
 
     public Subject(String courseCode, String curriculumCode, String subjectCode, String academicUnit, String type,
                    int credits, int hours, String name, Collection<String> equivalentCodesList, int idealTerm,
-                   Collection<String> preRequirementsList) {
+                   Collection<String> preRequirementsList, Collection<String> coRequirementsList) {
         this.courseCode = courseCode;
         this.curriculumCode = curriculumCode;
         this.subjectCode = subjectCode;
@@ -30,6 +31,7 @@ public class Subject {
         this.equivalentCodesList = equivalentCodesList;
         this.idealTerm = idealTerm;
         this.preRequirementsList = preRequirementsList;
+        this.coRequirementsList = coRequirementsList;
     }
 
     public String getCourseCode() {
@@ -112,6 +114,10 @@ public class Subject {
         return preRequirementsList;
     }
 
+    public Collection<String> getCoRequirementsList() {
+        return coRequirementsList;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -139,6 +145,7 @@ public class Subject {
                 ", equivalentCodesList=" + equivalentCodesList +
                 ", idealTerm=" + idealTerm +
                 ", preRequirementsList=" + preRequirementsList +
+                ", coRequirementsList=" + coRequirementsList +
                 '}';
     }
 }
