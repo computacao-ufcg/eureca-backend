@@ -360,17 +360,18 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
+    public StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration, Integer maxCredits) throws InvalidParameterException {
         Curriculum curriculum = this.getCurriculum(courseCode, curriculumCode);
         StudentCurriculumProgress progress = this.getStudentCurriculumProgress(studentRegistration);
 
         int actualTerm = this.getActualTerm(curriculum, progress);
         int nextTerm = getNextTerm(actualTerm, progress.getEnrolledCredits(), curriculum.getMinNumberOfTerms());
 
-        int idealMandatoryCredits = curriculum.getIdealMandatoryCredits(nextTerm);
-        int idealOptionalCredits = curriculum.getIdealOptionalCredits(nextTerm);
-        int idealComplementaryCredits = curriculum.getIdealComplementaryCredits(nextTerm);
-        int idealElectiveCredits = curriculum.getIdealElectiveCredits(nextTerm);
+        Map<SubjectType, Integer> idealCreditsMap = this.getIdealCredits(curriculum, maxCredits, nextTerm);
+        int idealMandatoryCredits = idealCreditsMap.get(SubjectType.MANDATORY);
+        int idealOptionalCredits = idealCreditsMap.get(SubjectType.OPTIONAL);
+        int idealComplementaryCredits = idealCreditsMap.get(SubjectType.COMPLEMENTARY);
+        int idealElectiveCredits = idealCreditsMap.get(SubjectType.ELECTIVE);
 
         StudentPreEnrollmentResponse studentPreEnrollment = new StudentPreEnrollmentResponse(studentRegistration, nextTerm, idealMandatoryCredits, idealOptionalCredits, idealComplementaryCredits, idealElectiveCredits);
 
@@ -398,6 +399,37 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         }
 
         return studentPreEnrollment;
+    }
+
+    public StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
+        return this.getStudentPreEnrollment(courseCode, curriculumCode, studentRegistration, null);
+    }
+
+    private Map<SubjectType, Integer> getIdealCredits(Curriculum curriculum, Integer maxCredits, int nextTerm) {
+        Map<SubjectType, Integer> idealCredits = new HashMap<>();
+        int idealMandatoryCredits = curriculum.getIdealMandatoryCredits(nextTerm);
+        int idealOptionalCredits = 0;
+        int idealComplementaryCredits = 0;
+        int idealElectiveCredits = 0;
+
+        if (maxCredits == null) {
+            idealMandatoryCredits = curriculum.getIdealMandatoryCredits(nextTerm);
+            idealOptionalCredits = curriculum.getIdealOptionalCredits(nextTerm);
+            idealComplementaryCredits = curriculum.getIdealComplementaryCredits(nextTerm);
+            idealElectiveCredits = curriculum.getIdealElectiveCredits(nextTerm);
+        } else {
+            idealMandatoryCredits = Math.min(idealMandatoryCredits, maxCredits);
+            idealComplementaryCredits = Math.max(0, Math.min(idealComplementaryCredits, maxCredits - idealMandatoryCredits));
+            idealOptionalCredits = Math.max(0, Math.min(idealOptionalCredits, maxCredits - (idealMandatoryCredits + idealComplementaryCredits)));
+            idealElectiveCredits = Math.max(0, Math.min(idealElectiveCredits, maxCredits - (idealMandatoryCredits + idealComplementaryCredits + idealOptionalCredits)));
+        }
+
+        idealCredits.put(SubjectType.MANDATORY, idealMandatoryCredits);
+        idealCredits.put(SubjectType.OPTIONAL, idealOptionalCredits);
+        idealCredits.put(SubjectType.COMPLEMENTARY, idealComplementaryCredits);
+        idealCredits.put(SubjectType.ELECTIVE, idealElectiveCredits);
+
+        return idealCredits;
     }
 
     @Override

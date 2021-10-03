@@ -18,8 +18,8 @@ public class PreEnrollmentController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
-    public StudentPreEnrollmentResponse createStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
-        return this.dataAccessFacade.getStudentPreEnrollment(courseCode, curriculumCode, studentRegistration);
+    public StudentPreEnrollmentResponse createStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration, Integer numCredits) throws InvalidParameterException {
+        return this.dataAccessFacade.getStudentPreEnrollment(courseCode, curriculumCode, studentRegistration, numCredits);
     }
 
     public PreEnrollmentsResponse getPreEnrollments(String courseCode, String curriculumCode) throws InvalidParameterException  {
