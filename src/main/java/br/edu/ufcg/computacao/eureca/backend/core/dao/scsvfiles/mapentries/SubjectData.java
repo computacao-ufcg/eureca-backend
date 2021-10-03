@@ -3,6 +3,7 @@ package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Subject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class SubjectData implements EurecaMapValue {
@@ -14,9 +15,10 @@ public class SubjectData implements EurecaMapValue {
     private String equivalentCodes;
     private int idealTerm;
     private String preRequirements;
+    private String coRequirements;
 
     public SubjectData(String academicUnitId, String type, int credits, int hours, String name, String equivalentCodes,
-                       int idealTerm, String preRequirements) {
+                       int idealTerm, String preRequirements, String coRequirements) {
         this.academicUnitId = academicUnitId;
         this.type = type;
         this.credits = credits;
@@ -25,6 +27,7 @@ public class SubjectData implements EurecaMapValue {
         this.equivalentCodes = equivalentCodes;
         this.idealTerm = idealTerm;
         this.preRequirements = preRequirements;
+        this.coRequirements = coRequirements;
     }
 
     public SubjectData() {
@@ -102,20 +105,29 @@ public class SubjectData implements EurecaMapValue {
         return extractStrList(getPreRequirements());
     }
 
+    public String getCoRequirements() {
+        return coRequirements;
+    }
+
+    public void setCoRequirements(String coRequirements) {
+        this.coRequirements = coRequirements;
+    }
+
+    public Collection<String> getCoRequirementsList() {
+        return extractStrList(getCoRequirements());
+    }
+
     public Subject createSubject(SubjectKey key) {
         return new Subject(key.getCourseCode(), key.getCurriculumCode(), key.getSubjectCode(), getAcademicUnitId(),
                 getType(), getCredits(), getHours(), getName(), extractStrList(getEquivalentCodes()), getIdealTerm(),
-                extractStrList(getPreRequirements()));
+                extractStrList(getPreRequirements()), extractStrList(getCoRequirements()));
     }
 
     private Collection<String> extractStrList(String subjectsStr) {
         ArrayList<String> ret = new ArrayList<>();
         if (subjectsStr.equals("")) return ret;
-        String creditsArray[] = subjectsStr.split(",");
-        for (int i =0; i < creditsArray.length; i++) {
-            ret.add(creditsArray[i]);
-        }
-        return ret;
+        String[] creditsArray = subjectsStr.split(",");
+        return Arrays.asList(creditsArray);
     }
 
     @Override
@@ -129,6 +141,7 @@ public class SubjectData implements EurecaMapValue {
                 ", equivalentCodes='" + equivalentCodes + '\'' +
                 ", idealTerm=" + idealTerm +
                 ", preRequirements='" + preRequirements + '\'' +
+                ", coRequirements='" + coRequirements + '\'' +
                 '}';
     }
 }
