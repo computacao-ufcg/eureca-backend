@@ -36,11 +36,15 @@ public class PreEnrollment {
             @RequestParam String curriculumCode,
             @ApiParam(value = ApiDocumentation.PreEnrollment.MAX_CREDITS)
             @RequestParam(required = false) Integer numCredits,
+            @ApiParam(value = ApiDocumentation.PreEnrollment.OPTIONAL_PRIORITY_LIST)
+            @RequestParam(required = false) String optionalPriorityList,
+            @ApiParam(value = ApiDocumentation.PreEnrollment.ELECTIVE_PRIORITY_LIST)
+            @RequestParam(required = false) String electivePriorityList,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
-            StudentPreEnrollmentResponse preEnrollment = ApplicationFacade.getInstance().getPreEnrollment(token, courseCode, curriculumCode, studentRegistration, numCredits);
+            StudentPreEnrollmentResponse preEnrollment = ApplicationFacade.getInstance().getPreEnrollment(token, courseCode, curriculumCode, studentRegistration, numCredits, optionalPriorityList, electivePriorityList);
             return new ResponseEntity<>(preEnrollment, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(e);

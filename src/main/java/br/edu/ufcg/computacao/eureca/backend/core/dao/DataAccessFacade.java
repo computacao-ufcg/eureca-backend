@@ -47,7 +47,7 @@ public interface DataAccessFacade {
 
     Collection<String> getCurriculumCodes(String courseCode) throws InvalidParameterException;
 
-    Subject getSubject(String courseCode, String curriculumCode, String subjectCode);
+    Subject getSubject(String courseCode, String curriculumCode, String subjectCode) throws InvalidParameterException;
 
     SubjectsStatisticsSummaryResponse getSubjectStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 
@@ -71,7 +71,7 @@ public interface DataAccessFacade {
 
     StudentCurriculumProgress getStudentCurriculumProgress(String studentRegistration) throws InvalidParameterException;
 
-    StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration, Integer numCredits) throws InvalidParameterException;
+    StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration, Integer numCredits, String optionalPriorityList, String electivePriorityList) throws InvalidParameterException;
 
     PreEnrollmentsResponse getActivesPreEnrollment(String courseCode, String curriculumCode) throws InvalidParameterException;
 }

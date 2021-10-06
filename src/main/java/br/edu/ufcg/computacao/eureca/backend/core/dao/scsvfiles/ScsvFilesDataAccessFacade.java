@@ -212,7 +212,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Subject getSubject(String courseCode, String curriculumCode, String subjectCode) {
+    public Subject getSubject(String courseCode, String curriculumCode, String subjectCode) throws InvalidParameterException {
         SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
         return getSubject(subjectKey);
     }
@@ -359,8 +359,28 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return this.indexesHolder.getStudentCurriculumProgress(studentRegistration);
     }
 
+    private List<Subject> getSubjectPriorityList(String courseCode, String curriculumCode, String priorityList) {
+        List<String> priorityCodes = new ArrayList<>();
+
+        if (priorityList != null) {
+            priorityCodes = Arrays.asList(priorityList.split(","));
+        }
+
+        List<Subject> prioritySubjects = new ArrayList<>();
+        for (String priorityCode : priorityCodes) {
+            try {
+                Subject subject = this.getSubject(courseCode, curriculumCode, priorityCode);
+                prioritySubjects.add(subject);
+            } catch (InvalidParameterException e) {
+                LOGGER.info(Messages.INVALID_SUBJECT);
+            }
+        }
+
+        return prioritySubjects;
+    }
+
     @Override
-    public StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration, Integer maxCredits) throws InvalidParameterException {
+    public StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration, Integer maxCredits, String optionalPriorityList, String electivePriorityList) throws InvalidParameterException {
         Curriculum curriculum = this.getCurriculum(courseCode, curriculumCode);
         StudentCurriculumProgress progress = this.getStudentCurriculumProgress(studentRegistration);
 
@@ -380,6 +400,12 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         List<Subject> availableElectiveSubjects = this.getElectiveSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
         List<Subject> availableOptionalSubjects = this.getOptionalSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
 
+        List<Subject> optionalSubjectsPriority = this.getSubjectPriorityList(courseCode, curriculumCode, optionalPriorityList);
+        List<Subject> electiveSubjectsPriority = this.getSubjectPriorityList(courseCode, curriculumCode, electivePriorityList);
+
+        optionalSubjectsPriority = this.intersection(optionalSubjectsPriority, availableOptionalSubjects);
+        electiveSubjectsPriority = this.intersection(electiveSubjectsPriority, availableElectiveSubjects);
+
         for (Subject s : availableMandatorySubjects)
             studentPreEnrollment.addSubject(s);
 
@@ -389,7 +415,17 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         }
 
         if (!studentPreEnrollment.isOptionalFull()) {
+            for (Subject s : optionalSubjectsPriority)
+                studentPreEnrollment.addSubject(s);
+        }
+
+        if (!studentPreEnrollment.isOptionalFull()) {
             for (Subject s : availableOptionalSubjects)
+                studentPreEnrollment.addSubject(s);
+        }
+
+        if (!studentPreEnrollment.isElectiveFull()) {
+            for (Subject s : electiveSubjectsPriority)
                 studentPreEnrollment.addSubject(s);
         }
 
@@ -401,8 +437,12 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return studentPreEnrollment;
     }
 
+    private <T> List<T> intersection(List<T> list1, List<T> list2) {
+        return list1.stream().distinct().filter(list2::contains).collect(Collectors.toList());
+    }
+
     public StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
-        return this.getStudentPreEnrollment(courseCode, curriculumCode, studentRegistration, null);
+        return this.getStudentPreEnrollment(courseCode, curriculumCode, studentRegistration, null, null, null);
     }
 
     private Map<SubjectType, Integer> getIdealCredits(Curriculum curriculum, Integer maxCredits, int nextTerm) {
@@ -504,9 +544,12 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return curriculum.getMinNumberOfTerms();
     }
 
-    private Subject getSubject(SubjectKey subjectKey) {
+    private Subject getSubject(SubjectKey subjectKey) throws InvalidParameterException {
         Map<SubjectKey, SubjectData> subjectMap = this.mapsHolder.getMap("subjects");
         SubjectData subjectData = subjectMap.get(subjectKey);
+        if (subjectData == null) {
+            throw new InvalidParameterException(String.format(Messages.INVALID_SUBJECT + "%s", subjectKey.getSubjectCode()));
+        }
         return subjectData.createSubject(subjectKey);
     }
 
