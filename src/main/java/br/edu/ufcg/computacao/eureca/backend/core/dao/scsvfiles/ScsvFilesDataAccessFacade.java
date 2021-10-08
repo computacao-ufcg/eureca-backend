@@ -365,7 +365,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         StudentCurriculumProgress progress = this.getStudentCurriculumProgress(studentRegistration);
 
         int actualTerm = this.getActualTerm(curriculum, progress);
-        int nextTerm = getNextTerm(actualTerm, progress.getEnrolledCredits(), curriculum.getMinNumberOfTerms());
+        int nextTerm = this.getNextTerm(actualTerm, progress.getEnrolledCredits(), curriculum.getMinNumberOfTerms());
 
         Map<SubjectType, Integer> idealCreditsMap = this.getIdealCredits(curriculum, maxCredits, nextTerm);
         int idealMandatoryCredits = idealCreditsMap.get(SubjectType.MANDATORY);
@@ -380,25 +380,32 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         List<Subject> availableElectiveSubjects = this.getElectiveSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
         List<Subject> availableOptionalSubjects = this.getOptionalSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
 
-        for (Subject s : availableMandatorySubjects)
-            studentPreEnrollment.addSubject(s);
+        addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, availableMandatorySubjects);
 
         if (!studentPreEnrollment.isComplementaryFull()) {
-            for (Subject s : availableComplementarySubjects)
-                studentPreEnrollment.addSubject(s);
+            addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, availableComplementarySubjects);
         }
 
         if (!studentPreEnrollment.isOptionalFull()) {
-            for (Subject s : availableOptionalSubjects)
-                studentPreEnrollment.addSubject(s);
+            addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, availableOptionalSubjects);
         }
 
         if (!studentPreEnrollment.isElectiveFull()) {
-            for (Subject s : availableElectiveSubjects)
-                studentPreEnrollment.addSubject(s);
+            addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, availableElectiveSubjects);
         }
 
         return studentPreEnrollment;
+    }
+
+    private void addSubjectsToPreEnrollment(String courseCode, String curriculumCode, StudentPreEnrollmentResponse studentPreEnrollment, List<Subject> availableOptionalSubjects) {
+        for (Subject s : availableOptionalSubjects) {
+            if (s.isComposed()) {
+                List<Subject> coRequirements = s.getCoRequirementsList().stream().map(subjectCode -> this.getSubject(courseCode, curriculumCode, subjectCode)).collect(Collectors.toList());
+                studentPreEnrollment.addSubject(s, coRequirements);
+            } else {
+                studentPreEnrollment.addSubject(s);
+            }
+        }
     }
 
     public StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
@@ -458,7 +465,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
     private int getNextTerm(int actualTerm, int enrolledCredits, int minTerms) {
         int nextTerm = actualTerm + (enrolledCredits > 0 ? 1 : 0);
-        return (nextTerm > minTerms ? minTerms : nextTerm);
+        return (Math.min(nextTerm, minTerms));
     }
 
     private Collection<DetailedSubjectDemand> getSubjectDemand(String subjectType, Collection<StudentPreEnrollmentResponse> preEnrollments) {
