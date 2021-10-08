@@ -400,11 +400,14 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         List<Subject> availableElectiveSubjects = this.getElectiveSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
         List<Subject> availableOptionalSubjects = this.getOptionalSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
 
-        List<Subject> optionalSubjectsPriority = this.getSubjectPriorityList(courseCode, curriculumCode, optionalPriorityList);
-        List<Subject> electiveSubjectsPriority = this.getSubjectPriorityList(courseCode, curriculumCode, electivePriorityList);
+        List<Subject> prioritizedOptionalSubjects = this.getSubjectPriorityList(courseCode, curriculumCode, optionalPriorityList);
+        List<Subject> prioritizedElectiveSubjects = this.getSubjectPriorityList(courseCode, curriculumCode, electivePriorityList);
 
-        optionalSubjectsPriority = this.intersection(optionalSubjectsPriority, availableOptionalSubjects);
-        electiveSubjectsPriority = this.intersection(electiveSubjectsPriority, availableElectiveSubjects);
+        prioritizedOptionalSubjects = this.intersection(prioritizedOptionalSubjects, availableOptionalSubjects);
+        prioritizedElectiveSubjects = this.intersection(prioritizedElectiveSubjects, availableElectiveSubjects);
+
+        List<Subject> nonPrioritizedOptionalSubjects = this.difference(availableOptionalSubjects, prioritizedOptionalSubjects);
+        List<Subject> nonPrioritizedElectiveSubjects = this.difference(availableElectiveSubjects, prioritizedElectiveSubjects);
 
         for (Subject s : availableMandatorySubjects)
             studentPreEnrollment.addSubject(s);
@@ -415,22 +418,22 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         }
 
         if (!studentPreEnrollment.isOptionalFull()) {
-            for (Subject s : optionalSubjectsPriority)
+            for (Subject s : prioritizedOptionalSubjects)
                 studentPreEnrollment.addSubject(s);
         }
 
         if (!studentPreEnrollment.isOptionalFull()) {
-            for (Subject s : availableOptionalSubjects)
+            for (Subject s : nonPrioritizedOptionalSubjects)
                 studentPreEnrollment.addSubject(s);
         }
 
         if (!studentPreEnrollment.isElectiveFull()) {
-            for (Subject s : electiveSubjectsPriority)
+            for (Subject s : prioritizedElectiveSubjects)
                 studentPreEnrollment.addSubject(s);
         }
 
         if (!studentPreEnrollment.isElectiveFull()) {
-            for (Subject s : availableElectiveSubjects)
+            for (Subject s : nonPrioritizedElectiveSubjects)
                 studentPreEnrollment.addSubject(s);
         }
 
@@ -439,6 +442,12 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
     private <T> List<T> intersection(List<T> list1, List<T> list2) {
         return list1.stream().distinct().filter(list2::contains).collect(Collectors.toList());
+    }
+
+    private <T> List<T> difference(List<T> list1, List<T> list2) {
+        List<T> result = new ArrayList<>(list1);
+        result.removeAll(list2);
+        return result;
     }
 
     public StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
