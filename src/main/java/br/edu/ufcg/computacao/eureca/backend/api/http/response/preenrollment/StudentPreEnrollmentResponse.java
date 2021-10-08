@@ -225,7 +225,8 @@ public class StudentPreEnrollmentResponse {
     }
 
     private boolean addOptionalSubject(Subject subject) {
-        boolean isPossibleToAdd = subject.getCredits() + this.optionalCredits <= this.maxOptionalCredits;
+        int newCredits = subject.getCredits() + this.optionalCredits;
+        boolean isPossibleToAdd = newCredits <= this.maxOptionalCredits;
         if (isPossibleToAdd) {
             this.subjects.add(subject);
             this.optionalCredits += subject.getCredits();
@@ -245,7 +246,8 @@ public class StudentPreEnrollmentResponse {
     }
 
     private boolean addComplementarySubject(Subject subject) {
-        boolean isPossibleToAdd = subject.getCredits() + this.complementaryCredits <= this.maxComplementaryCredits;
+        int newCredits = subject.getCredits() + this.complementaryCredits;
+        boolean isPossibleToAdd = newCredits <= this.maxComplementaryCredits;
         if (isPossibleToAdd) {
             this.subjects.add(subject);
             this.complementaryCredits += subject.getCredits();
@@ -265,7 +267,8 @@ public class StudentPreEnrollmentResponse {
     }
 
     private boolean addElectiveSubject(Subject subject) {
-        boolean isPossibleToAdd = subject.getCredits() + this.electiveCredits <= this.maxElectiveCredits;
+        int newCredits = subject.getCredits() + this.electiveCredits;
+        boolean isPossibleToAdd = newCredits <= this.maxElectiveCredits;
         if (isPossibleToAdd) {
             this.subjects.add(subject);
             this.electiveCredits += subject.getCredits();
