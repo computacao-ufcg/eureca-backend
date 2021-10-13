@@ -1,8 +1,10 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment;
 
 import br.edu.ufcg.computacao.eureca.backend.core.models.Subject;
+import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectType;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class StudentPreEnrollmentResponse {
@@ -177,7 +179,7 @@ public class StudentPreEnrollmentResponse {
     private boolean addMandatorySubject(Subject subject) {
         boolean isPossibleToAdd = subject.getCredits() + this.mandatoryCredits <= this.maxMandatoryCredits;
         if (isPossibleToAdd) {
-            this.subjects.add(subject);
+            isPossibleToAdd = this.subjects.add(subject);
             this.mandatoryCredits += subject.getCredits();
         }
         return isPossibleToAdd;
@@ -186,7 +188,7 @@ public class StudentPreEnrollmentResponse {
     private boolean addOptionalSubject(Subject subject) {
         boolean isPossibleToAdd = subject.getCredits() + this.optionalCredits <= this.maxOptionalCredits;
         if (isPossibleToAdd) {
-            this.subjects.add(subject);
+            isPossibleToAdd = this.subjects.add(subject);
             this.optionalCredits += subject.getCredits();
         }
         return isPossibleToAdd;
@@ -195,7 +197,7 @@ public class StudentPreEnrollmentResponse {
     private boolean addComplementarySubject(Subject subject) {
         boolean isPossibleToAdd = subject.getCredits() + this.complementaryCredits <= this.maxComplementaryCredits;
         if (isPossibleToAdd) {
-            this.subjects.add(subject);
+            isPossibleToAdd = this.subjects.add(subject);
             this.complementaryCredits += subject.getCredits();
         }
         return isPossibleToAdd;
@@ -204,7 +206,7 @@ public class StudentPreEnrollmentResponse {
     private boolean addElectiveSubject(Subject subject) {
         boolean isPossibleToAdd = subject.getCredits() + this.electiveCredits <= this.maxElectiveCredits;
         if (isPossibleToAdd) {
-            this.subjects.add(subject);
+            isPossibleToAdd = this.subjects.add(subject);
             this.electiveCredits += subject.getCredits();
         }
         return isPossibleToAdd;
