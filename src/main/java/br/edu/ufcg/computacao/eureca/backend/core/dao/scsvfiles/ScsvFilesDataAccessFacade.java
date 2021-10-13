@@ -22,6 +22,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Subje
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.StudentClassification;
 import br.edu.ufcg.computacao.eureca.backend.core.models.StudentCurriculumProgress;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
+import br.edu.ufcg.computacao.eureca.backend.core.util.EurecaUtil;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
 
@@ -395,19 +396,19 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
         StudentPreEnrollmentResponse studentPreEnrollment = new StudentPreEnrollmentResponse(studentRegistration, nextTerm, idealMandatoryCredits, idealOptionalCredits, idealComplementaryCredits, idealElectiveCredits);
 
-        List<Subject> availableMandatorySubjects = this.getMandatorySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
-        List<Subject> availableComplementarySubjects = this.getComplementarySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
-        List<Subject> availableElectiveSubjects = this.getElectiveSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
-        List<Subject> availableOptionalSubjects = this.getOptionalSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
+        Collection<Subject> availableMandatorySubjects = this.getMandatorySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
+        Collection<Subject> availableComplementarySubjects = this.getComplementarySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
+        Collection<Subject> availableElectiveSubjects = this.getElectiveSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
+        Collection<Subject> availableOptionalSubjects = this.getOptionalSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
 
-        List<Subject> prioritizedOptionalSubjects = this.getSubjectPriorityList(courseCode, curriculumCode, optionalPriorityList);
-        List<Subject> prioritizedElectiveSubjects = this.getSubjectPriorityList(courseCode, curriculumCode, electivePriorityList);
+        Collection<Subject> prioritizedOptionalSubjects = this.getSubjectPriorityList(courseCode, curriculumCode, optionalPriorityList);
+        Collection<Subject> prioritizedElectiveSubjects = this.getSubjectPriorityList(courseCode, curriculumCode, electivePriorityList);
 
-        prioritizedOptionalSubjects = this.intersection(prioritizedOptionalSubjects, availableOptionalSubjects);
-        prioritizedElectiveSubjects = this.intersection(prioritizedElectiveSubjects, availableElectiveSubjects);
+        prioritizedOptionalSubjects = EurecaUtil.intersection(prioritizedOptionalSubjects, availableOptionalSubjects);
+        prioritizedElectiveSubjects = EurecaUtil.intersection(prioritizedElectiveSubjects, availableElectiveSubjects);
 
-        List<Subject> nonPrioritizedOptionalSubjects = this.difference(availableOptionalSubjects, prioritizedOptionalSubjects);
-        List<Subject> nonPrioritizedElectiveSubjects = this.difference(availableElectiveSubjects, prioritizedElectiveSubjects);
+        Collection<Subject> nonPrioritizedOptionalSubjects = EurecaUtil.difference(availableOptionalSubjects, prioritizedOptionalSubjects);
+        Collection<Subject> nonPrioritizedElectiveSubjects = EurecaUtil.difference(availableElectiveSubjects, prioritizedElectiveSubjects);
 
         for (Subject s : availableMandatorySubjects)
             studentPreEnrollment.addSubject(s);
@@ -438,16 +439,6 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         }
 
         return studentPreEnrollment;
-    }
-
-    private <T> List<T> intersection(List<T> list1, List<T> list2) {
-        return list1.stream().distinct().filter(list2::contains).collect(Collectors.toList());
-    }
-
-    private <T> List<T> difference(List<T> list1, List<T> list2) {
-        List<T> result = new ArrayList<>(list1);
-        result.removeAll(list2);
-        return result;
     }
 
     public StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
