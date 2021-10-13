@@ -180,7 +180,9 @@ public class StudentPreEnrollmentResponse {
         boolean isPossibleToAdd = subject.getCredits() + this.mandatoryCredits <= this.maxMandatoryCredits;
         if (isPossibleToAdd) {
             isPossibleToAdd = this.subjects.add(subject);
-            this.mandatoryCredits += subject.getCredits();
+            if (isPossibleToAdd) {
+                this.mandatoryCredits += subject.getCredits();
+            }
         }
         return isPossibleToAdd;
     }
@@ -189,7 +191,9 @@ public class StudentPreEnrollmentResponse {
         boolean isPossibleToAdd = subject.getCredits() + this.optionalCredits <= this.maxOptionalCredits;
         if (isPossibleToAdd) {
             isPossibleToAdd = this.subjects.add(subject);
-            this.optionalCredits += subject.getCredits();
+            if (isPossibleToAdd) {
+                this.optionalCredits += subject.getCredits();
+            }
         }
         return isPossibleToAdd;
     }
@@ -198,7 +202,9 @@ public class StudentPreEnrollmentResponse {
         boolean isPossibleToAdd = subject.getCredits() + this.complementaryCredits <= this.maxComplementaryCredits;
         if (isPossibleToAdd) {
             isPossibleToAdd = this.subjects.add(subject);
-            this.complementaryCredits += subject.getCredits();
+            if (isPossibleToAdd) {
+                this.complementaryCredits += subject.getCredits();
+            }
         }
         return isPossibleToAdd;
     }
@@ -207,7 +213,9 @@ public class StudentPreEnrollmentResponse {
         boolean isPossibleToAdd = subject.getCredits() + this.electiveCredits <= this.maxElectiveCredits;
         if (isPossibleToAdd) {
             isPossibleToAdd = this.subjects.add(subject);
-            this.electiveCredits += subject.getCredits();
+            if (isPossibleToAdd) {
+                this.electiveCredits += subject.getCredits();
+            }
         }
         return isPossibleToAdd;
     }
