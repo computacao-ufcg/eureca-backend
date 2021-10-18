@@ -121,6 +121,19 @@ public class StudentsStatisticsController {
         return new StudentsStatisticsSummaryResponse(courseCode, curriculumCode, activesSummary, alumniSummary, dropoutSummary);
     }
 
+    public Map<String, String> getStudentsEmailsSearch(String courseCode, String curriculumCode) throws InvalidParameterException {
+        Map<String, String> studentsEmails = new HashMap<>();
+        Map<String, Collection<Student>> activesPerAdmissionTerm =
+                this.dataAccessFacade.getActivesPerAdmissionTerm(courseCode, curriculumCode, "2000.1", "2020.1");
+
+        for (String term: activesPerAdmissionTerm.keySet()) {
+            for (Student student: activesPerAdmissionTerm.get(term)) {
+                studentsEmails.put(student.getName(), student.getEmail());
+            }
+        }
+        return studentsEmails;
+    }
+
     private AlumniPerTermSummary getAlumniPerTermSummary(String term, Collection<Student> alumni) {
         int termAlumniCount = alumni.size();
         double aggregateGPA = 0.0;

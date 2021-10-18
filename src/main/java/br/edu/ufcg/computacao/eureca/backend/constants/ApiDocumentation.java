@@ -97,6 +97,15 @@ public class ApiDocumentation {
         public static final String GET_SUMMARY = "Retornar um sumário geral dos dados dos discentes.";
     }
 
+    public static class StudentEmailSearch {
+        public static final String NAME = "Nome do estudante";
+        public static final String STATUS = "Status do estudante (todos,a tivos, evadidos ou egressos)";
+        public static final String GENDER = "Gênero do estudante";
+        public static final String REGISTRATION = "Matrícula do estudante";
+        public static final String CRA = "Cra do estudante";
+        public static final String ENROLLED_CREDITS = "Créditos matriculados pelo estudante";
+    }
+
     public static class SubjectStatistics {
         public static final String API = "Estatísticas de disciplinas.";
         public static final String GET_MANDATORY = "Retorna um sumário dos dados das disciplinas obrigatórias do currículo e curso selecionados.";

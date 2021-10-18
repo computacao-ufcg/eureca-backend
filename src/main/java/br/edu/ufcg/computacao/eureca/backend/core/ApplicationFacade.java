@@ -33,6 +33,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.plugins.AuthorizationPlugin;
 import br.edu.ufcg.computacao.eureca.backend.core.util.factory.GlossaryFactory;
 import br.edu.ufcg.computacao.eureca.common.exceptions.ConfigurationErrorException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
+import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import br.edu.ufcg.computacao.eureca.common.util.CryptoUtil;
 import br.edu.ufcg.computacao.eureca.common.util.ServiceAsymmetricKeysHolder;
 import org.apache.log4j.Logger;
@@ -40,6 +41,7 @@ import org.apache.log4j.Logger;
 import java.security.GeneralSecurityException;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Collection;
+import java.util.Map;
 
 public class ApplicationFacade {
     private static final Logger LOGGER = Logger.getLogger(ApplicationFacade.class);
@@ -156,6 +158,12 @@ public class ApplicationFacade {
         StudentsStatisticsSummaryResponse response = this.studentsStatisticsController.getStudentsStatisticsSummary(courseCode, curriculumCode, from, to);
         StudentsGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.STUDENT);
         response.setGlossary(glossaryFields);
+        return response;
+    }
+
+    public Map<String, String> getStudentsEmailsSearch(String token, String courseCode, String curriculumCode) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_EMAILS);
+        Map<String, String> response = this.studentsStatisticsController.getStudentsEmailsSearch(courseCode, curriculumCode);
         return response;
     }
 
