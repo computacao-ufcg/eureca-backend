@@ -16,7 +16,6 @@ public class Subject {
     private int idealTerm;
     private Collection<String> preRequirementsList;
     private Collection<String> coRequirementsList;
-    private boolean isComposed;
 
     public Subject(String courseCode, String curriculumCode, String subjectCode, String academicUnit, String type,
                    int credits, int hours, String name, Collection<String> equivalentCodesList, int idealTerm,
@@ -33,7 +32,6 @@ public class Subject {
         this.idealTerm = idealTerm;
         this.preRequirementsList = preRequirementsList;
         this.coRequirementsList = coRequirementsList;
-        this.isComposed = coRequirementsList != null && !coRequirementsList.isEmpty();
     }
 
     public String getCourseCode() {
@@ -118,10 +116,6 @@ public class Subject {
 
     public Collection<String> getCoRequirementsList() {
         return coRequirementsList;
-    }
-
-    public boolean isComposed() {
-        return isComposed;
     }
 
     @Override

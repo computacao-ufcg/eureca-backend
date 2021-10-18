@@ -22,6 +22,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Subje
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.StudentClassification;
 import br.edu.ufcg.computacao.eureca.backend.core.models.StudentCurriculumProgress;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
+import br.edu.ufcg.computacao.eureca.backend.core.util.EurecaUtil;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
 
@@ -212,7 +213,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Subject getSubject(String courseCode, String curriculumCode, String subjectCode) {
+    public Subject getSubject(String courseCode, String curriculumCode, String subjectCode) throws InvalidParameterException {
         SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
         return getSubject(subjectKey);
     }
@@ -395,43 +396,53 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
         StudentPreEnrollmentResponse studentPreEnrollment = new StudentPreEnrollmentResponse(studentRegistration, nextTerm, idealMandatoryCredits, idealOptionalCredits, idealComplementaryCredits, idealElectiveCredits);
 
-        List<Subject> availableMandatorySubjects = this.getMandatorySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
-        List<Subject> availableComplementarySubjects = this.getComplementarySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
-        List<Subject> availableElectiveSubjects = this.getElectiveSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
-        List<Subject> availableOptionalSubjects = this.getOptionalSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
+        Collection<Subject> availableMandatorySubjects = this.getMandatorySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
+        Collection<Subject> availableComplementarySubjects = this.getComplementarySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
+        Collection<Subject> availableElectiveSubjects = this.getElectiveSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
+        Collection<Subject> availableOptionalSubjects = this.getOptionalSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
 
-        addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, availableMandatorySubjects);
+        Collection<Subject> prioritizedOptionalSubjects = this.getSubjectPriorityList(courseCode, curriculumCode, optionalPriorityList);
+        Collection<Subject> prioritizedElectiveSubjects = this.getSubjectPriorityList(courseCode, curriculumCode, electivePriorityList);
+
+        prioritizedOptionalSubjects = EurecaUtil.intersection(prioritizedOptionalSubjects, availableOptionalSubjects);
+        prioritizedElectiveSubjects = EurecaUtil.intersection(prioritizedElectiveSubjects, availableElectiveSubjects);
+
+        Collection<Subject> nonPrioritizedOptionalSubjects = EurecaUtil.difference(availableOptionalSubjects, prioritizedOptionalSubjects);
+        Collection<Subject> nonPrioritizedElectiveSubjects = EurecaUtil.difference(availableElectiveSubjects, prioritizedElectiveSubjects);
+
+        for (Subject s : availableMandatorySubjects)
+            studentPreEnrollment.addSubject(s);
 
         if (!studentPreEnrollment.isComplementaryFull()) {
-            addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, availableComplementarySubjects);
+            for (Subject s : availableComplementarySubjects)
+                studentPreEnrollment.addSubject(s);
         }
 
         if (!studentPreEnrollment.isOptionalFull()) {
-            addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, availableOptionalSubjects);
+            for (Subject s : prioritizedOptionalSubjects)
+                studentPreEnrollment.addSubject(s);
+        }
+
+        if (!studentPreEnrollment.isOptionalFull()) {
+            for (Subject s : nonPrioritizedOptionalSubjects)
+                studentPreEnrollment.addSubject(s);
         }
 
         if (!studentPreEnrollment.isElectiveFull()) {
-            addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, availableElectiveSubjects);
+            for (Subject s : prioritizedElectiveSubjects)
+                studentPreEnrollment.addSubject(s);
         }
 
-        return studentPreEnrollment;
-    }
-
-    private void addSubjectsToPreEnrollment(String courseCode, String curriculumCode, StudentPreEnrollmentResponse studentPreEnrollment, List<Subject> availableOptionalSubjects) {
-        for (Subject s : availableOptionalSubjects) {
-            if (s.isComposed()) {
-                List<Subject> coRequirements = s.getCoRequirementsList().stream().map(subjectCode -> this.getSubject(courseCode, curriculumCode, subjectCode)).collect(Collectors.toList());
-                studentPreEnrollment.addSubject(s, coRequirements);
-            } else {
+        if (!studentPreEnrollment.isElectiveFull()) {
+            for (Subject s : nonPrioritizedElectiveSubjects)
                 studentPreEnrollment.addSubject(s);
-            }
         }
 
         return studentPreEnrollment;
     }
 
     public StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
-        return this.getStudentPreEnrollment(courseCode, curriculumCode, studentRegistration, null);
+        return this.getStudentPreEnrollment(courseCode, curriculumCode, studentRegistration, null, null, null);
     }
 
     private Map<SubjectType, Integer> getIdealCredits(Curriculum curriculum, Integer maxCredits, int nextTerm) {
@@ -533,9 +544,12 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return curriculum.getMinNumberOfTerms();
     }
 
-    private Subject getSubject(SubjectKey subjectKey) {
+    private Subject getSubject(SubjectKey subjectKey) throws InvalidParameterException {
         Map<SubjectKey, SubjectData> subjectMap = this.mapsHolder.getMap("subjects");
         SubjectData subjectData = subjectMap.get(subjectKey);
+        if (subjectData == null) {
+            throw new InvalidParameterException(String.format(Messages.INVALID_SUBJECT + "%s", subjectKey.getSubjectCode()));
+        }
         return subjectData.createSubject(subjectKey);
     }
 
