@@ -10,7 +10,9 @@ import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.ApplicationFacade;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
+import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -18,6 +20,9 @@ import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collection;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -195,6 +200,37 @@ public class StudentsStatistics {
             StudentsStatisticsSummaryResponse summary = ApplicationFacade.getInstance().getStudentsStatisticsSummary(token, courseCode, curriculumCode, from, to, lang);
             return new ResponseEntity<>(summary, HttpStatus.OK);
         } catch (EurecaException e) {
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
+            throw e;
+        }
+    }
+
+    @RequestMapping(value = "emailsSearch", method = RequestMethod.GET)
+    @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_SUMMARY)
+    public ResponseEntity<Map<String, String>> getStudentsEmailsSearch(
+            @ApiParam(value = ApiDocumentation.Common.COURSE)
+            @RequestParam(required = true, value = "courseCode") String courseCode,
+            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+            @RequestParam(required = false, value = "curriculumCode", defaultValue = SystemConstants.ALL) String curriculumCode,
+            @ApiParam(value = ApiDocumentation.StudentEmailSearch.STATUS)
+            @RequestParam(required = false, value = "status") String status,
+            @ApiParam(value = ApiDocumentation.StudentEmailSearch.NAME)
+            @RequestParam(required = false, value = "studentName") String studentName,
+            @ApiParam(value = ApiDocumentation.StudentEmailSearch.GENDER)
+            @RequestParam(required = false, value = "gender") String gender,
+            @ApiParam(value = ApiDocumentation.StudentEmailSearch.REGISTRATION)
+            @RequestParam(required = false, value = "registration") String registration,
+            @ApiParam(value = ApiDocumentation.StudentEmailSearch.CRA)
+            @RequestParam(required = false, value = "cra") String cra,
+            @ApiParam(value = ApiDocumentation.StudentEmailSearch.ENROLLED_CREDITS)
+            @RequestParam(required = false, value = "enrolledCredits") String enrolledCredits,
+            @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
+
+    ) throws EurecaException {
+        try {
+            Map<String, String> summary = ApplicationFacade.getInstance().getStudentsEmailsSearch(token, courseCode, curriculumCode);
+            return new ResponseEntity<>(summary, HttpStatus.OK);
+        } catch (Exception e) {
             LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
         }
