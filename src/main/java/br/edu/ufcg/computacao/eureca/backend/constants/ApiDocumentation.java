@@ -104,6 +104,7 @@ public class ApiDocumentation {
         public static final String REGISTRATION = "Matrícula do estudante";
         public static final String CRA = "Cra do estudante";
         public static final String ENROLLED_CREDITS = "Créditos matriculados pelo estudante";
+        public static final String ADMISSION_TERM = "Período de admissão do estudante";
     }
 
     public static class SubjectStatistics {

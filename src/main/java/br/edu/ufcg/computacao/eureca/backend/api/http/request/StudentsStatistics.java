@@ -224,11 +224,13 @@ public class StudentsStatistics {
             @RequestParam(required = false, value = "cra") String cra,
             @ApiParam(value = ApiDocumentation.StudentEmailSearch.ENROLLED_CREDITS)
             @RequestParam(required = false, value = "enrolledCredits") String enrolledCredits,
+            @ApiParam(value = ApiDocumentation.StudentEmailSearch.ADMISSION_TERM)
+            @RequestParam(required = false, value = "admissionTerm") String admissionTerm,
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
 
     ) throws EurecaException {
         try {
-            Map<String, String> summary = ApplicationFacade.getInstance().getStudentsEmailsSearch(token, courseCode, curriculumCode);
+            Map<String, String> summary = ApplicationFacade.getInstance().getStudentsEmailsSearch(token, courseCode, curriculumCode, admissionTerm);
             return new ResponseEntity<>(summary, HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
