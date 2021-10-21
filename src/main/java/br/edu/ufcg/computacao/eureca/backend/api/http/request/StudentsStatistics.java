@@ -213,24 +213,25 @@ public class StudentsStatistics {
             @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
             @RequestParam(required = false, value = "curriculumCode", defaultValue = SystemConstants.ALL) String curriculumCode,
             @ApiParam(value = ApiDocumentation.StudentEmailSearch.STATUS)
-            @RequestParam(required = false, value = "status") String status,
+            @RequestParam(required = false, defaultValue = "^$") String status,
             @ApiParam(value = ApiDocumentation.StudentEmailSearch.NAME)
-            @RequestParam(required = false, value = "studentName") String studentName,
+            @RequestParam(required = false, defaultValue = "^$") String studentName,
             @ApiParam(value = ApiDocumentation.StudentEmailSearch.GENDER)
-            @RequestParam(required = false, value = "gender") String gender,
+            @RequestParam(required = false, defaultValue = "^$") String gender,
             @ApiParam(value = ApiDocumentation.StudentEmailSearch.REGISTRATION)
-            @RequestParam(required = false, value = "registration") String registration,
+            @RequestParam(required = false, defaultValue = "^$") String registration,
             @ApiParam(value = ApiDocumentation.StudentEmailSearch.CRA)
-            @RequestParam(required = false, value = "cra") String cra,
+            @RequestParam(required = false, defaultValue = "^$") String cra,
             @ApiParam(value = ApiDocumentation.StudentEmailSearch.ENROLLED_CREDITS)
-            @RequestParam(required = false, value = "enrolledCredits") String enrolledCredits,
+            @RequestParam(required = false, defaultValue = "^$") String enrolledCredits,
             @ApiParam(value = ApiDocumentation.StudentEmailSearch.ADMISSION_TERM)
-            @RequestParam(required = false, value = "admissionTerm") String admissionTerm,
+            @RequestParam(required = false, defaultValue = "^$") String admissionTerm,
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
 
     ) throws EurecaException {
         try {
-            Map<String, String> summary = ApplicationFacade.getInstance().getStudentsEmailsSearch(token, courseCode, curriculumCode, admissionTerm);
+            Map<String, String> summary = ApplicationFacade.getInstance().getStudentsEmailsSearch(token, courseCode,
+                    curriculumCode, admissionTerm, studentName, gender);
             return new ResponseEntity<>(summary, HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
