@@ -24,6 +24,8 @@ import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException
 import org.apache.log4j.Logger;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StudentsStatisticsController {
     private Logger LOGGER = Logger.getLogger(StudentsStatisticsController.class);
@@ -119,17 +121,6 @@ public class StudentsStatisticsController {
         AlumniSummary alumniSummary = getAlumniSummary(courseCode, curriculumCode, from, to);
         DropoutsSummary dropoutSummary = getDropoutsSummary(courseCode, curriculumCode, from, to);
         return new StudentsStatisticsSummaryResponse(courseCode, curriculumCode, activesSummary, alumniSummary, dropoutSummary);
-    }
-
-    public Map<String, String> getStudentsEmailsSearch(String courseCode, String curriculumCode, String admissionTerm) throws InvalidParameterException {
-        Map<String, String> studentsEmails = new HashMap<>();
-        Collection<Student> actives =
-                this.dataAccessFacade.getActives(courseCode, curriculumCode, admissionTerm, "2020.1");
-
-        for (Student student: actives) {
-            studentsEmails.put(student.getName(), student.getEmail());
-        }
-        return studentsEmails;
     }
 
     private AlumniPerTermSummary getAlumniPerTermSummary(String term, Collection<Student> alumni) {
@@ -329,4 +320,45 @@ public class StudentsStatisticsController {
 
         return new DropoutsSummary(firstTerm, lastTerm, dropoutCount, averageTermsCount, averageCost, costClass, aggregateDropouts);
     }
+
+    public Map<String, String> getStudentsEmailsSearch(String courseCode, String curriculumCode, String admissionTerm,
+                                                       String studentName, String gender)
+            throws InvalidParameterException {
+        Collection<Student> actives =
+                this.dataAccessFacade.getActives(courseCode, curriculumCode, admissionTerm, "2020.1");
+
+        return this.getEmailsSearch(actives, studentName, gender);
+    }
+
+    private synchronized Map<String, String> getEmailsSearch (Collection<Student> students, String studentName, String gender) {
+        Collection<Student> studentsCollection = students;
+        Map<String, String> search =  new HashMap<>();
+
+        Pattern namePattern = Pattern.compile(studentName, Pattern.CASE_INSENSITIVE);
+        Pattern genderPattern = Pattern.compile(gender, Pattern.CASE_INSENSITIVE);
+
+        for( Student student: studentsCollection) {
+            Matcher nameMatcher = namePattern.matcher(student.getName());
+            Matcher genderMatcher = genderPattern.matcher(student.getGender());
+
+            List<Matcher> list = new ArrayList<>();
+            if(!studentName.equals("^$")) {
+                list.add(nameMatcher);
+            } if (!gender.equals("^$")) {
+                list.add(genderMatcher);
+            }
+
+            if(list.size() == 1) {
+                if(list.get(0).find()) {
+                    search.put(student.getName(), student.getEmail());
+                }
+            } else if (list.size() == 2) {
+                if(list.get(0).find() && list.get(1).find()) {
+                    search.put(student.getName(), student.getEmail());
+                }
+            }
+        }
+        return search;
+    }
+
 }

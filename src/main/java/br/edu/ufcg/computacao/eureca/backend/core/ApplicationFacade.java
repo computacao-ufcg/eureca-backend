@@ -161,9 +161,12 @@ public class ApplicationFacade {
         return response;
     }
 
-    public Map<String, String> getStudentsEmailsSearch(String token, String courseCode, String curriculumCode, String admissionTerm) throws EurecaException {
+    public Map<String, String> getStudentsEmailsSearch(String token, String courseCode, String curriculumCode,
+                                                       String admissionTerm, String studentName, String gender)
+            throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_EMAILS);
-        Map<String, String> response = this.studentsStatisticsController.getStudentsEmailsSearch(courseCode, curriculumCode, admissionTerm);
+        Map<String, String> response = this.studentsStatisticsController.getStudentsEmailsSearch(courseCode, curriculumCode,
+                admissionTerm, studentName, gender);
         return response;
     }
 
