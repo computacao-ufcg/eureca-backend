@@ -147,7 +147,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     private void filterCompletedCoRequirements(String curriculumCode, String courseCode, Subject subject, StudentCurriculumProgress progress) {
         Collection<SubjectKey> completedSubjects = progress.getCompleted();
         Collection<SubjectKey> coRequirements = subject.getCoRequirementsList().stream().map(subjectCode -> new SubjectKey(courseCode, curriculumCode, subjectCode)).collect(Collectors.toList());
-        Collection<SubjectKey> availableCoRequirements = EurecaUtil.difference(completedSubjects, coRequirements);
+        Collection<SubjectKey> availableCoRequirements = EurecaUtil.difference(coRequirements, completedSubjects);
         Collection<String> availableCoRequirementsCode = availableCoRequirements.stream().map(SubjectKey::getSubjectCode).collect(Collectors.toSet());
         subject.setCoRequirementsList(availableCoRequirementsCode);
     }
