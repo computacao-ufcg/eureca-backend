@@ -18,8 +18,8 @@ public class PreEnrollmentController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
-    public StudentPreEnrollmentResponse createStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration, Integer numCredits) throws InvalidParameterException {
-        return this.dataAccessFacade.getStudentPreEnrollment(courseCode, curriculumCode, studentRegistration, numCredits);
+    public StudentPreEnrollmentResponse createStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration, Integer numCredits, String optionalPriorityList, String electivePriorityList) throws InvalidParameterException {
+        return this.dataAccessFacade.getStudentPreEnrollment(courseCode, curriculumCode, studentRegistration, numCredits, optionalPriorityList, electivePriorityList);
     }
 
     public PreEnrollmentsResponse getPreEnrollments(String courseCode, String curriculumCode) throws InvalidParameterException  {
@@ -27,13 +27,9 @@ public class PreEnrollmentController {
     }
 
     public SubjectsDemandResponse getDemand(String courseCode, String curriculumCode) throws InvalidParameterException {
-        PreEnrollmentsResponse preEnrollments = this.dataAccessFacade.getActivesPreEnrollment(courseCode, curriculumCode);
         Collection<SubjectDemand> demand = new TreeSet<>();
-        Collection<DetailedSubjectDemand> detailedDemand = new TreeSet<>();
-        detailedDemand.addAll(preEnrollments.getSubjectDemandSummary().getMandatoryDemand());
-        detailedDemand.addAll(preEnrollments.getSubjectDemandSummary().getComplementaryDemand());
-        detailedDemand.addAll(preEnrollments.getSubjectDemandSummary().getOptionalDemand());
-        detailedDemand.addAll(preEnrollments.getSubjectDemandSummary().getElectiveDemand());
+        Collection<DetailedSubjectDemand> detailedDemand = this.getDetailedSubjectDemand(courseCode, curriculumCode);
+
         detailedDemand.forEach(subject -> {
             String subjectCode = subject.getDemand().getSubjectCode();
             String subjectName = subject.getDemand().getSubjectName();
@@ -41,5 +37,17 @@ public class PreEnrollmentController {
             demand.add(new SubjectDemand(subjectCode, subjectName, totalDemand));
         });
         return new SubjectsDemandResponse(demand);
+    }
+
+    private Collection<DetailedSubjectDemand> getDetailedSubjectDemand(String courseCode, String curriculumCode) throws InvalidParameterException {
+        PreEnrollmentsResponse preEnrollments = this.dataAccessFacade.getActivesPreEnrollment(courseCode, curriculumCode);
+        Collection<DetailedSubjectDemand> detailedDemand = new TreeSet<>();
+
+        detailedDemand.addAll(preEnrollments.getSubjectDemandSummary().getMandatoryDemand());
+        detailedDemand.addAll(preEnrollments.getSubjectDemandSummary().getComplementaryDemand());
+        detailedDemand.addAll(preEnrollments.getSubjectDemandSummary().getOptionalDemand());
+        detailedDemand.addAll(preEnrollments.getSubjectDemandSummary().getElectiveDemand());
+
+        return detailedDemand;
     }
 }
