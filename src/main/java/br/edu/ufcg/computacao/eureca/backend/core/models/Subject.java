@@ -120,6 +120,10 @@ public class Subject {
         return coRequirementsList;
     }
 
+    public void setCoRequirementsList(Collection<String> coRequirementsList) {
+        this.coRequirementsList = coRequirementsList;
+    }
+
     public boolean isComposed() {
         return isComposed;
     }
