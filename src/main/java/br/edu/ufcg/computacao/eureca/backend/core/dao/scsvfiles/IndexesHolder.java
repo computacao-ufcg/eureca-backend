@@ -31,6 +31,7 @@ public class IndexesHolder {
     private final Map<SubjectCodeTermClassIdKey, TeachersListData> classesMap;
     private final Map<AcademicUnitKey, AcademicUnitData> academicUnitsMap;
     private final Map<TeacherKey, TeacherData> teachersMap;
+    private final Map<SubjectKey, ScheduleData> scheduleMap;
     // Student indexes
     private Map<String, NationalIdRegistrationKey> registrationMap;
     private Map<CurriculumKey, Collection<NationalIdRegistrationKey>> activesPerCurriculumMap;
@@ -64,6 +65,7 @@ public class IndexesHolder {
         this.classesMap = this.mapsHolder.getMap("classes");
         this.academicUnitsMap = this.mapsHolder.getMap("academicUnits");
         this.teachersMap = this.mapsHolder.getMap("teachers");
+        this.scheduleMap = this.mapsHolder.getMap("schedule");
         buildIndexes();
     }
 
@@ -290,6 +292,13 @@ public class IndexesHolder {
         return response;
     }
 
+    public Schedule getSchedule(String courseCode, String curriculumCode, String subjectCode) throws InvalidParameterException {
+        SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
+        Schedule schedule = this.scheduleMap.get(subjectKey).createSchedule();
+        if (schedule == null) throw new InvalidParameterException("Disciplina inexistente");
+        return schedule;
+    }
+
     public Map<String, TeachersStatisticsSummary> getTeachersPerAcademicUnit(String courseCode, String curriculumCode,
                                                                              String from, String to) throws InvalidParameterException {
         Map<String, TeachersStatisticsSummary> response = new HashMap<>();
@@ -491,13 +500,10 @@ public class IndexesHolder {
             this.activesPerCurriculumMap.get(new CurriculumKey(subjectKey.getCourseCode(),
                     subjectKey.getCurriculumCode())).forEach(studentKey -> {
                 StudentCurriculumProgress studentCurriculumProgress = this.studentCurriculumProgressMap.get(studentKey);
-                if (hasNotCompleted(studentCurriculumProgress, subjectKey, subjectData) &&
-                            !isDisabled(studentCurriculumProgress, subjectKey) &&
-                        isNotOngoing(studentCurriculumProgress, subjectKey)) {
+                if (hasNotCompleted(studentCurriculumProgress, subjectKey, subjectData) && !isDisabled(studentCurriculumProgress, subjectKey) && isNotOngoing(studentCurriculumProgress, subjectKey)) {
                     if (isEnabled(studentCurriculumProgress, subjectKey, subjectData)) {
                         studentCurriculumProgress.getEnabled().add(subjectKey);
-                        CurriculumData curriculumData = this.curriculumMap.get(new
-                                CurriculumKey(subjectKey.getCourseCode(), subjectKey.getCurriculumCode()));
+                        CurriculumData curriculumData = this.curriculumMap.get(new CurriculumKey(subjectKey.getCourseCode(), subjectKey.getCurriculumCode()));
                         if (isAdequate(studentCurriculumProgress, curriculumData, subjectData.getIdealTerm())) {
                             studentCurriculumProgress.getAdequate().add(subjectKey);
                             LOGGER.debug(String.format(Messages.STUDENT_S_SHOULD_ENROLL_SUBJECT_S,
