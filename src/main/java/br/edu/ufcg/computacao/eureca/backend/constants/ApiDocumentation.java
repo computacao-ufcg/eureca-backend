@@ -97,12 +97,18 @@ public class ApiDocumentation {
         public static final String GET_SUMMARY = "Retornar um sumário geral dos dados dos discentes.";
     }
 
+    public static class Communication {
+        public static final String API = "Buscas por emails";
+    }
+
+
     public static class StudentEmailSearch {
         public static final String NAME = "Nome do estudante";
         public static final String STATUS = "Status do estudante (todos,a tivos, evadidos ou egressos)";
         public static final String GENDER = "Gênero do estudante";
         public static final String REGISTRATION = "Matrícula do estudante";
         public static final String CRA = "Cra do estudante";
+        public static final String CRA_OPERATION = "Operação de busca que se deseja fazer de acordo com um valor de cra";
         public static final String ENROLLED_CREDITS = "Créditos matriculados pelo estudante";
         public static final String ADMISSION_TERM = "Período de admissão do estudante";
     }
