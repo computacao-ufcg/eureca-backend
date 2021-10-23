@@ -71,7 +71,7 @@ public interface DataAccessFacade {
 
     StudentCurriculumProgress getStudentCurriculumProgress(String studentRegistration) throws InvalidParameterException;
 
-    StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration, Integer numCredits, String optionalPriorityList, String electivePriorityList) throws InvalidParameterException;
+    StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration, Integer numCredits, String optionalPriorityList, String electivePriorityList, String mandatoryPriorityList) throws InvalidParameterException;
 
     PreEnrollmentsResponse getActivesPreEnrollment(String courseCode, String curriculumCode) throws InvalidParameterException;
 }
