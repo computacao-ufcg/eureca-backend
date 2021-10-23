@@ -321,44 +321,4 @@ public class StudentsStatisticsController {
         return new DropoutsSummary(firstTerm, lastTerm, dropoutCount, averageTermsCount, averageCost, costClass, aggregateDropouts);
     }
 
-    public Map<String, String> getStudentsEmailsSearch(String courseCode, String curriculumCode, String admissionTerm,
-                                                       String studentName, String gender)
-            throws InvalidParameterException {
-        Collection<Student> actives =
-                this.dataAccessFacade.getActives(courseCode, curriculumCode, admissionTerm, "2020.1");
-
-        return this.getEmailsSearch(actives, studentName, gender);
-    }
-
-    private synchronized Map<String, String> getEmailsSearch (Collection<Student> students, String studentName, String gender) {
-        Collection<Student> studentsCollection = students;
-        Map<String, String> search =  new HashMap<>();
-
-        Pattern namePattern = Pattern.compile(studentName, Pattern.CASE_INSENSITIVE);
-        Pattern genderPattern = Pattern.compile(gender, Pattern.CASE_INSENSITIVE);
-
-        for( Student student: studentsCollection) {
-            Matcher nameMatcher = namePattern.matcher(student.getName());
-            Matcher genderMatcher = genderPattern.matcher(student.getGender());
-
-            List<Matcher> list = new ArrayList<>();
-            if(!studentName.equals("^$")) {
-                list.add(nameMatcher);
-            } if (!gender.equals("^$")) {
-                list.add(genderMatcher);
-            }
-
-            if(list.size() == 1) {
-                if(list.get(0).find()) {
-                    search.put(student.getName(), student.getEmail());
-                }
-            } else if (list.size() == 2) {
-                if(list.get(0).find() && list.get(1).find()) {
-                    search.put(student.getName(), student.getEmail());
-                }
-            }
-        }
-        return search;
-    }
-
 }

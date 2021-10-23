@@ -48,6 +48,7 @@ public class ApplicationFacade {
     private RSAPublicKey asPublicKey;
     private AuthorizationPlugin authorizationPlugin;
     private AlumniController alumniController;
+    private CommunicationController communicationController;
     private ProfileController profileController;
     private CurriculaController curriculaController;
     private PreEnrollmentController preEnrollmentController;
@@ -62,6 +63,7 @@ public class ApplicationFacade {
         this.alumniController = new AlumniController();
         this.profileController = new ProfileController();
         this.curriculaController = new CurriculaController();
+        this.communicationController = new CommunicationController();
         this.preEnrollmentController = new PreEnrollmentController();
         this.studentsStatisticsController = new StudentsStatisticsController();
         this.subjectsStatisticsController = new SubjectsStatisticsController();
@@ -162,11 +164,12 @@ public class ApplicationFacade {
     }
 
     public Map<String, String> getStudentsEmailsSearch(String token, String courseCode, String curriculumCode,
-                                                       String admissionTerm, String studentName, String gender)
+                                                       String admissionTerm, String studentName, String gender, String registration,
+                                                       String status, String craOperation, double cra)
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_EMAILS);
-        Map<String, String> response = this.studentsStatisticsController.getStudentsEmailsSearch(courseCode, curriculumCode,
-                admissionTerm, studentName, gender);
+        Map<String, String> response = this.communicationController.getStudentsEmailsSearch(courseCode, curriculumCode,
+                admissionTerm, studentName, gender, registration, status, craOperation, cra);
         return response;
     }
 
