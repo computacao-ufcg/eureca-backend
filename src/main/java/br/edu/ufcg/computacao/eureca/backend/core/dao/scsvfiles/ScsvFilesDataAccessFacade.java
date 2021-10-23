@@ -225,7 +225,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Subject getSubject(String courseCode, String curriculumCode, String subjectCode) {
+    public Subject getSubject(String courseCode, String curriculumCode, String subjectCode) throws InvalidParameterException {
         SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
         return getSubject(subjectKey);
     }
@@ -372,8 +372,17 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return this.indexesHolder.getStudentCurriculumProgress(studentRegistration);
     }
 
+    private Collection<Subject> getPriorityList(String courseCode, String curriculumCode, String priorityListString) {
+        Collection<Subject> priorityList = new ArrayList<>();
+        if (priorityListString != null) {
+            Collection<String> priorityListCodes = Arrays.asList(priorityListString.split(","));
+            priorityList = this.getSubjectsByCode(courseCode, curriculumCode, priorityListCodes);
+        }
+        return priorityList;
+    }
+
     @Override
-    public StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration, Integer maxCredits, String optionalPriorityList, String electivePriorityList) throws InvalidParameterException {
+    public StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration, Integer maxCredits, String optionalPriorityList, String electivePriorityList, String mandatoryPriorityList) throws InvalidParameterException {
         Curriculum curriculum = this.getCurriculum(courseCode, curriculumCode);
         StudentCurriculumProgress progress = this.getStudentCurriculumProgress(studentRegistration);
 
@@ -388,32 +397,45 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
         StudentPreEnrollmentResponse studentPreEnrollment = new StudentPreEnrollmentResponse(studentRegistration, nextTerm, idealMandatoryCredits, idealOptionalCredits, idealComplementaryCredits, idealElectiveCredits);
 
-        List<Subject> availableMandatorySubjects = this.getMandatorySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
-        List<Subject> availableComplementarySubjects = this.getComplementarySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
-        List<Subject> availableElectiveSubjects = this.getElectiveSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
-        List<Subject> availableOptionalSubjects = this.getOptionalSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
+        Collection<Subject> availableMandatorySubjects = this.getMandatorySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
+        Collection<Subject> availableComplementarySubjects = this.getComplementarySubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
+        Collection<Subject> availableElectiveSubjects = this.getElectiveSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
+        Collection<Subject> availableOptionalSubjects = this.getOptionalSubjectsAvailableForEnrollment(courseCode, curriculumCode, studentRegistration);
 
-        addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, availableMandatorySubjects);
+        Collection<Subject> prioritizedOptionalSubjects = this.getPriorityList(courseCode, curriculumCode, optionalPriorityList);
+        Collection<Subject> prioritizedElectiveSubjects = this.getPriorityList(courseCode, curriculumCode, electivePriorityList);
+        Collection<Subject> prioritizedMandatorySubjects = this.getPriorityList(courseCode, curriculumCode, mandatoryPriorityList);
+
+        prioritizedOptionalSubjects = EurecaUtil.intersection(prioritizedOptionalSubjects, availableOptionalSubjects);
+        prioritizedElectiveSubjects = EurecaUtil.intersection(prioritizedElectiveSubjects, availableElectiveSubjects);
+        prioritizedMandatorySubjects = EurecaUtil.intersection(prioritizedMandatorySubjects, availableMandatorySubjects);
+
+        if (!studentPreEnrollment.isMandatoryFull()) {
+            addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, prioritizedMandatorySubjects);
+            addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, availableMandatorySubjects);
+        }
 
         if (!studentPreEnrollment.isComplementaryFull()) {
             addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, availableComplementarySubjects);
         }
 
         if (!studentPreEnrollment.isOptionalFull()) {
+            addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, prioritizedOptionalSubjects);
             addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, availableOptionalSubjects);
         }
 
         if (!studentPreEnrollment.isElectiveFull()) {
+            addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, prioritizedElectiveSubjects);
             addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, availableElectiveSubjects);
         }
 
         return studentPreEnrollment;
     }
 
-    private void addSubjectsToPreEnrollment(String courseCode, String curriculumCode, StudentPreEnrollmentResponse studentPreEnrollment, List<Subject> availableSubjects) {
+    private void addSubjectsToPreEnrollment(String courseCode, String curriculumCode, StudentPreEnrollmentResponse studentPreEnrollment, Collection<Subject> availableSubjects) {
         for (Subject s : availableSubjects) {
             if (s.isComposed()) {
-                List<Subject> coRequirements = s.getCoRequirementsList().stream().map(subjectCode -> this.getSubject(courseCode, curriculumCode, subjectCode)).collect(Collectors.toList());
+                Collection<Subject> coRequirements = this.getSubjectsByCode(courseCode, curriculumCode, s.getCoRequirementsList());
                 studentPreEnrollment.addSubject(s, coRequirements);
             } else {
                 studentPreEnrollment.addSubject(s);
@@ -421,8 +443,21 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         }
     }
 
+    private Collection<Subject> getSubjectsByCode(String courseCode, String curriculumCode, Collection<String> subjectCodes) {
+        Collection<Subject> subjects = new ArrayList<>();
+        for (String subjectCode : subjectCodes) {
+            try {
+                Subject subject = this.getSubject(courseCode, curriculumCode, subjectCode);
+                subjects.add(subject);
+            } catch (InvalidParameterException e) {
+                LOGGER.error(Messages.INVALID_SUBJECT);
+            }
+        }
+        return subjects;
+    }
+
     public StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException {
-        return this.getStudentPreEnrollment(courseCode, curriculumCode, studentRegistration, null, null, null);
+        return this.getStudentPreEnrollment(courseCode, curriculumCode, studentRegistration, null, null, null, null);
     }
 
     private Map<SubjectType, Integer> getIdealCredits(Curriculum curriculum, Integer maxCredits, int nextTerm) {
@@ -524,9 +559,10 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return curriculum.getMinNumberOfTerms();
     }
 
-    private Subject getSubject(SubjectKey subjectKey) {
+    private Subject getSubject(SubjectKey subjectKey) throws InvalidParameterException {
         Map<SubjectKey, SubjectData> subjectMap = this.mapsHolder.getMap("subjects");
         SubjectData subjectData = subjectMap.get(subjectKey);
+        if (subjectData == null) throw new InvalidParameterException(Messages.INVALID_SUBJECT);
         return subjectData.createSubject(subjectKey);
     }
 
