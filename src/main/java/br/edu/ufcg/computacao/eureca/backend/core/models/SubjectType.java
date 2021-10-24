@@ -4,7 +4,8 @@ public enum SubjectType {
     MANDATORY("mandatory"),
     OPTIONAL("optional"),
     ELECTIVE("elective"),
-    COMPLEMENTARY("complementary");
+    COMPLEMENTARY("complementary"),
+    ALL("all");
 
     private String value;
 

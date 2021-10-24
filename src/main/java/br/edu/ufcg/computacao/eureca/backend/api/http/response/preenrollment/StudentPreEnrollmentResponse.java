@@ -212,8 +212,10 @@ public class StudentPreEnrollmentResponse {
     private boolean addMandatorySubject(Subject subject) {
         boolean isPossibleToAdd = subject.getCredits() + this.mandatoryCredits <= this.maxMandatoryCredits;
         if (isPossibleToAdd) {
-            this.subjects.add(subject);
-            this.mandatoryCredits += subject.getCredits();
+            isPossibleToAdd = this.subjects.add(subject);
+            if (isPossibleToAdd) {
+                this.mandatoryCredits += subject.getCredits();
+            }
         }
         return isPossibleToAdd;
     }
@@ -237,8 +239,10 @@ public class StudentPreEnrollmentResponse {
         int newCredits = subject.getCredits() + this.optionalCredits;
         boolean isPossibleToAdd = newCredits <= this.maxOptionalCredits;
         if (isPossibleToAdd) {
-            this.subjects.add(subject);
-            this.optionalCredits += subject.getCredits();
+            isPossibleToAdd = this.subjects.add(subject);
+            if (isPossibleToAdd) {
+                this.optionalCredits += subject.getCredits();
+            }
         }
         return isPossibleToAdd;
     }
@@ -262,8 +266,10 @@ public class StudentPreEnrollmentResponse {
         int newCredits = subject.getCredits() + this.complementaryCredits;
         boolean isPossibleToAdd = newCredits <= this.maxComplementaryCredits;
         if (isPossibleToAdd) {
-            this.subjects.add(subject);
-            this.complementaryCredits += subject.getCredits();
+            isPossibleToAdd = this.subjects.add(subject);
+            if (isPossibleToAdd) {
+                this.complementaryCredits += subject.getCredits();
+            }
         }
         return isPossibleToAdd;
     }
@@ -287,8 +293,10 @@ public class StudentPreEnrollmentResponse {
         int newCredits = subject.getCredits() + this.electiveCredits;
         boolean isPossibleToAdd = newCredits <= this.maxElectiveCredits;
         if (isPossibleToAdd) {
-            this.subjects.add(subject);
-            this.electiveCredits += subject.getCredits();
+            isPossibleToAdd = this.subjects.add(subject);
+            if (isPossibleToAdd) {
+                this.electiveCredits += subject.getCredits();
+            }
         }
         return isPossibleToAdd;
     }

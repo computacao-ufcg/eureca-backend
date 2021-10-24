@@ -17,7 +17,6 @@ import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 public interface DataAccessFacade {
@@ -35,13 +34,13 @@ public interface DataAccessFacade {
 
     Collection<AlumniDigest> getAlumniPerStudentSummary(String courseCode, String from, String to) throws InvalidParameterException;
 
-    List<Subject> getMandatorySubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
+    Collection<Subject> getMandatorySubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
 
-    List<Subject> getOptionalSubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
+    Collection<Subject> getOptionalSubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
 
-    List<Subject> getElectiveSubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
+    Collection<Subject> getElectiveSubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
 
-    List<Subject> getComplementarySubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
+    Collection<Subject> getComplementarySubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
 
     Curriculum getCurriculum(String courseCode, String curriculumCode) throws InvalidParameterException;
 
