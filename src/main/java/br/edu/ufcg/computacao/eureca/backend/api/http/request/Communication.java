@@ -54,7 +54,7 @@ public class Communication {
     ) throws EurecaException {
         try {
             Map<String, String> summary = ApplicationFacade.getInstance().getStudentsEmailsSearch(token, courseCode,
-                    curriculumCode, admissionTerm, studentName, gender, registration, status, craOperation, cra);
+                    curriculumCode, admissionTerm, studentName, gender, registration, status, craOperation, cra, enrolledCredits);
             return new ResponseEntity<>(summary, HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));

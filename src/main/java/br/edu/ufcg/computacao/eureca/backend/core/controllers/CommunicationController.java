@@ -23,11 +23,11 @@ public class CommunicationController {
 
     public Map<String, String> getStudentsEmailsSearch(String courseCode, String curriculumCode, String admissionTerm,
                                                        String studentName, String gender, String registration, String status,
-                                                       String craOperation, double cra)
+                                                       String craOperation, double cra, String enrolledCredits)
             throws InvalidParameterException {
 
         Collection<Student> students = this.getStudentsByStatus(courseCode, curriculumCode, status);
-        return this.getEmailsSearch(students, admissionTerm, studentName, gender, registration);
+        return this.getEmailsSearch(students, admissionTerm, studentName, gender, registration, enrolledCredits);
     }
 
     private synchronized Collection<Student> getStudentsByStatus(String courseCode, String curriculumCode, String status) throws InvalidParameterException {
@@ -49,7 +49,7 @@ public class CommunicationController {
     }
 
     private synchronized Map<String, String> getEmailsSearch (Collection<Student> students, String admissionTerm, String studentName,
-                                                              String gender, String registration) {
+                                                              String gender, String registration, String enrolledCredits) {
         Collection<Student> studentsCollection = students;
         Map<String, String> search =  new HashMap<>();
 
@@ -57,6 +57,7 @@ public class CommunicationController {
         Pattern namePattern = Pattern.compile(studentName, Pattern.CASE_INSENSITIVE);
         Pattern genderPattern = Pattern.compile(gender, Pattern.CASE_INSENSITIVE);
         Pattern registrationPattern = Pattern.compile(registration, Pattern.CASE_INSENSITIVE);
+        Pattern enrolledCreditsPattern = Pattern.compile(enrolledCredits, Pattern.CASE_INSENSITIVE);
 
 
         for( Student student: studentsCollection) {
@@ -64,6 +65,7 @@ public class CommunicationController {
             Matcher nameMatcher = namePattern.matcher(student.getName());
             Matcher genderMatcher = genderPattern.matcher(student.getGender());
             Matcher registrationMatcher = registrationPattern.matcher(student.getRegistration().getRegistration());
+            Matcher enrolledCreditsMatcher = enrolledCreditsPattern.matcher(String.valueOf(student.getEnrolledCredits()));
 
             List<Matcher> list = new ArrayList<>();
             if(!studentName.equals("^$")) {
@@ -74,6 +76,8 @@ public class CommunicationController {
                 list.add(registrationMatcher);
             } if (!admissionTerm.equals("^$")) {
                 list.add(admissionMatcher);
+            } if (!enrolledCredits.equals("^$")) {
+                list.add(enrolledCreditsMatcher);
             }
 
             if(list.size() == 1) {
@@ -90,6 +94,10 @@ public class CommunicationController {
                 }
             } else if (list.size() == 4) {
                 if(list.get(0).find() && list.get(1).find() && list.get(2).find() && list.get(3).find()) {
+                    search.put(student.getName(), student.getEmail());
+                }
+            } else if (list.size() == 5) {
+                if(list.get(0).find() && list.get(1).find() && list.get(2).find() && list.get(3).find() && list.get(4).find()) {
                     search.put(student.getName(), student.getEmail());
                 }
             }
