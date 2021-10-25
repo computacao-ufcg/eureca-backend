@@ -433,15 +433,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         prioritizedElectiveSubjects = EurecaUtil.intersection(prioritizedElectiveSubjects, availableElectiveSubjects);
         prioritizedMandatorySubjects = EurecaUtil.intersection(prioritizedMandatorySubjects, availableMandatorySubjects);
 
-        Map<Integer, Collection<Subject>> mandatorySubjectsGroupedByTerm = this.getMandatorySubjectsGroupedByTermAndType(availableMandatorySubjects);
-        for (Integer term : mandatorySubjectsGroupedByTerm.keySet()) {
-            Collection<Subject> termSubjects = mandatorySubjectsGroupedByTerm.get(term);
-            int totalTermCredits = this.getSubjectCreditsSum(termSubjects);
-
-            if (totalTermCredits > studentPreEnrollment.getMaxMandatoryCredits() - studentPreEnrollment.getMandatoryCredits()) break;
-
-            this.addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, termSubjects);
-        }
+        this.enrollTermMandatorySubjects(courseCode, curriculumCode, studentPreEnrollment, availableMandatorySubjects);
 
         if (!studentPreEnrollment.isMandatoryFull()) {
             this.addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, prioritizedMandatorySubjects);
@@ -467,6 +459,18 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         }
 
         return studentPreEnrollment;
+    }
+
+    private void enrollTermMandatorySubjects(String courseCode, String curriculumCode, StudentPreEnrollmentResponse studentPreEnrollment, Collection<Subject> availableMandatorySubjects) {
+        Map<Integer, Collection<Subject>> mandatorySubjectsGroupedByTerm = this.getMandatorySubjectsGroupedByTermAndType(availableMandatorySubjects);
+        for (Integer term : mandatorySubjectsGroupedByTerm.keySet()) {
+            Collection<Subject> termSubjects = mandatorySubjectsGroupedByTerm.get(term);
+            int totalTermCredits = this.getSubjectCreditsSum(termSubjects);
+
+            if (totalTermCredits > studentPreEnrollment.getMaxMandatoryCredits() - studentPreEnrollment.getMandatoryCredits()) break;
+
+            this.addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, termSubjects);
+        }
     }
 
     private int getSubjectCreditsSum(Collection<Subject> subjects) {
