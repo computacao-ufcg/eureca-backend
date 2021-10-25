@@ -40,6 +40,7 @@ public class PreEnrollment {
             @RequestParam(required = false) String optionalPriorityList,
             @ApiParam(value = ApiDocumentation.PreEnrollment.ELECTIVE_PRIORITY_LIST)
             @RequestParam(required = false) String electivePriorityList,
+            @ApiParam(value = ApiDocumentation.PreEnrollment.MANDATORY_PRIORITY_LIST)
             @RequestParam(required = false) String mandatoryPriorityList,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token

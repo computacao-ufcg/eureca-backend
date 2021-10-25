@@ -404,49 +404,6 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return priorityList;
     }
 
-    private Collection<Subject> getMandatoryPriorityList(String courseCode, String curriculumCode, String mandatoryPriorityListString, String studentRegistration, int nextTerm) throws InvalidParameterException {
-        Map<Integer, Collection<Subject>> availableMandatorySubjects = this.getAvailableMandatorySubjectsGroupedByTerm(courseCode, curriculumCode, studentRegistration);
-        Collection<Subject> nextTermMandatorySubjects = availableMandatorySubjects.get(nextTerm);
-        Collection<Subject> mandatoryPriorityList = this.getPriorityList(courseCode, curriculumCode, mandatoryPriorityListString);
-
-        if (mandatoryPriorityList.containsAll(nextTermMandatorySubjects)) {
-            return nextTermMandatorySubjects;
-        } else {
-            return this.filterMandatoryPriorityList(mandatoryPriorityList, availableMandatorySubjects, nextTerm);
-        }
-    }
-
-    private boolean hasPendency(Map<Integer, Collection<Subject>> availableMandatorySubjects, int nextTerm) {
-        for (int i = 1; i < nextTerm; i++) {
-            if (availableMandatorySubjects.get(i) != null)
-                return true;
-        }
-        return false;
-    }
-
-    private Collection<Subject> filterMandatoryPriorityList(Collection<Subject> mandatoryPriorityList, Map<Integer, Collection<Subject>> availableMandatorySubjects, int nextTerm) {
-        List<Subject> filteredMandatorySubjects = new ArrayList<>();
-
-        if (this.hasPendency(availableMandatorySubjects, nextTerm)) {
-            for (int i = 1; i < nextTerm; i++) {
-                Collection<Subject> termSubjects = availableMandatorySubjects.get(i);
-                if (termSubjects != null)
-                    filteredMandatorySubjects.addAll(termSubjects);
-            }
-        }
-
-        for (Subject subject : mandatoryPriorityList) {
-            int subjectTerm = subject.getIdealTerm();
-            Collection<Subject> termSubjects = availableMandatorySubjects.get(subjectTerm);
-            boolean isSubjectAvailable = termSubjects != null && termSubjects.contains(subject);
-
-            if (subjectTerm <= nextTerm && isSubjectAvailable)
-                filteredMandatorySubjects.add(subject);
-        }
-
-        return filteredMandatorySubjects;
-    }
-
     @Override
     public StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration, Integer maxCredits, String optionalPriorityList, String electivePriorityList, String mandatoryPriorityList) throws InvalidParameterException {
         Curriculum curriculum = this.getCurriculum(courseCode, curriculumCode);
@@ -470,32 +427,50 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
         Collection<Subject> prioritizedOptionalSubjects = this.getPriorityList(courseCode, curriculumCode, optionalPriorityList);
         Collection<Subject> prioritizedElectiveSubjects = this.getPriorityList(courseCode, curriculumCode, electivePriorityList);
-        Collection<Subject> prioritizedMandatorySubjects = this.getMandatoryPriorityList(courseCode, curriculumCode, mandatoryPriorityList, studentRegistration, nextTerm);
+        Collection<Subject> prioritizedMandatorySubjects = this.getPriorityList(courseCode, curriculumCode, mandatoryPriorityList);
 
         prioritizedOptionalSubjects = EurecaUtil.intersection(prioritizedOptionalSubjects, availableOptionalSubjects);
         prioritizedElectiveSubjects = EurecaUtil.intersection(prioritizedElectiveSubjects, availableElectiveSubjects);
         prioritizedMandatorySubjects = EurecaUtil.intersection(prioritizedMandatorySubjects, availableMandatorySubjects);
 
+        Map<Integer, Collection<Subject>> mandatorySubjectsGroupedByTerm = this.getMandatorySubjectsGroupedByTermAndType(availableMandatorySubjects);
+        for (Integer term : mandatorySubjectsGroupedByTerm.keySet()) {
+            Collection<Subject> termSubjects = mandatorySubjectsGroupedByTerm.get(term);
+            int totalTermCredits = this.getSubjectCreditsSum(termSubjects);
+
+            if (totalTermCredits > studentPreEnrollment.getMaxMandatoryCredits() - studentPreEnrollment.getMandatoryCredits()) break;
+
+            this.addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, termSubjects);
+        }
+
         if (!studentPreEnrollment.isMandatoryFull()) {
-            addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, prioritizedMandatorySubjects);
-            addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, availableMandatorySubjects);
+            this.addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, prioritizedMandatorySubjects);
+        }
+
+        if (!studentPreEnrollment.isMandatoryFull()) {
+            Collection<Subject> mandatoryLeftovers = EurecaUtil.difference(availableMandatorySubjects, prioritizedMandatorySubjects);
+            this.addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, mandatoryLeftovers);
         }
 
         if (!studentPreEnrollment.isComplementaryFull()) {
-            addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, availableComplementarySubjects);
+            this.addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, availableComplementarySubjects);
         }
 
         if (!studentPreEnrollment.isOptionalFull()) {
-            addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, prioritizedOptionalSubjects);
-            addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, availableOptionalSubjects);
+            this.addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, prioritizedOptionalSubjects);
+            this.addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, availableOptionalSubjects);
         }
 
         if (!studentPreEnrollment.isElectiveFull()) {
-            addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, prioritizedElectiveSubjects);
-            addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, availableElectiveSubjects);
+            this.addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, prioritizedElectiveSubjects);
+            this.addSubjectsToPreEnrollment(courseCode, curriculumCode, studentPreEnrollment, availableElectiveSubjects);
         }
 
         return studentPreEnrollment;
+    }
+
+    private int getSubjectCreditsSum(Collection<Subject> subjects) {
+        return subjects.stream().map(Subject::getCredits).reduce(0, Integer::sum);
     }
 
     private void addSubjectsToPreEnrollment(String courseCode, String curriculumCode, StudentPreEnrollmentResponse studentPreEnrollment, Collection<Subject> availableSubjects) {
@@ -523,7 +498,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     private Map<Integer, Map<SubjectType, Collection<Subject>>> getSubjectsGroupedByTerm(Collection<Subject> subjects) {
-        Map<Integer, Map<SubjectType, Collection<Subject>>> groupedSubjects = new HashMap<>();
+        Map<Integer, Map<SubjectType, Collection<Subject>>> groupedSubjects = new TreeMap<>();
 
         for (Subject subject : subjects) {
             int term = subject.getIdealTerm();
@@ -542,6 +517,23 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         }
 
         return groupedSubjects;
+    }
+
+    private Map<Integer, Collection<Subject>> getMandatorySubjectsGroupedByTermAndType(Collection<Subject> subjects) {
+        return this.getSubjectsGroupedByTermAndType(subjects, SubjectType.MANDATORY);
+    }
+
+    private Map<Integer, Collection<Subject>> getSubjectsGroupedByTermAndType(Collection<Subject> subjects, SubjectType type) {
+        Map<Integer, Map<SubjectType, Collection<Subject>>> groupedSubjects = this.getSubjectsGroupedByTerm(subjects);
+        Map<Integer, Collection<Subject>> groupedSubjectsByType = new TreeMap<>();
+        for (Integer term : groupedSubjects.keySet()) {
+            Map<SubjectType, Collection<Subject>> termSubjects = groupedSubjects.get(term);
+            Collection<Subject> typeSubjects = termSubjects.get(type);
+            if (typeSubjects != null) {
+                groupedSubjectsByType.put(term, typeSubjects);
+            }
+        }
+        return groupedSubjectsByType;
     }
 
     private SubjectType getSubjectType(Subject subject) {
