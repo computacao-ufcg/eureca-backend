@@ -23,26 +23,26 @@ public class CommunicationController {
 
     public Map<String, String> getStudentsEmailsSearch(String courseCode, String curriculumCode, String admissionTerm,
                                                        String studentName, String gender, String registration, String status,
-                                                       String craOperation, double cra, String enrolledCredits)
+                                                       String craOperation, String cra, String enrolledCredits)
             throws InvalidParameterException {
 
-        Collection<Student> students = this.getStudentsByStatus(courseCode, curriculumCode, status);
+        Collection<Student> students = this.getStudentsByStatus(courseCode, curriculumCode, "1970.1","2021.1", status);
         return this.getEmailsSearch(students, admissionTerm, studentName, gender, registration, enrolledCredits);
     }
 
-    private synchronized Collection<Student> getStudentsByStatus(String courseCode, String curriculumCode, String status) throws InvalidParameterException {
+    private synchronized Collection<Student> getStudentsByStatus(String courseCode, String curriculumCode, String from, String to, String status) throws InvalidParameterException {
         Collection<Student> students = null;
         if (status.equals("Ativos")) {
-            students = this.dataAccessFacade.getActives(courseCode, curriculumCode, "1950.1", "2021.1");
+            students = this.dataAccessFacade.getActives(courseCode, curriculumCode, from, to);
         } else if(status.equals("Evadidos")){
-            students = this.dataAccessFacade.getDropouts(courseCode, curriculumCode, "1950.1", "2021.1");
+            students = this.dataAccessFacade.getDropouts(courseCode, curriculumCode, from, to);
         } else if(status.equals("Egressos")) {
-            students = this.dataAccessFacade.getAlumni(courseCode, curriculumCode, "1950.1", "2021.1");
+            students = this.dataAccessFacade.getAlumni(courseCode, curriculumCode, from, to);
         } else if(status.equals("Todos")) {
             students = Stream.concat(
-                    Stream.concat(this.dataAccessFacade.getActives(courseCode, curriculumCode, "1950.1", "2021.1").stream(),
-                            this.dataAccessFacade.getDropouts(courseCode, curriculumCode, "1950.1", "2021.1").stream()),
-                    this.dataAccessFacade.getAlumni(courseCode, curriculumCode, "1950.1", "2021.1").stream())
+                    Stream.concat(this.dataAccessFacade.getActives(courseCode, curriculumCode, from, to).stream(),
+                            this.dataAccessFacade.getDropouts(courseCode, curriculumCode, from, to).stream()),
+                    this.dataAccessFacade.getAlumni(courseCode, curriculumCode, from, to).stream())
                     .collect(Collectors.toList());
         }
         return students;
@@ -58,7 +58,6 @@ public class CommunicationController {
         Pattern genderPattern = Pattern.compile(gender, Pattern.CASE_INSENSITIVE);
         Pattern registrationPattern = Pattern.compile(registration, Pattern.CASE_INSENSITIVE);
         Pattern enrolledCreditsPattern = Pattern.compile(enrolledCredits, Pattern.CASE_INSENSITIVE);
-
 
         for( Student student: studentsCollection) {
             Matcher admissionMatcher = admissionPattern.matcher(student.getAdmissionTerm());
