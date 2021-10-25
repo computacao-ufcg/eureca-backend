@@ -104,7 +104,7 @@ public class ApiDocumentation {
 
     public static class StudentEmailSearch {
         public static final String NAME = "Nome do estudante";
-        public static final String STATUS = "Status do estudante (todos,a tivos, evadidos ou egressos)";
+        public static final String STATUS = "Status do estudante (Todos, Ativos, Evadidos ou Egressos)";
         public static final String GENDER = "Gênero do estudante";
         public static final String REGISTRATION = "Matrícula do estudante";
         public static final String CRA = "Cra do estudante";

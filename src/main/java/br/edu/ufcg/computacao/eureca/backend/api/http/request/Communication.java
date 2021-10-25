@@ -44,7 +44,7 @@ public class Communication {
             @ApiParam(value = ApiDocumentation.StudentEmailSearch.CRA_OPERATION)
             @RequestParam(required = false, defaultValue = "^$") String craOperation,
             @ApiParam(value = ApiDocumentation.StudentEmailSearch.CRA)
-            @RequestParam(required = false, defaultValue = "^$") double cra,
+            @RequestParam(required = false, defaultValue = "^$") String cra,
             @ApiParam(value = ApiDocumentation.StudentEmailSearch.ENROLLED_CREDITS)
             @RequestParam(required = false, defaultValue = "^$") String enrolledCredits,
             @ApiParam(value = ApiDocumentation.StudentEmailSearch.ADMISSION_TERM)
