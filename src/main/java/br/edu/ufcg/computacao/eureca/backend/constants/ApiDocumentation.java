@@ -124,5 +124,6 @@ public class ApiDocumentation {
         public static final String MAX_CREDITS = "Número máximo de créditos na pré-matrícula.";
         public static final String ELECTIVE_PRIORITY_LIST = "Códigos das disciplinas eletivas a serem priorizadas (separadas por vírgula)";
         public static final String OPTIONAL_PRIORITY_LIST = "Códigos das disciplinas optativas a serem priorizadas (separadas por vírgula)";
+        public static final String MANDATORY_PRIORITY_LIST = "Códigos das disciplinas obrigatorias a serem priorizadas (separadas por vírgula)";
     }
 }
