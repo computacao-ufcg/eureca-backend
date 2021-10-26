@@ -43,4 +43,5 @@ public class Messages {
     public static final String INVALID_ACADEMIC_UNIT_S = "Could not find Academic Unit: %s.";
     public static final String INVALID_STUDENT_S = "No student with registration %s.";
     public static final String INVALID_SUBJECT = "Invalid subject, ignoring.";
+    public static final String INVALID_SCHEDULE_S_S_S_S = "No schedule found for 'courseCode' = %s, 'curriculumCode' = %s, 'subjectCode' = %s, 'classCode' = %s";
 }

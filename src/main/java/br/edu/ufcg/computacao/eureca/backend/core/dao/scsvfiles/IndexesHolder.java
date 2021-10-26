@@ -31,7 +31,7 @@ public class IndexesHolder {
     private final Map<SubjectCodeTermClassIdKey, TeachersListData> classesMap;
     private final Map<AcademicUnitKey, AcademicUnitData> academicUnitsMap;
     private final Map<TeacherKey, TeacherData> teachersMap;
-    private final Map<SubjectKey, ScheduleData> scheduleMap;
+    private final Map<ScheduleKey, ScheduleData> scheduleMap;
     // Student indexes
     private Map<String, NationalIdRegistrationKey> registrationMap;
     private Map<CurriculumKey, Collection<NationalIdRegistrationKey>> activesPerCurriculumMap;
@@ -292,11 +292,11 @@ public class IndexesHolder {
         return response;
     }
 
-    public Schedule getSchedule(String courseCode, String curriculumCode, String subjectCode) throws InvalidParameterException {
-        SubjectKey subjectKey = new SubjectKey(courseCode, curriculumCode, subjectCode);
-        Schedule schedule = this.scheduleMap.get(subjectKey).createSchedule();
-        if (schedule == null) throw new InvalidParameterException("Disciplina inexistente");
-        return schedule;
+    public Schedule getSchedule(String courseCode, String curriculumCode, String subjectCode, String classCode) throws InvalidParameterException {
+        ScheduleKey key = new ScheduleKey(courseCode, curriculumCode, subjectCode, classCode);
+        ScheduleData schedule = this.scheduleMap.get(key);
+        if (schedule == null) throw new InvalidParameterException(String.format(Messages.INVALID_SCHEDULE_S_S_S_S, courseCode, curriculumCode, subjectCode, classCode));
+        return schedule.createSchedule();
     }
 
     public Map<String, TeachersStatisticsSummary> getTeachersPerAcademicUnit(String courseCode, String curriculumCode,
