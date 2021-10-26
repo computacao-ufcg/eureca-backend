@@ -2,6 +2,7 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment;
 
 import br.edu.ufcg.computacao.eureca.backend.core.models.Subject;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,6 +36,10 @@ public class StudentPreEnrollmentResponse {
 
     public boolean isFull() {
         return this.totalCredits >= this.maxCredits;
+    }
+
+    public boolean isMandatoryFull() {
+        return this.isFull() || this.mandatoryCredits >= this.maxMandatoryCredits;
     }
 
     public boolean isOptionalFull() {
@@ -175,7 +180,7 @@ public class StudentPreEnrollmentResponse {
         }
     }
 
-    public void addSubject(Subject subject, List<Subject> coRequirements) {
+    public void addSubject(Subject subject, Collection<Subject> coRequirements) {
         boolean added = false;
         switch (subject.getType()) {
             case "M":
@@ -197,7 +202,7 @@ public class StudentPreEnrollmentResponse {
         }
     }
 
-    private int getCoRequirementsCredits(List<Subject> coRequirements) {
+    private int getCoRequirementsCredits(Collection<Subject> coRequirements) {
         int sum = 0;
         for (Subject subject : coRequirements)
             sum += subject.getCredits();
@@ -207,13 +212,15 @@ public class StudentPreEnrollmentResponse {
     private boolean addMandatorySubject(Subject subject) {
         boolean isPossibleToAdd = subject.getCredits() + this.mandatoryCredits <= this.maxMandatoryCredits;
         if (isPossibleToAdd) {
-            this.subjects.add(subject);
-            this.mandatoryCredits += subject.getCredits();
+            isPossibleToAdd = this.subjects.add(subject);
+            if (isPossibleToAdd) {
+                this.mandatoryCredits += subject.getCredits();
+            }
         }
         return isPossibleToAdd;
     }
 
-    private boolean addMandatorySubject(Subject subject, List<Subject> coRequirements) {
+    private boolean addMandatorySubject(Subject subject, Collection<Subject> coRequirements) {
         int newCredits = subject.getCredits() + this.getCoRequirementsCredits(coRequirements) + this.mandatoryCredits;
         boolean isPossibleToAdd = newCredits <= this.maxMandatoryCredits;
         if (isPossibleToAdd) {
@@ -232,13 +239,15 @@ public class StudentPreEnrollmentResponse {
         int newCredits = subject.getCredits() + this.optionalCredits;
         boolean isPossibleToAdd = newCredits <= this.maxOptionalCredits;
         if (isPossibleToAdd) {
-            this.subjects.add(subject);
-            this.optionalCredits += subject.getCredits();
+            isPossibleToAdd = this.subjects.add(subject);
+            if (isPossibleToAdd) {
+                this.optionalCredits += subject.getCredits();
+            }
         }
         return isPossibleToAdd;
     }
 
-    private boolean addOptionalSubject(Subject subject, List<Subject> coRequirements) {
+    private boolean addOptionalSubject(Subject subject, Collection<Subject> coRequirements) {
         int newCredits = subject.getCredits() + this.getCoRequirementsCredits(coRequirements) + this.optionalCredits;
         boolean isPossibleToAdd = newCredits <= this.maxOptionalCredits;
         if (isPossibleToAdd) {
@@ -257,13 +266,15 @@ public class StudentPreEnrollmentResponse {
         int newCredits = subject.getCredits() + this.complementaryCredits;
         boolean isPossibleToAdd = newCredits <= this.maxComplementaryCredits;
         if (isPossibleToAdd) {
-            this.subjects.add(subject);
-            this.complementaryCredits += subject.getCredits();
+            isPossibleToAdd = this.subjects.add(subject);
+            if (isPossibleToAdd) {
+                this.complementaryCredits += subject.getCredits();
+            }
         }
         return isPossibleToAdd;
     }
 
-    private boolean addComplementarySubject(Subject subject, List<Subject> coRequirements) {
+    private boolean addComplementarySubject(Subject subject, Collection<Subject> coRequirements) {
         int newCredits = subject.getCredits() + this.getCoRequirementsCredits(coRequirements) + this.complementaryCredits;
         boolean isPossibleToAdd = newCredits <= this.maxComplementaryCredits;
         if (isPossibleToAdd) {
@@ -282,13 +293,15 @@ public class StudentPreEnrollmentResponse {
         int newCredits = subject.getCredits() + this.electiveCredits;
         boolean isPossibleToAdd = newCredits <= this.maxElectiveCredits;
         if (isPossibleToAdd) {
-            this.subjects.add(subject);
-            this.electiveCredits += subject.getCredits();
+            isPossibleToAdd = this.subjects.add(subject);
+            if (isPossibleToAdd) {
+                this.electiveCredits += subject.getCredits();
+            }
         }
         return isPossibleToAdd;
     }
 
-    private boolean addElectiveSubject(Subject subject, List<Subject> coRequirements) {
+    private boolean addElectiveSubject(Subject subject, Collection<Subject> coRequirements) {
         int newCredits = subject.getCredits() + this.getCoRequirementsCredits(coRequirements) + this.electiveCredits;
         boolean isPossibleToAdd = newCredits <= this.maxElectiveCredits;
         if (isPossibleToAdd) {
