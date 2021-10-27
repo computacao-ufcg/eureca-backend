@@ -163,13 +163,13 @@ public class ApplicationFacade {
         return response;
     }
 
-    public Map<String, String> getStudentsEmailsSearch(String token, String courseCode, String curriculumCode,
-                                                       String admissionTerm, String studentName, String gender, String registration,
+    public Map<String, EmailSearchResponse> getStudentsEmailsSearch(String token, String courseCode, String curriculumCode,
+                                                       String admissionTerm, String studentName, String gender,
                                                        String status, String craOperation, String cra, String enrolledCredits)
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_EMAILS);
-        Map<String, String> response = this.communicationController.getStudentsEmailsSearch(courseCode, curriculumCode,
-                admissionTerm, studentName, gender, registration, status, craOperation, cra, enrolledCredits);
+        Map<String, EmailSearchResponse> response = this.communicationController.getStudentsEmailsSearch(courseCode, curriculumCode,
+                admissionTerm, studentName, gender, status, craOperation, cra, enrolledCredits);
         return response;
     }
 
