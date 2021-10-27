@@ -106,7 +106,6 @@ public class ApiDocumentation {
         public static final String NAME = "Nome do estudante";
         public static final String STATUS = "Status do estudante (Todos, Ativos, Evadidos ou Egressos)";
         public static final String GENDER = "Gênero do estudante";
-        public static final String REGISTRATION = "Matrícula do estudante";
         public static final String CRA = "Cra do estudante";
         public static final String CRA_OPERATION = "Operação de busca que se deseja fazer de acordo com um valor de cra";
         public static final String ENROLLED_CREDITS = "Créditos matriculados pelo estudante";

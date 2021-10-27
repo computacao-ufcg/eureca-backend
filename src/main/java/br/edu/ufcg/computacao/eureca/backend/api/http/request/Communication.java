@@ -5,6 +5,7 @@ import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.ApplicationFacade;
+import br.edu.ufcg.computacao.eureca.backend.core.models.EmailSearchResponse;
 import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +29,7 @@ public class Communication {
 
     @RequestMapping(value = "studentsEmailSearch", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_SUMMARY)
-    public ResponseEntity<Map<String, String>> getStudentsEmailsSearch(
+    public ResponseEntity<Map<String, EmailSearchResponse>> getStudentsEmailsSearch(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
             @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
@@ -39,8 +40,6 @@ public class Communication {
             @RequestParam(required = false, defaultValue = "^$") String studentName,
             @ApiParam(value = ApiDocumentation.StudentEmailSearch.GENDER)
             @RequestParam(required = false, defaultValue = "^$") String gender,
-            @ApiParam(value = ApiDocumentation.StudentEmailSearch.REGISTRATION)
-            @RequestParam(required = false, defaultValue = "^$") String registration,
             @ApiParam(value = ApiDocumentation.StudentEmailSearch.CRA_OPERATION)
             @RequestParam(required = false, defaultValue = "^$") String craOperation,
             @ApiParam(value = ApiDocumentation.StudentEmailSearch.CRA)
@@ -53,8 +52,8 @@ public class Communication {
 
     ) throws EurecaException {
         try {
-            Map<String, String> summary = ApplicationFacade.getInstance().getStudentsEmailsSearch(token, courseCode,
-                    curriculumCode, admissionTerm, studentName, gender, registration, status, craOperation, cra, enrolledCredits);
+            Map<String, EmailSearchResponse> summary = ApplicationFacade.getInstance().getStudentsEmailsSearch(token, courseCode,
+                    curriculumCode, admissionTerm, studentName, gender, status, craOperation, cra, enrolledCredits);
             return new ResponseEntity<>(summary, HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
