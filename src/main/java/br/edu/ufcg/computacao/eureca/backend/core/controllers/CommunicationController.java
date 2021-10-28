@@ -67,38 +67,16 @@ public class CommunicationController {
             Matcher enrolledCreditsMatcher = enrolledCreditsPattern.matcher(String.valueOf(student.getEnrolledCredits()));
 
             List<Matcher> list = new ArrayList<>();
-            if(!studentName.equals("^$")) {
-                list.add(nameMatcher);
-            } if (!gender.equals("^$")) {
-                list.add(genderMatcher);
-            }  if (!admissionTerm.equals("^$")) {
-                list.add(admissionMatcher);
-            } if (!enrolledCredits.equals("^$")) {
-                list.add(enrolledCreditsMatcher);
+            list.add(enrolledCreditsMatcher);
+            list.add(admissionMatcher);
+            list.add(genderMatcher);
+            list.add(nameMatcher);
+
+            if(list.get(0).find() && list.get(1).find() && list.get(2).find() && list.get(3).find()) {
+                EmailSearchResponse emailSearchResponse = new EmailSearchResponse(student.getName(), student.getEmail());
+                search.put(student.getRegistration().getRegistration(), emailSearchResponse);
             }
 
-            EmailSearchResponse emailSearchResponse = null;
-            if(list.size() == 1) {
-                if(list.get(0).find()) {
-                    emailSearchResponse = new EmailSearchResponse(student.getName(), student.getEmail());
-                    search.put(student.getRegistration().getRegistration(), emailSearchResponse);
-                }
-            } else if (list.size() == 2) {
-                if(list.get(0).find() && list.get(1).find()) {
-                    emailSearchResponse = new EmailSearchResponse(student.getName(), student.getEmail());
-                    search.put(student.getRegistration().getRegistration(), emailSearchResponse);
-                }
-            } else if (list.size() == 3) {
-                if(list.get(0).find() && list.get(1).find() && list.get(2).find()) {
-                    emailSearchResponse = new EmailSearchResponse(student.getName(), student.getEmail());
-                    search.put(student.getRegistration().getRegistration(), emailSearchResponse);
-                }
-            } else if (list.size() == 4) {
-                if(list.get(0).find() && list.get(1).find() && list.get(2).find() && list.get(3).find()) {
-                    emailSearchResponse = new EmailSearchResponse(student.getName(), student.getEmail());
-                    search.put(student.getRegistration().getRegistration(), emailSearchResponse);
-                }
-            }
         }
         return search;
     }
