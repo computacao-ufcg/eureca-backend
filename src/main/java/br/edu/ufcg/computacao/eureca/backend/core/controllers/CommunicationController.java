@@ -28,7 +28,7 @@ public class CommunicationController {
             throws InvalidParameterException {
 
         Collection<Student> students = this.getStudentsByStatus(courseCode, curriculumCode, "1970.1","2021.1", status);
-        return this.getEmailsSearch(students, admissionTerm, studentName, gender, enrolledCredits);
+        return this.getEmailsSearch(students, admissionTerm, studentName, gender, enrolledCredits, craOperation, cra);
     }
 
     private synchronized Collection<Student> getStudentsByStatus(String courseCode, String curriculumCode, String from, String to, String status) throws InvalidParameterException {
@@ -50,7 +50,7 @@ public class CommunicationController {
     }
 
     private synchronized Map<String, EmailSearchResponse> getEmailsSearch (Collection<Student> students, String admissionTerm, String studentName,
-                                                              String gender, String enrolledCredits) {
+                                                              String gender, String enrolledCredits, String craOperation, String cra) {
         Collection<Student> studentsCollection = students;
         Map<String, EmailSearchResponse> search =  new HashMap<>();
 
@@ -72,12 +72,33 @@ public class CommunicationController {
             list.add(genderMatcher);
             list.add(nameMatcher);
 
-            if(list.get(0).find() && list.get(1).find() && list.get(2).find() && list.get(3).find()) {
+            boolean isStudentGpaMatchingRequest = this.compareStudentPerformaceIndex(craOperation, cra, student.getGpa());
+
+            if(list.get(0).find() && list.get(1).find() && list.get(2).find() && list.get(3).find() && isStudentGpaMatchingRequest) {
                 EmailSearchResponse emailSearchResponse = new EmailSearchResponse(student.getName(), student.getEmail());
                 search.put(student.getRegistration().getRegistration(), emailSearchResponse);
             }
 
         }
         return search;
+    }
+
+    private boolean compareStudentPerformaceIndex(String operation, String craToCompare, double studentGpa) {
+        double gpa = Double.parseDouble(craToCompare);
+
+        switch (operation) {
+            case ">":
+                return studentGpa > gpa;
+            case "<":
+                return studentGpa < gpa;
+            case ">=":
+                return studentGpa >= gpa;
+            case "<=":
+                return studentGpa <= gpa;
+            case "=":
+                return studentGpa == gpa;
+            default:
+                return true;
+        }
     }
 }
