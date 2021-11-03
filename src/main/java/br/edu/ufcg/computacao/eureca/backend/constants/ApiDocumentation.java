@@ -110,6 +110,8 @@ public class ApiDocumentation {
         public static final String CRA_OPERATION = "Operação de busca que se deseja fazer de acordo com um valor de cra";
         public static final String ENROLLED_CREDITS = "Créditos matriculados pelo estudante";
         public static final String ADMISSION_TERM = "Período de admissão do estudante";
+        public static final String ENROLLED_CREDITS_OPERATION = "Operação de busca que se deseja fazer de acordo com um valor de cra";
+
     }
 
     public static class SubjectStatistics {

@@ -44,6 +44,8 @@ public class Communication {
             @RequestParam(required = false, defaultValue = "^$") String craOperation,
             @ApiParam(value = ApiDocumentation.StudentEmailSearch.CRA)
             @RequestParam(required = false, defaultValue = "^$") String cra,
+            @ApiParam(value = ApiDocumentation.StudentEmailSearch.CRA_OPERATION)
+            @RequestParam(required = false, defaultValue = "^$") String enrolledCreditsOperation,
             @ApiParam(value = ApiDocumentation.StudentEmailSearch.ENROLLED_CREDITS)
             @RequestParam(required = false, defaultValue = "^$") String enrolledCredits,
             @ApiParam(value = ApiDocumentation.StudentEmailSearch.ADMISSION_TERM)
@@ -53,7 +55,8 @@ public class Communication {
     ) throws EurecaException {
         try {
             Map<String, EmailSearchResponse> summary = ApplicationFacade.getInstance().getStudentsEmailsSearch(token, courseCode,
-                    curriculumCode, admissionTerm, studentName, gender, status, craOperation, cra, enrolledCredits);
+                    curriculumCode, admissionTerm, studentName, gender,
+                    status, craOperation, cra, enrolledCreditsOperation, enrolledCredits);
             return new ResponseEntity<>(summary, HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
