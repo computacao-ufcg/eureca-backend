@@ -24,11 +24,12 @@ public class CommunicationController {
 
     public Map<String, EmailSearchResponse> getStudentsEmailsSearch(String courseCode, String curriculumCode, String admissionTerm,
                                                        String studentName, String gender, String status,
-                                                       String craOperation, String cra, String enrolledCredits)
+                                                       String craOperation, String cra, String enrolledCreditsOperation,
+                                                                    String enrolledCredits)
             throws InvalidParameterException {
 
         Collection<Student> students = this.getStudentsByStatus(courseCode, curriculumCode, "1970.1","2021.1", status);
-        return this.getEmailsSearch(students, admissionTerm, studentName, gender, enrolledCredits, craOperation, cra);
+        return this.getEmailsSearch(students, admissionTerm, studentName, gender, enrolledCreditsOperation, enrolledCredits, craOperation, cra);
     }
 
     private synchronized Collection<Student> getStudentsByStatus(String courseCode, String curriculumCode, String from, String to, String status) throws InvalidParameterException {
@@ -50,7 +51,7 @@ public class CommunicationController {
     }
 
     private synchronized Map<String, EmailSearchResponse> getEmailsSearch (Collection<Student> students, String admissionTerm, String studentName,
-                                                              String gender, String enrolledCredits, String craOperation, String cra) {
+                                                              String gender, String enrolledCreditsOperation, String enrolledCredits, String craOperation, String cra) {
         Collection<Student> studentsCollection = students;
         Map<String, EmailSearchResponse> search =  new HashMap<>();
 
@@ -64,17 +65,17 @@ public class CommunicationController {
             Matcher admissionMatcher = admissionPattern.matcher(student.getAdmissionTerm());
             Matcher nameMatcher = namePattern.matcher(student.getName());
             Matcher genderMatcher = genderPattern.matcher(student.getGender());
-            Matcher enrolledCreditsMatcher = enrolledCreditsPattern.matcher(String.valueOf(student.getEnrolledCredits()));
 
             List<Matcher> list = new ArrayList<>();
-            list.add(enrolledCreditsMatcher);
             list.add(admissionMatcher);
             list.add(genderMatcher);
             list.add(nameMatcher);
 
             boolean isStudentGpaMatchingRequest = this.compareStudentPerformaceIndex(craOperation, cra, student.getGpa());
+            boolean isStudentEnrolledCreditsMatchingRequest = this.compareStudentPerformaceIndex(enrolledCreditsOperation,
+                    cra, student.getEnrolledCredits());
 
-            if(list.get(0).find() && list.get(1).find() && list.get(2).find() && list.get(3).find() && isStudentGpaMatchingRequest) {
+            if(list.get(0).find() && list.get(1).find() && list.get(2).find() && isStudentEnrolledCreditsMatchingRequest && isStudentGpaMatchingRequest) {
                 EmailSearchResponse emailSearchResponse = new EmailSearchResponse(student.getName(), student.getEmail());
                 search.put(student.getRegistration().getRegistration(), emailSearchResponse);
             }
@@ -83,20 +84,20 @@ public class CommunicationController {
         return search;
     }
 
-    private boolean compareStudentPerformaceIndex(String operation, String craToCompare, double studentGpa) {
-        double gpa = Double.parseDouble(craToCompare);
+    private boolean compareStudentPerformaceIndex(String operation, String valueToCompare, double value) {
+        double gpa = Double.parseDouble(valueToCompare);
 
         switch (operation) {
             case ">":
-                return studentGpa > gpa;
+                return value > gpa;
             case "<":
-                return studentGpa < gpa;
+                return value < gpa;
             case ">=":
-                return studentGpa >= gpa;
+                return value >= gpa;
             case "<=":
-                return studentGpa <= gpa;
+                return value <= gpa;
             case "=":
-                return studentGpa == gpa;
+                return value == gpa;
             default:
                 return true;
         }
