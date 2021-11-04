@@ -161,12 +161,12 @@ public class ApplicationFacade {
 
     public StudentPreEnrollmentResponse getPreEnrollment(String token, String courseCode, String curriculumCode, String registration, Integer numCredits, String optionalPriorityList, String electivePriorityList, String mandatoryPriorityList) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_PRE_ENROLLMENT);
-        return this.preEnrollmentController.createStudentPreEnrollment(courseCode, curriculumCode, registration, numCredits, optionalPriorityList, electivePriorityList, mandatoryPriorityList);
+        return this.preEnrollmentController.getStudentPreEnrollment(courseCode, curriculumCode, registration, numCredits, optionalPriorityList, electivePriorityList, mandatoryPriorityList);
     }
 
     public PreEnrollmentsResponse getPreEnrollments(String token, String courseCode, String curriculumCode) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_PRE_ENROLLMENTS);
-        return this.preEnrollmentController.getPreEnrollments(courseCode, curriculumCode);
+        return this.preEnrollmentController.getActivesPreEnrollments(courseCode, curriculumCode);
     }
 
     public SubjectsDemandResponse getDemand(String token, String courseCode, String curriculumCode) throws EurecaException {

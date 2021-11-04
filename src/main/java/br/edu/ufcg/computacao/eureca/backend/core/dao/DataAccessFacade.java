@@ -22,6 +22,8 @@ import java.util.Map;
 public interface DataAccessFacade {
     Collection<Student> getActives(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 
+    Collection<Student> getAllActives(String courseCode, String curriculumCode) throws InvalidParameterException;
+
     Collection<Student> getAlumni(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 
     Collection<Student> getDropouts(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
@@ -34,13 +36,7 @@ public interface DataAccessFacade {
 
     Collection<AlumniDigest> getAlumniPerStudentSummary(String courseCode, String from, String to) throws InvalidParameterException;
 
-    Collection<Subject> getMandatorySubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
-
-    Collection<Subject> getOptionalSubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
-
-    Collection<Subject> getElectiveSubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
-
-    Collection<Subject> getComplementarySubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
+    Collection<Subject> getAllSubjects(String courseCode, String curriculumCode) throws InvalidParameterException;
 
     Curriculum getCurriculum(String courseCode, String curriculumCode) throws InvalidParameterException;
 
@@ -70,7 +66,7 @@ public interface DataAccessFacade {
 
     StudentCurriculumProgress getStudentCurriculumProgress(String studentRegistration) throws InvalidParameterException;
 
-    StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration, Integer numCredits, String optionalPriorityList, String electivePriorityList, String mandatoryPriorityList) throws InvalidParameterException;
+    StudentPreEnrollmentResponse getStudentPreEnrollment(PreEnrollmentData preEnrollmentData) throws InvalidParameterException;
 
-    PreEnrollmentsResponse getActivesPreEnrollment(String courseCode, String curriculumCode) throws InvalidParameterException;
+    PreEnrollmentsResponse getActivesPreEnrollment(Collection<PreEnrollmentData> activesPreEnrollmentData) throws InvalidParameterException;
 }
