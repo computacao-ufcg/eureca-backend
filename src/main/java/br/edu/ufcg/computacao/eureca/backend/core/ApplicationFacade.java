@@ -2,6 +2,7 @@ package br.edu.ufcg.computacao.eureca.backend.core;
 
 import br.edu.ufcg.computacao.eureca.as.core.AuthenticationUtil;
 import br.edu.ufcg.computacao.eureca.as.core.models.SystemUser;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.EnrollmentsPerSubjectData;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment.PreEnrollmentsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.active.ActivesStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.alumni.AlumniDigest;
@@ -171,6 +172,15 @@ public class ApplicationFacade {
         authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_EMAILS);
         Map<String, EmailSearchResponse> response = this.communicationController.getStudentsEmailsSearch(courseCode, curriculumCode,
                 admissionTerm, studentName, gender, status, craOperation, cra, enrolledCreditsOperation, enrolledCredits);
+        return response;
+    }
+
+    public Map<String, EmailSearchResponse> getSubjectEmailsSearch(String token, String courseCode, String curriculumCode,
+                                                                        String subjectName, String subjectType,
+                                                                        String academicUnit, String term) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_EMAILS);
+        Map<String, EmailSearchResponse> response = this.communicationController.getSubjectEmailsSearch(courseCode, curriculumCode, subjectName,
+                subjectType, academicUnit, term);
         return response;
     }
 

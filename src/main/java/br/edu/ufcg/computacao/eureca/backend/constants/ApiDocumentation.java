@@ -110,7 +110,11 @@ public class ApiDocumentation {
         public static final String CRA_OPERATION = "Operação de busca que se deseja fazer de acordo com um valor de cra";
         public static final String ENROLLED_CREDITS = "Créditos matriculados pelo estudante";
         public static final String ADMISSION_TERM = "Período de admissão do estudante";
-        public static final String ENROLLED_CREDITS_OPERATION = "Operação de busca que se deseja fazer de acordo com um valor de cra";
+        public static final String ENROLLED_CREDITS_OPERATION = "Operação de busca que se deseja fazer de acordo com um valor de creditos matriculados";
+        public static final String SUBJECT_NAME = "Nome da disciplina na qual se deve buscar os alunos matriculados";
+        public static final String SUBJECT_TYPE = "Tipo da disciplina na qual se deve buscar os alunos matriculados";
+        public static final String ACADEMIC_UNIT = "Unidade acadêmica da disciplina na qual se deve buscar os alunos matriculados";
+        public static final String TERM = "Período da disciplina na qual se deve buscar os alunos matriculados";
 
     }
 
