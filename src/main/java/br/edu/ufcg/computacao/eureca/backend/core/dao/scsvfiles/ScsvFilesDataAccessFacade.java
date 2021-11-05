@@ -2,9 +2,6 @@ package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.alumni.AlumniDigest;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.*;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment.DetailedSubjectDemand;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment.PreEnrollmentsResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment.StudentPreEnrollmentResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.profile.ProfileResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.SubjectRetentionCSV;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.SubjectRetentionPerAdmissionTerm;
@@ -14,12 +11,10 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeacherSt
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsSummary;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
-import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.StudentClassification;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
-import br.edu.ufcg.computacao.eureca.backend.core.util.EurecaUtil;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
 
@@ -94,20 +89,6 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             }
         }
         return alumniBasicData;
-    }
-
-    private Collection<String> getConcludedSubjectsCode(StudentCurriculumProgress progress) {
-        Collection<SubjectKey> concludedSubjects = progress.getCompleted();
-        // If the student is currently registered, we take the optimistic approach and consider that he/she
-        // will complete the ongoing subjects successfully
-        concludedSubjects.addAll(progress.getOngoing());
-        return this.mapSubjectsToCodes(concludedSubjects);
-    }
-
-    private Collection<String> mapSubjectsToCodes(Collection<SubjectKey> subjects) {
-        return subjects.stream()
-                .map(SubjectKey::getSubjectCode)
-                .collect(Collectors.toSet());
     }
 
     @Override
@@ -322,208 +303,6 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     @Override
     public StudentCurriculumProgress getStudentCurriculumProgress(String studentRegistration) throws InvalidParameterException {
         return this.indexesHolder.getStudentCurriculumProgress(studentRegistration);
-    }
-
-    private Collection<Subject> getPriorityList(String courseCode, String curriculumCode, String priorityListString) {
-        Collection<Subject> priorityList = new ArrayList<>();
-        if (priorityListString != null) {
-            Collection<String> priorityListCodes = Arrays.asList(priorityListString.split(","));
-            priorityList = this.getSubjectsByCode(courseCode, curriculumCode, priorityListCodes);
-            priorityList = priorityList.stream().sorted(Comparator.comparingInt(Subject::getIdealTerm)).collect(Collectors.toList());
-        }
-        return priorityList;
-    }
-
-    @Override
-    public StudentPreEnrollmentResponse getStudentPreEnrollment(PreEnrollmentData preEnrollmentData) throws InvalidParameterException {
-        String studentRegistration = preEnrollmentData.getStudentRegistration();
-        int nextTerm = preEnrollmentData.getNextTerm();
-        int idealMandatoryCredits = preEnrollmentData.getIdealMandatoryCredits();
-        int idealOptionalCredits = preEnrollmentData.getIdealOptionalCredits();
-        int idealComplementaryCredits = preEnrollmentData.getIdealComplementaryCredits();
-        int idealElectiveCredits = preEnrollmentData.getIdealElectiveCredits();
-
-        Collection<Subject> availableMandatorySubjects = preEnrollmentData.getAvailableMandatorySubjects();
-        Collection<Subject> availableOptionalSubjects = preEnrollmentData.getAvailableOptionalSubjects();
-        Collection<Subject> availableComplementarySubjects = preEnrollmentData.getAvailableComplementarySubjects();
-        Collection<Subject> availableElectiveSubjects = preEnrollmentData.getAvailableElectiveSubjects();
-
-        Collection<Subject> prioritizedOptionalSubjects = preEnrollmentData.getPrioritizedOptionalSubjects();
-        Collection<Subject> prioritizedElectiveSubjects = preEnrollmentData.getPrioritizedElectiveSubjects();
-        Collection<Subject> prioritizedMandatorySubjects = preEnrollmentData.getPrioritizedMandatorySubjects();
-
-        StudentPreEnrollmentResponse studentPreEnrollment = new StudentPreEnrollmentResponse(studentRegistration, nextTerm, idealMandatoryCredits, idealOptionalCredits, idealComplementaryCredits, idealElectiveCredits);
-
-        prioritizedOptionalSubjects = this.excludeUnavailableSubjects(prioritizedOptionalSubjects, availableOptionalSubjects);
-        prioritizedElectiveSubjects = this.excludeUnavailableSubjects(prioritizedElectiveSubjects, availableElectiveSubjects);
-        prioritizedMandatorySubjects = this.excludeUnavailableSubjects(prioritizedMandatorySubjects, availableMandatorySubjects);
-
-        this.enrollMandatorySubjectsUntilConflict(studentPreEnrollment, availableMandatorySubjects);
-
-        if (!studentPreEnrollment.isMandatoryFull()) {
-            this.addSubjectsToPreEnrollment(studentPreEnrollment, prioritizedMandatorySubjects);
-        }
-
-        if (!studentPreEnrollment.isMandatoryFull()) {
-            Collection<Subject> mandatoryLeftovers = EurecaUtil.difference(availableMandatorySubjects, prioritizedMandatorySubjects);
-            this.addSubjectsToPreEnrollment(studentPreEnrollment, mandatoryLeftovers);
-        }
-
-        if (!studentPreEnrollment.isComplementaryFull()) {
-            this.addSubjectsToPreEnrollment(studentPreEnrollment, availableComplementarySubjects);
-        }
-
-        if (!studentPreEnrollment.isOptionalFull()) {
-            this.addSubjectsToPreEnrollment(studentPreEnrollment, prioritizedOptionalSubjects);
-            this.addSubjectsToPreEnrollment(studentPreEnrollment, availableOptionalSubjects);
-        }
-
-        if (!studentPreEnrollment.isElectiveFull()) {
-            this.addSubjectsToPreEnrollment(studentPreEnrollment, prioritizedElectiveSubjects);
-            this.addSubjectsToPreEnrollment(studentPreEnrollment, availableElectiveSubjects);
-        }
-
-        return studentPreEnrollment;
-    }
-
-    private Collection<Subject> excludeUnavailableSubjects(Collection<Subject> prioritizedSubjects, Collection<Subject> availableSubjects) {
-        return EurecaUtil.intersection(prioritizedSubjects, availableSubjects);
-    }
-
-    private void enrollMandatorySubjectsUntilConflict(StudentPreEnrollmentResponse studentPreEnrollment, Collection<Subject> availableMandatorySubjects) {
-        Map<Integer, Collection<Subject>> mandatorySubjectsGroupedByTerm = this.getMandatorySubjectsGroupedByTermAndType(availableMandatorySubjects);
-        for (Integer term : mandatorySubjectsGroupedByTerm.keySet()) {
-            Collection<Subject> termSubjects = mandatorySubjectsGroupedByTerm.get(term);
-            int totalTermCredits = this.getSubjectCreditsSum(termSubjects);
-
-            if (totalTermCredits > studentPreEnrollment.getMaxMandatoryCredits() - studentPreEnrollment.getMandatoryCredits()) break;
-
-            this.addSubjectsToPreEnrollment(studentPreEnrollment, termSubjects);
-        }
-    }
-
-    private int getSubjectCreditsSum(Collection<Subject> subjects) {
-        return subjects.stream().map(Subject::getCredits).reduce(0, Integer::sum);
-    }
-
-    private void addSubjectsToPreEnrollment(StudentPreEnrollmentResponse studentPreEnrollment, Collection<Subject> availableSubjects) {
-        for (Subject s : availableSubjects) {
-            if (s.isComposed()) {
-                Collection<Subject> coRequirements = this.getSubjectsByCode(s.getCourseCode(), s.getCurriculumCode(), s.getCoRequirementsList());
-                studentPreEnrollment.addSubject(s, coRequirements);
-            } else {
-                studentPreEnrollment.addSubject(s);
-            }
-        }
-    }
-
-    private Collection<Subject> getSubjectsByCode(String courseCode, String curriculumCode, Collection<String> subjectCodes) {
-        Collection<Subject> subjects = new ArrayList<>();
-        for (String subjectCode : subjectCodes) {
-            try {
-                Subject subject = this.getSubject(courseCode, curriculumCode, subjectCode);
-                subjects.add(subject);
-            } catch (InvalidParameterException e) {
-                LOGGER.error(Messages.INVALID_SUBJECT);
-            }
-        }
-        return subjects;
-    }
-
-    private Map<Integer, Map<SubjectType, Collection<Subject>>> getSubjectsGroupedByTerm(Collection<Subject> subjects) {
-        Map<Integer, Map<SubjectType, Collection<Subject>>> groupedSubjects = new TreeMap<>();
-
-        for (Subject subject : subjects) {
-            int term = subject.getIdealTerm();
-            if (!groupedSubjects.containsKey(term)) {
-                groupedSubjects.put(term, new HashMap<>());
-            }
-
-            Map<SubjectType, Collection<Subject>> subjectsByTerm = groupedSubjects.get(term);
-            SubjectType subjectType = EurecaUtil.getSubjectType(subject);
-            if (!subjectsByTerm.containsKey(subjectType)) {
-                subjectsByTerm.put(subjectType, new ArrayList<>());
-            }
-
-            subjectsByTerm.get(subjectType).add(subject);
-            groupedSubjects.put(term, subjectsByTerm);
-        }
-
-        return groupedSubjects;
-    }
-
-    private Map<Integer, Collection<Subject>> getMandatorySubjectsGroupedByTermAndType(Collection<Subject> subjects) {
-        return this.getSubjectsGroupedByTermAndType(subjects, SubjectType.MANDATORY);
-    }
-
-    private Map<Integer, Collection<Subject>> getSubjectsGroupedByTermAndType(Collection<Subject> subjects, SubjectType type) {
-        Map<Integer, Map<SubjectType, Collection<Subject>>> groupedSubjects = this.getSubjectsGroupedByTerm(subjects);
-        Map<Integer, Collection<Subject>> groupedSubjectsByType = new TreeMap<>();
-        for (Integer term : groupedSubjects.keySet()) {
-            Map<SubjectType, Collection<Subject>> termSubjects = groupedSubjects.get(term);
-            Collection<Subject> typeSubjects = termSubjects.get(type);
-            if (typeSubjects != null) {
-                groupedSubjectsByType.put(term, typeSubjects);
-            }
-        }
-        return groupedSubjectsByType;
-    }
-
-    @Override
-    public PreEnrollmentsResponse getActivesPreEnrollment(Collection<PreEnrollmentData> activesPreEnrollmentData) throws InvalidParameterException {
-        Collection<StudentPreEnrollmentResponse> preEnrollments = new HashSet<>();
-
-        for (PreEnrollmentData preEnrollmentData : activesPreEnrollmentData) {
-            StudentPreEnrollmentResponse preEnrollment = this.getStudentPreEnrollment(preEnrollmentData);
-            preEnrollments.add(preEnrollment);
-        }
-        SubjectDemandSummary subjectDemandSummary = this.getSubjectDemandSummary(preEnrollments);
-
-        return new PreEnrollmentsResponse(preEnrollments, subjectDemandSummary);
-    }
-
-    private SubjectDemandSummary getSubjectDemandSummary(Collection<StudentPreEnrollmentResponse> preEnrollments) {
-        Collection<DetailedSubjectDemand> mandatoryDemand = getSubjectDemand("M", preEnrollments);
-        Collection<DetailedSubjectDemand> optionalDemand = getSubjectDemand("O", preEnrollments);
-        Collection<DetailedSubjectDemand> complementaryDemand = getSubjectDemand("C", preEnrollments);
-        Collection<DetailedSubjectDemand> electiveDemand = getSubjectDemand("E", preEnrollments);
-
-        return new SubjectDemandSummary(mandatoryDemand, optionalDemand, complementaryDemand, electiveDemand);
-    }
-
-    private Collection<DetailedSubjectDemand> getSubjectDemand(String subjectType, Collection<StudentPreEnrollmentResponse> preEnrollments) {
-        Collection<DetailedSubjectDemand> response = new ArrayList<>();
-        Map<Subject, Map<Integer, Integer>> subjectDemandByTerm = new HashMap<>();
-
-        for (StudentPreEnrollmentResponse preEnrollment : preEnrollments) {
-            Set<Subject> proposedSubjects = preEnrollment.getSubjects();
-            int studentCurrentTerm = preEnrollment.getTerm();
-
-            for (Subject subject : proposedSubjects) {
-                if (subject.getType().equals(subjectType)) {
-                    if (!subjectDemandByTerm.containsKey(subject)) {
-                        subjectDemandByTerm.put(subject, new HashMap<>());
-                    }
-                    Map<Integer, Integer> demandByTerm = subjectDemandByTerm.get(subject);
-
-                    if (!demandByTerm.containsKey(studentCurrentTerm)) {
-                        demandByTerm.put(studentCurrentTerm, 0);
-                    }
-
-                    int currentDemand = demandByTerm.get(studentCurrentTerm);
-                    subjectDemandByTerm.get(subject).put(studentCurrentTerm, currentDemand + 1);
-                }
-            }
-        }
-
-        for (Map.Entry<Subject, Map<Integer, Integer>> entry : subjectDemandByTerm.entrySet()) {
-            Subject subject = entry.getKey();
-            Map<Integer, Integer> demandByTerm = entry.getValue();
-
-            response.add(new DetailedSubjectDemand(subject, demandByTerm));
-        }
-
-        return response;
     }
 
     private Subject getSubject(SubjectKey subjectKey) throws InvalidParameterException {
@@ -792,6 +571,19 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         subjectCodes.addAll(curriculum.getElectiveSubjectsList());
 
         return this.getSubjectsByCode(courseCode, curriculumCode, subjectCodes);
+    }
+
+    private Collection<Subject> getSubjectsByCode(String courseCode, String curriculumCode, Collection<String> subjectCodes) {
+        Collection<Subject> subjects = new ArrayList<>();
+        for (String subjectCode : subjectCodes) {
+            try {
+                Subject subject = this.getSubject(courseCode, curriculumCode, subjectCode);
+                subjects.add(subject);
+            } catch (InvalidParameterException e) {
+                LOGGER.error(Messages.INVALID_SUBJECT);
+            }
+        }
+        return subjects;
     }
 
     private String getGroupingTerm(StudentClassification status, Student item) {
