@@ -73,8 +73,8 @@ public class CommunicationController {
             list.add(genderMatcher);
             list.add(nameMatcher);
 
-            boolean isStudentGpaMatchingRequest = this.compareStudentPerformaceIndex(craOperation, cra, student.getGpa());
-            boolean isStudentCreditsMatchingRequest = this.compareStudentPerformaceIndex(enrolledCreditsOperation, enrolledCredits, student.getEnrolledCredits());
+            boolean isStudentGpaMatchingRequest = this.compareStudentValueWithRequiredValue(craOperation, cra, student.getGpa());
+            boolean isStudentCreditsMatchingRequest = this.compareStudentValueWithRequiredValue(enrolledCreditsOperation, enrolledCredits, student.getEnrolledCredits());
 
             if(list.get(0).find() && list.get(1).find() && list.get(2).find() && isStudentCreditsMatchingRequest && isStudentGpaMatchingRequest) {
                 EmailSearchResponse emailSearchResponse = new EmailSearchResponse(student.getName(), student.getEmail());
@@ -89,6 +89,7 @@ public class CommunicationController {
                                                                    String subjectType, String academicUnit, String term) throws InvalidParameterException {
 
         Map<String, EmailSearchResponse> search =  new HashMap<>();
+        Collection<Student> students = this.getStudentsByStatus(courseCode, curriculumCode, "1970.1","2021.1", "Todos");
         SubjectType type = SubjectType.valueOf(subjectType);
         Collection<EnrollmentsPerSubjectData> enrollmentsPerSubjectPerTerm =
                 this.dataAccessFacade.getEnrollmentsPerSubjectPerTerm(courseCode, curriculumCode, term, term, type);
@@ -99,7 +100,13 @@ public class CommunicationController {
                 for (String i: map.keySet()) {
                     Set<String> enrollments = map.get(i).getEnrolleds();
                     for (String e: enrollments) {
-                        search.put(e,null);
+                        for (Student student: students) {
+                            if(student.getRegistration().getRegistration().equals(e)) {
+                                EmailSearchResponse emailSearchResponse = new EmailSearchResponse(student.getName(), student.getEmail());
+                                search.put(e, emailSearchResponse);
+                            }
+                        }
+
                     }
                 }
             }
@@ -108,7 +115,7 @@ public class CommunicationController {
         return search;
     }
 
-    private boolean compareStudentPerformaceIndex(String operation, String valueToCompare, double value) {
+    private boolean compareStudentValueWithRequiredValue (String operation, String valueToCompare, double value) {
         double v = Double.parseDouble(valueToCompare);
 
         switch (operation) {

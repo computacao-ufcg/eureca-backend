@@ -56,10 +56,10 @@ public class Communication {
 
     ) throws EurecaException {
         try {
-            Map<String, EmailSearchResponse> summary = ApplicationFacade.getInstance().getStudentsEmailsSearch(token, courseCode,
+            Map<String, EmailSearchResponse> emails = ApplicationFacade.getInstance().getStudentsEmailsSearch(token, courseCode,
                     curriculumCode, admissionTerm, studentName, gender,
                     status, craOperation, cra, enrolledCreditsOperation, enrolledCredits);
-            return new ResponseEntity<>(summary, HttpStatus.OK);
+            return new ResponseEntity<>(emails, HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
@@ -85,9 +85,9 @@ public class Communication {
 
     ) throws EurecaException {
         try {
-            Map<String, EmailSearchResponse> summary = ApplicationFacade.getInstance().getSubjectEmailsSearch(token, courseCode,
+            Map<String, EmailSearchResponse> emails = ApplicationFacade.getInstance().getSubjectEmailsSearch(token, courseCode,
                     curriculumCode, subjectName, subjectType, academicUnit, term);
-            return new ResponseEntity<>(summary, HttpStatus.OK);
+            return new ResponseEntity<>(emails, HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
             throw e;
