@@ -1,15 +1,13 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment.PreEnrollmentsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.alumni.AlumniDigest;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.EnrollmentsMetricsPerTermSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.EnrollmentsPerSubjectData;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.EnrollmentsStatisticsSummaryResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment.StudentPreEnrollmentResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.profile.ProfileResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectMetricsPerTermSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.SubjectRetentionCSV;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.SubjectRetentionPerAdmissionTermSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectMetricsPerTermSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectsStatisticsSummaryResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsSummary;
@@ -21,6 +19,8 @@ import java.util.Map;
 
 public interface DataAccessFacade {
     Collection<Student> getActives(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
+
+    Collection<Student> getAllActives(String courseCode, String curriculumCode) throws InvalidParameterException;
 
     Collection<Student> getAlumni(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 
@@ -34,13 +34,7 @@ public interface DataAccessFacade {
 
     Collection<AlumniDigest> getAlumniPerStudentSummary(String courseCode, String from, String to) throws InvalidParameterException;
 
-    Collection<Subject> getMandatorySubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
-
-    Collection<Subject> getOptionalSubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
-
-    Collection<Subject> getElectiveSubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
-
-    Collection<Subject> getComplementarySubjectsAvailableForEnrollment(String courseCode, String curriculumCode, String studentRegistration) throws InvalidParameterException;
+    Collection<Subject> getAllSubjects(String courseCode, String curriculumCode) throws InvalidParameterException;
 
     Curriculum getCurriculum(String courseCode, String curriculumCode) throws InvalidParameterException;
 
@@ -70,7 +64,4 @@ public interface DataAccessFacade {
 
     StudentCurriculumProgress getStudentCurriculumProgress(String studentRegistration) throws InvalidParameterException;
 
-    StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration, Integer numCredits, String optionalPriorityList, String electivePriorityList, String mandatoryPriorityList) throws InvalidParameterException;
-
-    PreEnrollmentsResponse getActivesPreEnrollment(String courseCode, String curriculumCode) throws InvalidParameterException;
 }
