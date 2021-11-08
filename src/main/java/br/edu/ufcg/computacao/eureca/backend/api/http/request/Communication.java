@@ -30,7 +30,7 @@ public class Communication {
     private static final Logger LOGGER = Logger.getLogger(Communication.class);
 
     @RequestMapping(value = "studentsEmailSearch", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_SUMMARY)
+    @ApiOperation(value = ApiDocumentation.StudentEmailSearch.GET_EMAILS)
     public ResponseEntity<Map<String, EmailSearchResponse>> getStudentsEmailsSearch(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,
@@ -67,7 +67,7 @@ public class Communication {
     }
 
     @RequestMapping(value = "subjectEmailSearch", method = RequestMethod.GET)
-    @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_SUMMARY)
+    @ApiOperation(value =  ApiDocumentation.StudentEmailSearch.GET_EMAILS)
     public ResponseEntity<Map<String, EmailSearchResponse>> getSubjectEmailsSearch(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam(required = true, value = "courseCode") String courseCode,

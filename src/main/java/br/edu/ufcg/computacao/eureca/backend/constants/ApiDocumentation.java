@@ -115,7 +115,7 @@ public class ApiDocumentation {
         public static final String SUBJECT_TYPE = "Tipo da disciplina na qual se deve buscar os alunos matriculados";
         public static final String ACADEMIC_UNIT = "Unidade acadêmica da disciplina na qual se deve buscar os alunos matriculados";
         public static final String TERM = "Período da disciplina na qual se deve buscar os alunos matriculados";
-
+        public static final String GET_EMAILS = "Retorna uma lista de emails de acordo com o que foi buscado";
     }
 
     public static class SubjectStatistics {
