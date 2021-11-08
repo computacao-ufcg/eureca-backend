@@ -93,26 +93,44 @@ public class CommunicationController {
         SubjectType type = SubjectType.valueOf(subjectType);
         Collection<EnrollmentsPerSubjectData> enrollmentsPerSubjectPerTerm =
                 this.dataAccessFacade.getEnrollmentsPerSubjectPerTerm(courseCode, curriculumCode, term, term, type);
+        Collection<EnrollmentsPerSubjectData> subjects = this.filterSubjects(enrollmentsPerSubjectPerTerm, subjectName);
 
-        for (EnrollmentsPerSubjectData enrollmentsPerSubjectData : enrollmentsPerSubjectPerTerm) {
+        Map<String, EmailSearchResponse> emails = this.getStudentEmails(students);
+
+        for (EnrollmentsPerSubjectData enrollmentsPerSubjectData : subjects) {
             for (String t : enrollmentsPerSubjectData.getEnrollmentsPerTerm().keySet()) {
                 Map<String, ClassEnrollments> map = enrollmentsPerSubjectData.getEnrollmentsPerTerm().get(t);
                 for (String i: map.keySet()) {
                     Set<String> enrollments = map.get(i).getEnrolleds();
                     for (String e: enrollments) {
-                        for (Student student: students) {
-                            if(student.getRegistration().getRegistration().equals(e)) {
-                                EmailSearchResponse emailSearchResponse = new EmailSearchResponse(student.getName(), student.getEmail());
-                                search.put(e, emailSearchResponse);
-                            }
-                        }
-
+                        search.put(e, emails.get(e));
                     }
                 }
             }
         }
-        
+
         return search;
+    }
+
+    private Collection<EnrollmentsPerSubjectData> filterSubjects(Collection<EnrollmentsPerSubjectData> allSubjects, String subjectName) {
+        Collection<EnrollmentsPerSubjectData> subjects = new ArrayList<>();
+        Pattern subjectNamePattern = Pattern.compile(subjectName, Pattern.CASE_INSENSITIVE);
+        for (EnrollmentsPerSubjectData e: allSubjects) {
+            Matcher subjectNameMatcher = subjectNamePattern.matcher(e.getSubjectName());
+            if(subjectNameMatcher.find()) {
+                subjects.add(e);
+            }
+        }
+        return subjects;
+    }
+
+    private Map<String, EmailSearchResponse> getStudentEmails(Collection<Student> students) {
+        Map<String, EmailSearchResponse> emails =  new HashMap<>();
+        for (Student student: students) {
+            EmailSearchResponse emailSearchResponse = new EmailSearchResponse(student.getName(), student.getEmail());
+            emails.put(student.getRegistration().getRegistration(), emailSearchResponse);
+        }
+        return emails;
     }
 
     private boolean compareStudentValueWithRequiredValue (String operation, String valueToCompare, double value) {
