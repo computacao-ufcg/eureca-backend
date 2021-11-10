@@ -1,24 +1,30 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
+import br.edu.ufcg.computacao.eureca.backend.core.util.EurecaUtil;
+
 import java.util.Collection;
 import java.util.Objects;
 
 public class Schedule {
 
-    private Integer availability;
+    private int availability;
     private Collection<ClassSchedule> schedule;
 
-    public Schedule(Integer availability, Collection<ClassSchedule> schedule) {
+    public Schedule(int availability, Collection<ClassSchedule> schedule) {
         this.availability = availability;
         this.schedule = schedule;
     }
 
-    public Integer getAvailability() {
+    public int getAvailability() {
         return availability;
     }
 
-    public void setAvailability(Integer availability) {
+    public void setAvailability(int availability) {
         this.availability = availability;
+    }
+
+    public void decrementAvailability() {
+        this.availability--;
     }
 
     public Collection<ClassSchedule> getSchedule() {
@@ -40,5 +46,10 @@ public class Schedule {
     @Override
     public int hashCode() {
         return Objects.hash(schedule);
+    }
+
+    public boolean haveConflict(Schedule schedule) {
+        Collection<ClassSchedule> classSchedules = schedule.getSchedule();
+        return !EurecaUtil.intersection(classSchedules, this.schedule).isEmpty();
     }
 }

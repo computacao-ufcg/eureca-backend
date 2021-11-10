@@ -1,5 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
 
+import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectScheduleKey;
+
 import java.util.Objects;
 
 public class ScheduleKey implements EurecaMapKey, Comparable {
@@ -8,12 +10,14 @@ public class ScheduleKey implements EurecaMapKey, Comparable {
     private String curriculumCode;
     private String subjectCode;
     private String classCode;
+    private String term;
 
-    public ScheduleKey(String courseCode, String curriculumCode, String subjectCode, String classCode) {
+    public ScheduleKey(String courseCode, String curriculumCode, String subjectCode, String classCode, String term) {
         this.courseCode = courseCode;
         this.curriculumCode = curriculumCode;
         this.subjectCode = subjectCode;
         this.classCode = classCode;
+        this.term = term;
     }
 
     public ScheduleKey() {}
@@ -48,6 +52,18 @@ public class ScheduleKey implements EurecaMapKey, Comparable {
 
     public void setClassCode(String classCode) {
         this.classCode = classCode;
+    }
+
+    public String getTerm() {
+        return term;
+    }
+
+    public void setTerm(String term) {
+        this.term = term;
+    }
+
+    public SubjectScheduleKey createSubjectScheduleKey() {
+        return new SubjectScheduleKey(this.courseCode, this.curriculumCode, this.subjectCode, this.term);
     }
 
     @Override

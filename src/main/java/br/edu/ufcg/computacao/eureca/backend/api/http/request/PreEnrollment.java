@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RestController
 @RequestMapping(PreEnrollment.PRE_ENROLLMENT_ENDPOINT)
-@Api(ApiDocumentation.PreEnrollment.API)
+@Api(description = ApiDocumentation.PreEnrollment.API)
 public class PreEnrollment {
     private static final Logger LOGGER = Logger.getLogger(PreEnrollment.class);
 
@@ -34,6 +34,8 @@ public class PreEnrollment {
             @RequestParam String courseCode,
             @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
             @RequestParam String curriculumCode,
+            @ApiParam(value = ApiDocumentation.PreEnrollment.TERM)
+            @RequestParam String term,
             @ApiParam(value = ApiDocumentation.PreEnrollment.MAX_CREDITS)
             @RequestParam(required = false) Integer numCredits,
             @ApiParam(value = ApiDocumentation.PreEnrollment.OPTIONAL_PRIORITY_LIST)
@@ -46,7 +48,7 @@ public class PreEnrollment {
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
-            StudentPreEnrollmentResponse preEnrollment = ApplicationFacade.getInstance().getPreEnrollment(token, courseCode, curriculumCode, studentRegistration, numCredits, optionalPriorityList, electivePriorityList, mandatoryPriorityList);
+            StudentPreEnrollmentResponse preEnrollment = ApplicationFacade.getInstance().getPreEnrollment(token, courseCode, curriculumCode, studentRegistration, term, numCredits, optionalPriorityList, electivePriorityList, mandatoryPriorityList);
             return new ResponseEntity<>(preEnrollment, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(e);
@@ -61,11 +63,13 @@ public class PreEnrollment {
             @RequestParam String courseCode,
             @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
             @RequestParam String curriculumCode,
+            @ApiParam(value = ApiDocumentation.PreEnrollment.TERM)
+            @RequestParam String term,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
-            PreEnrollmentsResponse preEnrollments = ApplicationFacade.getInstance().getPreEnrollments(token, courseCode, curriculumCode);
+            PreEnrollmentsResponse preEnrollments = ApplicationFacade.getInstance().getPreEnrollments(token, courseCode, curriculumCode, term);
             return new ResponseEntity<>(preEnrollments, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(e);
@@ -80,11 +84,13 @@ public class PreEnrollment {
             @RequestParam String courseCode,
             @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
             @RequestParam String curriculumCode,
+            @ApiParam(value = ApiDocumentation.PreEnrollment.TERM)
+            @RequestParam String term,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
-            SubjectsDemandResponse demand = ApplicationFacade.getInstance().getDemand(token, courseCode, curriculumCode);
+            SubjectsDemandResponse demand = ApplicationFacade.getInstance().getDemand(token, courseCode, curriculumCode, term);
             return new ResponseEntity<>(demand, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(e);
