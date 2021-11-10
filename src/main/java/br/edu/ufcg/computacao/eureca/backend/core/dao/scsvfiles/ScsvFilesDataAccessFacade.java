@@ -20,7 +20,6 @@ import org.apache.log4j.Logger;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     private final Logger LOGGER = Logger.getLogger(ScsvFilesDataAccessFacade.class);
@@ -303,6 +302,27 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     @Override
     public StudentCurriculumProgress getStudentCurriculumProgress(String studentRegistration) throws InvalidParameterException {
         return this.indexesHolder.getStudentCurriculumProgress(studentRegistration);
+    }
+
+    @Override
+    public Map<SubjectScheduleKey, SubjectSchedule> getAllSchedules(String courseCode, String curriculumCode, String term) {
+        Map<SubjectScheduleKey, Map<String, Schedule>> schedulesSeparatedByClassCode = this.indexesHolder.getAllSchedules(courseCode, curriculumCode, term);
+        Map<SubjectScheduleKey, SubjectSchedule> allSchedules = new HashMap<>();
+
+        for (Map.Entry<SubjectScheduleKey, Map<String, Schedule>> entry : schedulesSeparatedByClassCode.entrySet()) {
+            SubjectScheduleKey key = entry.getKey();
+            Map<String, Schedule> value = entry.getValue();
+
+            try {
+                Subject subject = this.getSubject(courseCode, curriculumCode, key.getSubjectCode());
+                SubjectSchedule subjectSchedule = new SubjectSchedule(subject, value);
+                allSchedules.put(key, subjectSchedule);
+            } catch (InvalidParameterException e) {
+                LOGGER.info(Messages.INVALID_SUBJECT);
+            }
+        }
+
+        return allSchedules;
     }
 
     private Subject getSubject(SubjectKey subjectKey) throws InvalidParameterException {
