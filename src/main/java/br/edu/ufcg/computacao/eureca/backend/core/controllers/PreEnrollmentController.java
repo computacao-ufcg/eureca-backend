@@ -118,9 +118,18 @@ public class PreEnrollmentController {
         Collection<Subject> prioritizedElectiveSubjects = this.getPriorityList(courseCode, curriculumCode, electivePriorityList);
         Collection<Subject> prioritizedMandatorySubjects = this.getPriorityList(courseCode, curriculumCode, mandatoryPriorityList);
 
+        Collection<SubjectSchedule> availableMandatorySubjectsWithSchedule = this.getSubjectsSchedules(availableMandatorySubjects, term);
+        Collection<SubjectSchedule> availableOptionalSubjectsWithSchedule = this.getSubjectsSchedules(availableOptionalSubjects, term);
+        Collection<SubjectSchedule> availableComplementarySubjectsWithSchedule = this.getSubjectsSchedules(availableComplementarySubjects, term);
+        Collection<SubjectSchedule> availableElectiveSubjectsWithSchedule = this.getSubjectsSchedules(availableElectiveSubjects, term);
+
+        Collection<SubjectSchedule> prioritizedMandatorySubjectsWithSchedule = this.getSubjectsSchedules(prioritizedMandatorySubjects, term);
+        Collection<SubjectSchedule> prioritizedOptionalSubjectsWithSchedule = this.getSubjectsSchedules(prioritizedOptionalSubjects, term);
+        Collection<SubjectSchedule> prioritizedElectiveSubjectsWithSchedule = this.getSubjectsSchedules(prioritizedElectiveSubjects, term);
+
         return new PreEnrollmentData(studentRegistration, term, nextTerm, idealMandatoryCredits, idealOptionalCredits, idealComplementaryCredits, idealElectiveCredits,
-                availableMandatorySubjects, availableComplementarySubjects, availableOptionalSubjects, availableElectiveSubjects,
-                prioritizedOptionalSubjects, prioritizedElectiveSubjects, prioritizedMandatorySubjects);
+                availableMandatorySubjectsWithSchedule, availableComplementarySubjectsWithSchedule, availableOptionalSubjectsWithSchedule, availableElectiveSubjectsWithSchedule,
+                prioritizedOptionalSubjectsWithSchedule, prioritizedElectiveSubjectsWithSchedule, prioritizedMandatorySubjectsWithSchedule);
     }
 
     private StudentPreEnrollmentResponse getStudentPreEnrollment(PreEnrollmentData preEnrollmentData) {
@@ -132,14 +141,14 @@ public class PreEnrollmentController {
         int idealComplementaryCredits = preEnrollmentData.getIdealComplementaryCredits();
         int idealElectiveCredits = preEnrollmentData.getIdealElectiveCredits();
 
-        Collection<Subject> availableMandatorySubjects = preEnrollmentData.getAvailableMandatorySubjects();
-        Collection<Subject> availableOptionalSubjects = preEnrollmentData.getAvailableOptionalSubjects();
-        Collection<Subject> availableComplementarySubjects = preEnrollmentData.getAvailableComplementarySubjects();
-        Collection<Subject> availableElectiveSubjects = preEnrollmentData.getAvailableElectiveSubjects();
+        Collection<SubjectSchedule> availableMandatorySubjects = preEnrollmentData.getAvailableMandatorySubjects();
+        Collection<SubjectSchedule> availableOptionalSubjects = preEnrollmentData.getAvailableOptionalSubjects();
+        Collection<SubjectSchedule> availableComplementarySubjects = preEnrollmentData.getAvailableComplementarySubjects();
+        Collection<SubjectSchedule> availableElectiveSubjects = preEnrollmentData.getAvailableElectiveSubjects();
 
-        Collection<Subject> prioritizedOptionalSubjects = preEnrollmentData.getPrioritizedOptionalSubjects();
-        Collection<Subject> prioritizedElectiveSubjects = preEnrollmentData.getPrioritizedElectiveSubjects();
-        Collection<Subject> prioritizedMandatorySubjects = preEnrollmentData.getPrioritizedMandatorySubjects();
+        Collection<SubjectSchedule> prioritizedOptionalSubjects = preEnrollmentData.getPrioritizedOptionalSubjects();
+        Collection<SubjectSchedule> prioritizedElectiveSubjects = preEnrollmentData.getPrioritizedElectiveSubjects();
+        Collection<SubjectSchedule> prioritizedMandatorySubjects = preEnrollmentData.getPrioritizedMandatorySubjects();
 
         StudentPreEnrollmentResponse studentPreEnrollment = new StudentPreEnrollmentResponse(studentRegistration, nextTerm, idealMandatoryCredits, idealOptionalCredits, idealComplementaryCredits, idealElectiveCredits);
 
@@ -154,7 +163,7 @@ public class PreEnrollmentController {
         }
 
         if (!studentPreEnrollment.isMandatoryFull()) {
-            Collection<Subject> mandatoryLeftovers = EurecaUtil.difference(availableMandatorySubjects, prioritizedMandatorySubjects);
+            Collection<SubjectSchedule> mandatoryLeftovers = EurecaUtil.difference(availableMandatorySubjects, prioritizedMandatorySubjects);
             this.enrollSubjects(studentPreEnrollment, mandatoryLeftovers, term);
         }
 
@@ -175,24 +184,24 @@ public class PreEnrollmentController {
         return studentPreEnrollment;
     }
 
-    private void enrollMandatorySubjectsUntilConflict(StudentPreEnrollmentResponse studentPreEnrollment, Collection<Subject> availableMandatorySubjects, String term) {
-        Map<Integer, Collection<Subject>> mandatorySubjectsGroupedByTerm = PreEnrollmentUtil.getSubjectsGroupedByTermAndType(availableMandatorySubjects, SubjectType.MANDATORY);
+    private void enrollMandatorySubjectsUntilConflict(StudentPreEnrollmentResponse studentPreEnrollment, Collection<SubjectSchedule> availableMandatorySubjects, String term) {
+        Map<Integer, Collection<SubjectSchedule>> mandatorySubjectsGroupedByTerm = PreEnrollmentUtil.getSubjectsGroupedByTermAndType(availableMandatorySubjects, SubjectType.MANDATORY);
         for (Integer termNumber : mandatorySubjectsGroupedByTerm.keySet()) {
-            Collection<Subject> termSubjects = mandatorySubjectsGroupedByTerm.get(termNumber);
+            Collection<SubjectSchedule> termSubjects = mandatorySubjectsGroupedByTerm.get(termNumber);
             int totalTermCredits = PreEnrollmentUtil.getSubjectCreditsSum(termSubjects);
 
             if (totalTermCredits > studentPreEnrollment.getMaxMandatoryCredits() - studentPreEnrollment.getMandatoryCredits()) break;
 
-            enrollSubjects(studentPreEnrollment, termSubjects, term);
+            this.enrollSubjects(studentPreEnrollment, termSubjects, term);
         }
     }
 
-    private void enrollSubjects(StudentPreEnrollmentResponse studentPreEnrollment, Collection<Subject> availableSubjects, String term) {
-        for (Subject s : availableSubjects) {
-            SubjectSchedule subjectAndSchedule = this.getSubjectSchedule(s, term);
-            if (s.isComposed()) {
-                Collection<Subject> coRequirements = this.getSubjectsByCode(s.getCourseCode(), s.getCurriculumCode(), s.getCoRequirementsList());
-                Collection<SubjectSchedule> coRequirementsSchedule = coRequirements.stream().map(subj -> this.getSubjectSchedule(subj, term)).collect(Collectors.toList());
+    private void enrollSubjects(StudentPreEnrollmentResponse studentPreEnrollment, Collection<SubjectSchedule> availableSubjects, String term) {
+        for (SubjectSchedule subjectAndSchedule : availableSubjects) {
+            Subject subject = subjectAndSchedule.getSubject();
+            if (subject.isComposed()) {
+                Collection<Subject> coRequirements = this.getSubjectsByCode(subject.getCourseCode(), subject.getCurriculumCode(), subject.getCoRequirementsList());
+                Collection<SubjectSchedule> coRequirementsSchedule = this.getSubjectsSchedules(coRequirements, term);
                 studentPreEnrollment.enrollSubject(subjectAndSchedule, coRequirementsSchedule);
             } else {
                 studentPreEnrollment.enrollSubject(subjectAndSchedule);
@@ -200,12 +209,26 @@ public class PreEnrollmentController {
         }
     }
 
-    private SubjectSchedule getSubjectSchedule(Subject subject, String term) {
-        String courseCode = subject.getCourseCode();
-        String curriculumCode = subject.getCurriculumCode();
-        String subjectCode = subject.getSubjectCode();
-        SubjectSchedule subjectSchedule = this.scheduleCache.get(new SubjectScheduleKey(courseCode, curriculumCode, subjectCode, term));
-        if (subjectSchedule == null) return this.scheduleCache.get(new SubjectScheduleKey(courseCode, curriculumCode, "1411311", term));
+    private Collection<SubjectSchedule> getSubjectsSchedules(Collection<Subject> subjects, String term) {
+        Collection<SubjectSchedule> subjectsSchedules = new ArrayList<>();
+        for (Subject subject : subjects) {
+            try {
+                String courseCode = subject.getCourseCode();
+                String curriculumCode = subject.getCurriculumCode();
+                String subjectCode = subject.getSubjectCode();
+                SubjectSchedule subjectSchedule = this.getSubjectSchedule(courseCode, curriculumCode, subjectCode, term);
+                subjectsSchedules.add(subjectSchedule);
+            } catch (InvalidParameterException e) {
+                LOGGER.info(Messages.INVALID_SUBJECT_IGNORING);
+            }
+        }
+        return subjectsSchedules;
+    }
+
+    private SubjectSchedule getSubjectSchedule(String courseCode, String curriculumCode, String subjectCode, String term) throws InvalidParameterException {
+        SubjectScheduleKey key = new SubjectScheduleKey(courseCode, curriculumCode, subjectCode, term);
+        SubjectSchedule subjectSchedule = this.scheduleCache.get(key);
+        if (subjectSchedule == null) throw new InvalidParameterException(String.format(Messages.INVALID_SCHEDULE_S_S_S_S, courseCode, curriculumCode, subjectCode, term));
         return subjectSchedule;
     }
 
@@ -216,7 +239,7 @@ public class PreEnrollmentController {
                 Subject subject = this.getSubject(courseCode, curriculumCode, subjectCode);
                 subjects.add(subject);
             } catch (InvalidParameterException e) {
-                LOGGER.error(Messages.INVALID_SUBJECT);
+                LOGGER.error(Messages.INVALID_SUBJECT_IGNORING);
             }
         }
         return subjects;
@@ -269,7 +292,7 @@ public class PreEnrollmentController {
                     Subject subject = this.getSubject(courseCode, curriculumCode, subjectCode);
                     priorityList.add(subject);
                 } catch (InvalidParameterException e) {
-                    LOGGER.error(Messages.INVALID_SUBJECT);
+                    LOGGER.error(Messages.INVALID_SUBJECT_IGNORING);
                 }
             }
             priorityList = priorityList.stream().sorted(Comparator.comparingInt(Subject::getIdealTerm)).collect(Collectors.toList());
@@ -309,10 +332,13 @@ public class PreEnrollmentController {
         for (String subjectCode : subjectCodes) {
             Subject subject = this.getSubject(courseCode, curriculumCode, subjectCode);
             if (!concludedSubjectsCode.contains(subjectCode) && concludedSubjectsCode.containsAll(subject.getPreRequirementsList())) {
-                SubjectSchedule subjectAndSchedule = this.getSubjectSchedule(subject, term);
-                PreEnrollmentUtil.filterAvailableClasses(subjectAndSchedule);
-                PreEnrollmentUtil.filterCompletedCoRequirements(curriculumCode, courseCode, subject, studentCurriculumProgress);
-                availableSubjects.add(subject);
+                try {
+                    SubjectSchedule subjectAndSchedule = this.getSubjectSchedule(courseCode, curriculumCode, subjectCode, term);
+                    Subject sanitizedSubject = PreEnrollmentUtil.sanitizedSubject(courseCode, curriculumCode, subjectAndSchedule, studentCurriculumProgress);
+                    availableSubjects.add(sanitizedSubject);
+                } catch (InvalidParameterException e) {
+                    LOGGER.info(String.format(Messages.INVALID_SCHEDULE_S_S_S_S, courseCode, curriculumCode, subjectCode, term));
+                }
             }
         }
 
@@ -325,7 +351,7 @@ public class PreEnrollmentController {
 
     private Subject getSubject(String courseCode, String curriculumCode, String subjectCode) throws InvalidParameterException {
         Subject subject = this.subjectsCache.get(new SubjectKey(courseCode, curriculumCode, subjectCode));
-        if (subject == null) throw new InvalidParameterException(Messages.INVALID_SUBJECT);
+        if (subject == null) throw new InvalidParameterException(Messages.INVALID_SUBJECT_IGNORING);
         return subject;
     }
 }

@@ -278,10 +278,10 @@ public class StudentPreEnrollmentResponse {
     }
 
     private int getNewCredits(SubjectSchedule subjectAndSchedule, Collection<SubjectSchedule> coRequirements) {
-        return subjectAndSchedule.getSubject().getCredits() + this.getCoRequirementsCredits(coRequirements);
+        return this.getNewCredits(subjectAndSchedule) + this.getCoRequirementsCredits(coRequirements);
     }
 
     private int getNewCredits(SubjectSchedule subjectAndSchedule) {
-        return subjectAndSchedule.getSubject().getIdealTerm();
+        return subjectAndSchedule.getSubject().getCredits();
     }
 }
