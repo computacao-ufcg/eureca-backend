@@ -8,13 +8,13 @@ import java.util.stream.Collectors;
 
 public class PreEnrollmentUtil {
 
-    public static Map<Integer, Collection<Subject>> getSubjectsGroupedByTermAndType(Collection<Subject> subjects, SubjectType type) {
-        Map<Integer, Map<SubjectType, Collection<Subject>>> groupedSubjects = getSubjectsGroupedByTerm(subjects);
-        Map<Integer, Collection<Subject>> groupedSubjectsByType = new TreeMap<>();
+    public static Map<Integer, Collection<SubjectSchedule>> getSubjectsGroupedByTermAndType(Collection<SubjectSchedule> subjects, SubjectType type) {
+        Map<Integer, Map<SubjectType, Collection<SubjectSchedule>>> groupedSubjects = getSubjectsGroupedByTerm(subjects);
+        Map<Integer, Collection<SubjectSchedule>> groupedSubjectsByType = new TreeMap<>();
 
         for (Integer term : groupedSubjects.keySet()) {
-            Map<SubjectType, Collection<Subject>> termSubjects = groupedSubjects.get(term);
-            Collection<Subject> typeSubjects = termSubjects.get(type);
+            Map<SubjectType, Collection<SubjectSchedule>> termSubjects = groupedSubjects.get(term);
+            Collection<SubjectSchedule> typeSubjects = termSubjects.get(type);
             if (typeSubjects != null) {
                 groupedSubjectsByType.put(term, typeSubjects);
             }
@@ -22,41 +22,47 @@ public class PreEnrollmentUtil {
         return groupedSubjectsByType;
     }
 
-    private static Map<Integer, Map<SubjectType, Collection<Subject>>> getSubjectsGroupedByTerm(Collection<Subject> subjects) {
-        Map<Integer, Map<SubjectType, Collection<Subject>>> groupedSubjects = new TreeMap<>();
+    private static Map<Integer, Map<SubjectType, Collection<SubjectSchedule>>> getSubjectsGroupedByTerm(Collection<SubjectSchedule> subjects) {
+        Map<Integer, Map<SubjectType, Collection<SubjectSchedule>>> groupedSubjects = new TreeMap<>();
 
-        for (Subject subject : subjects) {
+        for (SubjectSchedule subjectAndSchedule : subjects) {
+            Subject subject = subjectAndSchedule.getSubject();
             int term = subject.getIdealTerm();
             if (!groupedSubjects.containsKey(term)) {
                 groupedSubjects.put(term, new HashMap<>());
             }
 
-            Map<SubjectType, Collection<Subject>> subjectsByTerm = groupedSubjects.get(term);
+            Map<SubjectType, Collection<SubjectSchedule>> subjectsByTerm = groupedSubjects.get(term);
             SubjectType subjectType = EurecaUtil.getSubjectType(subject);
             if (!subjectsByTerm.containsKey(subjectType)) {
                 subjectsByTerm.put(subjectType, new ArrayList<>());
             }
 
-            subjectsByTerm.get(subjectType).add(subject);
+            subjectsByTerm.get(subjectType).add(subjectAndSchedule);
             groupedSubjects.put(term, subjectsByTerm);
         }
 
         return groupedSubjects;
     }
 
-    public static int getSubjectCreditsSum(Collection<Subject> subjectsSchedules) {
+    public static int getSubjectCreditsSum(Collection<SubjectSchedule> subjectsSchedules) {
         int sum = 0;
-        for (Subject subject : subjectsSchedules) {
-            sum += subject.getCredits();
+        for (SubjectSchedule subjectAndSchedule : subjectsSchedules) {
+            sum += subjectAndSchedule.getSubject().getCredits();
         }
         return sum;
     }
 
-    public static Collection<Subject> excludeUnavailableSubjects(Collection<Subject> prioritizedSubjects, Collection<Subject> availableSubjects) {
+    public static Collection<SubjectSchedule> excludeUnavailableSubjects(Collection<SubjectSchedule> prioritizedSubjects, Collection<SubjectSchedule> availableSubjects) {
         return EurecaUtil.intersection(prioritizedSubjects, availableSubjects);
     }
 
-    public static void filterAvailableClasses(SubjectSchedule subjectAndSchedule) {
+    public static Subject sanitizedSubject(String courseCode, String curriculumCode, SubjectSchedule subjectAndSchedule, StudentCurriculumProgress progress) {
+        SubjectSchedule subjectWithAvailableClasses = filterAvailableClasses(subjectAndSchedule);
+        return filterCompletedCoRequirements(curriculumCode, courseCode, subjectWithAvailableClasses.getSubject(), progress);
+    }
+
+    private static SubjectSchedule filterAvailableClasses(SubjectSchedule subjectAndSchedule) {
         Map<String, Schedule> updatedSchedules = new HashMap<>(subjectAndSchedule.getSchedules());
         Set<Map.Entry<String, Schedule>> entrySet = subjectAndSchedule.getSchedules().entrySet();
 
@@ -67,15 +73,17 @@ public class PreEnrollmentUtil {
                 updatedSchedules.remove(classCode);
             }
         }
-        subjectAndSchedule.setSchedules(updatedSchedules);
+        return new SubjectSchedule(subjectAndSchedule.getSubject(), updatedSchedules);
     }
 
-    public static void filterCompletedCoRequirements(String curriculumCode, String courseCode, Subject subject, StudentCurriculumProgress progress) {
+    private static Subject filterCompletedCoRequirements(String curriculumCode, String courseCode, Subject subject, StudentCurriculumProgress progress) {
         Collection<SubjectKey> completedSubjects = progress.getCompleted();
         Collection<SubjectKey> coRequirements = subject.getCoRequirementsList().stream().map(subjectCode -> new SubjectKey(courseCode, curriculumCode, subjectCode)).collect(Collectors.toList());
         Collection<SubjectKey> availableCoRequirements = EurecaUtil.difference(coRequirements, completedSubjects);
         Collection<String> availableCoRequirementsCode = availableCoRequirements.stream().map(SubjectKey::getSubjectCode).collect(Collectors.toSet());
-        subject.setCoRequirementsList(availableCoRequirementsCode);
+        return new Subject(courseCode, curriculumCode, subject.getSubjectCode(), subject.getAcademicUnit(),
+                subject.getType(), subject.getCredits(), subject.getHours(), subject.getName(),
+                subject.getEquivalentCodesList(), subject.getIdealTerm(), subject.getPreRequirementsList(), availableCoRequirementsCode);
     }
 
     public static Map<SubjectType, Integer> getIdealCreditsPerSubjectType(Curriculum curriculum, Integer maxCredits, int nextTerm) {

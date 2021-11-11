@@ -318,7 +318,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                 SubjectSchedule subjectSchedule = new SubjectSchedule(subject, value);
                 allSchedules.put(key, subjectSchedule);
             } catch (InvalidParameterException e) {
-                LOGGER.info(Messages.INVALID_SUBJECT);
+                LOGGER.info(Messages.INVALID_SUBJECT_IGNORING);
             }
         }
 
@@ -328,7 +328,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     private Subject getSubject(SubjectKey subjectKey) throws InvalidParameterException {
         Map<SubjectKey, SubjectData> subjectMap = this.mapsHolder.getMap("subjects");
         SubjectData subjectData = subjectMap.get(subjectKey);
-        if (subjectData == null) throw new InvalidParameterException(Messages.INVALID_SUBJECT);
+        if (subjectData == null) throw new InvalidParameterException(Messages.INVALID_SUBJECT_IGNORING);
         return subjectData.createSubject(subjectKey);
     }
 
@@ -600,7 +600,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                 Subject subject = this.getSubject(courseCode, curriculumCode, subjectCode);
                 subjects.add(subject);
             } catch (InvalidParameterException e) {
-                LOGGER.error(Messages.INVALID_SUBJECT);
+                LOGGER.error(Messages.INVALID_SUBJECT_IGNORING);
             }
         }
         return subjects;
