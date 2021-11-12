@@ -3,10 +3,7 @@ package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.EnrollmentsPerSubjectData;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.models.ClassEnrollments;
-import br.edu.ufcg.computacao.eureca.backend.core.models.EmailSearchResponse;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
-import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectType;
+import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
 
@@ -90,10 +87,25 @@ public class CommunicationController {
 
         Map<String, EmailSearchResponse> search =  new HashMap<>();
         Collection<Student> students = this.getStudentsByStatus(courseCode, curriculumCode, "1970.1","2021.1", "Todos");
-        SubjectType type = SubjectType.valueOf(subjectType);
-        Collection<EnrollmentsPerSubjectData> enrollmentsPerSubjectPerTerm =
-                this.dataAccessFacade.getEnrollmentsPerSubjectPerTerm(courseCode, curriculumCode, term, term, type);
-        Collection<EnrollmentsPerSubjectData> subjects = this.filterSubjects(enrollmentsPerSubjectPerTerm, subjectName);
+        SubjectType type = null;
+        Collection<EnrollmentsPerSubjectData> enrollmentsPerSubjectPerTerm = null;
+
+        try {
+            type = SubjectType.valueOf(subjectType);
+            enrollmentsPerSubjectPerTerm = this.dataAccessFacade.getEnrollmentsPerSubjectPerTerm(courseCode, curriculumCode, term, term, type);
+        } catch (Exception e) {
+            SubjectType mandatory = SubjectType.valueOf("MANDATORY");
+            SubjectType optional = SubjectType.valueOf("OPTIONAL");
+            SubjectType elective = SubjectType.valueOf("ELECTIVE");
+            SubjectType complementary = SubjectType.valueOf("COMPLEMENTARY");
+            enrollmentsPerSubjectPerTerm = Stream.concat(Stream.concat(Stream.concat(this.dataAccessFacade.getEnrollmentsPerSubjectPerTerm(courseCode, curriculumCode, term, term, mandatory).stream(),
+                                    this.dataAccessFacade.getEnrollmentsPerSubjectPerTerm(courseCode, curriculumCode, term, term, optional).stream()),
+                            this.dataAccessFacade.getEnrollmentsPerSubjectPerTerm(courseCode, curriculumCode, term, term, elective).stream()),
+                    this.dataAccessFacade.getEnrollmentsPerSubjectPerTerm(courseCode, curriculumCode, term, term, complementary).stream())
+                    .collect(Collectors.toList());
+        }
+
+        Collection<EnrollmentsPerSubjectData> subjects = this.filterSubjects(courseCode, curriculumCode, academicUnit, enrollmentsPerSubjectPerTerm, subjectName);
 
         Map<String, EmailSearchResponse> emails = this.getStudentEmails(students);
 
@@ -112,12 +124,16 @@ public class CommunicationController {
         return search;
     }
 
-    private Collection<EnrollmentsPerSubjectData> filterSubjects(Collection<EnrollmentsPerSubjectData> allSubjects, String subjectName) {
+    private Collection<EnrollmentsPerSubjectData> filterSubjects(String courseCode, String curriculumCode, String academicUnit, Collection<EnrollmentsPerSubjectData> allSubjects, String subjectName) {
         Collection<EnrollmentsPerSubjectData> subjects = new ArrayList<>();
         Pattern subjectNamePattern = Pattern.compile(subjectName, Pattern.CASE_INSENSITIVE);
+        Pattern academicUnitPattern = Pattern.compile(academicUnit, Pattern.CASE_INSENSITIVE);
+
         for (EnrollmentsPerSubjectData e: allSubjects) {
+            Subject subject = this.dataAccessFacade.getSubject(courseCode, curriculumCode, e.getSubjectCode());
             Matcher subjectNameMatcher = subjectNamePattern.matcher(e.getSubjectName());
-            if(subjectNameMatcher.find()) {
+            Matcher academicUnitMatcher = academicUnitPattern.matcher(subject.getAcademicUnit());
+            if(subjectNameMatcher.find() && academicUnitMatcher.find()) {
                 subjects.add(e);
             }
         }
