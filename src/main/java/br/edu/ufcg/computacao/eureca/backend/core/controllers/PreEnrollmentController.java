@@ -185,7 +185,7 @@ public class PreEnrollmentController {
     }
 
     private void enrollMandatorySubjectsUntilConflict(StudentPreEnrollmentResponse studentPreEnrollment, Collection<SubjectSchedule> availableMandatorySubjects, String term) {
-        Map<Integer, Collection<SubjectSchedule>> mandatorySubjectsGroupedByTerm = PreEnrollmentUtil.getSubjectsGroupedByTermAndType(availableMandatorySubjects, SubjectType.MANDATORY);
+        Map<Integer, Collection<SubjectSchedule>> mandatorySubjectsGroupedByTerm = PreEnrollmentUtil.getSubjectsPerTerm(availableMandatorySubjects, SubjectType.MANDATORY);
         for (Integer termNumber : mandatorySubjectsGroupedByTerm.keySet()) {
             Collection<SubjectSchedule> termSubjects = mandatorySubjectsGroupedByTerm.get(termNumber);
             int totalTermCredits = PreEnrollmentUtil.getSubjectCreditsSum(termSubjects);
@@ -201,7 +201,7 @@ public class PreEnrollmentController {
             Subject subject = subjectAndSchedule.getSubject();
             if (subject.isComposed()) {
                 Collection<Subject> coRequirements = this.getSubjectsByCode(subject.getCourseCode(), subject.getCurriculumCode(), subject.getCoRequirementsList());
-                Collection<SubjectSchedule> coRequirementsSchedule = this.getSubjectsSchedules(coRequirements, term);
+                Collection<SubjectSchedule> coRequirementsSchedule = this.getSubjectsSchedules(coRequirements, term); // recupera os horários a partir da(s) disciplina(s) co-requisito(s)
                 studentPreEnrollment.enrollSubject(subjectAndSchedule, coRequirementsSchedule);
             } else {
                 studentPreEnrollment.enrollSubject(subjectAndSchedule);
@@ -209,6 +209,7 @@ public class PreEnrollmentController {
         }
     }
 
+    // retorna uma coleção de disciplias com horários a partir de uma coleção de (apenas) disciplinas
     private Collection<SubjectSchedule> getSubjectsSchedules(Collection<Subject> subjects, String term) {
         Collection<SubjectSchedule> subjectsSchedules = new ArrayList<>();
         for (Subject subject : subjects) {

@@ -8,8 +8,9 @@ import java.util.stream.Collectors;
 
 public class PreEnrollmentUtil {
 
-    public static Map<Integer, Collection<SubjectSchedule>> getSubjectsGroupedByTermAndType(Collection<SubjectSchedule> subjects, SubjectType type) {
-        Map<Integer, Map<SubjectType, Collection<SubjectSchedule>>> groupedSubjects = getSubjectsGroupedByTerm(subjects);
+    // retorna as disciplinas agrupadas por período e tipo
+    public static Map<Integer, Collection<SubjectSchedule>> getSubjectsPerTerm(Collection<SubjectSchedule> subjects, SubjectType type) {
+        Map<Integer, Map<SubjectType, Collection<SubjectSchedule>>> groupedSubjects = getSubjectsPerTermPerType(subjects);
         Map<Integer, Collection<SubjectSchedule>> groupedSubjectsByType = new TreeMap<>();
 
         for (Integer term : groupedSubjects.keySet()) {
@@ -22,7 +23,7 @@ public class PreEnrollmentUtil {
         return groupedSubjectsByType;
     }
 
-    private static Map<Integer, Map<SubjectType, Collection<SubjectSchedule>>> getSubjectsGroupedByTerm(Collection<SubjectSchedule> subjects) {
+    private static Map<Integer, Map<SubjectType, Collection<SubjectSchedule>>> getSubjectsPerTermPerType(Collection<SubjectSchedule> subjects) {
         Map<Integer, Map<SubjectType, Collection<SubjectSchedule>>> groupedSubjects = new TreeMap<>();
 
         for (SubjectSchedule subjectAndSchedule : subjects) {
