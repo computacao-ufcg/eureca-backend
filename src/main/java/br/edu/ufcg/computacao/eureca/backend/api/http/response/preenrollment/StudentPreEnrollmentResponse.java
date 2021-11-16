@@ -9,7 +9,7 @@ import java.util.*;
 public class StudentPreEnrollmentResponse {
 
     private String studentRegistration;
-    private Map<Subject, Schedule> subjects;
+    private Map<String, ScheduleResponse> subjects;
     private int term;
     private int maxCredits;
     private int maxMandatoryCredits;
@@ -56,11 +56,11 @@ public class StudentPreEnrollmentResponse {
         this.studentRegistration = studentRegistration;
     }
 
-    public Map<Subject, Schedule> getSubjects() {
+    public Map<String, ScheduleResponse> getSubjects() {
         return subjects;
     }
 
-    public void setSubjects(Map<Subject, Schedule> subjects) {
+    public void setSubjects(Map<String, ScheduleResponse> subjects) {
         this.subjects = subjects;
     }
 
@@ -192,17 +192,18 @@ public class StudentPreEnrollmentResponse {
 
     private boolean enrollSubjectAndSchedule(SubjectSchedule subjectAndSchedule, Collection<SubjectSchedule> coRequirements) {
         boolean haveCoRequirementScheduleConflict = false;
-        Map<Subject, Schedule> availableCoRequirementsSchedules = new HashMap<>();
+        Map<String, ScheduleResponse> availableCoRequirementsSchedules = new HashMap<>();
 
         // verifica se alguma disciplina co-requisito possui conflito de horário
-        for (SubjectSchedule coRequirementSchedule : coRequirements) {
-            Subject coRequirement = coRequirementSchedule.getSubject();
-            List<Schedule> availableCoRequirementSchedule = this.getAvailableSchedules(coRequirementSchedule);
+        for (SubjectSchedule coRequirementSubjectAndSchedule : coRequirements) {
+            Subject coRequirement = coRequirementSubjectAndSchedule.getSubject();
+            List<Schedule> availableCoRequirementSchedule = this.getAvailableSchedules(coRequirementSubjectAndSchedule);
             haveCoRequirementScheduleConflict = availableCoRequirementSchedule.isEmpty();
             if (haveCoRequirementScheduleConflict) break;
 
             Schedule firstAvailableCoRequirementSchedule = availableCoRequirementSchedule.get(0);
-            availableCoRequirementsSchedules.put(coRequirement, firstAvailableCoRequirementSchedule);
+            ScheduleResponse coRequirementSchedule = new ScheduleResponse(coRequirement.getName(), firstAvailableCoRequirementSchedule);
+            availableCoRequirementsSchedules.put(coRequirement.getSubjectCode(), coRequirementSchedule);
         }
 
         Subject subject = subjectAndSchedule.getSubject();
@@ -212,7 +213,8 @@ public class StudentPreEnrollmentResponse {
         boolean haveScheduleConflict = availableSchedules.isEmpty() || haveCoRequirementScheduleConflict;
         if (!haveScheduleConflict) {
             Schedule firstAvailableSchedule = availableSchedules.get(0);
-            this.subjects.put(subject, firstAvailableSchedule);
+            ScheduleResponse schedule = new ScheduleResponse(subject.getName(), firstAvailableSchedule);
+            this.subjects.put(subject.getSubjectCode(), schedule);
             this.subjects.putAll(availableCoRequirementsSchedules);
             firstAvailableSchedule.decrementAvailability();
         }
@@ -255,8 +257,8 @@ public class StudentPreEnrollmentResponse {
     private List<Schedule> getAvailableSchedules(SubjectSchedule subjectAndSchedule) {
         List<Schedule> proposedSchedules = new ArrayList<>(subjectAndSchedule.getAllSchedules());
         // remove os horários/turmas que possuem conflito com as disciplinas já matriculadas
-        for (Schedule enrolledSchedule : this.subjects.values()) {
-            proposedSchedules.removeIf(schedule -> schedule.haveConflict(enrolledSchedule));
+        for (ScheduleResponse enrolledSchedule : this.subjects.values()) {
+            proposedSchedules.removeIf(schedule -> schedule.haveConflict(enrolledSchedule.getSchedule()));
         }
         return proposedSchedules;
     }
