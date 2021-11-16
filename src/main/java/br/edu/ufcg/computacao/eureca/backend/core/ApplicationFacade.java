@@ -159,19 +159,19 @@ public class ApplicationFacade {
         return response;
     }
 
-    public StudentPreEnrollmentResponse getPreEnrollment(String token, String courseCode, String curriculumCode, String registration, Integer numCredits, String optionalPriorityList, String electivePriorityList, String mandatoryPriorityList) throws EurecaException {
+    public StudentPreEnrollmentResponse getPreEnrollment(String token, String courseCode, String curriculumCode, String registration, String term, Integer numCredits, String optionalPriorityList, String electivePriorityList, String mandatoryPriorityList) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_PRE_ENROLLMENT);
-        return this.preEnrollmentController.getStudentPreEnrollment(courseCode, curriculumCode, registration, numCredits, optionalPriorityList, electivePriorityList, mandatoryPriorityList);
+        return this.preEnrollmentController.getStudentPreEnrollment(courseCode, curriculumCode, registration, term, numCredits, optionalPriorityList, electivePriorityList, mandatoryPriorityList);
     }
 
-    public PreEnrollmentsResponse getPreEnrollments(String token, String courseCode, String curriculumCode) throws EurecaException {
+    public PreEnrollmentsResponse getPreEnrollments(String token, String courseCode, String curriculumCode, String term) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_PRE_ENROLLMENTS);
-        return this.preEnrollmentController.getActivesPreEnrollments(courseCode, curriculumCode);
+        return this.preEnrollmentController.getActivesPreEnrollments(courseCode, curriculumCode, term);
     }
 
-    public SubjectsDemandResponse getDemand(String token, String courseCode, String curriculumCode) throws EurecaException {
+    public SubjectsDemandResponse getDemand(String token, String courseCode, String curriculumCode, String term) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DEMAND);
-        return this.preEnrollmentController.getDemand(courseCode, curriculumCode);
+        return this.preEnrollmentController.getDemand(courseCode, curriculumCode, term);
     }
 
     public StudentsRetentionStatisticsResponse getStudentsRetentionStatistics(String token, String courseCode, String curriculumCode, String from, String to) throws EurecaException {

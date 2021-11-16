@@ -5,21 +5,24 @@ import java.util.Collection;
 public class PreEnrollmentData {
 
     private String studentRegistration;
+    private String term;
     private int nextTerm;
     private int idealMandatoryCredits;
     private int idealOptionalCredits;
     private int idealComplementaryCredits;
     private int idealElectiveCredits;
-    private Collection<Subject> availableMandatorySubjects;
-    private Collection<Subject> availableComplementarySubjects;
-    private Collection<Subject> availableOptionalSubjects;
-    private Collection<Subject> availableElectiveSubjects;
-    private Collection<Subject> prioritizedOptionalSubjects;
-    private Collection<Subject> prioritizedElectiveSubjects;
-    private Collection<Subject> prioritizedMandatorySubjects;
+    private Collection<SubjectSchedule> availableMandatorySubjects;
+    private Collection<SubjectSchedule> availableComplementarySubjects;
+    private Collection<SubjectSchedule> availableOptionalSubjects;
+    private Collection<SubjectSchedule> availableElectiveSubjects;
+    private Collection<SubjectSchedule> prioritizedOptionalSubjects;
+    private Collection<SubjectSchedule> prioritizedElectiveSubjects;
+    private Collection<SubjectSchedule> prioritizedMandatorySubjects;
 
-    public PreEnrollmentData(String studentRegistration, int nextTerm, int idealMandatoryCredits, int idealOptionalCredits, int idealComplementaryCredits, int idealElectiveCredits, Collection<Subject> availableMandatorySubjects, Collection<Subject> availableComplementarySubjects, Collection<Subject> availableOptionalSubjects, Collection<Subject> availableElectiveSubjects, Collection<Subject> prioritizedOptionalSubjects, Collection<Subject> prioritizedElectiveSubjects, Collection<Subject> prioritizedMandatorySubjects) {
+
+    public PreEnrollmentData(String studentRegistration, String term, int nextTerm, int idealMandatoryCredits, int idealOptionalCredits, int idealComplementaryCredits, int idealElectiveCredits, Collection<SubjectSchedule> availableMandatorySubjects, Collection<SubjectSchedule> availableComplementarySubjects, Collection<SubjectSchedule> availableOptionalSubjects, Collection<SubjectSchedule> availableElectiveSubjects, Collection<SubjectSchedule> prioritizedOptionalSubjects, Collection<SubjectSchedule> prioritizedElectiveSubjects, Collection<SubjectSchedule> prioritizedMandatorySubjects) {
         this.studentRegistration = studentRegistration;
+        this.term = term;
         this.nextTerm = nextTerm;
         this.idealMandatoryCredits = idealMandatoryCredits;
         this.idealOptionalCredits = idealOptionalCredits;
@@ -40,6 +43,14 @@ public class PreEnrollmentData {
 
     public void setStudentRegistration(String studentRegistration) {
         this.studentRegistration = studentRegistration;
+    }
+
+    public String getTerm() {
+        return term;
+    }
+
+    public void setTerm(String term) {
+        this.term = term;
     }
 
     public int getNextTerm() {
@@ -82,59 +93,59 @@ public class PreEnrollmentData {
         this.idealElectiveCredits = idealElectiveCredits;
     }
 
-    public Collection<Subject> getAvailableMandatorySubjects() {
+    public Collection<SubjectSchedule> getAvailableMandatorySubjects() {
         return availableMandatorySubjects;
     }
 
-    public void setAvailableMandatorySubjects(Collection<Subject> availableMandatorySubjects) {
+    public void setAvailableMandatorySubjects(Collection<SubjectSchedule> availableMandatorySubjects) {
         this.availableMandatorySubjects = availableMandatorySubjects;
     }
 
-    public Collection<Subject> getAvailableComplementarySubjects() {
+    public Collection<SubjectSchedule> getAvailableComplementarySubjects() {
         return availableComplementarySubjects;
     }
 
-    public void setAvailableComplementarySubjects(Collection<Subject> availableComplementarySubjects) {
+    public void setAvailableComplementarySubjects(Collection<SubjectSchedule> availableComplementarySubjects) {
         this.availableComplementarySubjects = availableComplementarySubjects;
     }
 
-    public Collection<Subject> getAvailableOptionalSubjects() {
+    public Collection<SubjectSchedule> getAvailableOptionalSubjects() {
         return availableOptionalSubjects;
     }
 
-    public void setAvailableOptionalSubjects(Collection<Subject> availableOptionalSubjects) {
+    public void setAvailableOptionalSubjects(Collection<SubjectSchedule> availableOptionalSubjects) {
         this.availableOptionalSubjects = availableOptionalSubjects;
     }
 
-    public Collection<Subject> getAvailableElectiveSubjects() {
+    public Collection<SubjectSchedule> getAvailableElectiveSubjects() {
         return availableElectiveSubjects;
     }
 
-    public void setAvailableElectiveSubjects(Collection<Subject> availableElectiveSubjects) {
+    public void setAvailableElectiveSubjects(Collection<SubjectSchedule> availableElectiveSubjects) {
         this.availableElectiveSubjects = availableElectiveSubjects;
     }
 
-    public Collection<Subject> getPrioritizedOptionalSubjects() {
+    public Collection<SubjectSchedule> getPrioritizedOptionalSubjects() {
         return prioritizedOptionalSubjects;
     }
 
-    public void setPrioritizedOptionalSubjects(Collection<Subject> prioritizedOptionalSubjects) {
+    public void setPrioritizedOptionalSubjects(Collection<SubjectSchedule> prioritizedOptionalSubjects) {
         this.prioritizedOptionalSubjects = prioritizedOptionalSubjects;
     }
 
-    public Collection<Subject> getPrioritizedElectiveSubjects() {
+    public Collection<SubjectSchedule> getPrioritizedElectiveSubjects() {
         return prioritizedElectiveSubjects;
     }
 
-    public void setPrioritizedElectiveSubjects(Collection<Subject> prioritizedElectiveSubjects) {
+    public void setPrioritizedElectiveSubjects(Collection<SubjectSchedule> prioritizedElectiveSubjects) {
         this.prioritizedElectiveSubjects = prioritizedElectiveSubjects;
     }
 
-    public Collection<Subject> getPrioritizedMandatorySubjects() {
+    public Collection<SubjectSchedule> getPrioritizedMandatorySubjects() {
         return prioritizedMandatorySubjects;
     }
 
-    public void setPrioritizedMandatorySubjects(Collection<Subject> prioritizedMandatorySubjects) {
+    public void setPrioritizedMandatorySubjects(Collection<SubjectSchedule> prioritizedMandatorySubjects) {
         this.prioritizedMandatorySubjects = prioritizedMandatorySubjects;
     }
 }
