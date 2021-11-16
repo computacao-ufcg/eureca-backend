@@ -8,15 +8,13 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeacherSt
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsSummary;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.TeacherData;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.TeachersListData;
-import br.edu.ufcg.computacao.eureca.backend.core.models.StudentCurriculumProgress;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.TeachersSetAndEnrollments;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
-
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
+
 import java.util.*;
 
 public class IndexesHolder {
@@ -292,11 +290,33 @@ public class IndexesHolder {
         return response;
     }
 
-    public Schedule getSchedule(String courseCode, String curriculumCode, String subjectCode, String classCode) throws InvalidParameterException {
-        ScheduleKey key = new ScheduleKey(courseCode, curriculumCode, subjectCode, classCode);
+    public Schedule getSchedule(String courseCode, String curriculumCode, String subjectCode, String classCode, String term) throws InvalidParameterException {
+        ScheduleKey key = new ScheduleKey(courseCode, curriculumCode, subjectCode, classCode, term);
         ScheduleData schedule = this.scheduleMap.get(key);
         if (schedule == null) throw new InvalidParameterException(String.format(Messages.INVALID_SCHEDULE_S_S_S_S, courseCode, curriculumCode, subjectCode, classCode));
         return schedule.createSchedule();
+    }
+
+    public Map<SubjectScheduleKey, Map<String, Schedule>> getAllSchedules(String courseCode, String curriculumCode, String term) {
+        Map<SubjectScheduleKey, Map<String, Schedule>> allSchedules = new HashMap<>();
+
+        for (Map.Entry<ScheduleKey, ScheduleData> entry : this.scheduleMap.entrySet()) {
+            ScheduleKey key = entry.getKey();
+            ScheduleData value = entry.getValue();
+
+            SubjectScheduleKey subjectScheduleKey = key.createSubjectScheduleKey();
+            Schedule schedule = value.createSchedule();
+
+            if (!allSchedules.containsKey(subjectScheduleKey)) {
+                allSchedules.put(subjectScheduleKey, new HashMap<>());
+            }
+
+            if (key.getCourseCode().equals(courseCode) && key.getCurriculumCode().equals(curriculumCode) && key.getTerm().equals(term)) {
+                allSchedules.get(subjectScheduleKey).put(key.getClassCode(), schedule);
+            }
+        }
+
+        return allSchedules;
     }
 
     public Map<String, TeachersStatisticsSummary> getTeachersPerAcademicUnit(String courseCode, String curriculumCode,
