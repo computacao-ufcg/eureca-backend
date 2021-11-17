@@ -184,6 +184,15 @@ public class ApplicationFacade {
         return response;
     }
 
+    public Map<String, EmailSearchResponse> getTeacherEmailsSearch(String token, String courseCode, String curriculumCode,
+                                                                   String teacherName, String teacherId, String academicUnit,
+                                                                   String term) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_EMAILS);
+        Map<String, EmailSearchResponse> response = this.communicationController.getTeacherEmailsSearch(courseCode, curriculumCode, teacherName,
+                teacherId, academicUnit, term);
+        return response;
+    }
+
     public StudentPreEnrollmentResponse getPreEnrollment(String token, String courseCode, String curriculumCode, String registration) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_PRE_ENROLLMENT);
         return this.preEnrollmentController.createStudentPreEnrollment(courseCode, curriculumCode, registration);
