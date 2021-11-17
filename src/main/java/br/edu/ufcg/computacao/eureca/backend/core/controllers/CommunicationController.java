@@ -1,6 +1,9 @@
 package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.EnrollmentsPerSubjectData;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeacherCSV;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeacherStatisticsSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
@@ -122,6 +125,20 @@ public class CommunicationController {
         }
 
         return search;
+    }
+
+    public Map<String, EmailSearchResponse> getTeacherEmailsSearch(String courseCode, String curriculumCode, String teacherName,
+                                                                   String teacherId, String academicUnit, String term) throws InvalidParameterException {
+
+        TeachersStatisticsResponse teachersSummary = this.dataAccessFacade.getTeachersPerTermSummary(courseCode, curriculumCode, "1980.1", "2021.1", "1411");
+        Map<String, EmailSearchResponse> emails = new HashMap<>();
+
+        teachersSummary.getTeachers().forEach(teacher -> {
+            EmailSearchResponse emailSearchResponse = new EmailSearchResponse(teacher.getTeacherName(), teacher.getTeacherEmail());
+            emails.put(teacher.getTeacherId(), emailSearchResponse );
+        });
+        return emails;
+
     }
 
     private Collection<EnrollmentsPerSubjectData> filterSubjects(String courseCode, String curriculumCode, String academicUnit, Collection<EnrollmentsPerSubjectData> allSubjects, String subjectName) {

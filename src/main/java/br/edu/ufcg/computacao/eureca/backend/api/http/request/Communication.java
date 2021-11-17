@@ -1,7 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.CommonKeys;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.EnrollmentsPerSubjectData;
 import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
@@ -16,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 import java.util.Map;
 
 @CrossOrigin
@@ -87,6 +85,34 @@ public class Communication {
         try {
             Map<String, EmailSearchResponse> emails = ApplicationFacade.getInstance().getSubjectEmailsSearch(token, courseCode,
                     curriculumCode, subjectName, subjectType, academicUnit, term);
+            return new ResponseEntity<>(emails, HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
+            throw e;
+        }
+    }
+
+    @RequestMapping(value = "teacherEmailSearch", method = RequestMethod.GET)
+    @ApiOperation(value =  ApiDocumentation.StudentEmailSearch.GET_EMAILS)
+    public ResponseEntity<Map<String, EmailSearchResponse>> getTeachersEmailsSearch(
+            @ApiParam(value = ApiDocumentation.Common.COURSE)
+            @RequestParam(required = true, value = "courseCode") String courseCode,
+            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+            @RequestParam(required = false, value = "curriculumCode", defaultValue = SystemConstants.ALL) String curriculumCode,
+            @ApiParam(value = ApiDocumentation.StudentEmailSearch.SUBJECT_NAME)
+            @RequestParam(required = false, defaultValue = "^$") String teacherName,
+            @ApiParam(value = ApiDocumentation.StudentEmailSearch.SUBJECT_TYPE)
+            @RequestParam(required = false, defaultValue = "^$") String teacherId,
+            @ApiParam(value = ApiDocumentation.StudentEmailSearch.ACADEMIC_UNIT)
+            @RequestParam(required = false, defaultValue = "^$") String academicUnit,
+            @ApiParam(value = ApiDocumentation.StudentEmailSearch.TERM)
+            @RequestParam(required = false, defaultValue = "^$") String term,
+            @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
+
+    ) throws EurecaException {
+        try {
+            Map<String, EmailSearchResponse> emails = ApplicationFacade.getInstance().getTeacherEmailsSearch(token, courseCode,
+                    curriculumCode, teacherName, teacherId, academicUnit, term);
             return new ResponseEntity<>(emails, HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
