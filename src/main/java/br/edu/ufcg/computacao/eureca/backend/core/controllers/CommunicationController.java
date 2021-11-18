@@ -1,8 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.EnrollmentsPerSubjectData;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeacherCSV;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeacherStatisticsSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
@@ -130,12 +128,20 @@ public class CommunicationController {
     public Map<String, EmailSearchResponse> getTeacherEmailsSearch(String courseCode, String curriculumCode, String teacherName,
                                                                    String teacherId, String academicUnit, String term) throws InvalidParameterException {
 
-        TeachersStatisticsResponse teachersSummary = this.dataAccessFacade.getTeachersPerTermSummary(courseCode, curriculumCode, "1980.1", "2021.1", "1411");
+        Pattern teacherIdPattern = Pattern.compile(teacherId, Pattern.CASE_INSENSITIVE);
+        Pattern namePattern = Pattern.compile(teacherName, Pattern.CASE_INSENSITIVE);
+
+        TeachersStatisticsResponse teachersSummary = this.dataAccessFacade.getTeachersPerTermSummary(courseCode, curriculumCode, "1980.1", "2021.1", academicUnit);
         Map<String, EmailSearchResponse> emails = new HashMap<>();
 
         teachersSummary.getTeachers().forEach(teacher -> {
-            EmailSearchResponse emailSearchResponse = new EmailSearchResponse(teacher.getTeacherName(), teacher.getTeacherEmail());
-            emails.put(teacher.getTeacherId(), emailSearchResponse );
+            Matcher teacherIdMatcher = teacherIdPattern.matcher(teacher.getTeacherId());
+            Matcher nameMatcher = namePattern.matcher(teacher.getTeacherName());
+
+            if(teacherIdMatcher.find() && nameMatcher.find()) {
+                EmailSearchResponse emailSearchResponse = new EmailSearchResponse(teacher.getTeacherName(), teacher.getTeacherEmail());
+                emails.put(teacher.getTeacherId(), emailSearchResponse );
+            }
         });
         return emails;
 

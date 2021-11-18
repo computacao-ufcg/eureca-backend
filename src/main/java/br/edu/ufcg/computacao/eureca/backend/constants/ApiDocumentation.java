@@ -99,10 +99,13 @@ public class ApiDocumentation {
 
     public static class Communication {
         public static final String API = "Buscas por emails";
+        public static final String STUDENT_EMAILS_SEARCH = "Buscas por emails de dicentes";
+        public static final String SUBJECTS_EMAILS_SEARCH = "Buscas por emails de dicentes de uma disciplina";
+        public static final String TEACHERS_EMAILS_SEARCH = "Buscas por emails de professores";
     }
 
 
-    public static class StudentEmailSearch {
+    public static class EmailSearch {
         public static final String NAME = "Nome do estudante";
         public static final String STATUS = "Status do estudante (Todos, Ativos, Evadidos ou Egressos)";
         public static final String GENDER = "Gênero do estudante";
@@ -114,8 +117,10 @@ public class ApiDocumentation {
         public static final String SUBJECT_NAME = "Nome da disciplina na qual se deve buscar os alunos matriculados";
         public static final String SUBJECT_TYPE = "Tipo da disciplina na qual se deve buscar os alunos matriculados";
         public static final String ACADEMIC_UNIT = "Unidade acadêmica da disciplina na qual se deve buscar os alunos matriculados";
-        public static final String TERM = "Período da disciplina na qual se deve buscar os alunos matriculados";
-        public static final String GET_EMAILS = "Retorna uma lista de emails de acordo com o que foi buscado";
+        public static final String TERM = "Período pelo qual deve ser feito a busca";
+        public static final String TEACHER_NAME = "Nome do professor que se deve buscar";
+        public static final String TEACHER_ID = "Id do professor que se deve buscar";
+        public static final String TEACHER_ACADEMIC_UNIT = "Unidade acadêmica do professor que se deve buscar";
     }
 
     public static class SubjectStatistics {
