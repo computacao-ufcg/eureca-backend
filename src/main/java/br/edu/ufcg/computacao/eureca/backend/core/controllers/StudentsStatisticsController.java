@@ -24,6 +24,8 @@ import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException
 import org.apache.log4j.Logger;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StudentsStatisticsController {
     private Logger LOGGER = Logger.getLogger(StudentsStatisticsController.class);
@@ -318,4 +320,5 @@ public class StudentsStatisticsController {
 
         return new DropoutsSummary(firstTerm, lastTerm, dropoutCount, averageTermsCount, averageCost, costClass, aggregateDropouts);
     }
+
 }

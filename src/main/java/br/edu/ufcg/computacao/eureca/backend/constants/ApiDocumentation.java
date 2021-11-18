@@ -97,6 +97,32 @@ public class ApiDocumentation {
         public static final String GET_SUMMARY = "Retornar um sumário geral dos dados dos discentes.";
     }
 
+    public static class Communication {
+        public static final String API = "Buscas por emails";
+        public static final String STUDENT_EMAILS_SEARCH = "Buscas por emails de dicentes";
+        public static final String SUBJECTS_EMAILS_SEARCH = "Buscas por emails de dicentes de uma disciplina";
+        public static final String TEACHERS_EMAILS_SEARCH = "Buscas por emails de professores";
+    }
+
+
+    public static class EmailSearch {
+        public static final String NAME = "Nome do estudante";
+        public static final String STATUS = "Status do estudante (Todos, Ativos, Evadidos ou Egressos)";
+        public static final String GENDER = "Gênero do estudante";
+        public static final String CRA = "Cra do estudante";
+        public static final String CRA_OPERATION = "Operação de busca que se deseja fazer de acordo com um valor de cra";
+        public static final String ENROLLED_CREDITS = "Créditos matriculados pelo estudante";
+        public static final String ADMISSION_TERM = "Período de admissão do estudante";
+        public static final String ENROLLED_CREDITS_OPERATION = "Operação de busca que se deseja fazer de acordo com um valor de creditos matriculados";
+        public static final String SUBJECT_NAME = "Nome da disciplina na qual se deve buscar os alunos matriculados";
+        public static final String SUBJECT_TYPE = "Tipo da disciplina na qual se deve buscar os alunos matriculados";
+        public static final String ACADEMIC_UNIT = "Unidade acadêmica da disciplina na qual se deve buscar os alunos matriculados";
+        public static final String TERM = "Período pelo qual deve ser feito a busca";
+        public static final String TEACHER_NAME = "Nome do professor que se deve buscar";
+        public static final String TEACHER_ID = "Id do professor que se deve buscar";
+        public static final String TEACHER_ACADEMIC_UNIT = "Unidade acadêmica do professor que se deve buscar";
+    }
+
     public static class SubjectStatistics {
         public static final String API = "Estatísticas de disciplinas.";
         public static final String GET_MANDATORY = "Retorna um sumário dos dados das disciplinas obrigatórias do currículo e curso selecionados.";
