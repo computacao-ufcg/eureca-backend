@@ -8,10 +8,12 @@ import java.util.Objects;
 public class Schedule {
 
     private int availability;
+    private String classCode;
     private Collection<ClassSchedule> schedule;
 
-    public Schedule(int availability, Collection<ClassSchedule> schedule) {
+    public Schedule(int availability, String classCode, Collection<ClassSchedule> schedule) {
         this.availability = availability;
+        this.classCode = classCode;
         this.schedule = schedule;
     }
 
@@ -25,6 +27,14 @@ public class Schedule {
 
     public void decrementAvailability() {
         this.availability--;
+    }
+
+    public String getClassCode() {
+        return classCode;
+    }
+
+    public void setClassCode(String classCode) {
+        this.classCode = classCode;
     }
 
     public Collection<ClassSchedule> getSchedule() {
