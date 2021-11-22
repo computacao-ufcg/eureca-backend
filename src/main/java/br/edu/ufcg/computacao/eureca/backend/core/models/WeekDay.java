@@ -3,9 +3,9 @@ package br.edu.ufcg.computacao.eureca.backend.core.models;
 public enum WeekDay {
 
     MONDAY("Seg"),
-    THURSDAY("Ter"),
+    TUESDAY("Ter"),
     WEDNESDAY("Qua"),
-    TUESDAY("Qui"),
+    THURSDAY("Qui"),
     FRIDAY("Sex"),
     SATURDAY("Sab"),
     SUNDAY("Sun");
