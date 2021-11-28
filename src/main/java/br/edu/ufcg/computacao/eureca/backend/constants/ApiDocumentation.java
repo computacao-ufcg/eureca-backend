@@ -121,6 +121,8 @@ public class ApiDocumentation {
         public static final String TEACHER_NAME = "Nome do professor que se deve buscar";
         public static final String TEACHER_ID = "Id do professor que se deve buscar";
         public static final String TEACHER_ACADEMIC_UNIT = "Unidade acadêmica do professor que se deve buscar";
+        public static final String AFFIRMATIVE_POLICY = "Cota do estudante";
+
     }
 
     public static class SubjectStatistics {

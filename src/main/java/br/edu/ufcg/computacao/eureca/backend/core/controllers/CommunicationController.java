@@ -26,11 +26,11 @@ public class CommunicationController {
     public Map<String, EmailSearchResponse> getStudentsEmailsSearch(String courseCode, String curriculumCode, String admissionTerm,
                                                        String studentName, String gender, String status,
                                                        String craOperation, String cra, String enrolledCreditsOperation,
-                                                                    String enrolledCredits)
+                                                                    String enrolledCredits, String affirmativePolicy)
             throws InvalidParameterException {
 
         Collection<Student> students = this.getStudentsByStatus(courseCode, curriculumCode, "1970.1","2021.1", status);
-        return this.getEmailsSearch(students, admissionTerm, studentName, gender, craOperation, cra, enrolledCreditsOperation, enrolledCredits);
+        return this.getEmailsSearch(students, admissionTerm, studentName, gender, craOperation, cra, enrolledCreditsOperation, enrolledCredits, affirmativePolicy);
     }
 
     private synchronized Collection<Student> getStudentsByStatus(String courseCode, String curriculumCode, String from, String to, String status) throws InvalidParameterException {
@@ -52,35 +52,56 @@ public class CommunicationController {
     }
 
     private synchronized Map<String, EmailSearchResponse> getEmailsSearch (Collection<Student> students, String admissionTerm, String studentName,
-                                                              String gender, String craOperation, String cra, String enrolledCreditsOperation, String enrolledCredits) {
+                                                              String gender, String craOperation, String cra, String enrolledCreditsOperation, String enrolledCredits,
+                                                                           String affirmativePolicy) {
         Collection<Student> studentsCollection = students;
         Map<String, EmailSearchResponse> search =  new HashMap<>();
+        String affirmativePolicyResult = this.checkAffirmativePolicy(affirmativePolicy);
 
         Pattern admissionPattern = Pattern.compile(admissionTerm, Pattern.CASE_INSENSITIVE);
         Pattern namePattern = Pattern.compile(studentName, Pattern.CASE_INSENSITIVE);
         Pattern genderPattern = Pattern.compile(gender, Pattern.CASE_INSENSITIVE);
+        Pattern affirmativePolicyPattern = Pattern.compile(affirmativePolicyResult, Pattern.CASE_INSENSITIVE);
 
         for( Student student: studentsCollection) {
-
             Matcher admissionMatcher = admissionPattern.matcher(student.getAdmissionTerm());
             Matcher nameMatcher = namePattern.matcher(student.getName());
             Matcher genderMatcher = genderPattern.matcher(student.getGender());
-
-            List<Matcher> list = new ArrayList<>();
-            list.add(admissionMatcher);
-            list.add(genderMatcher);
-            list.add(nameMatcher);
+            Matcher affirmativePolicyMatcher = affirmativePolicyPattern.matcher(student.getAffirmativePolicy());
 
             boolean isStudentGpaMatchingRequest = this.compareStudentValueWithRequiredValue(craOperation, cra, student.getGpa());
             boolean isStudentCreditsMatchingRequest = this.compareStudentValueWithRequiredValue(enrolledCreditsOperation, enrolledCredits, student.getEnrolledCredits());
 
-            if(list.get(0).find() && list.get(1).find() && list.get(2).find() && isStudentCreditsMatchingRequest && isStudentGpaMatchingRequest) {
+            if(admissionMatcher.find() && genderMatcher.find() && nameMatcher.find() && affirmativePolicyMatcher.find() && isStudentCreditsMatchingRequest && isStudentGpaMatchingRequest) {
                 EmailSearchResponse emailSearchResponse = new EmailSearchResponse(student.getName(), student.getEmail());
                 search.put(student.getRegistration().getRegistration(), emailSearchResponse);
             }
 
         }
         return search;
+    }
+
+    private String checkAffirmativePolicy(String affirmativePolicy) {
+        String L1 = "Candidato com renda familiar bruta per capita igual ou inferior a 1,5 salrio mnimo que tenha cursado integralmente o ensino mdio em escola pblica.";
+        String L2 = "Candidato autodeclarado preto, pardo ou indgena, com renda familiar bruta per capita igual ou inferior a 1,5 salrio mnimo que tenha cursado integralmente o ensino mdio em escola pblica.";
+        String L5 = "Candidato que, independentemente da renda, tenha cursado integralmente o ensino mdio em escola pblica.";
+        String L6 = "Candidato autodeclarado preto, pardo ou indgena que, independentemente da renda, tenha cursado integralmente o ensino mdio em escola pblica.";
+        String L9 = "Candidato com deficincia com renda familiar bruta per capita igual ou inferior a 1,5 salrio mnimo que tenha cursado integralmente o ensino mdio em escola pblica.";
+        String L10 = "Candidato com deficincia autodeclarado preto, pardo ou indgena, com renda familiar bruta per capita igual ou inferior a 1,5 salrio mnimo que tenha cursado integralmente o ensino mdio em escola pblica.";
+        String L13 = "Candidato com deficincia que, independentemente da renda, tenha cursado integralmente o ensino mdio em escola pblica.";
+        String L14 = "Candidato com deficincia autodeclarado preto, pardo ou indgena que, independentemente da renda, tenha cursado integralmente o ensino mdio em escola pblica.";
+
+        Map<String, String> affirmativePolicyMap = new HashMap<>();
+        affirmativePolicyMap.put("L1", L1);
+        affirmativePolicyMap.put("L2", L2);
+        affirmativePolicyMap.put("L5", L5);
+        affirmativePolicyMap.put("L6", L6);
+        affirmativePolicyMap.put("L9", L9);
+        affirmativePolicyMap.put("L10", L10);
+        affirmativePolicyMap.put("L13", L13);
+        affirmativePolicyMap.put("L14", L14);
+
+        return affirmativePolicyMap.get(affirmativePolicy);
     }
 
     public Map<String, EmailSearchResponse> getSubjectEmailsSearch(String courseCode, String curriculumCode, String subjectName,
