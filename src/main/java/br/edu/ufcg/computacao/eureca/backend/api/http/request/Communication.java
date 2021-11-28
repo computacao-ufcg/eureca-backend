@@ -50,13 +50,15 @@ public class Communication {
             @RequestParam(required = false, defaultValue = "^$") String enrolledCredits,
             @ApiParam(value = ApiDocumentation.EmailSearch.ADMISSION_TERM)
             @RequestParam(required = false, defaultValue = "^$") String admissionTerm,
+            @ApiParam(value = ApiDocumentation.EmailSearch.AFFIRMATIVE_POLICY)
+            @RequestParam(required = false, defaultValue = "^$") String affirmativePolicy,
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
 
     ) throws EurecaException {
         try {
             Map<String, EmailSearchResponse> emails = ApplicationFacade.getInstance().getStudentsEmailsSearch(token, courseCode,
                     curriculumCode, admissionTerm, studentName, gender,
-                    status, craOperation, cra, enrolledCreditsOperation, enrolledCredits);
+                    status, craOperation, cra, enrolledCreditsOperation, enrolledCredits, affirmativePolicy);
             return new ResponseEntity<>(emails, HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
