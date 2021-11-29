@@ -2,6 +2,7 @@ package br.edu.ufcg.computacao.eureca.backend.core;
 
 import br.edu.ufcg.computacao.eureca.as.core.AuthenticationUtil;
 import br.edu.ufcg.computacao.eureca.as.core.models.SystemUser;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.EnrollmentsPerSubjectData;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment.PreEnrollmentsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.active.ActivesStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.alumni.AlumniDigest;
@@ -33,6 +34,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.plugins.AuthorizationPlugin;
 import br.edu.ufcg.computacao.eureca.backend.core.util.factory.GlossaryFactory;
 import br.edu.ufcg.computacao.eureca.common.exceptions.ConfigurationErrorException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
+import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import br.edu.ufcg.computacao.eureca.common.util.CryptoUtil;
 import br.edu.ufcg.computacao.eureca.common.util.ServiceAsymmetricKeysHolder;
 import org.apache.log4j.Logger;
@@ -40,12 +42,14 @@ import org.apache.log4j.Logger;
 import java.security.GeneralSecurityException;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Collection;
+import java.util.Map;
 
 public class ApplicationFacade {
     private static final Logger LOGGER = Logger.getLogger(ApplicationFacade.class);
     private RSAPublicKey asPublicKey;
     private AuthorizationPlugin authorizationPlugin;
     private AlumniController alumniController;
+    private CommunicationController communicationController;
     private ProfileController profileController;
     private CurriculaController curriculaController;
     private PreEnrollmentController preEnrollmentController;
@@ -60,6 +64,7 @@ public class ApplicationFacade {
         this.alumniController = new AlumniController();
         this.profileController = new ProfileController();
         this.curriculaController = new CurriculaController();
+        this.communicationController = new CommunicationController();
         this.preEnrollmentController = new PreEnrollmentController();
         this.studentsStatisticsController = new StudentsStatisticsController();
         this.subjectsStatisticsController = new SubjectsStatisticsController();
@@ -156,6 +161,36 @@ public class ApplicationFacade {
         StudentsStatisticsSummaryResponse response = this.studentsStatisticsController.getStudentsStatisticsSummary(courseCode, curriculumCode, from, to);
         StudentsGlossaryFields glossaryFields = GlossaryFactory.createGlossary(language, GlossaryType.STUDENT);
         response.setGlossary(glossaryFields);
+        return response;
+    }
+
+    public Map<String, EmailSearchResponse> getStudentsEmailsSearch(String token, String courseCode, String curriculumCode,
+                                                       String admissionTerm, String studentName, String gender,
+                                                       String status, String craOperation, String cra,
+                                                                    String enrolledCreditsOperation, String enrolledCredits,
+                                                                    String affirmativePolicy)
+            throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_EMAILS);
+        Map<String, EmailSearchResponse> response = this.communicationController.getStudentsEmailsSearch(courseCode, curriculumCode,
+                admissionTerm, studentName, gender, status, craOperation, cra, enrolledCreditsOperation, enrolledCredits, affirmativePolicy);
+        return response;
+    }
+
+    public Map<String, EmailSearchResponse> getSubjectEmailsSearch(String token, String courseCode, String curriculumCode,
+                                                                        String subjectName, String subjectType,
+                                                                        String academicUnit, String term) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_EMAILS);
+        Map<String, EmailSearchResponse> response = this.communicationController.getSubjectEmailsSearch(courseCode, curriculumCode, subjectName,
+                subjectType, academicUnit, term);
+        return response;
+    }
+
+    public Map<String, EmailSearchResponse> getTeacherEmailsSearch(String token, String courseCode, String curriculumCode,
+                                                                   String teacherName, String teacherId, String academicUnit,
+                                                                   String term) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_EMAILS);
+        Map<String, EmailSearchResponse> response = this.communicationController.getTeacherEmailsSearch(courseCode, curriculumCode, teacherName,
+                teacherId, academicUnit, term);
         return response;
     }
 

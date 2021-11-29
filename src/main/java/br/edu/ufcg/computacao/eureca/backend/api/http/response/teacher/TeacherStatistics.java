@@ -7,13 +7,15 @@ import java.util.Collection;
 public class TeacherStatistics extends Range implements Comparable {
     private String teacherId;
     private String teacherName;
+    private String teacherEmail;
     Collection<TeacherStatisticsPerTerm> terms;
 
-    public TeacherStatistics(String from, String to, String teacherId, String teacherName,
+    public TeacherStatistics(String from, String to, String teacherId, String teacherName, String teacherEmail,
                              Collection<TeacherStatisticsPerTerm> terms) {
         super(from, to);
         this.teacherId = teacherId;
         this.teacherName = teacherName;
+        this.teacherEmail = teacherEmail;
         this.terms = terms;
     }
 
@@ -39,6 +41,14 @@ public class TeacherStatistics extends Range implements Comparable {
 
     public void setTerms(Collection<TeacherStatisticsPerTerm> terms) {
         this.terms = terms;
+    }
+
+    public String getTeacherEmail () {
+        return teacherEmail;
+    }
+
+    public void setTeacherEmail (String teacherEmail) {
+        this.teacherEmail = teacherEmail;
     }
 
     @Override

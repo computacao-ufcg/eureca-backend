@@ -283,7 +283,7 @@ public class IndexesHolder {
 
                 TeacherData teacherData = this.teachersMap.get(teacherKey);
                 TeacherStatistics teachersData = new TeacherStatistics(first, last, teacherKey.getId(),
-                        teacherData.getName(), terms);
+                        teacherData.getName(), teacherData.getEmail(),terms);
                 response.add(teachersData);
             }
         }
