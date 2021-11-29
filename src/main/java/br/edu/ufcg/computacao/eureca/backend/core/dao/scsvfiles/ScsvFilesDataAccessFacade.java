@@ -32,6 +32,11 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
+    public Collection<Student> getAllStudentsPerStatus (StudentClassification status, String courseCode, String curriculumCode) throws InvalidParameterException {
+        return getAllStudentsByStatusPerCourse(status, courseCode, curriculumCode);
+    }
+
+    @Override
     public Collection<Student> getActives(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         return getFilteredStudents(StudentClassification.ACTIVE, courseCode, curriculumCode, from, to);
     }

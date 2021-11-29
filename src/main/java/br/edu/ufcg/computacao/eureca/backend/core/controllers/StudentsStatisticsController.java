@@ -318,4 +318,5 @@ public class StudentsStatisticsController {
 
         return new DropoutsSummary(firstTerm, lastTerm, dropoutCount, averageTermsCount, averageCost, costClass, aggregateDropouts);
     }
+
 }
