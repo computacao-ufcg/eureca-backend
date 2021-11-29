@@ -3,6 +3,7 @@ package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.EnrollmentsPerSubjectData;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.StudentClassification;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
@@ -29,23 +30,23 @@ public class CommunicationController {
                                                                     String enrolledCredits, String affirmativePolicy)
             throws InvalidParameterException {
 
-        Collection<Student> students = this.getStudentsByStatus(courseCode, curriculumCode, "1970.1","2021.1", status);
+        Collection<Student> students = this.getStudentsByStatus(courseCode, curriculumCode, status);
         return this.getEmailsSearch(students, admissionTerm, studentName, gender, craOperation, cra, enrolledCreditsOperation, enrolledCredits, affirmativePolicy);
     }
 
-    private synchronized Collection<Student> getStudentsByStatus(String courseCode, String curriculumCode, String from, String to, String status) throws InvalidParameterException {
+    private synchronized Collection<Student> getStudentsByStatus(String courseCode, String curriculumCode, String status) throws InvalidParameterException {
         Collection<Student> students = null;
         if (status.equals("Ativos")) {
-            students = this.dataAccessFacade.getActives(courseCode, curriculumCode, from, to);
+            students = this.dataAccessFacade.getAllStudentsPerStatus(StudentClassification.ACTIVE, courseCode, curriculumCode);
         } else if(status.equals("Evadidos")){
-            students = this.dataAccessFacade.getDropouts(courseCode, curriculumCode, from, to);
+            students = this.dataAccessFacade.getAllStudentsPerStatus(StudentClassification.DROPOUT, courseCode, curriculumCode);
         } else if(status.equals("Egressos")) {
-            students = this.dataAccessFacade.getAlumni(courseCode, curriculumCode, from, to);
+            students = this.dataAccessFacade.getAllStudentsPerStatus(StudentClassification.ALUMNUS, courseCode, curriculumCode);
         } else if(status.equals("Todos")) {
             students = Stream.concat(
-                    Stream.concat(this.dataAccessFacade.getActives(courseCode, curriculumCode, from, to).stream(),
-                            this.dataAccessFacade.getDropouts(courseCode, curriculumCode, from, to).stream()),
-                    this.dataAccessFacade.getAlumni(courseCode, curriculumCode, from, to).stream())
+                    Stream.concat(this.dataAccessFacade.getAllStudentsPerStatus(StudentClassification.ACTIVE, courseCode, curriculumCode).stream(),
+                            this.dataAccessFacade.getAllStudentsPerStatus(StudentClassification.DROPOUT, courseCode, curriculumCode).stream()),
+                    this.dataAccessFacade.getAllStudentsPerStatus(StudentClassification.ALUMNUS, courseCode, curriculumCode).stream())
                     .collect(Collectors.toList());
         }
         return students;
@@ -69,8 +70,8 @@ public class CommunicationController {
             Matcher genderMatcher = genderPattern.matcher(student.getGender());
             Matcher affirmativePolicyMatcher = affirmativePolicyPattern.matcher(student.getAffirmativePolicy());
 
-            boolean isStudentGpaMatchingRequest = this.compareStudentValueWithRequiredValue(craOperation, cra, student.getGpa());
-            boolean isStudentCreditsMatchingRequest = this.compareStudentValueWithRequiredValue(enrolledCreditsOperation, enrolledCredits, student.getEnrolledCredits());
+            boolean isStudentGpaMatchingRequest = this.compareStudentMetricWithRequiredValue(craOperation, cra, student.getGpa());
+            boolean isStudentCreditsMatchingRequest = this.compareStudentMetricWithRequiredValue(enrolledCreditsOperation, enrolledCredits, student.getEnrolledCredits());
 
             if(admissionMatcher.find() && genderMatcher.find() && nameMatcher.find() && affirmativePolicyMatcher.find() && isStudentCreditsMatchingRequest && isStudentGpaMatchingRequest) {
                 EmailSearchResponse emailSearchResponse = new EmailSearchResponse(student.getName(), student.getEmail());
@@ -112,7 +113,7 @@ public class CommunicationController {
                                                                    String subjectType, String academicUnit, String term) throws InvalidParameterException {
 
         Map<String, EmailSearchResponse> search =  new HashMap<>();
-        Collection<Student> students = this.getStudentsByStatus(courseCode, curriculumCode, "1970.1","2021.1", "Todos");
+        Collection<Student> students = this.getStudentsByStatus(courseCode, curriculumCode,"Todos");
         SubjectType type = null;
         Collection<EnrollmentsPerSubjectData> enrollmentsPerSubjectPerTerm = null;
 
@@ -156,7 +157,7 @@ public class CommunicationController {
         Pattern teacherIdPattern = Pattern.compile(teacherId, Pattern.CASE_INSENSITIVE);
         Pattern namePattern = Pattern.compile(teacherName, Pattern.CASE_INSENSITIVE);
 
-        TeachersStatisticsResponse teachersSummary = this.dataAccessFacade.getTeachersPerTermSummary(courseCode, curriculumCode, "1980.1", "2021.1", academicUnit);
+        TeachersStatisticsResponse teachersSummary = this.dataAccessFacade.getTeachersPerTermSummary(courseCode, curriculumCode, term, term, academicUnit);
         Map<String, EmailSearchResponse> emails = new HashMap<>();
 
         teachersSummary.getTeachers().forEach(teacher -> {
@@ -197,7 +198,7 @@ public class CommunicationController {
         return emails;
     }
 
-    private boolean compareStudentValueWithRequiredValue (String operation, String valueToCompare, double value) {
+    private boolean compareStudentMetricWithRequiredValue (String operation, String valueToCompare, double value) {
         double v = Double.parseDouble(valueToCompare);
 
         switch (operation) {
