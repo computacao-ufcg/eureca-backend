@@ -11,6 +11,7 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectMe
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectsStatisticsSummaryResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsSummary;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.StudentClassification;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 
@@ -18,6 +19,8 @@ import java.util.Collection;
 import java.util.Map;
 
 public interface DataAccessFacade {
+    Collection<Student> getAllStudentsPerStatus (StudentClassification status, String courseCode, String curriculumCode) throws InvalidParameterException;
+
     Collection<Student> getActives(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 
     Collection<Student> getAllActives(String courseCode, String curriculumCode) throws InvalidParameterException;
