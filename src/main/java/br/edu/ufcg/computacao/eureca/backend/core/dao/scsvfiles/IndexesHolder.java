@@ -283,18 +283,11 @@ public class IndexesHolder {
 
                 TeacherData teacherData = this.teachersMap.get(teacherKey);
                 TeacherStatistics teachersData = new TeacherStatistics(first, last, teacherKey.getId(),
-                        teacherData.getName(), terms);
+                        teacherData.getName(), teacherData.getEmail(),terms);
                 response.add(teachersData);
             }
         }
         return response;
-    }
-
-    public Schedule getSchedule(String courseCode, String curriculumCode, String subjectCode, String classCode, String term) throws InvalidParameterException {
-        ScheduleKey key = new ScheduleKey(courseCode, curriculumCode, subjectCode, classCode, term);
-        ScheduleData schedule = this.scheduleMap.get(key);
-        if (schedule == null) throw new InvalidParameterException(String.format(Messages.INVALID_SCHEDULE_S_S_S_S, courseCode, curriculumCode, subjectCode, classCode));
-        return schedule.createSchedule();
     }
 
     public Map<SubjectScheduleKey, Map<String, Schedule>> getAllSchedules(String courseCode, String curriculumCode, String term) {
@@ -305,7 +298,7 @@ public class IndexesHolder {
             ScheduleData value = entry.getValue();
 
             SubjectScheduleKey subjectScheduleKey = key.createSubjectScheduleKey();
-            Schedule schedule = value.createSchedule();
+            Schedule schedule = value.createSchedule(key);
 
             if (!allSchedules.containsKey(subjectScheduleKey)) {
                 allSchedules.put(subjectScheduleKey, new HashMap<>());

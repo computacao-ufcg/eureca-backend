@@ -36,8 +36,8 @@ public class ScheduleData implements EurecaMapValue {
         this.schedule = schedule;
     }
 
-    public Schedule createSchedule() {
-        return new Schedule(availability, extractSchedule());
+    public Schedule createSchedule(ScheduleKey key) {
+        return new Schedule(availability, key.getClassCode(), extractSchedule());
     }
 
     private Collection<ClassSchedule> extractSchedule() {
