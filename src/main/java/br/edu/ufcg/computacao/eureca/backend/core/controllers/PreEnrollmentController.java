@@ -52,21 +52,22 @@ public class PreEnrollmentController {
     }
 
     private SubjectDemandSummary getSubjectDemandSummary(String courseCode, String curriculumCode, String term, Collection<StudentPreEnrollmentResponse> preEnrollments) {
-        Collection<DetailedSubjectDemand> mandatoryDemand = this.getSubjectDemand("M", preEnrollments);
-        Collection<DetailedSubjectDemand> optionalDemand = this.getSubjectDemand("O", preEnrollments);
-        Collection<DetailedSubjectDemand> complementaryDemand = this.getSubjectDemand("C", preEnrollments);
-        Collection<DetailedSubjectDemand> electiveDemand = this.getSubjectDemand("E", preEnrollments);
+        Collection<DetailedSubjectDemand> mandatoryDemand = this.getSubjectDemand(courseCode, curriculumCode, "M", preEnrollments);
+        Collection<DetailedSubjectDemand> optionalDemand = this.getSubjectDemand(courseCode, curriculumCode, "O", preEnrollments);
+        Collection<DetailedSubjectDemand> complementaryDemand = this.getSubjectDemand(courseCode, curriculumCode, "C", preEnrollments);
+        Collection<DetailedSubjectDemand> electiveDemand = this.getSubjectDemand(courseCode, curriculumCode, "E", preEnrollments);
 
         this.cacheSchedules(courseCode, curriculumCode, term);
         return new SubjectDemandSummary(mandatoryDemand, optionalDemand, complementaryDemand, electiveDemand);
     }
 
-    private Collection<DetailedSubjectDemand> getSubjectDemand(String subjectType, Collection<StudentPreEnrollmentResponse> preEnrollments) {
+    private Collection<DetailedSubjectDemand> getSubjectDemand(String courseCode, String curriculumCode, String subjectType, Collection<StudentPreEnrollmentResponse> preEnrollments) {
         Collection<DetailedSubjectDemand> response = new ArrayList<>();
         Map<Subject, Map<Integer, Integer>> subjectDemandByTerm = new HashMap<>();
 
         for (StudentPreEnrollmentResponse preEnrollment : preEnrollments) {
-            Set<Subject> proposedSubjects = preEnrollment.getSubjects().keySet();
+            Collection<String> proposedSubjectsCodes = preEnrollment.getSubjects().keySet();
+            Collection<Subject> proposedSubjects = this.getSubjectsByCode(courseCode, curriculumCode, proposedSubjectsCodes);
             int studentCurrentTerm = preEnrollment.getTerm();
 
             for (Subject subject : proposedSubjects) {
