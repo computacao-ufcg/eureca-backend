@@ -90,6 +90,8 @@ public class CommunicationController {
         String L10 = "Candidato com deficincia autodeclarado preto, pardo ou indgena, com renda familiar bruta per capita igual ou inferior a 1,5 salrio mnimo que tenha cursado integralmente o ensino mdio em escola pblica.";
         String L13 = "Candidato com deficincia que, independentemente da renda, tenha cursado integralmente o ensino mdio em escola pblica.";
         String L14 = "Candidato com deficincia autodeclarado preto, pardo ou indgena que, independentemente da renda, tenha cursado integralmente o ensino mdio em escola pblica.";
+        String AC = "^$";
+        String all = ".*?";
 
         Map<String, String> affirmativePolicyMap = new HashMap<>();
         affirmativePolicyMap.put("L1", L1);
@@ -100,6 +102,8 @@ public class CommunicationController {
         affirmativePolicyMap.put("L10", L10);
         affirmativePolicyMap.put("L13", L13);
         affirmativePolicyMap.put("L14", L14);
+        affirmativePolicyMap.put("AC", AC);
+        affirmativePolicyMap.put("all", all);
 
         return affirmativePolicyMap.get(affirmativePolicy);
     }
