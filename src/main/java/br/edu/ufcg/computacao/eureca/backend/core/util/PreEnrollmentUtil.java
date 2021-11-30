@@ -58,12 +58,12 @@ public class PreEnrollmentUtil {
         return EurecaUtil.intersection(prioritizedSubjects, availableSubjects);
     }
 
-    public static Subject sanitizedSubject(String courseCode, String curriculumCode, SubjectSchedule subjectAndSchedule, StudentCurriculumProgress progress) {
-        SubjectSchedule subjectWithAvailableClasses = filterAvailableClasses(subjectAndSchedule);
-        return filterCompletedCoRequirements(curriculumCode, courseCode, subjectWithAvailableClasses.getSubject(), progress);
+    public static void sanitizedSubject(String courseCode, String curriculumCode, SubjectSchedule subjectAndSchedule, StudentCurriculumProgress progress) {
+        filterAvailableClasses(subjectAndSchedule);
+        filterCompletedCoRequirements(curriculumCode, courseCode, subjectAndSchedule.getSubject(), progress);
     }
 
-    private static SubjectSchedule filterAvailableClasses(SubjectSchedule subjectAndSchedule) {
+    private static void filterAvailableClasses(SubjectSchedule subjectAndSchedule) {
         Map<String, Schedule> updatedSchedules = new HashMap<>(subjectAndSchedule.getSchedules());
         Set<Map.Entry<String, Schedule>> entrySet = subjectAndSchedule.getSchedules().entrySet();
 
@@ -74,17 +74,15 @@ public class PreEnrollmentUtil {
                 updatedSchedules.remove(classCode);
             }
         }
-        return new SubjectSchedule(subjectAndSchedule.getSubject(), updatedSchedules);
+        subjectAndSchedule.setSchedules(updatedSchedules);
     }
 
-    private static Subject filterCompletedCoRequirements(String curriculumCode, String courseCode, Subject subject, StudentCurriculumProgress progress) {
+    private static void filterCompletedCoRequirements(String curriculumCode, String courseCode, Subject subject, StudentCurriculumProgress progress) {
         Collection<SubjectKey> completedSubjects = progress.getCompleted();
         Collection<SubjectKey> coRequirements = subject.getCoRequirementsList().stream().map(subjectCode -> new SubjectKey(courseCode, curriculumCode, subjectCode)).collect(Collectors.toList());
         Collection<SubjectKey> availableCoRequirements = EurecaUtil.difference(coRequirements, completedSubjects);
         Collection<String> availableCoRequirementsCode = availableCoRequirements.stream().map(SubjectKey::getSubjectCode).collect(Collectors.toSet());
-        return new Subject(courseCode, curriculumCode, subject.getSubjectCode(), subject.getAcademicUnit(),
-                subject.getType(), subject.getCredits(), subject.getHours(), subject.getName(),
-                subject.getEquivalentCodesList(), subject.getIdealTerm(), subject.getPreRequirementsList(), availableCoRequirementsCode);
+        subject.setCoRequirementsList(availableCoRequirementsCode);
     }
 
     public static Map<SubjectType, Integer> getIdealCreditsPerSubjectType(Curriculum curriculum, Integer maxCredits, int nextTerm) {
