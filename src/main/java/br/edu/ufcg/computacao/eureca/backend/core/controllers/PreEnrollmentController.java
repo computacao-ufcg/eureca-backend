@@ -29,7 +29,9 @@ public class PreEnrollmentController {
     public StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration, String term, Integer numCredits,
                                                                 String optionalPriorityList, String electivePriorityList, String mandatoryPriorityList) throws InvalidParameterException {
         PreEnrollmentData preEnrollmentData = this.getPreEnrollmentData(courseCode, curriculumCode, studentRegistration, term, numCredits, optionalPriorityList, electivePriorityList, mandatoryPriorityList);
-        return this.getStudentPreEnrollment(preEnrollmentData);
+        StudentPreEnrollmentResponse studentPreEnrollment = this.getStudentPreEnrollment(preEnrollmentData);
+        this.cacheSchedules(courseCode, curriculumCode, term);
+        return studentPreEnrollment;
     }
 
     public PreEnrollmentsResponse getActivesPreEnrollments(String courseCode, String curriculumCode, String term) throws InvalidParameterException  {
@@ -43,16 +45,19 @@ public class PreEnrollmentController {
             activesPreEnrollments.add(preEnrollmentResponse);
         }
 
-        SubjectDemandSummary subjectDemandSummary = this.getSubjectDemandSummary(courseCode, curriculumCode, activesPreEnrollments);
+        SubjectDemandSummary subjectDemandSummary = this.getSubjectDemandSummary(courseCode, curriculumCode, term, activesPreEnrollments);
+        this.cacheSchedules(courseCode, curriculumCode, term);
+
         return new PreEnrollmentsResponse(activesPreEnrollments, subjectDemandSummary);
     }
 
-    private SubjectDemandSummary getSubjectDemandSummary(String courseCode, String curriculumCode, Collection<StudentPreEnrollmentResponse> preEnrollments) {
+    private SubjectDemandSummary getSubjectDemandSummary(String courseCode, String curriculumCode, String term, Collection<StudentPreEnrollmentResponse> preEnrollments) {
         Collection<DetailedSubjectDemand> mandatoryDemand = this.getSubjectDemand(courseCode, curriculumCode, "M", preEnrollments);
         Collection<DetailedSubjectDemand> optionalDemand = this.getSubjectDemand(courseCode, curriculumCode, "O", preEnrollments);
         Collection<DetailedSubjectDemand> complementaryDemand = this.getSubjectDemand(courseCode, curriculumCode, "C", preEnrollments);
         Collection<DetailedSubjectDemand> electiveDemand = this.getSubjectDemand(courseCode, curriculumCode, "E", preEnrollments);
 
+        this.cacheSchedules(courseCode, curriculumCode, term);
         return new SubjectDemandSummary(mandatoryDemand, optionalDemand, complementaryDemand, electiveDemand);
     }
 
@@ -97,7 +102,7 @@ public class PreEnrollmentController {
         StudentCurriculumProgress studentProgress = this.dataAccessFacade.getStudentCurriculumProgress(studentRegistration);
         if (this.subjectsCache == null || this.subjectsCache.isEmpty()) {
             this.cacheSubjects(courseCode, curriculumCode);
-            this.cacheSchedule(courseCode, curriculumCode, term);
+            this.cacheSchedules(courseCode, curriculumCode, term);
         }
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, studentProgress);
@@ -281,7 +286,7 @@ public class PreEnrollmentController {
         }
     }
 
-    private void cacheSchedule(String courseCode, String curriculumCode, String term) {
+    private void cacheSchedules(String courseCode, String curriculumCode, String term) {
         this.scheduleCache = this.dataAccessFacade.getAllSchedules(courseCode, curriculumCode, term);
     }
 
@@ -336,8 +341,8 @@ public class PreEnrollmentController {
             if (!concludedSubjectsCode.contains(subjectCode) && concludedSubjectsCode.containsAll(subject.getPreRequirementsList())) {
                 try {
                     SubjectSchedule subjectAndSchedule = this.getSubjectSchedule(courseCode, curriculumCode, subjectCode, term);
-                    Subject sanitizedSubject = PreEnrollmentUtil.sanitizedSubject(courseCode, curriculumCode, subjectAndSchedule, studentCurriculumProgress);
-                    availableSubjects.add(sanitizedSubject);
+                    PreEnrollmentUtil.sanitizedSubject(courseCode, curriculumCode, subjectAndSchedule, studentCurriculumProgress);
+                    availableSubjects.add(subjectAndSchedule.getSubject());
                 } catch (InvalidParameterException e) {
                     LOGGER.info(String.format(Messages.INVALID_SCHEDULE_S_S_S_S, courseCode, curriculumCode, subjectCode, term));
                 }
