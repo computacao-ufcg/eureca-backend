@@ -36,6 +36,24 @@ public class EnrollmentsStatisticsTest extends EndpointTest {
     private static final String ENROLLMENTS_STATISTICS_ENDPOINT = EnrollmentsStatistics.ENDPOINT;
 
     @Test
+    public void testGetComplementaryEnrollments() throws Exception {
+        EnrollmentsStatisticsResponse res = mockEnrollmentsStatisticsResponse();
+        Mockito.doReturn(res).when(this.facade).getSubjectEnrollmentsStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
+        String endpoint = ENROLLMENTS_STATISTICS_ENDPOINT + "/complementary?courseCode=" +
+                "14102100&curriculumCode=2017&from=1950.0&to=2049.9";
+        System.out.println(endpoint);
+
+        HttpHeaders headers = TestUtils.getTokenHeaders();
+        RequestBuilder request = TestUtils.createRequestBuilder(HttpMethod.GET,endpoint, headers, "");
+
+        MvcResult result = this.mockMvc.perform(request).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+        int expectedStatus = HttpStatus.OK.value();
+
+        Assertions.assertEquals(expectedStatus, result.getResponse().getStatus());
+    }
+
+    @Test
     public void testGetElectiveEnrollments() throws Exception {
         EnrollmentsStatisticsResponse res = mockEnrollmentsStatisticsResponse();
         Mockito.doReturn(res).when(this.facade).getSubjectEnrollmentsStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
