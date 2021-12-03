@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static br.edu.ufcg.computacao.eureca.backend.util.TestUtils.getMockedActiveSummaryResponse;
+import static br.edu.ufcg.computacao.eureca.backend.util.TestUtils.getMockedStudentCsvResponse;
 
 
 @WebMvcTest(value = EnrollmentsStatistics.class, secure = false)
