@@ -41,10 +41,9 @@ public class EnrollmentsStatisticsTest extends EndpointTest {
         Mockito.doReturn(res).when(this.facade).getSubjectEnrollmentsStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
         String endpoint = ENROLLMENTS_STATISTICS_ENDPOINT + "/complementary?courseCode=" +
                 "14102100&curriculumCode=2017&from=1950.0&to=2049.9";
-        System.out.println(endpoint);
 
         HttpHeaders headers = TestUtils.getTokenHeaders();
-        RequestBuilder request = TestUtils.createRequestBuilder(HttpMethod.GET,endpoint, headers, "");
+        RequestBuilder request = TestUtils.createRequestBuilder(HttpMethod.GET, endpoint, headers, "");
 
         MvcResult result = this.mockMvc.perform(request).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
@@ -59,10 +58,9 @@ public class EnrollmentsStatisticsTest extends EndpointTest {
         Mockito.doReturn(res).when(this.facade).getSubjectEnrollmentsStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
         String endpoint = ENROLLMENTS_STATISTICS_ENDPOINT + "/elective?courseCode=" +
                 "14102100&curriculumCode=2017&from=1950.0&to=2049.9";
-        System.out.println(endpoint);
 
         HttpHeaders headers = TestUtils.getTokenHeaders();
-        RequestBuilder request = TestUtils.createRequestBuilder(HttpMethod.GET,endpoint, headers, "");
+        RequestBuilder request = TestUtils.createRequestBuilder(HttpMethod.GET, endpoint, headers, "");
 
         MvcResult result = this.mockMvc.perform(request).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
@@ -77,10 +75,9 @@ public class EnrollmentsStatisticsTest extends EndpointTest {
         Mockito.doReturn(res).when(this.facade).getSubjectEnrollmentsStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
         String endpoint = ENROLLMENTS_STATISTICS_ENDPOINT + "/mandatory?courseCode=" +
                 "14102100&curriculumCode=2017&from=1950.0&to=2049.9";
-        System.out.println(endpoint);
 
         HttpHeaders headers = TestUtils.getTokenHeaders();
-        RequestBuilder request = TestUtils.createRequestBuilder(HttpMethod.GET,endpoint, headers, "");
+        RequestBuilder request = TestUtils.createRequestBuilder(HttpMethod.GET, endpoint, headers, "");
 
         MvcResult result = this.mockMvc.perform(request).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
@@ -95,10 +92,9 @@ public class EnrollmentsStatisticsTest extends EndpointTest {
         Mockito.doReturn(res).when(this.facade).getSubjectEnrollmentsStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
         String endpoint = ENROLLMENTS_STATISTICS_ENDPOINT + "/optional?courseCode=" +
                 "14102100&curriculumCode=2017&from=1950.0&to=2049.9";
-        System.out.println(endpoint);
 
         HttpHeaders headers = TestUtils.getTokenHeaders();
-        RequestBuilder request = TestUtils.createRequestBuilder(HttpMethod.GET,endpoint, headers, "");
+        RequestBuilder request = TestUtils.createRequestBuilder(HttpMethod.GET, endpoint, headers, "");
 
         MvcResult result = this.mockMvc.perform(request).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
@@ -107,14 +103,14 @@ public class EnrollmentsStatisticsTest extends EndpointTest {
         Assertions.assertEquals(expectedStatus, result.getResponse().getStatus());
     }
 
-    private EnrollmentsStatisticsResponse mockEnrollmentsStatisticsResponse(){
+    private EnrollmentsStatisticsResponse mockEnrollmentsStatisticsResponse() {
         List<EnrollmentsMetricsPerTerm> listCollection = new ArrayList<>();
         List<EnrollmentsMetricsPerTermSummary> listSummary = new ArrayList<>();
-        EnrollmentsMetricsPerTerm metricsResponse = new EnrollmentsMetricsPerTerm("2017",0,0,0);
+        EnrollmentsMetricsPerTerm metricsResponse = new EnrollmentsMetricsPerTerm("2017", 0, 0, 0);
         listCollection.add(metricsResponse);
-        EnrollmentsMetricsPerTermSummary metricsSummaryResponse = new EnrollmentsMetricsPerTermSummary("1950.0","2049.9","1411192","SISTEMAS OPERACIONAIS",listCollection);
+        EnrollmentsMetricsPerTermSummary metricsSummaryResponse = new EnrollmentsMetricsPerTermSummary("1950.0", "2049.9", "1411192", "SISTEMAS OPERACIONAIS", listCollection);
         listSummary.add(metricsSummaryResponse);
-        EnrollmentsStatisticsResponse response = new EnrollmentsStatisticsResponse(listSummary,"14102100","2017");
+        EnrollmentsStatisticsResponse response = new EnrollmentsStatisticsResponse(listSummary, "14102100", "2017");
 
         return response;
     }
