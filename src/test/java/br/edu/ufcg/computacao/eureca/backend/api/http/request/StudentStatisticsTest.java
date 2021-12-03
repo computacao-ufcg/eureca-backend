@@ -29,7 +29,7 @@ public class StudentStatisticsTest extends EndpointTest {
         // set up
         ActivesStatisticsResponse response = getActivesSummaryResponse();
         Mockito.doReturn(response).when(this.facade).getActivesStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/actives", null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/actives?courseCode=14102100&curriculumCode=2017&from=1950.0&to=2049.9", null, "");
 
         // exercise
         MvcResult res = this.mockMvc.perform(req).andReturn();

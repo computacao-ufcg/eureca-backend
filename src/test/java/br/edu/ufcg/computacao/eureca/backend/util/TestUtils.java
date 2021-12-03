@@ -69,10 +69,8 @@ public class TestUtils {
     }
 
     public static String getMockedActiveSummaryResponse() {
-        return "{" +
-                "\"sliderLabel\":[\"slider\",\"label\"]" +
-                ",\"terms\":[{\"admissionTerm\":\"\",\"riskClassCount\":{\"inaccurate\":0,\"safe\":0,\"low\":0,\"average\":0,\"high\":0,\"unfeasible\":0,\"notApplicable\":0}}]" +
-                "}";
+        return "{\"from\":\"x\"," +
+                "\"to\":\"y\",\"courseCode\":\"\",\"curriculumCode\":\"\",\"activesPerTermSummaries\":[{\"admissionTerm\":\"\",\"riskClassCount\":{\"inaccurate\":0,\"safe\":0,\"low\":0,\"average\":0,\"high\":0,\"unfeasible\":0,\"notApplicable\":0},\"term\":\"\"}]}";
     }
 
     public static String getMockedAlumniSummaryResponse() {
