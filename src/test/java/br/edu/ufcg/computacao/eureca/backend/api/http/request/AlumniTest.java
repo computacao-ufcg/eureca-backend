@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.alumni.AlumniDigest;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.alumni.AlumniResponse;
 import br.edu.ufcg.computacao.eureca.backend.util.TestUtils;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -14,7 +14,6 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 @WebMvcTest(value = Alumni.class, secure = false)
 public class AlumniTest extends EndpointTest {
@@ -23,17 +22,17 @@ public class AlumniTest extends EndpointTest {
 
     @Test
     public void getAlumniTest() throws Exception {
-        Collection<AlumniDigest> response = new ArrayList<>();
+        AlumniResponse response = new AlumniResponse(new ArrayList<>());
         Mockito.doReturn(response).when(this.facade).getAlumniDigest(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
 
         HttpHeaders headers = TestUtils.getTokenHeaders();
-        RequestBuilder request = TestUtils.createRequestBuilder(HttpMethod.GET, ALUMNI_ENDPOINT, headers, "");
+        RequestBuilder request = TestUtils.createRequestBuilder(HttpMethod.GET, ALUMNI_ENDPOINT + "?courseCode=14102100&curriculumCode=2017", headers, "");
 
         MvcResult result = this.mockMvc.perform(request).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
         int expectedStatus = HttpStatus.OK.value();
 
         Assertions.assertEquals(expectedStatus, result.getResponse().getStatus());
-        Assertions.assertEquals("[]", result.getResponse().getContentAsString());
+        Assertions.assertEquals("{\"alumniDigest\":[],\"glossary\":null}", result.getResponse().getContentAsString());
     }
 }
