@@ -4,6 +4,7 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectMe
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectsStatisticsSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectsStatisticsSummaryResponse;
 import br.edu.ufcg.computacao.eureca.backend.core.models.MetricStatistics;
+import br.edu.ufcg.computacao.eureca.backend.util.TestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -23,7 +24,7 @@ public class SubjectStatisticsTest extends EndpointTest {
         Mockito.doReturn(getSubjectStatisticsMock()).when(this.facade).getSubjectsStatisticsSummary(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         int expectedStatusCode = HttpStatus.OK.value();
 
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, SUBJECT_STATISTICS_ENDPOINT + "/summary", null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, SUBJECT_STATISTICS_ENDPOINT + "/summary" + TestUtils.DEFAULT_COURSE_CURRICULUM_QUERY, null, "");
         MvcResult res = this.mockMvc.perform(req).andReturn();
 
         Assert.assertEquals(expectedStatusCode, res.getResponse().getStatus());
