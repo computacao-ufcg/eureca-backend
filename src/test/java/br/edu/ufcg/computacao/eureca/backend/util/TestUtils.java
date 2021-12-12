@@ -14,16 +14,22 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.student
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.NationalIdRegistrationKey;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Curriculum;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
 public class TestUtils {
+
+    private static final String DEFAULT_COURSE_CODE = "14102100";
+    private static final String DEFAULT_CURRICULUM_CODE = "2017";
+    public static final String DEFAULT_COURSE_CURRICULUM_QUERY = String.format("?courseCode=%s&curriculumCode=%s", DEFAULT_COURSE_CODE, DEFAULT_CURRICULUM_CODE);
 
     public static RequestBuilder createRequestBuilder(HttpMethod method, String url, HttpHeaders headers, String content) {
         switch (method) {
@@ -57,37 +63,41 @@ public class TestUtils {
         return new AlumniStatisticsResponse(Arrays.asList(alumniPerTerm), "", "", "x", "y");
     }
 
-    public static Collection<StudentCSV> getStudentsCsvResponse() {
+    public static StudentsResponse getStudentsCsvResponse() {
         StudentData mockedStudentData = new StudentData("x", "Ativo", "VESTIBULAR 2007.2", "x", "x", "x", "x",
                 "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", 1980,196,840,
                 56,450,30,5.68,
                 7,1.69,14,1,0,
                 0,0,0);
         StudentCSV mockedStudentDataResponse = new StudentCSV(mockedStudentData.
-                createStudent(new NationalIdRegistrationKey("fake-national-id", "fake-registration"), null));
-        return Arrays.asList(mockedStudentDataResponse);
+                createStudent(new NationalIdRegistrationKey("fake-national-id", "fake-registration"), getCurriculum()));
+        return new StudentsResponse(Arrays.asList(mockedStudentDataResponse));
     }
 
     public static String getMockedActiveSummaryResponse() {
-        return "{\"from\":\"x\"," +
-                "\"to\":\"y\",\"courseCode\":\"\",\"curriculumCode\":\"\",\"activesPerTermSummaries\":[{\"admissionTerm\":\"\",\"riskClassCount\":{\"inaccurate\":0,\"safe\":0,\"low\":0,\"average\":0,\"high\":0,\"unfeasible\":0,\"notApplicable\":0},\"term\":\"\"}]}";
+        return "{" +
+                "\"from\":\"x\",\"to\":\"y\",\"courseCode\":\"\",\"curriculumCode\":\"\"," +
+                "\"activesPerTermSummaries\":[{\"admissionTerm\":\"\",\"riskClassCount\":{\"inaccurate\":0,\"safe\":0,\"low\":0,\"average\":0,\"high\":0,\"unfeasible\":0,\"notApplicable\":0},\"term\":\"\"}]" +
+                "}";
+
     }
 
-    public static String getMockedAlumniSummaryResponse() {
-        return "{" +
-                "\"sliderLabel\":[\"slider\",\"label\"]" +
-                ",\"terms\":[{\"graduationTerm\":\"x\",\"alumniCount\":10,\"averageGpa\":5.0,\"averageTerms\":4.0,\"averageCost\":1.0}]" +
-                "}";
+    public static String getMockedStudentStatisticsSummaryResponse() {
+        return "{\"courseCode\":\"\",\"curriculumCode\":\"\",\"activesSummary\":null,\"alumniSummary\":null,\"dropoutsSummary\":null,\"glossary\":null}";
+    }
+
+    public static String getMockedAlumniStatisticsResponse() {
+        return "{\"from\":\"x\",\"to\":\"y\",\"courseCode\":\"\",\"curriculumCode\":\"\",\"alumniPerTermSummaries\":[{\"graduationTerm\":\"x\",\"alumniCount\":10,\"averageGpa\":5.0,\"averageTerms\":4.0,\"averageCost\":1.0,\"term\":\"x\"}]}";
     }
 
     public static String getMockedStudentCsvResponse() {
-        return "[{\"registration\":\"fake-registration\"," +
-                "\"name\":\"x\",\"gender\":\"x\",\"maritalStatus\":\"x\",\"curriculum\":\"x\",\"affirmativePolicy\":\"x\"," +
-                "\"admissionType\":\"VESTIBULAR\",\"admissionTerm\":\"2007.2\",\"statusStr\":\"Ativo\",\"statusTerm\":\"Current\"," +
-                "\"entryGrade\":0.0,\"gpa\":5.68,\"iea\":1.69,\"mc\":7.0,\"mandatoryCredits\":120,\"complementaryCredits\":26,\"electiveCredits\":58," +
-                "\"completedTerms\":14,\"attemptedCredits\":0.0,\"institutionalEnrollments\":0,\"mobilityTerms\":0,\"suspendedTerms\":1," +
-                "\"feasibility\":2.5,\"successRate\":-1.0,\"averageLoad\":0.0,\"cost\":-1.0,\"pace\":13.285714285714286,\"courseDurationPrediction\":15.0,\"risk\":1.4634146341463414," +
-                "\"riskClass\":\"UNFEASIBLE\",\"costClass\":\"NOT_APPLICABLE\"}]";
+        return "{\"students\"" +
+                ":[{\"registration\":\"fake-registration\",\"courseCode\":\"x\",\"curriculumCode\":\"x\",\"name\":\"x\",\"gender\":\"x\",\"maritalStatus\":\"x\"," +
+                "\"affirmativePolicy\":\"x\",\"admissionType\":\"VESTIBULAR\",\"admissionTerm\":\"2007.2\",\"statusStr\":\"Ativo\",\"statusTerm\":\"Current\"," +
+                "\"entryGrade\":0.0,\"gpa\":5.68,\"iea\":1.69,\"mc\":7.0,\"mandatoryCredits\":196,\"complementaryCredits\":30,\"electiveCredits\":56," +
+                "\"completedTerms\":14,\"attemptedCredits\":0.0,\"institutionalEnrollments\":0,\"mobilityTerms\":0,\"suspendedTerms\":1,\"feasibility\":0.0," +
+                "\"successRate\":-1.0,\"averageLoad\":0.0,\"cost\":-1.0,\"pace\":20.142857142857142,\"courseDurationPrediction\":10.0,\"risk\":0.975609756097561," +
+                "\"riskClass\":\"SAFE\",\"costClass\":\"NOT_APPLICABLE\"}]}";
     }
 
     public static DropoutsStatisticsResponse getDropoutsSummaryResponse() {
@@ -105,5 +115,11 @@ public class TestUtils {
         StudentMetricsSummary metricsSummary = new StudentMetricsSummary(0, metrics, 0, 0);
         StudentsRetentionPerTermSummary delayedPerTermSummary = new StudentsRetentionPerTermSummary("", metricsSummary);
         return new StudentsRetentionStatisticsResponse(Arrays.asList(delayedPerTermSummary), "", "", "x", "y");
+    }
+
+    public static Curriculum getCurriculum() {
+        return new Curriculum("14102100", "2017", new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), 132,
+                40, 16, 8, 22, 9, 14, 16, 24, 4,
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
     }
 }
