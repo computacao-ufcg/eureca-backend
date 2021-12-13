@@ -93,6 +93,7 @@ public class TestUtils {
         return new SubjectsResponse(Arrays.asList(mockSubjectDataResponse));
     }
 
+
     public static String getMockedActiveSummaryResponse() {
         return "{" +
                 "\"from\":\"x\",\"to\":\"y\",\"courseCode\":\"\",\"curriculumCode\":\"\"," +
@@ -136,6 +137,17 @@ public class TestUtils {
                 "\"metrics\""+
                 ":{\"failedDueToAbsences\":0,\"failedDueToGrade\":0,\"cancelled\":0,\"succeeded\":0,\"ongoing\":0,\"exempted\":0,\"suspended\":0," +
                 "\"numberOfClasses\":0,\"totalEnrolled\":0}}]}";
+    }
+
+    public static String getMockedStudentsRetentionStatisticsResponse(){
+     return "{\"from\":\"x\",\"to\":\"y\",\"courseCode\":\"14112100\",\"curriculumCode\":\"2017\",\"terms\":[{\"admissionTerm\":\"0\",\"metricsSummary\"" +
+             ":{\"termsCount\":0.0,\"metrics\":{\"attemptedCredits\":0.0,\"feasibility\":0.0,\"successRate\":0.0,\"averageLoad\":0.0,\"cost\":0.0,\"pace\":0.0," +
+             "\"courseDurationPrediction\":0.0,\"risk\":0.0},\"riskClass\":\"SAFE\",\"costClass\":\"INACCURATE\"},\"term\":\"0\"}]}";
+    }
+
+    public static String getMockedSubjectsRetentionStatisticsResponse(){
+        return "{\"courseCode\":\"14112100\",\"curriculumCode\":\"2017\",\"subjectRetentionSummary\":[{\"from\":\"x\",\"to\":\"y\",\"subjectCode\":\"0\",\"" +
+                "subjectName\":\"x\",\"idealTerm\":1,\"retention\":[{\"admissionTerm\":\"0\",\"adequate\":0,\"possible\":0,\"term\":\"0\"}]}]}";
     }
 
 
