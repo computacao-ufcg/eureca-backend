@@ -9,12 +9,16 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.alumni.AlumniStat
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutPerTermSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutReasonSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutsStatisticsResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.*;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.student.StudentsRetentionPerTermSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.student.StudentsRetentionStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.*;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.EnrollmentData;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.NationalIdRegistrationKey;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.RegistrationSubjectCodeTermKey;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Curriculum;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Enrollment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -24,6 +28,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 public class TestUtils {
 
@@ -74,6 +79,12 @@ public class TestUtils {
         return new StudentsResponse(Arrays.asList(mockedStudentDataResponse));
     }
 
+    public static EnrollmentsResponse getEnrollmentsCsvResponse(){
+        EnrollmentData mockedEnrollmentData = new EnrollmentData("x",0,0,"x");
+        EnrollmentsCSV mockedEnrollmentDataResponse = new EnrollmentsCSV("x","x","x","x","x","x",0,0,0,0,0,0,0,0);
+        return new EnrollmentsResponse(Arrays.asList(mockedEnrollmentDataResponse));
+    }
+
     public static String getMockedActiveSummaryResponse() {
         return "{" +
                 "\"from\":\"x\",\"to\":\"y\",\"courseCode\":\"\",\"curriculumCode\":\"\"," +
@@ -98,6 +109,16 @@ public class TestUtils {
                 "\"completedTerms\":14,\"attemptedCredits\":0.0,\"institutionalEnrollments\":0,\"mobilityTerms\":0,\"suspendedTerms\":1,\"feasibility\":0.0," +
                 "\"successRate\":-1.0,\"averageLoad\":0.0,\"cost\":-1.0,\"pace\":20.142857142857142,\"courseDurationPrediction\":10.0,\"risk\":0.975609756097561," +
                 "\"riskClass\":\"SAFE\",\"costClass\":\"NOT_APPLICABLE\"}]}";
+    }
+
+    public static String getMockedSubjectEnrollmentSummaryResponse() {
+        return "{\"courseCode\":\"\",\"curriculumCode\":\"\",\"mandatory\":null,\"optional\":null,\"elective\":null,\"complementary\":null,\"glossary\":null}";
+    }
+
+    public static String getMockedSubjectEnrollmentCsvResponse() {
+        return "{\"enrollments\":[{\"courseCode\":\"x\",\"curriculumCode\":\"x\",\"subjectCode\":\"x\",\"subjectName\":\"x\",\"term\":\"x\",\"classId\":\"x\","+
+                "\"enrollmentsCount\":0,\"succeededCount\":0,\"cancelledCount\":0,\"exemptedCount\":0,\"ongoingCount\":0,\"failedDueToGradeCount\":0,\"failedDueToAbsenceCount\":0,"+
+                "\"suspendedCount\":0}]}";
     }
 
     public static DropoutsStatisticsResponse getDropoutsSummaryResponse() {
