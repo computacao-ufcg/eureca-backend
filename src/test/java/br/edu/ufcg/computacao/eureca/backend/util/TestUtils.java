@@ -1,7 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.util;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.CommonKeys;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.RiskClassCountSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.active.ActivesPerTermSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.active.ActivesStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.alumni.AlumniPerTermSummary;
@@ -9,12 +9,13 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.alumni.AlumniStat
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutPerTermSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutReasonSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutsStatisticsResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.student.StudentsRetentionPerTermSummary;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.student.StudentsRetentionStatisticsResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.*;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentCSV;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentsResponse;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.NationalIdRegistrationKey;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Curriculum;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Subject;
+import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectSchedule;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -99,6 +100,19 @@ public class TestUtils {
                 "\"riskClass\":\"SAFE\",\"costClass\":\"NOT_APPLICABLE\"}]}";
     }
 
+    public static String getMockedPreEnrollmentResponse() {
+        return "{\"studentRegistration\":\"fake-registration\",\"subjects\":{}," +
+                "\"term\":4,\"maxCredits\":20,\"maxMandatoryCredits\":20,\"mandatoryCredits\":0,\"maxOptionalCredits\":0," +
+                "\"optionalCredits\":0,\"maxComplementaryCredits\":0,\"complementaryCredits\":0," +
+                "\"maxElectiveCredits\":0,\"electiveCredits\":0," +
+                "\"mandatoryFull\":false,\"optionalFull\":true,\"complementaryFull\":true,\"electiveFull\":true,\"totalCredits\":0}";
+    }
+
+    public static String getMockedPreEnrollmentsResponse() {
+        return "{\"activesPreEnrollment\":[" + getMockedPreEnrollmentResponse() + "]," +
+                "\"subjectDemandSummary\":{\"mandatoryDemand\":[],\"optionalDemand\":[],\"complementaryDemand\":[],\"electiveDemand\":[]}}";
+    }
+
     public static DropoutsStatisticsResponse getDropoutsSummaryResponse() {
         DropoutReasonSummary reasonSummary = new DropoutReasonSummary(0,0,0,
                 0,0,0,
@@ -108,16 +122,8 @@ public class TestUtils {
         return new DropoutsStatisticsResponse(Arrays.asList(dropouts), "", "","x", "y");
     }
 
-    public static StudentsRetentionStatisticsResponse getDelayedSummaryResponse() {
-        StudentMetrics metrics = new StudentMetrics(0,0,0,
-                0,0,0,0,0);
-        StudentMetricsSummary metricsSummary = new StudentMetricsSummary(0, metrics, 0, 0);
-        StudentsRetentionPerTermSummary delayedPerTermSummary = new StudentsRetentionPerTermSummary("", metricsSummary);
-        return new StudentsRetentionStatisticsResponse(Arrays.asList(delayedPerTermSummary), "", "", "x", "y");
-    }
-
     public static Curriculum getCurriculum() {
-        return new Curriculum("14102100", "2017", new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), 132,
+        return new Curriculum("14102100", "2017", new ArrayList<>(Arrays.asList(16,16,24,24,24,12,8,4,4)), new ArrayList<>(Arrays.asList(0,0,0,0,0,8,8,8,16)), new ArrayList<>(Arrays.asList(4,4,0,0,0,0,4,4,0)), new ArrayList<>(Arrays.asList(0,0,0,0,0,0,0,4,4)), new ArrayList<>(Arrays.asList(10,30,52,76,100,122,142,162,184)), 132,
                 40, 16, 8, 22, 9, 14, 16, 24, 4,
                 new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
     }
