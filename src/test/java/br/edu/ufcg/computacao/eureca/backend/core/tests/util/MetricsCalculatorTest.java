@@ -10,6 +10,7 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentM
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
 import br.edu.ufcg.computacao.eureca.backend.core.util.StudentMetricsCalculator;
+import br.edu.ufcg.computacao.eureca.backend.util.TestUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,13 +51,13 @@ public class MetricsCalculatorTest {
     @Test
     public void computeMetricsWithValidStudentTest() {
         // set up
-        StudentMetrics expected = new StudentMetrics(0,0,-1,0,-1,18.5,11,1);
+        StudentMetrics expected = new StudentMetrics(0,0,-1,0,-1,20.14,10,1);
 
         // exercise
         int attemptedCredits = this.studentData.getAttemptedCredits();
         int termsAccounted = this.studentData.getCompletedTerms() + this.studentData.getInstitutionalEnrollments() + this.studentData.getInstitutionalEnrollments();
         int completedCredits = this.studentData.getCompletedCredits();
-        StudentMetrics result = StudentMetricsCalculator.computeMetrics(attemptedCredits, termsAccounted, completedCredits, null);
+        StudentMetrics result = StudentMetricsCalculator.computeMetrics(attemptedCredits, termsAccounted, completedCredits, TestUtils.getCurriculum());
 
         // verify
         Assert.assertEquals(expected.getAttemptedCredits(), result.getAttemptedCredits(), 0.1);
@@ -78,7 +79,7 @@ public class MetricsCalculatorTest {
         int completedCredits = this.studentData.getCompletedCredits();
 
         // exercise
-        double result = Whitebox.invokeMethod(this.metricsCalculator, "computeFeasibility", completedTerms, completedCredits);
+        double result = Whitebox.invokeMethod(this.metricsCalculator, "computeFeasibility", completedTerms, completedCredits, TestUtils.getCurriculum());
 
         // verify
         Assert.assertEquals(expected, result, 0);
@@ -124,7 +125,7 @@ public class MetricsCalculatorTest {
         int attemptedCredits = this.studentData.getAttemptedCredits();
 
         // exercise
-        double result = Whitebox.invokeMethod(this.metricsCalculator, "computeCost", completedTerms, completedCredits, attemptedCredits);
+        double result = Whitebox.invokeMethod(this.metricsCalculator, "computeCost", completedTerms, completedCredits, attemptedCredits, TestUtils.getCurriculum());
 
         // verify
         Assert.assertEquals(expected, result, 0);
@@ -134,7 +135,7 @@ public class MetricsCalculatorTest {
     @Test
     public void computePaceTest() throws Exception {
         // set up
-        double expected = 18.5;
+        double expected = 20.14;
         int completedTerms = this.studentData.getCompletedTerms();
         int completedCredits = this.studentData.getCompletedCredits();
 
@@ -149,12 +150,12 @@ public class MetricsCalculatorTest {
     @Test
     public void computeCourseDurationPredictionTest() throws Exception {
         // set up
-        int expected = 11;
+        int expected = 10;
         int completedTerms = this.studentData.getCompletedTerms();
         int completedCredits = this.studentData.getCompletedCredits();
 
         // exercise
-        int result = Whitebox.invokeMethod(this.metricsCalculator, "computeCourseDurationPrediction", completedTerms, completedCredits);
+        int result = Whitebox.invokeMethod(this.metricsCalculator, "computeCourseDurationPrediction", completedTerms, completedCredits, TestUtils.getCurriculum());
 
         // verify
         Assert.assertEquals(expected, result);
@@ -169,7 +170,7 @@ public class MetricsCalculatorTest {
         int completedCredits = this.studentData.getCompletedCredits();
 
         // exercise
-        double result = Whitebox.invokeMethod(this.metricsCalculator, "computeRisk", completedTerms, completedCredits);
+        double result = Whitebox.invokeMethod(this.metricsCalculator, "computeRisk", completedTerms, completedCredits, TestUtils.getCurriculum());
 
         // verify
         Assert.assertEquals(expected, result, 0.1);
@@ -206,7 +207,7 @@ public class MetricsCalculatorTest {
         // set up
         List<Student> students = new ArrayList<>();
         NationalIdRegistrationKey cpfRegistration = new NationalIdRegistrationKey("","");
-        Student student = this.studentData.createStudent(cpfRegistration, null);
+        Student student = this.studentData.createStudent(cpfRegistration, TestUtils.getCurriculum());
         students.add(student);
 
         // exercise
