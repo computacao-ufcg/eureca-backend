@@ -27,7 +27,7 @@ public class CommunicationTest extends EndpointTest{
                 Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString()
                 , Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString()
         );
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, COMMUNICATION_ENDPOINT + "/studentsEmailSearch?admissionTerm=2019.1&affirmativePolicy=L1&courseCode=14102100&cra=0&craOperation=%3E%3D&curriculumCode=2017&enrolledCredits=0&enrolledCreditsOperation=%3E%3D&gender=Feminino&status=Todos&studentName=a" , null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, COMMUNICATION_ENDPOINT + "/studentsEmailSearch?admissionTerm=2019.1&affirmativePolicy=L1&courseCode=14102100&cra=0&craOperation=%3E%3D&curriculumCode=2017&enrolledCredits=0&enrolledCreditsOperation=%3E%3D&gender=Feminino&status=Todos&studentName=a");
 
         // exercise
         MvcResult res = this.mockMvc.perform(req).andReturn();
@@ -42,7 +42,7 @@ public class CommunicationTest extends EndpointTest{
         Map<String, EmailSearchResponse> response = new HashMap<>();
         Mockito.doReturn(response).when(this.facade).getSubjectEmailsSearch(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),
                 Mockito.anyString(), Mockito.anyString(),Mockito.anyString(),Mockito.anyString());
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, COMMUNICATION_ENDPOINT + "/subjectEmailSearch?academicUnit=1141&courseCode=14102100&curriculumCode=2017&subjectName=Sistemas&subjectType=MANDATORY&term=2019.1" , null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, COMMUNICATION_ENDPOINT + "/subjectEmailSearch?academicUnit=1141&courseCode=14102100&curriculumCode=2017&subjectName=Sistemas&subjectType=MANDATORY&term=2019.1");
 
         // exercise
         MvcResult res = this.mockMvc.perform(req).andReturn();
@@ -57,7 +57,7 @@ public class CommunicationTest extends EndpointTest{
         Map<String, EmailSearchResponse> response = new HashMap<>();
         Mockito.doReturn(response).when(this.facade).getTeacherEmailsSearch(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),
                 Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),Mockito.anyString());
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, COMMUNICATION_ENDPOINT + "/teacherEmailSearch?academicUnit=1411&courseCode=14102100&curriculumCode=2017&teacherId=%5E%24&teacherName=%5E%24&term=2019.1" , null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, COMMUNICATION_ENDPOINT + "/teacherEmailSearch?academicUnit=1411&courseCode=14102100&curriculumCode=2017&teacherId=%5E%24&teacherName=%5E%24&term=2019.1");
 
         // exercise
         MvcResult res = this.mockMvc.perform(req).andReturn();

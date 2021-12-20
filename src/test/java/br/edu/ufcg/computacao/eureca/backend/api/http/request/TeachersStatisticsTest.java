@@ -29,7 +29,7 @@ public class TeachersStatisticsTest extends EndpointTest {
         TeachersStatisticsResponse response = getTeachersStaticticsResponse();
         Mockito.doReturn(response).when(this.facade).getTeachersStatistics(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),
                 Mockito.anyString(),Mockito.anyString(),Mockito.anyString());
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, TEACHERS_STATISTICS_ENDPOINT + "?academicUnitId=1411&courseCode=14102100&curriculumCode=2017&from=1950.0&to=2049.9" , null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, TEACHERS_STATISTICS_ENDPOINT + "?academicUnitId=1411&courseCode=14102100&curriculumCode=2017&from=1950.0&to=2049.9");
 
         // exercise
         MvcResult res = this.mockMvc.perform(req).andReturn();
@@ -44,7 +44,7 @@ public class TeachersStatisticsTest extends EndpointTest {
         TeachersResponse response = getTeachersResponse();
         Mockito.doReturn(response).when(this.facade).getTeachersCSV(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),
                 Mockito.anyString(),Mockito.anyString(),Mockito.anyString());
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, TEACHERS_STATISTICS_ENDPOINT + "/csv?academicUnitId=1411&courseCode=14102100&curriculumCode=2017&from=1950.0&to=2049.9" , null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, TEACHERS_STATISTICS_ENDPOINT + "/csv?academicUnitId=1411&courseCode=14102100&curriculumCode=2017&from=1950.0&to=2049.9");
 
         // exercise
         MvcResult res = this.mockMvc.perform(req).andReturn();
@@ -59,7 +59,7 @@ public class TeachersStatisticsTest extends EndpointTest {
         TeachersStatisticsSummaryResponse response = getTeachersStatisticsSummaryResponse();
         Mockito.doReturn(response).when(this.facade).getTeachersStatisticsSummary(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),
                 Mockito.anyString(),Mockito.anyString(),Mockito.anyString());
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, TEACHERS_STATISTICS_ENDPOINT + "/summary?courseCode=14102100&curriculumCode=2017&from=1950.0&language=PORTUGUESE&to=2049.9" , null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, TEACHERS_STATISTICS_ENDPOINT + "/summary?courseCode=14102100&curriculumCode=2017&from=1950.0&language=PORTUGUESE&to=2049.9");
 
         // exercise
         MvcResult res = this.mockMvc.perform(req).andReturn();
