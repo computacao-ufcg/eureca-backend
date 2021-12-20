@@ -58,7 +58,7 @@ public class PreEnrollmentUtil {
         return EurecaUtil.intersection(prioritizedSubjects, availableSubjects);
     }
 
-    public static void sanitizedSubject(String courseCode, String curriculumCode, SubjectSchedule subjectAndSchedule, StudentCurriculumProgress progress) {
+    public static void sanitizeSubject(String courseCode, String curriculumCode, SubjectSchedule subjectAndSchedule, StudentCurriculumProgress progress) {
         filterAvailableClasses(subjectAndSchedule);
         filterCompletedCoRequirements(curriculumCode, courseCode, subjectAndSchedule.getSubject(), progress);
     }

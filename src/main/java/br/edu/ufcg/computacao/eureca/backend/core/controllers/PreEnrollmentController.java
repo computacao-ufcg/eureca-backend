@@ -341,7 +341,7 @@ public class PreEnrollmentController {
             if (!concludedSubjectsCode.contains(subjectCode) && concludedSubjectsCode.containsAll(subject.getPreRequirementsList())) {
                 try {
                     SubjectSchedule subjectAndSchedule = this.getSubjectSchedule(courseCode, curriculumCode, subjectCode, term);
-                    PreEnrollmentUtil.sanitizedSubject(courseCode, curriculumCode, subjectAndSchedule, studentCurriculumProgress);
+                    PreEnrollmentUtil.sanitizeSubject(courseCode, curriculumCode, subjectAndSchedule, studentCurriculumProgress);
                     availableSubjects.add(subjectAndSchedule.getSubject());
                 } catch (InvalidParameterException e) {
                     LOGGER.info(String.format(Messages.INVALID_SCHEDULE_S_S_S_S, courseCode, curriculumCode, subjectCode, term));
