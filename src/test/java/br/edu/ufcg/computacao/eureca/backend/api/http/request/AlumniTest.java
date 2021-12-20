@@ -25,9 +25,7 @@ public class AlumniTest extends EndpointTest {
         AlumniResponse response = new AlumniResponse(new ArrayList<>());
         Mockito.doReturn(response).when(this.facade).getAlumniDigest(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
 
-        HttpHeaders headers = TestUtils.getTokenHeaders();
-        RequestBuilder request = TestUtils.createRequestBuilder(HttpMethod.GET, ALUMNI_ENDPOINT + "?courseCode=14102100&curriculumCode=2017", headers, "");
-
+        RequestBuilder request = this.getRequestBuilder(HttpMethod.GET, ALUMNI_ENDPOINT + TestUtils.DEFAULT_COURSE_CURRICULUM_QUERY);
         MvcResult result = this.mockMvc.perform(request).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
         int expectedStatus = HttpStatus.OK.value();
