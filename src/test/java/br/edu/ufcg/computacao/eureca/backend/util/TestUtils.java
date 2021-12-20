@@ -12,6 +12,8 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutsS
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.*;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.student.StudentsRetentionPerTermSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.student.StudentsRetentionStatisticsResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.SubjectRetentionCSV;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.SubjectsRetentionResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.*;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectCSV;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectMetrics;
@@ -97,6 +99,18 @@ public class TestUtils {
         return new SubjectsResponse(Arrays.asList(mockSubjectDataResponse));
     }
 
+    public static SubjectsRetentionResponse getSubjectsRetentionCsvResponse(){
+        SubjectMetrics metrics = new SubjectMetrics(0,0,0,0,0,0,0,0,0);
+        SubjectRetentionCSV mockSubjectDataResponse = new SubjectRetentionCSV("x","x",0,"x","x","x",0,0,0,0,0,0,0,0,0,0);
+        return new SubjectsRetentionResponse(Arrays.asList(mockSubjectDataResponse));
+    }
+
+    public static String getMockedSubjectRetentionCsvResponse(){
+        return "{\"subjectRetention\"" +
+                ":[{\"courseCode\":\"x\",\"curriculumCode\":\"x\",\"idealTerm\":0,\"subjectCode\":\"x\",\"subjectName\":\"x\",\"registration\":\"x\",\"attemptedCredits\":0," +
+                "\"mandatoryCredits\":0,\"optionalCredits\":0,\"electiveCredits\":0,\"complementaryCredits\":0,\"completedTerms\":0,\"suspendedTerms\":0,\"institutionalTerms\":0," +
+                "\"mobilityTerms\":0,\"gpa\":0.0}]}";
+    }
 
     public static String getMockedActiveSummaryResponse() {
         return "{" +
@@ -108,6 +122,10 @@ public class TestUtils {
 
     public static String getMockedStudentStatisticsSummaryResponse() {
         return "{\"courseCode\":\"\",\"curriculumCode\":\"\",\"activesSummary\":null,\"alumniSummary\":null,\"dropoutsSummary\":null,\"glossary\":null}";
+    }
+
+    public static String getMockedRetentionSummaryResponse(){
+        return "{\"courseCode\":\"\",\"curriculumCode\":\"\",\"studentsRetentionSummary\":null,\"subjectsRetentionSummary\":null,\"glossary\":null}";
     }
 
     public static String getMockedAlumniStatisticsResponse() {
