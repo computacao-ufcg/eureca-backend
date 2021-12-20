@@ -2,6 +2,7 @@ package br.edu.ufcg.computacao.eureca.backend.core;
 
 import br.edu.ufcg.computacao.eureca.as.core.AuthenticationUtil;
 import br.edu.ufcg.computacao.eureca.as.core.models.SystemUser;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.VersionResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.EnrollmentsPerSubjectData;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment.PreEnrollmentsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.active.ActivesStatisticsResponse;
@@ -35,6 +36,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.util.factory.GlossaryFactory;
 import br.edu.ufcg.computacao.eureca.common.exceptions.ConfigurationErrorException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
+import br.edu.ufcg.computacao.eureca.common.util.BuildNumberHolder;
 import br.edu.ufcg.computacao.eureca.common.util.CryptoUtil;
 import br.edu.ufcg.computacao.eureca.common.util.ServiceAsymmetricKeysHolder;
 import org.apache.log4j.Logger;
@@ -282,6 +284,12 @@ public class ApplicationFacade {
         } catch (GeneralSecurityException e) {
             throw new ConfigurationErrorException(e.getMessage());
         }
+    }
+
+    public VersionResponse getVersion() {
+        String buildNumber = BuildNumberHolder.getInstance().getBuildNumber();
+        String versionNumber = SystemConstants.API_VERSION_NUMBER + "-" + buildNumber;
+        return new VersionResponse(versionNumber);
     }
 
     private RSAPublicKey getAsPublicKey() throws EurecaException {
