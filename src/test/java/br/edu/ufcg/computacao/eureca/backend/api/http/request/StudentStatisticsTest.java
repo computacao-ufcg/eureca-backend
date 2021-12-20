@@ -29,7 +29,6 @@ public class StudentStatisticsTest extends EndpointTest {
         Mockito.doReturn(response).when(this.facade).getActivesStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/actives" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
-
         // exercise
         MvcResult res = this.mockMvc.perform(req).andReturn();
 

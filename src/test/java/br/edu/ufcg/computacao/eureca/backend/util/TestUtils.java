@@ -18,26 +18,22 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.*;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectCSV;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectMetrics;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectsResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.*;
+import br.edu.ufcg.computacao.eureca.backend.constants.TeachersGlossaryFields;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.EnrollmentData;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentCSV;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentsResponse;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.NationalIdRegistrationKey;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.RegistrationSubjectCodeTermKey;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Curriculum;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Enrollment;
-import br.edu.ufcg.computacao.eureca.backend.core.models.Subject;
-import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectSchedule;
+import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class TestUtils {
 
@@ -117,7 +113,6 @@ public class TestUtils {
                 "\"from\":\"x\",\"to\":\"y\",\"courseCode\":\"\",\"curriculumCode\":\"\"," +
                 "\"activesPerTermSummaries\":[{\"admissionTerm\":\"\",\"riskClassCount\":{\"inaccurate\":0,\"safe\":0,\"low\":0,\"average\":0,\"high\":0,\"unfeasible\":0,\"notApplicable\":0},\"term\":\"\"}]" +
                 "}";
-
     }
 
     public static String getMockedStudentStatisticsSummaryResponse() {
@@ -198,5 +193,40 @@ public class TestUtils {
         return new Curriculum("14102100", "2017", new ArrayList<>(Arrays.asList(16,16,24,24,24,12,8,4,4)), new ArrayList<>(Arrays.asList(0,0,0,0,0,8,8,8,16)), new ArrayList<>(Arrays.asList(4,4,0,0,0,0,4,4,0)), new ArrayList<>(Arrays.asList(0,0,0,0,0,0,0,4,4)), new ArrayList<>(Arrays.asList(10,30,52,76,100,122,142,162,184)), 132,
                 40, 16, 8, 22, 9, 14, 16, 24, 4,
                 new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+    }
+
+    public static TeachersStatisticsResponse getTeachersStaticticsResponse() {
+        List<TeacherStatisticsPerTerm> listTerms = new ArrayList();
+        List<TeacherStatistics> list = new ArrayList();
+        TeacherStatisticsSummary teacherStatisticsSummary = new TeacherStatisticsSummary(1,1,1,1,1,
+                1,1,1,1,1,1);
+        TeacherStatisticsPerTerm teacherStatisticsPerTerm = new TeacherStatisticsPerTerm("", teacherStatisticsSummary);
+        TeacherStatistics teacherStatistics = new TeacherStatistics("2018.1","2019.1","","xxx","xxx",listTerms);
+        list.add(teacherStatistics);
+        listTerms.add(teacherStatisticsPerTerm);
+        return new TeachersStatisticsResponse("x","x","x","14102100","2017",
+                "1980.1","2019.1",list);
+    }
+
+    public static TeachersResponse getTeachersResponse() {
+        TeacherStatisticsSummary teacherStatisticsSummary = new TeacherStatisticsSummary(1,1,1,1,1,
+                1,1,1,1,1,1);
+
+        List<TeacherCSV> listCsv = new ArrayList<>();
+        TeacherCSV teacherCSV = new TeacherCSV("111","xxx","14102100","2017","2019.1",teacherStatisticsSummary);
+        listCsv.add(teacherCSV);
+        return new TeachersResponse(listCsv);
+    }
+
+    public static TeachersStatisticsSummaryResponse getTeachersStatisticsSummaryResponse() {
+        TermCount termCount1 = new TermCount(0,"2019.1");
+        TermCount termCount2 = new TermCount(0, "2020.1");
+        Map<String, TeachersStatisticsSummary> map = new HashMap<>();
+        TeachersStatisticsSummary teachersStatisticsSummary = new TeachersStatisticsSummary("2018.1","2020.1",0,termCount1,
+                termCount2,0,0,0,0);
+
+        map.put("x", teachersStatisticsSummary);
+        return new TeachersStatisticsSummaryResponse("", "", map);
+
     }
 }
