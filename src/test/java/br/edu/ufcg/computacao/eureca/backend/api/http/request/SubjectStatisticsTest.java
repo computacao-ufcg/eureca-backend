@@ -1,9 +1,5 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.EnrollmentsMetricsPerTerm;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.EnrollmentsMetricsPerTermSummary;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.EnrollmentsResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.EnrollmentsStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.*;
 import br.edu.ufcg.computacao.eureca.backend.core.models.MetricStatistics;
 import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectType;
@@ -36,9 +32,7 @@ public class SubjectStatisticsTest extends EndpointTest {
         Mockito.doReturn(res).when(this.facade).getSubjectsStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
         String endpoint = SUBJECT_STATISTICS_ENDPOINT + "/complementary" + DEFAULT_COURSE_CURRICULUM_QUERY;
 
-        HttpHeaders headers = TestUtils.getTokenHeaders();
-        RequestBuilder request = TestUtils.createRequestBuilder(HttpMethod.GET, endpoint, headers, "");
-
+        RequestBuilder request = this.getRequestBuilder(HttpMethod.GET, endpoint);
         MvcResult result = this.mockMvc.perform(request).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
         int expectedStatus = HttpStatus.OK.value();
@@ -51,7 +45,7 @@ public class SubjectStatisticsTest extends EndpointTest {
         // set up
         SubjectsResponse response = getSubjectsCsvResponse();
         Mockito.doReturn(response).when(this.facade).getSubjectsCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, SUBJECT_STATISTICS_ENDPOINT+ "/complementary/csv" + DEFAULT_COURSE_CURRICULUM_QUERY, null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, SUBJECT_STATISTICS_ENDPOINT+ "/complementary/csv" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
         // exercise
         MvcResult res = this.mockMvc.perform(req).andReturn();
@@ -83,7 +77,7 @@ public class SubjectStatisticsTest extends EndpointTest {
         // set up
         SubjectsResponse response = getSubjectsCsvResponse();
         Mockito.doReturn(response).when(this.facade).getSubjectsCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, SUBJECT_STATISTICS_ENDPOINT+ "/elective/csv" + DEFAULT_COURSE_CURRICULUM_QUERY, null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, SUBJECT_STATISTICS_ENDPOINT+ "/elective/csv" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
         // exercise
         MvcResult res = this.mockMvc.perform(req).andReturn();
@@ -115,7 +109,7 @@ public class SubjectStatisticsTest extends EndpointTest {
         // set up
         SubjectsResponse response = getSubjectsCsvResponse();
         Mockito.doReturn(response).when(this.facade).getSubjectsCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, SUBJECT_STATISTICS_ENDPOINT+ "/mandatory/csv" + DEFAULT_COURSE_CURRICULUM_QUERY, null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, SUBJECT_STATISTICS_ENDPOINT+ "/mandatory/csv" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
         // exercise
         MvcResult res = this.mockMvc.perform(req).andReturn();
@@ -146,7 +140,7 @@ public class SubjectStatisticsTest extends EndpointTest {
         // set up
         SubjectsResponse response = getSubjectsCsvResponse();
         Mockito.doReturn(response).when(this.facade).getSubjectsCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, SUBJECT_STATISTICS_ENDPOINT+ "/optional/csv" + DEFAULT_COURSE_CURRICULUM_QUERY, null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, SUBJECT_STATISTICS_ENDPOINT+ "/optional/csv" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
         // exercise
         MvcResult res = this.mockMvc.perform(req).andReturn();
@@ -161,7 +155,7 @@ public class SubjectStatisticsTest extends EndpointTest {
         Mockito.doReturn(getSubjectStatisticsSummaryMock()).when(this.facade).getSubjectsStatisticsSummary(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         int expectedStatusCode = HttpStatus.OK.value();
 
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, SUBJECT_STATISTICS_ENDPOINT + "/summary" + TestUtils.DEFAULT_COURSE_CURRICULUM_QUERY, null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, SUBJECT_STATISTICS_ENDPOINT + "/summary" + TestUtils.DEFAULT_COURSE_CURRICULUM_QUERY);
         MvcResult res = this.mockMvc.perform(req).andReturn();
 
         Assert.assertEquals(expectedStatusCode, res.getResponse().getStatus());

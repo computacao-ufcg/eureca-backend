@@ -24,7 +24,6 @@ import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectType;
 import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpMethod;
@@ -34,7 +33,6 @@ import org.springframework.test.web.servlet.RequestBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static br.edu.ufcg.computacao.eureca.backend.util.TestUtils.*;
 
@@ -48,7 +46,7 @@ public class RetentionStatisticsTest extends EndpointTest {
         // set up
         StudentsRetentionStatisticsResponse response = getMockStudentRetentionResponse();
         Mockito.doReturn(response).when(this.facade).getStudentsRetentionStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, RETENTION_STATISTICS_ENDPOINT + "/students" + DEFAULT_COURSE_CURRICULUM_QUERY, null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, RETENTION_STATISTICS_ENDPOINT + "/students" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
 
         // exercise
@@ -65,7 +63,7 @@ public class RetentionStatisticsTest extends EndpointTest {
         // set up
         SubjectsRetentionStatisticsResponse response = getMockedSubjectRetentionResponse();
         Mockito.doReturn(response).when(this.facade).getSubjectsRetentionStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, RETENTION_STATISTICS_ENDPOINT + "/subjects" + DEFAULT_COURSE_CURRICULUM_QUERY, null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, RETENTION_STATISTICS_ENDPOINT + "/subjects" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
 
         // exercise

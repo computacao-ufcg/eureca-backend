@@ -36,8 +36,8 @@ public abstract class EndpointTest {
         BDDMockito.given(ApplicationFacade.getInstance()).willReturn(facade);
     }
 
-    protected RequestBuilder getRequestBuilder(HttpMethod method, String url, HttpHeaders headers, String content) {
-        HttpHeaders header = headers == null ? TestUtils.getTokenHeaders() : headers;
-        return TestUtils.createRequestBuilder(method, url, header, content);
+    protected RequestBuilder getRequestBuilder(HttpMethod method, String url) {
+        HttpHeaders header = TestUtils.getTokenHeaders();
+        return TestUtils.createRequestBuilder(method, url, header, "");
     }
 }
