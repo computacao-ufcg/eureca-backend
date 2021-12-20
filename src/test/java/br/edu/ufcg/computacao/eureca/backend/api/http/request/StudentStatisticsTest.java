@@ -27,7 +27,7 @@ public class StudentStatisticsTest extends EndpointTest {
         // set up
         ActivesStatisticsResponse response = getActivesSummaryResponse();
         Mockito.doReturn(response).when(this.facade).getActivesStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/actives" + DEFAULT_COURSE_CURRICULUM_QUERY, null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/actives" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
 
         // exercise
@@ -44,7 +44,7 @@ public class StudentStatisticsTest extends EndpointTest {
         // set up
         StudentsResponse response = getStudentsCsvResponse();
         Mockito.doReturn(response).when(this.facade).getActivesCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/actives/csv" + DEFAULT_COURSE_CURRICULUM_QUERY, null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/actives/csv" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
         // exercise
         MvcResult res = this.mockMvc.perform(req).andReturn();
@@ -60,7 +60,7 @@ public class StudentStatisticsTest extends EndpointTest {
         // set up
         AlumniStatisticsResponse response = getAlumniSummaryResponse();
         Mockito.doReturn(response).when(this.facade).getAlumniStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/alumni" + DEFAULT_COURSE_CURRICULUM_QUERY, null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/alumni" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
         // exercise
         MvcResult res = this.mockMvc.perform(req).andReturn();
@@ -76,7 +76,7 @@ public class StudentStatisticsTest extends EndpointTest {
         // set up
         StudentsResponse response = getStudentsCsvResponse();
         Mockito.doReturn(response).when(this.facade).getAlumniCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/alumni/csv" + DEFAULT_COURSE_CURRICULUM_QUERY, null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/alumni/csv" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
         // exercise
         MvcResult res = this.mockMvc.perform(req).andReturn();
@@ -91,7 +91,7 @@ public class StudentStatisticsTest extends EndpointTest {
         // set up
         DropoutsStatisticsResponse response = getDropoutsSummaryResponse();
         Mockito.doReturn(response).when(this.facade).getDropoutsStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
-        RequestBuilder requestBuilder = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/dropouts" + DEFAULT_COURSE_CURRICULUM_QUERY, null, "");
+        RequestBuilder requestBuilder = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/dropouts" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
         // exercise
         MvcResult result = this.mockMvc.perform(requestBuilder).andReturn();
@@ -106,7 +106,7 @@ public class StudentStatisticsTest extends EndpointTest {
         // set up
         StudentsResponse response = getStudentsCsvResponse();
         Mockito.doReturn(response).when(this.facade).getDropoutsCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/dropouts/csv" + DEFAULT_COURSE_CURRICULUM_QUERY, null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/dropouts/csv" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
         // exercise
         MvcResult res = this.mockMvc.perform(req).andReturn();
@@ -121,7 +121,7 @@ public class StudentStatisticsTest extends EndpointTest {
         StudentsStatisticsSummaryResponse response = new StudentsStatisticsSummaryResponse("", "", null, null, null);
         Mockito.doReturn(response).when(this.facade).getStudentsStatisticsSummary(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
 
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/summary" + DEFAULT_COURSE_CURRICULUM_QUERY, null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, STUDENT_STATISTICS_ENDPOINT + "/summary" + DEFAULT_COURSE_CURRICULUM_QUERY);
         MvcResult res = this.mockMvc.perform(req).andReturn();
 
         Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
