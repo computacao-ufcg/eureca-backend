@@ -1,8 +1,4 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.active.ActivesStatisticsResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.EnrollmentsMetricsPerTerm;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.EnrollmentsMetricsPerTermSummary;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.EnrollmentsStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.student.StudentsRetentionPerTermSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.student.StudentsRetentionStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.SubjectRetentionPerAdmissionTerm;
@@ -10,16 +6,8 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.SubjectsRetentionStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentMetrics;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentMetricsSummary;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectMetricsStatistics;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectsStatisticsSummary;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectsStatisticsSummaryResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsSummary;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsSummaryResponse;
-import br.edu.ufcg.computacao.eureca.backend.core.models.MetricStatistics;
-import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpMethod;
@@ -29,7 +17,6 @@ import org.springframework.test.web.servlet.RequestBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static br.edu.ufcg.computacao.eureca.backend.util.TestUtils.*;
 
@@ -43,7 +30,7 @@ public class RetentionStatisticsTest extends EndpointTest {
         // set up
         StudentsRetentionStatisticsResponse response = getMockStudentRetentionResponse();
         Mockito.doReturn(response).when(this.facade).getStudentsRetentionStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, RETENTION_STATISTICS_ENDPOINT + "/students" + DEFAULT_COURSE_CURRICULUM_QUERY, null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, RETENTION_STATISTICS_ENDPOINT + "/students" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
 
         // exercise
@@ -59,7 +46,7 @@ public class RetentionStatisticsTest extends EndpointTest {
         // set up
         SubjectsRetentionStatisticsResponse response = getMockedSubjectRetentionResponse();
         Mockito.doReturn(response).when(this.facade).getSubjectsRetentionStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, RETENTION_STATISTICS_ENDPOINT + "/subjects" + DEFAULT_COURSE_CURRICULUM_QUERY, null, "");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, RETENTION_STATISTICS_ENDPOINT + "/subjects" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
 
         // exercise
