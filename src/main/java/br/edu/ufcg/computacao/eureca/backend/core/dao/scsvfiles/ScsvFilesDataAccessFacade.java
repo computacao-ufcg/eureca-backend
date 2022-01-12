@@ -15,6 +15,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.StudentClassification;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
+import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
 
@@ -305,7 +306,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public StudentCurriculumProgress getStudentCurriculumProgress(String studentRegistration) throws InvalidParameterException {
+    public StudentCurriculumProgress getStudentCurriculumProgress(String studentRegistration) throws EurecaException {
         return this.indexesHolder.getStudentCurriculumProgress(studentRegistration);
     }
 
