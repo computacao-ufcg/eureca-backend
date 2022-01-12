@@ -1,5 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
+import br.edu.ufcg.computacao.eureca.backend.api.http.exceptions.pre_enrollment.StudentNotFoundException;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.SubjectRetentionCSV;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.SubjectRetentionPerAdmissionTerm;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeacherStatistics;
@@ -12,6 +13,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.Teach
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.TeachersSetAndEnrollments;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
+import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
 
@@ -79,9 +81,9 @@ public class IndexesHolder {
         return alumni;
     }
 
-    public StudentCurriculumProgress getStudentCurriculumProgress(String registration) throws InvalidParameterException {
+    public StudentCurriculumProgress getStudentCurriculumProgress(String registration) throws EurecaException {
         NationalIdRegistrationKey studentId = this.registrationMap.get(registration);
-        if (studentId == null) throw new InvalidParameterException(String.format(Messages.INVALID_STUDENT_S, registration));
+        if (studentId == null) throw new StudentNotFoundException(registration);
         return this.studentCurriculumProgressMap.get(studentId);
     }
 
