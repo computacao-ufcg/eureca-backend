@@ -33,27 +33,27 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Collection<Student> getAllStudentsPerStatus (StudentClassification status, String courseCode, String curriculumCode) throws InvalidParameterException {
+    public Collection<Student> getAllStudentsPerStatus (StudentClassification status, String courseCode, String curriculumCode) throws EurecaException {
         return getAllStudentsByStatusPerCourse(status, courseCode, curriculumCode);
     }
 
     @Override
-    public Collection<Student> getActives(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+    public Collection<Student> getActives(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
         return getFilteredStudents(StudentClassification.ACTIVE, courseCode, curriculumCode, from, to);
     }
 
     @Override
-    public Collection<Student> getAllActives(String courseCode, String curriculumCode) throws InvalidParameterException {
+    public Collection<Student> getAllActives(String courseCode, String curriculumCode) throws EurecaException {
         return this.indexesHolder.getAllActives(courseCode, curriculumCode);
     }
 
     @Override
-    public Collection<Student> getAlumni(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+    public Collection<Student> getAlumni(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
         return getFilteredStudents(StudentClassification.ALUMNUS, courseCode, curriculumCode, from, to);
     }
 
     @Override
-    public Collection<Student> getDropouts(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+    public Collection<Student> getDropouts(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
         return getFilteredStudents(StudentClassification.DROPOUT, courseCode, curriculumCode, from, to);
     }
 
@@ -78,7 +78,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Collection<AlumniDigest> getAlumniPerStudentSummary(String courseCode, String from, String to) throws InvalidParameterException {
+    public Collection<AlumniDigest> getAlumniPerStudentSummary(String courseCode, String from, String to) throws EurecaException {
         String parsedFrom = "1" + from.substring(2,4) + from.substring(5,6) + "00000";
         String parsedTo = "1" + to.substring(2,4) + to.substring(5,6) + "99999";
         Collection<AlumniDigest> alumniBasicData = new TreeSet<>();
@@ -97,12 +97,12 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Curriculum getCurriculum(String courseCode, String curriculumCode) throws InvalidParameterException {
+    public Curriculum getCurriculum(String courseCode, String curriculumCode) throws EurecaException {
         return this.indexesHolder.getCurriculum(courseCode, curriculumCode);
     }
 
     @Override
-    public Collection<String> getCurriculumCodes(String courseCode) throws InvalidParameterException {
+    public Collection<String> getCurriculumCodes(String courseCode) throws EurecaException {
         return this.indexesHolder.getCurriculumCodes(courseCode);
     }
 
@@ -147,7 +147,12 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
     @Override
     public SubjectsStatisticsSummaryResponse getSubjectStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
-        Curriculum curriculum = getCurriculum(courseCode, curriculumCode);
+        Curriculum curriculum = null;
+        try {
+            curriculum = getCurriculum(courseCode, curriculumCode);
+        } catch (EurecaException exception) {
+            exception.printStackTrace();
+        }
         if (curriculum == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
         SubjectsStatisticsSummary mandatory = buildSubjectSummary(courseCode, curriculumCode, from, to,
                 curriculum.getMandatorySubjectsList());
@@ -200,7 +205,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
     @Override
     public EnrollmentsStatisticsSummaryResponse getEnrollmentsStatisticsSummary(String courseCode, String curriculumCode,
-                                                                                String from, String to) throws InvalidParameterException {
+                                                                                String from, String to) throws EurecaException {
         Curriculum curriculum = getCurriculum(courseCode, curriculumCode);
         if (curriculum == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
         EnrollmentsSummary mandatory = buildEnrollmentSummary(courseCode, curriculumCode, from, to,
@@ -348,7 +353,12 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                 Collection<Student> actives = new TreeSet<>();
                 for (NationalIdRegistrationKey cpfRegistration : entry.getValue()) {
                     StudentData studentData = studentsMap.get(cpfRegistration);
-                    Curriculum curriculum = getCurriculum(studentData.getCourseCode(), studentData.getCurriculumCode());
+                    Curriculum curriculum = null;
+                    try {
+                        curriculum = getCurriculum(studentData.getCourseCode(), studentData.getCurriculumCode());
+                    } catch (EurecaException exception) {
+                        exception.printStackTrace();
+                    }
                     actives.add(studentData.createStudent(cpfRegistration, curriculum));
                 }
                 termsMap.put(term, actives);
@@ -358,7 +368,12 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     private Collection<String> getSubjectsCode(String courseCode, String curriculumCode, SubjectType subjectType) throws InvalidParameterException {
-        Curriculum curriculum = getCurriculum(courseCode, curriculumCode);
+        Curriculum curriculum = null;
+        try {
+            curriculum = getCurriculum(courseCode, curriculumCode);
+        } catch (EurecaException exception) {
+            exception.printStackTrace();
+        }
         if (curriculum == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, curriculumCode, courseCode));
         Collection<String> subjectCodes = new HashSet<>();
         switch (subjectType) {
@@ -563,7 +578,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     private Collection<Student> getFilteredStudents(StudentClassification status, String courseCode,
-                                   String curriculumCode, String from, String to) throws InvalidParameterException {
+                                   String curriculumCode, String from, String to) throws EurecaException {
         Collection<Student> filteredStudents = new TreeSet<>();
         Collection<Student> allStudents = getAllStudentsByStatusPerCourse(status, courseCode, curriculumCode);
         allStudents.forEach(item -> {
@@ -575,13 +590,14 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         return filteredStudents;
     }
 
-    private Collection<Student> getFilteredStudents(StudentClassification status, String courseCode, String curriculumCode) throws InvalidParameterException {
-        return this.getFilteredStudents(status, courseCode, curriculumCode, "1949.2", "2050.1");
-    }
-
     private Collection<String> getSubjectsList(String courseCode, String curriculumCode) throws InvalidParameterException {
         Collection<String> subjectList;
-        Curriculum curriculum = this.getCurriculum(courseCode, curriculumCode);
+        Curriculum curriculum = null;
+        try {
+            curriculum = this.getCurriculum(courseCode, curriculumCode);
+        } catch (EurecaException exception) {
+            exception.printStackTrace();
+        }
         if (curriculum == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
         subjectList = curriculum.getMandatorySubjectsList();
         subjectList.addAll(curriculum.getComplementarySubjectsList());
@@ -590,7 +606,12 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
 
     @Override
     public Collection<Subject> getAllSubjects(String courseCode, String curriculumCode) throws InvalidParameterException {
-        Curriculum curriculum = this.getCurriculum(courseCode, curriculumCode);
+        Curriculum curriculum = null;
+        try {
+            curriculum = this.getCurriculum(courseCode, curriculumCode);
+        } catch (EurecaException exception) {
+            exception.printStackTrace();
+        }
         Collection<String> subjectCodes = curriculum.getComplementarySubjectsList();
         subjectCodes.addAll(curriculum.getOptionalSubjectsList());
         subjectCodes.addAll(curriculum.getMandatorySubjectsList());
@@ -623,7 +644,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         }
     }
 
-    private Collection<Student> getAllStudentsByStatusPerCourse(StudentClassification status, String courseCode, String curriculumCode) throws InvalidParameterException {
+    private Collection<Student> getAllStudentsByStatusPerCourse(StudentClassification status, String courseCode, String curriculumCode) throws EurecaException {
         switch(status) {
             case ALUMNUS:
                 return this.indexesHolder.getAllAlumni(courseCode, curriculumCode);

@@ -1,15 +1,21 @@
 package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.*;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.RetentionStatisticsSummaryResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.student.StudentsRetentionPerTermSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.student.StudentsRetentionStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.student.StudentsRetentionSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.*;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.*;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentCSV;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentMetricsSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentsResponse;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.models.*;
+import br.edu.ufcg.computacao.eureca.backend.core.models.MetricStatistics;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Range;
+import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
+import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.backend.core.util.StudentMetricsCalculator;
+import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
 
@@ -45,7 +51,7 @@ public class RetentionStatisticsController {
         return new StudentsRetentionStatisticsResponse(terms, courseCode, curriculumCode, firstTerm, lastTerm);
     }
 
-    public StudentsResponse getStudentsRetentionCSV(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+    public StudentsResponse getStudentsRetentionCSV(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
         Collection<StudentCSV> studentsRetentionData = new TreeSet<>();
         Collection<Student> studentsRetention = getStudentsRetention(courseCode, curriculumCode, from, to);
         studentsRetention.forEach(item -> {
@@ -65,7 +71,7 @@ public class RetentionStatisticsController {
         return new SubjectsRetentionResponse(retention);
     }
 
-    public RetentionStatisticsSummaryResponse getRetentionStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+    public RetentionStatisticsSummaryResponse getRetentionStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
         Collection<Student> studentsRetention = getStudentsRetention(courseCode, curriculumCode, from, to);
         StudentMetricsSummary summary = StudentMetricsCalculator.computeMetricsSummary(studentsRetention);
         Range limits = getRange(studentsRetention);
@@ -109,7 +115,7 @@ public class RetentionStatisticsController {
         return new RetentionSampleList(from, to, adequateSampleList, possibleSampleList);
     }
 
-    private Collection<Student> getStudentsRetention(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+    private Collection<Student> getStudentsRetention(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
          return this.dataAccessFacade.getActives(courseCode, curriculumCode, from, to).stream()
                 .filter(item -> item.computeRiskClass().equals(RiskClass.AVERAGE) ||
                         item.computeRiskClass().equals(RiskClass.HIGH) ||
