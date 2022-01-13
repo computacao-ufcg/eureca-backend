@@ -1,10 +1,11 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.exceptions;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.exceptions.pre_enrollment.InvalidTermException;
+import br.edu.ufcg.computacao.eureca.backend.api.http.exceptions.curriculum.CourseNotFoundException;
+import br.edu.ufcg.computacao.eureca.backend.api.http.exceptions.curriculum.CurriculumNotFoundException;
 import br.edu.ufcg.computacao.eureca.backend.api.http.exceptions.pre_enrollment.StudentNotFoundException;
+import br.edu.ufcg.computacao.eureca.common.exceptions.CommonExceptionHandler;
 import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.ExceptionResponse;
-import br.edu.ufcg.computacao.eureca.common.exceptions.CommonExceptionHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,17 +20,22 @@ public class EurecaExceptionHandler extends CommonExceptionHandler {
         return this.buildEurecaErrorResponseEntity(exception, req, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(InvalidTermException.class)
-    public ResponseEntity<ExceptionResponse> handleInvalidTerm(EurecaException exception, WebRequest req) {
+    @ExceptionHandler(CurriculumNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleCurriculumNotFound(EurecaException exception, WebRequest req) {
+        return this.buildEurecaErrorResponseEntity(exception, req, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CourseNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleCourseNotFound(EurecaException exception, WebRequest req) {
         return this.buildEurecaErrorResponseEntity(exception, req, HttpStatus.NOT_FOUND);
     }
 
     private ResponseEntity<ExceptionResponse> buildEurecaErrorResponseEntity(EurecaException exception, WebRequest req, HttpStatus statusCode) {
-        ExceptionResponse error = this.buildEurecaError(exception, req);
+        ExceptionResponse error = this.buildExceptionResponse(exception, req);
         return new ResponseEntity<>(error, statusCode);
     }
 
-    private ExceptionResponse buildEurecaError(EurecaException exception, WebRequest req) {
+    private ExceptionResponse buildExceptionResponse(EurecaException exception, WebRequest req) {
         return new ExceptionResponse(exception.getMessage(), req.getDescription(false));
     }
 }

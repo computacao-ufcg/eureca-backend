@@ -1,5 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 
+import br.edu.ufcg.computacao.eureca.backend.api.http.exceptions.curriculum.CurriculumNotFoundException;
 import br.edu.ufcg.computacao.eureca.backend.api.http.exceptions.pre_enrollment.StudentNotFoundException;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.SubjectRetentionCSV;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.SubjectRetentionPerAdmissionTerm;
@@ -18,6 +19,7 @@ import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException
 import org.apache.log4j.Logger;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class IndexesHolder {
     private final Logger LOGGER = Logger.getLogger(IndexesHolder.class);
@@ -123,29 +125,29 @@ public class IndexesHolder {
         return curriculumCodes;
     }
 
-    public Curriculum getCurriculum(String courseCode, String curriculumCode) throws InvalidParameterException {
+    public Curriculum getCurriculum(String courseCode, String curriculumCode) throws EurecaException {
         Map<CurriculumKey, CurriculumData> curriculumMap = this.mapsHolder.getMap("curriculum");
         CurriculumKey key = new CurriculumKey(courseCode, curriculumCode);
         CurriculumData ret = curriculumMap.get(key);
-        if (ret == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
+        if (ret == null) throw new CurriculumNotFoundException(courseCode, curriculumCode);
         return ret.createCurriculum(key);
     }
 
-    public Collection<Student> getAllActives(String courseCode, String curriculumCode) throws InvalidParameterException {
+    public Collection<Student> getAllActives(String courseCode, String curriculumCode) throws EurecaException {
         Collection<NationalIdRegistrationKey> actives = this.activesPerCurriculumMap.get(new
                 CurriculumKey(courseCode, curriculumCode));
-        if (actives == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
+        if (actives == null) throw new CurriculumNotFoundException(courseCode, curriculumCode);
         return getAllStudents(actives);
     }
 
-    public Collection<Student> getAllAlumni(String courseCode, String curriculumCode) throws InvalidParameterException {
+    public Collection<Student> getAllAlumni(String courseCode, String curriculumCode) throws EurecaException {
         Collection<NationalIdRegistrationKey> alumni = this.alumniPerCurriculumMap.get(new
                 CurriculumKey(courseCode, curriculumCode));
-        if (alumni == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
+        if (alumni == null) throw new CurriculumNotFoundException(courseCode, curriculumCode);
         return getAllStudents(alumni);
     }
 
-    public Collection<Student> getAllDropouts(String courseCode, String curriculumCode) throws InvalidParameterException {
+    public Collection<Student> getAllDropouts(String courseCode, String curriculumCode) throws EurecaException {
         Collection<NationalIdRegistrationKey> dropouts = this.dropoutsPerCurriculumMap.get(new
                 CurriculumKey(courseCode, curriculumCode));
         if (dropouts == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
@@ -763,7 +765,7 @@ public class IndexesHolder {
         this.studentsMap.replace(studentKey, student);
     }
 
-    private Collection<Student> getAllStudents(Collection<NationalIdRegistrationKey> studentKeys) throws InvalidParameterException {
+    private Collection<Student> getAllStudents(Collection<NationalIdRegistrationKey> studentKeys) throws EurecaException {
         Collection<Student> allStudents = new ArrayList<>();
         Map<NationalIdRegistrationKey, StudentData> mapStudents = this.mapsHolder.getMap("students");
         for (NationalIdRegistrationKey k : studentKeys) {
