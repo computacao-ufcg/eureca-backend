@@ -37,33 +37,17 @@ public class CommunicationController {
     private synchronized Collection<Student> getStudentsByStatus(String courseCode, String curriculumCode, String status) throws InvalidParameterException {
         Collection<Student> students = null;
         if (status.equals("Ativos")) {
-            try {
-                students = this.dataAccessFacade.getAllStudentsPerStatus(StudentClassification.ACTIVE, courseCode, curriculumCode);
-            } catch (br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException exception) {
-                exception.printStackTrace();
-            }
+            students = this.dataAccessFacade.getAllStudentsPerStatus(StudentClassification.ACTIVE, courseCode, curriculumCode);
         } else if(status.equals("Evadidos")){
-            try {
-                students = this.dataAccessFacade.getAllStudentsPerStatus(StudentClassification.DROPOUT, courseCode, curriculumCode);
-            } catch (br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException exception) {
-                exception.printStackTrace();
-            }
+            students = this.dataAccessFacade.getAllStudentsPerStatus(StudentClassification.DROPOUT, courseCode, curriculumCode);
         } else if(status.equals("Egressos")) {
-            try {
-                students = this.dataAccessFacade.getAllStudentsPerStatus(StudentClassification.ALUMNUS, courseCode, curriculumCode);
-            } catch (br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException exception) {
-                exception.printStackTrace();
-            }
+            students = this.dataAccessFacade.getAllStudentsPerStatus(StudentClassification.ALUMNUS, courseCode, curriculumCode);
         } else if(status.equals("Todos")) {
-            try {
-                students = Stream.concat(
-                        Stream.concat(this.dataAccessFacade.getAllStudentsPerStatus(StudentClassification.ACTIVE, courseCode, curriculumCode).stream(),
-                                this.dataAccessFacade.getAllStudentsPerStatus(StudentClassification.DROPOUT, courseCode, curriculumCode).stream()),
-                        this.dataAccessFacade.getAllStudentsPerStatus(StudentClassification.ALUMNUS, courseCode, curriculumCode).stream())
-                        .collect(Collectors.toList());
-            } catch (br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException exception) {
-                exception.printStackTrace();
-            }
+            students = Stream.concat(
+                    Stream.concat(this.dataAccessFacade.getAllStudentsPerStatus(StudentClassification.ACTIVE, courseCode, curriculumCode).stream(),
+                            this.dataAccessFacade.getAllStudentsPerStatus(StudentClassification.DROPOUT, courseCode, curriculumCode).stream()),
+                            this.dataAccessFacade.getAllStudentsPerStatus(StudentClassification.ALUMNUS, courseCode, curriculumCode).stream())
+                            .collect(Collectors.toList());
         }
         return students;
     }
