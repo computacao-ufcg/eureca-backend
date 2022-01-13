@@ -33,27 +33,27 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Collection<Student> getAllStudentsPerStatus (StudentClassification status, String courseCode, String curriculumCode) throws EurecaException {
+    public Collection<Student> getAllStudentsPerStatus (StudentClassification status, String courseCode, String curriculumCode) throws InvalidParameterException {
         return getAllStudentsByStatusPerCourse(status, courseCode, curriculumCode);
     }
 
     @Override
-    public Collection<Student> getActives(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
+    public Collection<Student> getActives(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         return getFilteredStudents(StudentClassification.ACTIVE, courseCode, curriculumCode, from, to);
     }
 
     @Override
-    public Collection<Student> getAllActives(String courseCode, String curriculumCode) throws EurecaException {
+    public Collection<Student> getAllActives(String courseCode, String curriculumCode) throws InvalidParameterException {
         return this.indexesHolder.getAllActives(courseCode, curriculumCode);
     }
 
     @Override
-    public Collection<Student> getAlumni(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
+    public Collection<Student> getAlumni(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         return getFilteredStudents(StudentClassification.ALUMNUS, courseCode, curriculumCode, from, to);
     }
 
     @Override
-    public Collection<Student> getDropouts(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
+    public Collection<Student> getDropouts(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         return getFilteredStudents(StudentClassification.DROPOUT, courseCode, curriculumCode, from, to);
     }
 
@@ -78,7 +78,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Collection<AlumniDigest> getAlumniPerStudentSummary(String courseCode, String from, String to) throws EurecaException {
+    public Collection<AlumniDigest> getAlumniPerStudentSummary(String courseCode, String from, String to) throws InvalidParameterException {
         String parsedFrom = "1" + from.substring(2,4) + from.substring(5,6) + "00000";
         String parsedTo = "1" + to.substring(2,4) + to.substring(5,6) + "99999";
         Collection<AlumniDigest> alumniBasicData = new TreeSet<>();
@@ -97,12 +97,12 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Curriculum getCurriculum(String courseCode, String curriculumCode) throws EurecaException {
+    public Curriculum getCurriculum(String courseCode, String curriculumCode) throws InvalidParameterException {
         return this.indexesHolder.getCurriculum(courseCode, curriculumCode);
     }
 
     @Override
-    public Collection<String> getCurriculumCodes(String courseCode) throws EurecaException {
+    public Collection<String> getCurriculumCodes(String courseCode) throws InvalidParameterException {
         return this.indexesHolder.getCurriculumCodes(courseCode);
     }
 
@@ -311,7 +311,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public StudentCurriculumProgress getStudentCurriculumProgress(String studentRegistration) throws EurecaException {
+    public StudentCurriculumProgress getStudentCurriculumProgress(String studentRegistration) throws InvalidParameterException {
         return this.indexesHolder.getStudentCurriculumProgress(studentRegistration);
     }
 
@@ -578,7 +578,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     private Collection<Student> getFilteredStudents(StudentClassification status, String courseCode,
-                                   String curriculumCode, String from, String to) throws EurecaException {
+                                   String curriculumCode, String from, String to) throws InvalidParameterException {
         Collection<Student> filteredStudents = new TreeSet<>();
         Collection<Student> allStudents = getAllStudentsByStatusPerCourse(status, courseCode, curriculumCode);
         allStudents.forEach(item -> {
@@ -644,7 +644,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
         }
     }
 
-    private Collection<Student> getAllStudentsByStatusPerCourse(StudentClassification status, String courseCode, String curriculumCode) throws EurecaException {
+    private Collection<Student> getAllStudentsByStatusPerCourse(StudentClassification status, String courseCode, String curriculumCode) throws InvalidParameterException {
         switch(status) {
             case ALUMNUS:
                 return this.indexesHolder.getAllAlumni(courseCode, curriculumCode);

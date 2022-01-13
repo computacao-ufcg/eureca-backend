@@ -83,7 +83,7 @@ public class IndexesHolder {
         return alumni;
     }
 
-    public StudentCurriculumProgress getStudentCurriculumProgress(String registration) throws EurecaException {
+    public StudentCurriculumProgress getStudentCurriculumProgress(String registration) throws InvalidParameterException {
         NationalIdRegistrationKey studentId = this.registrationMap.get(registration);
         if (studentId == null) throw new StudentNotFoundException(registration);
         return this.studentCurriculumProgressMap.get(studentId);
@@ -125,7 +125,7 @@ public class IndexesHolder {
         return curriculumCodes;
     }
 
-    public Curriculum getCurriculum(String courseCode, String curriculumCode) throws EurecaException {
+    public Curriculum getCurriculum(String courseCode, String curriculumCode) throws InvalidParameterException {
         Map<CurriculumKey, CurriculumData> curriculumMap = this.mapsHolder.getMap("curriculum");
         CurriculumKey key = new CurriculumKey(courseCode, curriculumCode);
         CurriculumData ret = curriculumMap.get(key);
@@ -133,21 +133,21 @@ public class IndexesHolder {
         return ret.createCurriculum(key);
     }
 
-    public Collection<Student> getAllActives(String courseCode, String curriculumCode) throws EurecaException {
+    public Collection<Student> getAllActives(String courseCode, String curriculumCode) throws InvalidParameterException {
         Collection<NationalIdRegistrationKey> actives = this.activesPerCurriculumMap.get(new
                 CurriculumKey(courseCode, curriculumCode));
         if (actives == null) throw new CurriculumNotFoundException(courseCode, curriculumCode);
         return getAllStudents(actives);
     }
 
-    public Collection<Student> getAllAlumni(String courseCode, String curriculumCode) throws EurecaException {
+    public Collection<Student> getAllAlumni(String courseCode, String curriculumCode) throws InvalidParameterException {
         Collection<NationalIdRegistrationKey> alumni = this.alumniPerCurriculumMap.get(new
                 CurriculumKey(courseCode, curriculumCode));
         if (alumni == null) throw new CurriculumNotFoundException(courseCode, curriculumCode);
         return getAllStudents(alumni);
     }
 
-    public Collection<Student> getAllDropouts(String courseCode, String curriculumCode) throws EurecaException {
+    public Collection<Student> getAllDropouts(String courseCode, String curriculumCode) throws InvalidParameterException {
         Collection<NationalIdRegistrationKey> dropouts = this.dropoutsPerCurriculumMap.get(new
                 CurriculumKey(courseCode, curriculumCode));
         if (dropouts == null) throw new InvalidParameterException(String.format(Messages.INVALID_COURSE_OR_CURRICULUM_S_S, courseCode, curriculumCode));
@@ -765,7 +765,7 @@ public class IndexesHolder {
         this.studentsMap.replace(studentKey, student);
     }
 
-    private Collection<Student> getAllStudents(Collection<NationalIdRegistrationKey> studentKeys) throws EurecaException {
+    private Collection<Student> getAllStudents(Collection<NationalIdRegistrationKey> studentKeys) throws InvalidParameterException {
         Collection<Student> allStudents = new ArrayList<>();
         Map<NationalIdRegistrationKey, StudentData> mapStudents = this.mapsHolder.getMap("students");
         for (NationalIdRegistrationKey k : studentKeys) {

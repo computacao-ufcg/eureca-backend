@@ -20,15 +20,15 @@ import java.util.Collection;
 import java.util.Map;
 
 public interface DataAccessFacade {
-    Collection<Student> getAllStudentsPerStatus (StudentClassification status, String courseCode, String curriculumCode) throws EurecaException;
+    Collection<Student> getAllStudentsPerStatus (StudentClassification status, String courseCode, String curriculumCode) throws InvalidParameterException;
 
-    Collection<Student> getActives(String courseCode, String curriculumCode, String from, String to) throws EurecaException;
+    Collection<Student> getActives(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 
-    Collection<Student> getAllActives(String courseCode, String curriculumCode) throws EurecaException;
+    Collection<Student> getAllActives(String courseCode, String curriculumCode) throws InvalidParameterException;
 
-    Collection<Student> getAlumni(String courseCode, String curriculumCode, String from, String to) throws EurecaException;
+    Collection<Student> getAlumni(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 
-    Collection<Student> getDropouts(String courseCode, String curriculumCode, String from, String to) throws EurecaException;
+    Collection<Student> getDropouts(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 
     Map<String, Collection<Student>> getActivesPerAdmissionTerm(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 
@@ -36,13 +36,13 @@ public interface DataAccessFacade {
 
     Map<String, Collection<Student>> getDropoutsPerDropoutTerm(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 
-    Collection<AlumniDigest> getAlumniPerStudentSummary(String courseCode, String from, String to) throws EurecaException;
+    Collection<AlumniDigest> getAlumniPerStudentSummary(String courseCode, String from, String to) throws InvalidParameterException;
 
     Collection<Subject> getAllSubjects(String courseCode, String curriculumCode) throws InvalidParameterException;
 
-    Curriculum getCurriculum(String courseCode, String curriculumCode) throws EurecaException;
+    Curriculum getCurriculum(String courseCode, String curriculumCode) throws InvalidParameterException;
 
-    Collection<String> getCurriculumCodes(String courseCode) throws EurecaException;
+    Collection<String> getCurriculumCodes(String courseCode) throws InvalidParameterException;
 
     Subject getSubject(String courseCode, String curriculumCode, String subjectCode) throws InvalidParameterException;
 
@@ -66,7 +66,7 @@ public interface DataAccessFacade {
 
     Map<String, TeachersStatisticsSummary> getTeachersPerAcademicUnit(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException;
 
-    StudentCurriculumProgress getStudentCurriculumProgress(String studentRegistration) throws InvalidParameterException, EurecaException;
+    StudentCurriculumProgress getStudentCurriculumProgress(String studentRegistration) throws InvalidParameterException;
 
     Map<SubjectScheduleKey, SubjectSchedule> getAllSchedules(String courseCode, String curriculumCode, String term);
 }
