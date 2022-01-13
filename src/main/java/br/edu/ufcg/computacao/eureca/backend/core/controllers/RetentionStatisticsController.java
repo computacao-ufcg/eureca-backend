@@ -15,7 +15,6 @@ import br.edu.ufcg.computacao.eureca.backend.core.models.Range;
 import br.edu.ufcg.computacao.eureca.backend.core.models.RiskClass;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.backend.core.util.StudentMetricsCalculator;
-import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
 
@@ -51,7 +50,7 @@ public class RetentionStatisticsController {
         return new StudentsRetentionStatisticsResponse(terms, courseCode, curriculumCode, firstTerm, lastTerm);
     }
 
-    public StudentsResponse getStudentsRetentionCSV(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
+    public StudentsResponse getStudentsRetentionCSV(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         Collection<StudentCSV> studentsRetentionData = new TreeSet<>();
         Collection<Student> studentsRetention = getStudentsRetention(courseCode, curriculumCode, from, to);
         studentsRetention.forEach(item -> {
@@ -71,7 +70,7 @@ public class RetentionStatisticsController {
         return new SubjectsRetentionResponse(retention);
     }
 
-    public RetentionStatisticsSummaryResponse getRetentionStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
+    public RetentionStatisticsSummaryResponse getRetentionStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
         Collection<Student> studentsRetention = getStudentsRetention(courseCode, curriculumCode, from, to);
         StudentMetricsSummary summary = StudentMetricsCalculator.computeMetricsSummary(studentsRetention);
         Range limits = getRange(studentsRetention);
@@ -115,7 +114,7 @@ public class RetentionStatisticsController {
         return new RetentionSampleList(from, to, adequateSampleList, possibleSampleList);
     }
 
-    private Collection<Student> getStudentsRetention(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
+    private Collection<Student> getStudentsRetention(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
          return this.dataAccessFacade.getActives(courseCode, curriculumCode, from, to).stream()
                 .filter(item -> item.computeRiskClass().equals(RiskClass.AVERAGE) ||
                         item.computeRiskClass().equals(RiskClass.HIGH) ||
