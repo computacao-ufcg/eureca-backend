@@ -3,7 +3,7 @@ package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.alumni.AlumniDigest;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
-import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
+import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
 import org.apache.log4j.Logger;
 
 import java.util.Collection;
@@ -17,7 +17,7 @@ public class AlumniController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
-    public Collection<AlumniDigest> getAlumniDigest(String courseCode, String from, String to) throws InvalidParameterException {
+    public Collection<AlumniDigest> getAlumniDigest(String courseCode, String from, String to) throws EurecaException {
         return this.dataAccessFacade.getAlumniPerStudentSummary(courseCode, from, to);
     }
 }

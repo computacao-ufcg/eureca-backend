@@ -5,7 +5,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.ClassEnrollments;
 import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectType;
-import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
+import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
 import org.apache.log4j.Logger;
 
 import java.util.Collection;
@@ -22,7 +22,7 @@ public class EnrollmentsStatisticsController {
     }
 
     public EnrollmentsStatisticsResponse getSubjectEnrollmentsStatistics(String courseCode, String curriculumCode,
-                                                                         String from, String to, SubjectType subjectType) throws InvalidParameterException {
+                                                                         String from, String to, SubjectType subjectType) throws EurecaException {
         Collection<EnrollmentsMetricsPerTermSummary> enrollmentsPerTerm =
                 this.dataAccessFacade.getEnrollmentsPerTermSummary(courseCode, curriculumCode, from, to, subjectType);
         EnrollmentsStatisticsResponse response = new EnrollmentsStatisticsResponse(enrollmentsPerTerm, courseCode, curriculumCode);
@@ -30,7 +30,7 @@ public class EnrollmentsStatisticsController {
     }
 
     public EnrollmentsResponse getSubjectEnrollmentsCSV(String courseCode, String curriculumCode, String from, String to,
-                                                        SubjectType subjectType) throws InvalidParameterException {
+                                                        SubjectType subjectType) throws EurecaException {
         Collection<EnrollmentsCSV> enrollments = new TreeSet<>();
         Collection<EnrollmentsPerSubjectData> enrollmentsPerSubject =
                 this.dataAccessFacade.getEnrollmentsPerSubjectPerTerm(courseCode, curriculumCode, from, to, subjectType);
@@ -54,7 +54,7 @@ public class EnrollmentsStatisticsController {
     }
 
     public EnrollmentsStatisticsSummaryResponse getSubjectEnrollmentsStatisticsSummary(String courseCode, String curriculumCode,
-                                                                                       String from, String to) throws InvalidParameterException {
+                                                                                       String from, String to) throws EurecaException {
         EnrollmentsStatisticsSummaryResponse summary =
                 this.dataAccessFacade.getEnrollmentsStatisticsSummary(courseCode, curriculumCode, from, to);
         return summary;

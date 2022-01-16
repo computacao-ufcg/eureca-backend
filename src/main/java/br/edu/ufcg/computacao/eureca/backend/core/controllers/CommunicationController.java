@@ -6,6 +6,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.StudentClassification;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
+import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
 
@@ -28,13 +29,13 @@ public class CommunicationController {
                                                        String studentName, String gender, String status,
                                                        String craOperation, String cra, String enrolledCreditsOperation,
                                                                     String enrolledCredits, String affirmativePolicy)
-            throws InvalidParameterException {
+            throws EurecaException {
 
         Collection<Student> students = this.getStudentsByStatus(courseCode, curriculumCode, status);
         return this.getEmailsSearch(students, admissionTerm, studentName, gender, craOperation, cra, enrolledCreditsOperation, enrolledCredits, affirmativePolicy);
     }
 
-    private synchronized Collection<Student> getStudentsByStatus(String courseCode, String curriculumCode, String status) throws InvalidParameterException {
+    private synchronized Collection<Student> getStudentsByStatus(String courseCode, String curriculumCode, String status) throws EurecaException {
         Collection<Student> students = null;
         if (status.equals("Ativos")) {
             students = this.dataAccessFacade.getAllStudentsPerStatus(StudentClassification.ACTIVE, courseCode, curriculumCode);
@@ -110,7 +111,7 @@ public class CommunicationController {
     }
 
     public Map<String, EmailSearchResponse> getSubjectEmailsSearch(String courseCode, String curriculumCode, String subjectName,
-                                                                   String subjectType, String academicUnit, String term) throws InvalidParameterException {
+                                                                   String subjectType, String academicUnit, String term) throws EurecaException {
 
         Map<String, EmailSearchResponse> search =  new HashMap<>();
         Collection<Student> students = this.getStudentsByStatus(courseCode, curriculumCode,"Todos");
@@ -152,7 +153,7 @@ public class CommunicationController {
     }
 
     public Map<String, EmailSearchResponse> getTeacherEmailsSearch(String courseCode, String curriculumCode, String teacherName,
-                                                                   String teacherId, String academicUnit, String term) throws InvalidParameterException {
+                                                                   String teacherId, String academicUnit, String term) throws EurecaException {
 
         Pattern teacherIdPattern = Pattern.compile(teacherId, Pattern.CASE_INSENSITIVE);
         Pattern namePattern = Pattern.compile(teacherName, Pattern.CASE_INSENSITIVE);
@@ -173,7 +174,7 @@ public class CommunicationController {
 
     }
 
-    private Collection<EnrollmentsPerSubjectData> filterSubjects(String courseCode, String curriculumCode, String academicUnit, Collection<EnrollmentsPerSubjectData> allSubjects, String subjectName) throws InvalidParameterException {
+    private Collection<EnrollmentsPerSubjectData> filterSubjects(String courseCode, String curriculumCode, String academicUnit, Collection<EnrollmentsPerSubjectData> allSubjects, String subjectName) throws EurecaException {
         Collection<EnrollmentsPerSubjectData> subjects = new ArrayList<>();
         Pattern subjectNamePattern = Pattern.compile(subjectName, Pattern.CASE_INSENSITIVE);
         Pattern academicUnitPattern = Pattern.compile(academicUnit, Pattern.CASE_INSENSITIVE);
