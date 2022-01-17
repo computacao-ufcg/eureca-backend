@@ -37,7 +37,7 @@ public class Messages {
     public static final String COULD_NOT_FIND_TERM_S = "Could not find term: %s.";
     public static final String COULD_NOT_FIND_CLASS_S = "Could not find class: %s.";
     public static final String INVALID_COURSE_S = "Course %s does not exist.";
-    public static final String INVALID_COURSE_OR_CURRICULUM_S_S = "Course %s and/or curriculum %s does not exist.";
+    public static final String INVALID_COURSE_OR_CURRICULUM_S_S = "Course %s and/or curriculum %s do not exist.";
     public static final String INVALID_USER_S = "No profile fr user %s.";
     public static final String INVALID_ACADEMIC_UNIT_S = "Could not find Academic Unit: %s.";
     public static final String INVALID_STUDENT_S = "No student with registration %s.";
