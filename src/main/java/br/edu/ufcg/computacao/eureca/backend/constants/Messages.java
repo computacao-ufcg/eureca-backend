@@ -1,7 +1,5 @@
 package br.edu.ufcg.computacao.eureca.backend.constants;
 
-import java.util.Locale;
-
 public class Messages {
     public static final String ADD_TABLE_S = "Add table: %s.";
     public static final String ALL_SET = "All services have been initialized.";
@@ -34,6 +32,7 @@ public class Messages {
     public static final String STUDENT_S_COMPLETED_S = "Student %s completed %s.";
     public static final String STUDENT_S_IS_EXEMPTED_S = "Student %s is exempted of %s.";
     public static final String STUDENT_S_IS_ENROLLED_IN_S = "Student %s is enrolled in %s.";
+    public static final String STUDENT_S_NOT_FOUND = "Student with registration %s not found.";
     public static final String COULD_NOT_FIND_ENTRY_S = "Could not find entry: %s.";
     public static final String COULD_NOT_FIND_TERM_S = "Could not find term: %s.";
     public static final String COULD_NOT_FIND_CLASS_S = "Could not find class: %s.";
@@ -45,4 +44,5 @@ public class Messages {
     public static final String INVALID_SUBJECT_IGNORING = "Invalid subject, ignoring.";
     public static final String INVALID_SCHEDULE_S_S_S_S = "No schedule found for 'courseCode' = %s, 'curriculumCode' = %s, 'subjectCode' = %s, 'term' = %s";
     public static final String INVALID_SCHEDULE_IGNORING = "Invalid schedule, ignoring.";
+    public static final String INVALID_TERM_S = "Invalid term: %s";
 }

@@ -3,11 +3,13 @@ package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
-import br.edu.ufcg.computacao.eureca.backend.core.models.*;
+import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectType;
+import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.TreeSet;
 
 public class SubjectsStatisticsController {
     private Logger LOGGER = Logger.getLogger(SubjectsStatisticsController.class);
@@ -18,13 +20,13 @@ public class SubjectsStatisticsController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
-    public SubjectsStatisticsResponse getSubjectsStatistics(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
+    public SubjectsStatisticsResponse getSubjectsStatistics(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws EurecaException {
         Collection<SubjectMetricsPerTermSummary> metricsPerTerm = this.dataAccessFacade.getSubjectMetricsPerTermSummary(courseCode, curriculumCode, from, to, subjectType);
         SubjectsStatisticsResponse response = new SubjectsStatisticsResponse(metricsPerTerm, courseCode, curriculumCode);
         return response;
     }
 
-    public SubjectsResponse getSubjectsCSV(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws InvalidParameterException {
+    public SubjectsResponse getSubjectsCSV(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws EurecaException {
         Collection<SubjectCSV> subjectDataResponses = new TreeSet<>();
         Collection<SubjectMetricsPerTermSummary> metricsPerTerm =
                 this.dataAccessFacade.getSubjectMetricsPerTermSummary(courseCode, curriculumCode, from, to, subjectType);
@@ -38,7 +40,7 @@ public class SubjectsStatisticsController {
         return new SubjectsResponse(subjectDataResponses);
     }
 
-    public SubjectsStatisticsSummaryResponse getSubjectsStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+    public SubjectsStatisticsSummaryResponse getSubjectsStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
         SubjectsStatisticsSummaryResponse summary = this.dataAccessFacade.getSubjectStatisticsSummary(courseCode, curriculumCode, from, to);
         return summary;
     }

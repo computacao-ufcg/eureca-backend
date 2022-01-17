@@ -9,6 +9,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.backend.core.util.EurecaUtil;
 import br.edu.ufcg.computacao.eureca.backend.core.util.PreEnrollmentUtil;
+import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
 
@@ -27,14 +28,14 @@ public class PreEnrollmentController {
     }
 
     public StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode, String studentRegistration, String term, Integer numCredits,
-                                                                String optionalPriorityList, String electivePriorityList, String mandatoryPriorityList) throws InvalidParameterException {
+                                                                String optionalPriorityList, String electivePriorityList, String mandatoryPriorityList) throws EurecaException {
         PreEnrollmentData preEnrollmentData = this.getPreEnrollmentData(courseCode, curriculumCode, studentRegistration, term, numCredits, optionalPriorityList, electivePriorityList, mandatoryPriorityList);
         StudentPreEnrollmentResponse studentPreEnrollment = this.getStudentPreEnrollment(preEnrollmentData);
         this.cacheSchedules(courseCode, curriculumCode, term);
         return studentPreEnrollment;
     }
 
-    public PreEnrollmentsResponse getActivesPreEnrollments(String courseCode, String curriculumCode, String term) throws InvalidParameterException  {
+    public PreEnrollmentsResponse getActivesPreEnrollments(String courseCode, String curriculumCode, String term) throws EurecaException {
         Collection<Student> actives = this.dataAccessFacade.getAllActives(courseCode, curriculumCode);
         Collection<String> activesRegistrations = actives.stream().map(student -> student.getRegistration().getRegistration()).collect(Collectors.toList());
         Collection<StudentPreEnrollmentResponse> activesPreEnrollments = new HashSet<>();
@@ -97,7 +98,7 @@ public class PreEnrollmentController {
         return response;
     }
 
-    private PreEnrollmentData getPreEnrollmentData(String courseCode, String curriculumCode, String studentRegistration, String term, Integer numCredits, String optionalPriorityList, String electivePriorityList, String mandatoryPriorityList) throws InvalidParameterException {
+    private PreEnrollmentData getPreEnrollmentData(String courseCode, String curriculumCode, String studentRegistration, String term, Integer numCredits, String optionalPriorityList, String electivePriorityList, String mandatoryPriorityList) throws EurecaException {
         Curriculum curriculum = this.dataAccessFacade.getCurriculum(courseCode, curriculumCode);
         StudentCurriculumProgress studentProgress = this.dataAccessFacade.getStudentCurriculumProgress(studentRegistration);
         if (this.subjectsCache == null || this.subjectsCache.isEmpty()) {
@@ -252,7 +253,7 @@ public class PreEnrollmentController {
         return subjects;
     }
 
-    public SubjectsDemandResponse getDemand(String courseCode, String curriculumCode, String term) throws InvalidParameterException {
+    public SubjectsDemandResponse getDemand(String courseCode, String curriculumCode, String term) throws EurecaException {
         Collection<SubjectDemand> demand = new TreeSet<>();
         Collection<DetailedSubjectDemand> detailedDemand = this.getDetailedSubjectDemand(courseCode, curriculumCode, term);
 
@@ -265,7 +266,7 @@ public class PreEnrollmentController {
         return new SubjectsDemandResponse(demand);
     }
 
-    private Collection<DetailedSubjectDemand> getDetailedSubjectDemand(String courseCode, String curriculumCode, String term) throws InvalidParameterException {
+    private Collection<DetailedSubjectDemand> getDetailedSubjectDemand(String courseCode, String curriculumCode, String term) throws EurecaException {
         PreEnrollmentsResponse preEnrollments = this.getActivesPreEnrollments(courseCode, curriculumCode, term);
         Collection<DetailedSubjectDemand> detailedDemand = new TreeSet<>();
 
@@ -277,7 +278,7 @@ public class PreEnrollmentController {
         return detailedDemand;
     }
 
-    private void cacheSubjects(String courseCode, String curriculumCode) throws InvalidParameterException {
+    private void cacheSubjects(String courseCode, String curriculumCode) throws EurecaException {
         Collection<Subject> allSubjects = this.dataAccessFacade.getAllSubjects(courseCode, curriculumCode);
         this.subjectsCache = new HashMap<>();
         for (Subject subject : allSubjects) {

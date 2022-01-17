@@ -1,6 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.*;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.RiskClassCountSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.active.ActivesPerTermSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.active.ActivesStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.active.ActivesSummary;
@@ -20,6 +20,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.backend.core.util.StudentMetricsCalculator;
+import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
 import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
 
@@ -34,7 +35,7 @@ public class StudentsStatisticsController {
         this.dataAccessFacade = DataAccessFacadeHolder.getInstance().getDataAccessFacade();
     }
 
-    public StudentsResponse getActiveCSV(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+    public StudentsResponse getActiveCSV(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
         Collection<StudentCSV> activeStudentsData = new TreeSet<>();
         Collection<Student> actives = this.dataAccessFacade.getActives(courseCode, curriculumCode, from, to);
         actives.forEach(item -> {
@@ -44,7 +45,7 @@ public class StudentsStatisticsController {
         return new StudentsResponse(activeStudentsData);
     }
 
-    public StudentsResponse getAlumniCSV(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+    public StudentsResponse getAlumniCSV(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
         Collection<StudentCSV> alumniData = new TreeSet<>();
         Collection<Student> actives = this.dataAccessFacade.getAlumni(courseCode, curriculumCode, from, to);
         actives.forEach(item -> {
@@ -54,7 +55,7 @@ public class StudentsStatisticsController {
         return new StudentsResponse(alumniData);
     }
 
-    public StudentsResponse getDropoutsCSV(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+    public StudentsResponse getDropoutsCSV(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
         Collection<StudentCSV> dropoutsData = new TreeSet<>();
         Collection<Student> dropouts = this.dataAccessFacade.getDropouts(courseCode, curriculumCode, from, to);
         dropouts.forEach(item -> {
@@ -65,7 +66,7 @@ public class StudentsStatisticsController {
     }
 
     public ActivesStatisticsResponse getActivesStatistics(String courseCode, String curriculumCode, String from,
-                                                          String to) throws InvalidParameterException {
+                                                          String to) throws EurecaException {
         Collection<ActivesPerTermSummary> terms = new TreeSet<>();
         Map<String, Collection<Student>> activesPerAdmissionTerm =
                 this.dataAccessFacade.getActivesPerAdmissionTerm(courseCode, curriculumCode, from, to);
@@ -82,7 +83,7 @@ public class StudentsStatisticsController {
         return new ActivesStatisticsResponse(terms, courseCode, curriculumCode, firstTerm, lastTerm);
     }
 
-    public AlumniStatisticsResponse getAlumniStatistics(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+    public AlumniStatisticsResponse getAlumniStatistics(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
         Collection<AlumniPerTermSummary> terms = new TreeSet<>();
         Map<String, Collection<Student>> alumniPerGraduationTerm = this.dataAccessFacade.getAlumniPerGraduationTerm(courseCode, curriculumCode, from, to);
 
@@ -98,7 +99,7 @@ public class StudentsStatisticsController {
         return new AlumniStatisticsResponse(terms, courseCode, curriculumCode, firstTerm, lastTerm);
     }
 
-    public DropoutsStatisticsResponse getDropoutsStatistics(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+    public DropoutsStatisticsResponse getDropoutsStatistics(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
         Collection<DropoutPerTermSummary> terms = new TreeSet<>();
         Map<String, Collection<Student>> dropoutsPerDropoutTerm = this.dataAccessFacade.getDropoutsPerDropoutTerm(courseCode, curriculumCode, from, to);
 
@@ -114,7 +115,7 @@ public class StudentsStatisticsController {
         return new DropoutsStatisticsResponse(terms, courseCode, curriculumCode, firstTerm, lastTerm);
     }
 
-    public StudentsStatisticsSummaryResponse getStudentsStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+    public StudentsStatisticsSummaryResponse getStudentsStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
         ActivesSummary activesSummary = getActivesSummary(courseCode, curriculumCode, from, to);
         AlumniSummary alumniSummary = getAlumniSummary(courseCode, curriculumCode, from, to);
         DropoutsSummary dropoutSummary = getDropoutsSummary(courseCode, curriculumCode, from, to);
@@ -213,7 +214,7 @@ public class StudentsStatisticsController {
     }
 
 
-    private ActivesSummary getActivesSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+    private ActivesSummary getActivesSummary(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
         Collection<Student> actives = this.dataAccessFacade.getActives(courseCode, curriculumCode, from, to);
         StudentMetricsSummary summary = StudentMetricsCalculator.computeMetricsSummary(actives);
         Range limits = getRange(actives);
@@ -227,7 +228,7 @@ public class StudentsStatisticsController {
         return new Range(terms.get(0), terms.get(terms.size() - 1));
     }
 
-    private AlumniSummary getAlumniSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+    private AlumniSummary getAlumniSummary(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
         Collection<Student> alumni = this.dataAccessFacade.getAlumni(courseCode, curriculumCode, from, to);
         double aggregateGPA = 0;
         int aggregateTermsCount = 0;
@@ -285,7 +286,7 @@ public class StudentsStatisticsController {
                 maxAlumniCount, minAlumniCount, maxAlumniCountTerm, minAlumniCountTerm);
     }
 
-    private DropoutsSummary getDropoutsSummary(String courseCode, String curriculumCode, String from, String to) throws InvalidParameterException {
+    private DropoutsSummary getDropoutsSummary(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
         Collection<Student> dropouts = this.dataAccessFacade.getDropouts(courseCode, curriculumCode, from, to);
         int dropoutsCount[] = new int[SystemConstants.DROPOUT_TYPES_COUNT];
         double aggregateTermsCount = 0.0;
