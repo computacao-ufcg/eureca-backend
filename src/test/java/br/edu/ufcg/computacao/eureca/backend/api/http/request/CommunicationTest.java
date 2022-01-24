@@ -1,6 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
 import br.edu.ufcg.computacao.eureca.backend.core.models.EmailSearchResponse;
+import com.sun.xml.internal.ws.server.UnsupportedMediaException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -19,15 +20,19 @@ public class CommunicationTest extends EndpointTest{
 
     private static final String COMMUNICATION_ENDPOINT = Communication.ENDPOINT;
 
+    // Test case: Call the getStudentsEmailSearch method and tests a successfully return.
     @Test
     public void getStudentsEmailSearch() throws Exception {
         // set up
+        String STUDENTS_EMAIL_SEARCH_ENDPOINT = "/studentsEmailSearch?admissionTerm=&affirmativePolicy=&courseCode=cra=&craOperation=" +
+                "&curriculumCode=&enrolledCredits=&enrolledCreditsOperation=&gender=&status=&studentName=";
+
         Map<String, EmailSearchResponse> response = new HashMap<>();
         Mockito.doReturn(response).when(this.facade).getStudentsEmailsSearch(Mockito.anyString(), Mockito.anyString(),
                 Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString()
                 , Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString()
         );
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, COMMUNICATION_ENDPOINT + "/studentsEmailSearch?admissionTerm=2019.1&affirmativePolicy=L1&courseCode=14102100&cra=0&craOperation=%3E%3D&curriculumCode=2017&enrolledCredits=0&enrolledCreditsOperation=%3E%3D&gender=Feminino&status=Todos&studentName=a");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, COMMUNICATION_ENDPOINT + STUDENTS_EMAIL_SEARCH_ENDPOINT);
 
         // exercise
         MvcResult res = this.mockMvc.perform(req).andReturn();
@@ -36,13 +41,37 @@ public class CommunicationTest extends EndpointTest{
         Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
     }
 
+    // Test case: Call the getStudentsEmailSearch method with invalid course code or curriculum.
+    @Test
+    public void getStudentsEmailSearchCourseOrCurriculumNotFound() throws Exception {
+        // set up
+        String STUDENTS_EMAIL_SEARCH_ENDPOINT = "/studentsEmailSearch?admissionTerm=&affirmativePolicy=&courseCode=cra=&craOperation=" +
+                "&curriculumCode=&enrolledCredits=&enrolledCreditsOperation=&gender=&status=&studentName=";
+
+        Mockito.doThrow(UnsupportedMediaException.class).when(this.facade).getStudentsEmailsSearch(Mockito.anyString(), Mockito.anyString(),
+                Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString()
+                , Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString()
+        );
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, COMMUNICATION_ENDPOINT + STUDENTS_EMAIL_SEARCH_ENDPOINT);
+
+        // exercise
+        MvcResult res = this.mockMvc.perform(req).andReturn();
+
+        // verify
+        Assert.assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(), res.getResponse().getStatus());
+
+    }
+
+    // Test case: Call the getSubjectEmailsSearch method and tests a successfully return.
     @Test
     public void getSubjectsEmailSearch() throws Exception {
         // set up
+        String SUBJECTS_EMAIL_SEARCH_ENDPOINT = "/subjectEmailSearch?academicUnit=&courseCode=&curriculumCode=&subjectName=&subjectType=&term=";
+
         Map<String, EmailSearchResponse> response = new HashMap<>();
         Mockito.doReturn(response).when(this.facade).getSubjectEmailsSearch(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),
                 Mockito.anyString(), Mockito.anyString(),Mockito.anyString(),Mockito.anyString());
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, COMMUNICATION_ENDPOINT + "/subjectEmailSearch?academicUnit=1141&courseCode=14102100&curriculumCode=2017&subjectName=Sistemas&subjectType=MANDATORY&term=2019.1");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, COMMUNICATION_ENDPOINT + SUBJECTS_EMAIL_SEARCH_ENDPOINT);
 
         // exercise
         MvcResult res = this.mockMvc.perform(req).andReturn();
@@ -51,13 +80,33 @@ public class CommunicationTest extends EndpointTest{
         Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
     }
 
+    // Test case: Call the getSubjectEmailsSearch method with invalid course code or curriculum.
+    @Test
+    public void getSubjectsEmailSearchCourseOrCurriculumNotFound() throws Exception {
+        // set up
+        String SUBJECTS_EMAIL_SEARCH_ENDPOINT = "/subjectEmailSearch?academicUnit=&courseCode=&curriculumCode=&subjectName=&subjectType=&term=";
+
+        Mockito.doThrow(UnsupportedMediaException.class).when(this.facade).getSubjectEmailsSearch(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),
+                Mockito.anyString(), Mockito.anyString(),Mockito.anyString(),Mockito.anyString());
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, COMMUNICATION_ENDPOINT + SUBJECTS_EMAIL_SEARCH_ENDPOINT);
+
+        // exercise
+        MvcResult res = this.mockMvc.perform(req).andReturn();
+
+        // verify
+        Assert.assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(), res.getResponse().getStatus());
+    }
+
+    // Test case: Call the getTeacherEmailsSearch method and tests a successfully return.
     @Test
     public void getTeachersEmailSearch() throws Exception {
         // set up
+        String TEACHERS_EMAIL_SEARCH_ENDPOINT =  "/teacherEmailSearch?academicUnit=&courseCode=&curriculumCode=&teacherId=&teacherName=&term=";
+
         Map<String, EmailSearchResponse> response = new HashMap<>();
         Mockito.doReturn(response).when(this.facade).getTeacherEmailsSearch(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),
                 Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),Mockito.anyString());
-        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, COMMUNICATION_ENDPOINT + "/teacherEmailSearch?academicUnit=1411&courseCode=14102100&curriculumCode=2017&teacherId=%5E%24&teacherName=%5E%24&term=2019.1");
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, COMMUNICATION_ENDPOINT + TEACHERS_EMAIL_SEARCH_ENDPOINT);
 
         // exercise
         MvcResult res = this.mockMvc.perform(req).andReturn();
@@ -65,4 +114,22 @@ public class CommunicationTest extends EndpointTest{
         // verify
         Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
     }
+
+    // Test case: Call the getTeacherEmailsSearch method with invalid course code or curriculum.
+    @Test
+    public void getTeachersEmailSearchCourseOrCurriculumNotFound() throws Exception {
+        // set up
+        String TEACHERS_EMAIL_SEARCH_ENDPOINT =  "/teacherEmailSearch?academicUnit=&courseCode=&curriculumCode=&teacherId=&teacherName=&term=";
+
+        Mockito.doThrow(UnsupportedMediaException.class).when(this.facade).getTeacherEmailsSearch(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),
+                Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),Mockito.anyString());
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, COMMUNICATION_ENDPOINT + TEACHERS_EMAIL_SEARCH_ENDPOINT);
+
+        // exercise
+        MvcResult res = this.mockMvc.perform(req).andReturn();
+
+        // verify
+        Assert.assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(), res.getResponse().getStatus());
+    }
+
 }
