@@ -9,6 +9,7 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.SubjectsRetentionStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentMetrics;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentMetricsSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentsResponse;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -58,6 +59,20 @@ public class RetentionStatisticsTest extends EndpointTest {
         // verify
         Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
         Assert.assertEquals(getMockedSubjectsRetentionStatisticsResponse(), res.getResponse().getContentAsString());
+    }
+
+    @Test
+    public void getStudentsRetentionCsvTest() throws Exception {
+        StudentsResponse response = getStudentsCsvResponse();
+        Mockito.doReturn(response).when(this.facade).getStudentsRetentionCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, RETENTION_STATISTICS_ENDPOINT + "/students/csv" + DEFAULT_COURSE_CURRICULUM_QUERY);
+
+        // exercise
+        MvcResult res = this.mockMvc.perform(req).andReturn();
+
+        // verify
+        Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
+        Assert.assertEquals(getMockedStudentCsvResponse(), res.getResponse().getContentAsString());
     }
 
     @Test
