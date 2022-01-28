@@ -5,6 +5,7 @@ import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectType;
 import br.edu.ufcg.computacao.eureca.backend.util.TestUtils;
 import static br.edu.ufcg.computacao.eureca.backend.util.TestUtils.*;
 
+import com.sun.xml.internal.ws.server.UnsupportedMediaException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -39,6 +40,18 @@ public class EnrollmentsStatisticsTest extends EndpointTest {
         int expectedStatus = HttpStatus.OK.value();
 
         Assertions.assertEquals(expectedStatus, result.getResponse().getStatus());
+    }
+
+    @Test
+    public void testGetComplementaryEnrollmentsCourseOrCurriculumNotFound() throws Exception {
+
+        Mockito.doThrow(UnsupportedMediaException.class).when(this.facade).getSubjectEnrollmentsStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
+        String endpoint = ENROLLMENTS_STATISTICS_ENDPOINT + "/complementary" + DEFAULT_COURSE_CURRICULUM_QUERY;
+
+        RequestBuilder request = this.getRequestBuilder(HttpMethod.GET, endpoint);
+        MvcResult result = this.mockMvc.perform(request).andReturn();
+
+        Assertions.assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(), result.getResponse().getStatus());
     }
 
     @Test
