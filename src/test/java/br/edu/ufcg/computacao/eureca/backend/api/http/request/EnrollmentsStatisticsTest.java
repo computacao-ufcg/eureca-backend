@@ -43,18 +43,6 @@ public class EnrollmentsStatisticsTest extends EndpointTest {
     }
 
     @Test
-    public void testGetComplementaryEnrollmentsCourseOrCurriculumNotFound() throws Exception {
-
-        Mockito.doThrow(UnsupportedMediaException.class).when(this.facade).getSubjectEnrollmentsStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
-        String endpoint = ENROLLMENTS_STATISTICS_ENDPOINT + "/complementary" + DEFAULT_COURSE_CURRICULUM_QUERY;
-
-        RequestBuilder request = this.getRequestBuilder(HttpMethod.GET, endpoint);
-        MvcResult result = this.mockMvc.perform(request).andReturn();
-
-        Assertions.assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(), result.getResponse().getStatus());
-    }
-
-    @Test
     public void getComplementaryEnrollmentsCsvTest() throws Exception {
         // set up
         EnrollmentsResponse response = getEnrollmentsCsvResponse();
