@@ -26,45 +26,48 @@ public class TeachersStatisticsTest extends EndpointTest {
     @Test
     public void getTeachersStatisticsTest() throws Exception {
         // set up
-        TeachersStatisticsResponse response = getTeachersStaticticsResponse();
-        Mockito.doReturn(response).when(this.facade).getTeachersStatistics(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),
+        TeachersStatisticsResponse res = getTeachersStaticticsResponse();
+        Mockito.doReturn(res).when(this.facade).getTeachersStatistics(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),
                 Mockito.anyString(),Mockito.anyString(),Mockito.anyString());
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, TEACHERS_STATISTICS_ENDPOINT + "?academicUnitId=1411&courseCode=14102100&curriculumCode=2017&from=1950.0&to=2049.9");
 
         // exercise
-        MvcResult res = this.mockMvc.perform(req).andReturn();
+        MvcResult result = this.mockMvc.perform(req).andReturn();
 
         // verify
-        Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
+        int expectedStatus = HttpStatus.OK.value();
+        Assert.assertEquals(expectedStatus, result.getResponse().getStatus());
     }
 
     @Test
     public void getTeachersCSVTest() throws Exception {
         // set up
-        TeachersResponse response = getTeachersResponse();
-        Mockito.doReturn(response).when(this.facade).getTeachersCSV(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),
+        TeachersResponse res = getTeachersResponse();
+        Mockito.doReturn(res).when(this.facade).getTeachersCSV(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),
                 Mockito.anyString(),Mockito.anyString(),Mockito.anyString());
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, TEACHERS_STATISTICS_ENDPOINT + "/csv?academicUnitId=1411&courseCode=14102100&curriculumCode=2017&from=1950.0&to=2049.9");
 
         // exercise
-        MvcResult res = this.mockMvc.perform(req).andReturn();
+        MvcResult result = this.mockMvc.perform(req).andReturn();
 
         // verify
-        Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
+        int expectedStatus = HttpStatus.OK.value();
+        Assert.assertEquals(expectedStatus, result.getResponse().getStatus());
     }
 
     @Test
     public void getTeachersStatisticsSummaryTest() throws Exception {
         // set up
-        TeachersStatisticsSummaryResponse response = getTeachersStatisticsSummaryResponse();
-        Mockito.doReturn(response).when(this.facade).getTeachersStatisticsSummary(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),
+        TeachersStatisticsSummaryResponse res = getTeachersStatisticsSummaryResponse();
+        Mockito.doReturn(res).when(this.facade).getTeachersStatisticsSummary(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),
                 Mockito.anyString(),Mockito.anyString(),Mockito.anyString());
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, TEACHERS_STATISTICS_ENDPOINT + "/summary?courseCode=14102100&curriculumCode=2017&from=1950.0&language=PORTUGUESE&to=2049.9");
 
         // exercise
-        MvcResult res = this.mockMvc.perform(req).andReturn();
+        MvcResult result = this.mockMvc.perform(req).andReturn();
 
         // verify
-        Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
+        int expectedStatus = HttpStatus.OK.value();
+        Assert.assertEquals(expectedStatus, result.getResponse().getStatus());
     }
 }
