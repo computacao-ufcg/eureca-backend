@@ -27,7 +27,7 @@ public class SubjectStatisticsTest extends EndpointTest {
     private static String SUBJECT_STATISTICS_ENDPOINT = SubjectsStatistics.ENDPOINT;
 
     @Test
-    public void testGetComplementarySubjects() throws Exception {
+    public void getComplementarySubjectsTest() throws Exception {
         SubjectsStatisticsResponse res = getSubjectsStatisticsMock();
         Mockito.doReturn(res).when(this.facade).getSubjectsStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
         String endpoint = SUBJECT_STATISTICS_ENDPOINT + "/complementary" + DEFAULT_COURSE_CURRICULUM_QUERY;
@@ -43,21 +43,23 @@ public class SubjectStatisticsTest extends EndpointTest {
     @Test
     public void getComplementarySubjectsCsvTest() throws Exception {
         // set up
-        SubjectsResponse response = getSubjectsCsvResponse();
-        Mockito.doReturn(response).when(this.facade).getSubjectsCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
+        SubjectsResponse res = getSubjectsCsvResponse();
+        Mockito.doReturn(res).when(this.facade).getSubjectsCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, SUBJECT_STATISTICS_ENDPOINT+ "/complementary/csv" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
         // exercise
-        MvcResult res = this.mockMvc.perform(req).andReturn();
+        MvcResult result = this.mockMvc.perform(req).andReturn();
 
         // verify
-        Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
-        Assert.assertEquals(getMockedSubjectCsvResponse(), res.getResponse().getContentAsString());
+        int expectedStatus = HttpStatus.OK.value();
+
+        Assert.assertEquals(expectedStatus, result.getResponse().getStatus());
+        Assert.assertEquals(getMockedSubjectCsvResponse(), result.getResponse().getContentAsString());
 
     }
 
     @Test
-    public void testGetElectiveSubjects() throws Exception {
+    public void getElectiveSubjectsTest() throws Exception {
         SubjectsStatisticsResponse res = getSubjectsStatisticsMock();
         Mockito.doReturn(res).when(this.facade).getSubjectsStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
         String endpoint = SUBJECT_STATISTICS_ENDPOINT + "/elective" + DEFAULT_COURSE_CURRICULUM_QUERY;
@@ -75,21 +77,23 @@ public class SubjectStatisticsTest extends EndpointTest {
     @Test
     public void getElectiveSubjectsCsvTest() throws Exception {
         // set up
-        SubjectsResponse response = getSubjectsCsvResponse();
-        Mockito.doReturn(response).when(this.facade).getSubjectsCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
+        SubjectsResponse res = getSubjectsCsvResponse();
+        Mockito.doReturn(res).when(this.facade).getSubjectsCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, SUBJECT_STATISTICS_ENDPOINT+ "/elective/csv" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
         // exercise
-        MvcResult res = this.mockMvc.perform(req).andReturn();
+        MvcResult result = this.mockMvc.perform(req).andReturn();
 
         // verify
-        Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
-        Assert.assertEquals(getMockedSubjectCsvResponse(), res.getResponse().getContentAsString());
+        int expectedStatus = HttpStatus.OK.value();
+
+        Assert.assertEquals(expectedStatus, result.getResponse().getStatus());
+        Assert.assertEquals(getMockedSubjectCsvResponse(), result.getResponse().getContentAsString());
 
     }
 
     @Test
-    public void testGetMandatorySubjects() throws Exception {
+    public void getMandatorySubjectsTest() throws Exception {
         SubjectsStatisticsResponse res = getSubjectsStatisticsMock();
         Mockito.doReturn(res).when(this.facade).getSubjectsStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
         String endpoint = SUBJECT_STATISTICS_ENDPOINT + "/mandatory" + DEFAULT_COURSE_CURRICULUM_QUERY;
@@ -107,20 +111,22 @@ public class SubjectStatisticsTest extends EndpointTest {
     @Test
     public void getMandatorySubjectsCsvTest() throws Exception {
         // set up
-        SubjectsResponse response = getSubjectsCsvResponse();
-        Mockito.doReturn(response).when(this.facade).getSubjectsCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
+        SubjectsResponse res = getSubjectsCsvResponse();
+        Mockito.doReturn(res).when(this.facade).getSubjectsCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, SUBJECT_STATISTICS_ENDPOINT+ "/mandatory/csv" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
         // exercise
-        MvcResult res = this.mockMvc.perform(req).andReturn();
+        MvcResult result = this.mockMvc.perform(req).andReturn();
 
         // verify
-        Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
-        Assert.assertEquals(getMockedSubjectCsvResponse(), res.getResponse().getContentAsString());
+        int expectedStatus = HttpStatus.OK.value();
+
+        Assert.assertEquals(expectedStatus, result.getResponse().getStatus());
+        Assert.assertEquals(getMockedSubjectCsvResponse(), result.getResponse().getContentAsString());
 
     }
     @Test
-    public void testGetOptionalSubjects() throws Exception {
+    public void getOptionalSubjectsTest() throws Exception {
         SubjectsStatisticsResponse res = getSubjectsStatisticsMock();
         Mockito.doReturn(res).when(this.facade).getSubjectsStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
         String endpoint = SUBJECT_STATISTICS_ENDPOINT + "/optional" + DEFAULT_COURSE_CURRICULUM_QUERY;
@@ -138,27 +144,29 @@ public class SubjectStatisticsTest extends EndpointTest {
     @Test
     public void getOptionalSubjectsCsvTest() throws Exception {
         // set up
-        SubjectsResponse response = getSubjectsCsvResponse();
-        Mockito.doReturn(response).when(this.facade).getSubjectsCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
+        SubjectsResponse res = getSubjectsCsvResponse();
+        Mockito.doReturn(res).when(this.facade).getSubjectsCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(SubjectType.class));
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, SUBJECT_STATISTICS_ENDPOINT+ "/optional/csv" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
         // exercise
-        MvcResult res = this.mockMvc.perform(req).andReturn();
+        MvcResult result = this.mockMvc.perform(req).andReturn();
 
         // verify
-        Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
-        Assert.assertEquals(getMockedSubjectCsvResponse(), res.getResponse().getContentAsString());
+        int expectedStatus = HttpStatus.OK.value();
+
+        Assert.assertEquals(expectedStatus, result.getResponse().getStatus());
+        Assert.assertEquals(getMockedSubjectCsvResponse(), result.getResponse().getContentAsString());
 
     }
     @Test
     public void getSubjectSummaryTest() throws Exception {
         Mockito.doReturn(getSubjectStatisticsSummaryMock()).when(this.facade).getSubjectsStatisticsSummary(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
-        int expectedStatusCode = HttpStatus.OK.value();
+        int expectedStatus = HttpStatus.OK.value();
 
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, SUBJECT_STATISTICS_ENDPOINT + "/summary" + TestUtils.DEFAULT_COURSE_CURRICULUM_QUERY);
         MvcResult res = this.mockMvc.perform(req).andReturn();
 
-        Assert.assertEquals(expectedStatusCode, res.getResponse().getStatus());
+        Assert.assertEquals(expectedStatus, res.getResponse().getStatus());
     }
 
     private SubjectsStatisticsSummaryResponse getSubjectStatisticsSummaryMock() {
