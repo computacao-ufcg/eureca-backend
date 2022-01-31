@@ -30,78 +30,87 @@ public class RetentionStatisticsTest extends EndpointTest {
     private static final String RETENTION_STATISTICS_ENDPOINT = RetentionStatistics.ENDPOINT;
 
     @Test
-    public void testGetStudentRetention() throws Exception {
+    public void getStudentRetentionTest() throws Exception {
         // set up
-        StudentsRetentionStatisticsResponse response = getMockStudentRetentionResponse();
-        Mockito.doReturn(response).when(this.facade).getStudentsRetentionStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        StudentsRetentionStatisticsResponse res = getMockStudentRetentionResponse();
+        Mockito.doReturn(res).when(this.facade).getStudentsRetentionStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, RETENTION_STATISTICS_ENDPOINT + "/students" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
 
         // exercise
-        MvcResult res = this.mockMvc.perform(req).andReturn();
+        MvcResult result = this.mockMvc.perform(req).andReturn();
 
         // verify
-        Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
-        Assert.assertEquals(getMockedStudentsRetentionStatisticsResponse(), res.getResponse().getContentAsString());
+        int expectedStatus = HttpStatus.OK.value();
+
+        Assert.assertEquals(expectedStatus, result.getResponse().getStatus());
+        Assert.assertEquals(getMockedStudentsRetentionStatisticsResponse(), result.getResponse().getContentAsString());
     }
 
 
     @Test
-    public void testGetSubjectRetention() throws Exception {
+    public void getSubjectRetentionTest() throws Exception {
         // set up
-        SubjectsRetentionStatisticsResponse response = getMockedSubjectRetentionResponse();
-        Mockito.doReturn(response).when(this.facade).getSubjectsRetentionStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        SubjectsRetentionStatisticsResponse res = getMockedSubjectRetentionResponse();
+        Mockito.doReturn(res).when(this.facade).getSubjectsRetentionStatistics(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, RETENTION_STATISTICS_ENDPOINT + "/subjects" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
         // exercise
-        MvcResult res = this.mockMvc.perform(req).andReturn();
+        MvcResult result = this.mockMvc.perform(req).andReturn();
 
         // verify
-        Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
-        Assert.assertEquals(getMockedSubjectsRetentionStatisticsResponse(), res.getResponse().getContentAsString());
+        int expectedStatus = HttpStatus.OK.value();
+
+        Assert.assertEquals(expectedStatus, result.getResponse().getStatus());
+        Assert.assertEquals(getMockedSubjectsRetentionStatisticsResponse(), result.getResponse().getContentAsString());
     }
 
     @Test
     public void getStudentsRetentionCsvTest() throws Exception {
-        StudentsResponse response = getStudentsCsvResponse();
-        Mockito.doReturn(response).when(this.facade).getStudentsRetentionCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        StudentsResponse res = getStudentsCsvResponse();
+        Mockito.doReturn(res).when(this.facade).getStudentsRetentionCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, RETENTION_STATISTICS_ENDPOINT + "/students/csv" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
         // exercise
-        MvcResult res = this.mockMvc.perform(req).andReturn();
+        MvcResult result = this.mockMvc.perform(req).andReturn();
 
         // verify
-        Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
-        Assert.assertEquals(getMockedStudentCsvResponse(), res.getResponse().getContentAsString());
+        int expectedStatus = HttpStatus.OK.value();
+
+        Assert.assertEquals(expectedStatus, result.getResponse().getStatus());
+        Assert.assertEquals(getMockedStudentCsvResponse(), result.getResponse().getContentAsString());
     }
 
     @Test
     public void getSubjectRetentionCsvTest() throws Exception {
         // set up
-        SubjectsRetentionResponse response = getSubjectsRetentionCsvResponse();
-        Mockito.doReturn(response).when(this.facade).getSubjectsRetentionCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        SubjectsRetentionResponse res = getSubjectsRetentionCsvResponse();
+        Mockito.doReturn(res).when(this.facade).getSubjectsRetentionCSV(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, RETENTION_STATISTICS_ENDPOINT + "/subjects/csv" + DEFAULT_COURSE_CURRICULUM_QUERY);
 
         // exercise
-        MvcResult res = this.mockMvc.perform(req).andReturn();
+        MvcResult result= this.mockMvc.perform(req).andReturn();
 
         // verify
-        Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
-        Assert.assertEquals(getMockedSubjectRetentionCsvResponse(), res.getResponse().getContentAsString());
+        int expectedStatus = HttpStatus.OK.value();
+
+        Assert.assertEquals(expectedStatus, result.getResponse().getStatus());
+        Assert.assertEquals(getMockedSubjectRetentionCsvResponse(), result.getResponse().getContentAsString());
 
     }
 
     @Test
     public void getRetentionStatisticsSummaryTest() throws Exception {
-        RetentionStatisticsSummaryResponse response = new RetentionStatisticsSummaryResponse("","",null,null);
-        Mockito.doReturn(response).when(this.facade).getRetentionStatisticsSummary(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        RetentionStatisticsSummaryResponse res = new RetentionStatisticsSummaryResponse("","",null,null);
+        Mockito.doReturn(res).when(this.facade).getRetentionStatisticsSummary(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
 
         RequestBuilder req = this.getRequestBuilder(HttpMethod.GET, RETENTION_STATISTICS_ENDPOINT + "/summary" + DEFAULT_COURSE_CURRICULUM_QUERY);
-        MvcResult res = this.mockMvc.perform(req).andReturn();
+        MvcResult result= this.mockMvc.perform(req).andReturn();
 
-        Assert.assertEquals(HttpStatus.OK.value(), res.getResponse().getStatus());
+        int expectedStatus = HttpStatus.OK.value();
 
-        Assert.assertEquals(getMockedRetentionSummaryResponse(), res.getResponse().getContentAsString());
+        Assert.assertEquals(expectedStatus, result.getResponse().getStatus());
+        Assert.assertEquals(getMockedRetentionSummaryResponse(), result.getResponse().getContentAsString());
     }
 
     private StudentsRetentionStatisticsResponse getMockStudentRetentionResponse(){
