@@ -36,15 +36,18 @@ public class PreEnrollmentController {
                                                                 String electivePriorityList,
                                                                 String complementaryPriorityList,
                                                                 String mandatoryPriorityList) throws EurecaException {
+        this.loadSubjectAndScheduleCaches(courseCode, curriculumCode, term);
         PreEnrollmentData preEnrollmentData = this.getPreEnrollmentData(courseCode, curriculumCode, studentRegistration,
                 term, numCredits, optionalPriorityList, electivePriorityList, complementaryPriorityList,
                 mandatoryPriorityList);
         StudentPreEnrollmentResponse studentPreEnrollment = this.getStudentPreEnrollment(preEnrollmentData);
+        this.releaseSubjectAndScheduleCaches();
         return studentPreEnrollment;
     }
 
     public PreEnrollmentsResponse getActivesPreEnrollments(String courseCode, String curriculumCode, String term) throws EurecaException {
         Collection<Student> actives = this.dataAccessFacade.getAllActives(courseCode, curriculumCode);
+        this.loadSubjectAndScheduleCaches(courseCode, curriculumCode, term);
         Collection<String> activesRegistrations = actives.stream().map(student -> student.getRegistration().getRegistration()).collect(Collectors.toList());
         Collection<StudentPreEnrollmentResponse> activesPreEnrollments = new HashSet<>();
 
@@ -55,14 +58,9 @@ public class PreEnrollmentController {
         }
 
         SubjectDemandSummary subjectDemandSummary = this.getSubjectDemandSummary(courseCode, curriculumCode, term, activesPreEnrollments);
-        this.releaseCache();
+        this.releaseSubjectAndScheduleCaches();
 
         return new PreEnrollmentsResponse(activesPreEnrollments, subjectDemandSummary);
-    }
-
-    private void releaseCache() {
-        this.scheduleCache = null;
-        this.subjectsCache = null;
     }
 
     private SubjectDemandSummary getSubjectDemandSummary(String courseCode, String curriculumCode, String term, Collection<StudentPreEnrollmentResponse> preEnrollments) {
@@ -116,7 +114,6 @@ public class PreEnrollmentController {
                                                    String mandatoryPriorityList) throws EurecaException {
         Curriculum curriculum = getCachedCurriculum(courseCode, curriculumCode);
         StudentCurriculumProgress studentProgress = this.dataAccessFacade.getStudentCurriculumProgress(studentRegistration);
-        this.loadSubjectAndScheduleCaches(courseCode, curriculumCode, term);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, studentProgress);
         int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, studentProgress.getEnrolledCredits(), curriculum.getMinNumberOfTerms());
@@ -158,6 +155,11 @@ public class PreEnrollmentController {
             this.cacheSubjects(courseCode, curriculumCode);
             this.cacheSchedules(courseCode, curriculumCode, term);
         }
+    }
+
+    private void releaseSubjectAndScheduleCaches() {
+        this.scheduleCache = null;
+        this.subjectsCache = null;
     }
 
     private Curriculum getCachedCurriculum(String courseCode, String curriculumCode) throws EurecaException {

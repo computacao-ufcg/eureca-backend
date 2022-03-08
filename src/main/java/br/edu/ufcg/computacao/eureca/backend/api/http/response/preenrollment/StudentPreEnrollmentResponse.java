@@ -217,6 +217,9 @@ public class StudentPreEnrollmentResponse {
             this.subjects.put(subject.getSubjectCode(), schedule);
             this.subjects.putAll(availableCoRequirementsSchedules);
             firstAvailableSchedule.decrementAvailability();
+            availableCoRequirementsSchedules.values().forEach(coRequirementSchedule -> {
+                coRequirementSchedule.getSchedule().decrementAvailability();
+            });
         }
 
         return !haveScheduleConflict;
