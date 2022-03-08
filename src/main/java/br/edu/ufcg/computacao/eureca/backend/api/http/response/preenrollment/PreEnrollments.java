@@ -3,27 +3,22 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectDemandSummary;
 
 import java.util.Collection;
-import java.util.TreeSet;
 
-public class PreEnrollmentsResponse {
+public class PreEnrollments {
 
-    private Collection<StudentPreEnrollmentResponse> activesPreEnrollment;
+    private Collection<StudentPreEnrollment> activesPreEnrollment;
     private SubjectDemandSummary subjectDemandSummary;
 
-    public PreEnrollmentsResponse(Collection<StudentPreEnrollment> activesPreEnrollment, SubjectDemandSummary subjectDemandSummary) {
-        this.activesPreEnrollment = new TreeSet<>();
-        activesPreEnrollment.forEach(studentPreEnrollment -> {
-            StudentPreEnrollmentResponse response = new StudentPreEnrollmentResponse(studentPreEnrollment);
-            this.activesPreEnrollment.add(response);
-        });
+    public PreEnrollments(Collection<StudentPreEnrollment> activesPreEnrollment, SubjectDemandSummary subjectDemandSummary) {
+        this.activesPreEnrollment = activesPreEnrollment;
         this.subjectDemandSummary = subjectDemandSummary;
     }
 
-    public Collection<StudentPreEnrollmentResponse> getActivesPreEnrollment() {
+    public Collection<StudentPreEnrollment> getActivesPreEnrollment() {
         return activesPreEnrollment;
     }
 
-    public void setActivesPreEnrollment(Collection<StudentPreEnrollmentResponse> activesPreEnrollment) {
+    public void setActivesPreEnrollment(Collection<StudentPreEnrollment> activesPreEnrollment) {
         this.activesPreEnrollment = activesPreEnrollment;
     }
 

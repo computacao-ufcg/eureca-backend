@@ -30,40 +30,40 @@ public class PreEnrollmentController {
         this.curriculumCache = new HashMap<>();
     }
 
-    public StudentPreEnrollmentResponse getStudentPreEnrollment(String courseCode, String curriculumCode,
-                                                                String studentRegistration, String term,
-                                                                Integer numCredits, String optionalPriorityList,
-                                                                String electivePriorityList,
-                                                                String complementaryPriorityList,
-                                                                String mandatoryPriorityList) throws EurecaException {
+    public StudentPreEnrollment getStudentPreEnrollment(String courseCode, String curriculumCode,
+                                                        String studentRegistration, String term,
+                                                        Integer numCredits, String optionalPriorityList,
+                                                        String electivePriorityList,
+                                                        String complementaryPriorityList,
+                                                        String mandatoryPriorityList) throws EurecaException {
         this.loadSubjectAndScheduleCaches(courseCode, curriculumCode, term);
         PreEnrollmentData preEnrollmentData = this.getPreEnrollmentData(courseCode, curriculumCode, studentRegistration,
                 term, numCredits, optionalPriorityList, electivePriorityList, complementaryPriorityList,
                 mandatoryPriorityList);
-        StudentPreEnrollmentResponse studentPreEnrollment = this.getStudentPreEnrollment(preEnrollmentData);
+        StudentPreEnrollment studentPreEnrollment = this.getStudentPreEnrollment(preEnrollmentData);
         this.releaseSubjectAndScheduleCaches();
         return studentPreEnrollment;
     }
 
-    public PreEnrollmentsResponse getActivesPreEnrollments(String courseCode, String curriculumCode, String term) throws EurecaException {
+    public PreEnrollments getActivesPreEnrollments(String courseCode, String curriculumCode, String term) throws EurecaException {
         Collection<Student> actives = this.dataAccessFacade.getAllActives(courseCode, curriculumCode);
         this.loadSubjectAndScheduleCaches(courseCode, curriculumCode, term);
         Collection<String> activesRegistrations = actives.stream().map(student -> student.getRegistration().getRegistration()).collect(Collectors.toList());
-        Collection<StudentPreEnrollmentResponse> activesPreEnrollments = new HashSet<>();
+        Collection<StudentPreEnrollment> activesPreEnrollments = new HashSet<>();
 
         for (String studentRegistration : activesRegistrations) {
             PreEnrollmentData preEnrollmentData = this.getPreEnrollmentData(courseCode, curriculumCode, studentRegistration, term, null, null, null, null, null);
-            StudentPreEnrollmentResponse preEnrollmentResponse = this.getStudentPreEnrollment(preEnrollmentData);
+            StudentPreEnrollment preEnrollmentResponse = this.getStudentPreEnrollment(preEnrollmentData);
             activesPreEnrollments.add(preEnrollmentResponse);
         }
 
         SubjectDemandSummary subjectDemandSummary = this.getSubjectDemandSummary(courseCode, curriculumCode, term, activesPreEnrollments);
         this.releaseSubjectAndScheduleCaches();
 
-        return new PreEnrollmentsResponse(activesPreEnrollments, subjectDemandSummary);
+        return new PreEnrollments(activesPreEnrollments, subjectDemandSummary);
     }
 
-    private SubjectDemandSummary getSubjectDemandSummary(String courseCode, String curriculumCode, String term, Collection<StudentPreEnrollmentResponse> preEnrollments) {
+    private SubjectDemandSummary getSubjectDemandSummary(String courseCode, String curriculumCode, String term, Collection<StudentPreEnrollment> preEnrollments) {
         Collection<DetailedSubjectDemand> mandatoryDemand = this.getSubjectDemand(courseCode, curriculumCode, "M", preEnrollments);
         Collection<DetailedSubjectDemand> optionalDemand = this.getSubjectDemand(courseCode, curriculumCode, "O", preEnrollments);
         Collection<DetailedSubjectDemand> complementaryDemand = this.getSubjectDemand(courseCode, curriculumCode, "C", preEnrollments);
@@ -72,11 +72,12 @@ public class PreEnrollmentController {
         return new SubjectDemandSummary(mandatoryDemand, optionalDemand, complementaryDemand, electiveDemand);
     }
 
-    private Collection<DetailedSubjectDemand> getSubjectDemand(String courseCode, String curriculumCode, String subjectType, Collection<StudentPreEnrollmentResponse> preEnrollments) {
+    private Collection<DetailedSubjectDemand> getSubjectDemand(String courseCode, String curriculumCode,
+                                         String subjectType, Collection<StudentPreEnrollment> preEnrollments) {
         Collection<DetailedSubjectDemand> response = new ArrayList<>();
         Map<Subject, Map<Integer, Integer>> subjectDemandByTerm = new HashMap<>();
 
-        for (StudentPreEnrollmentResponse preEnrollment : preEnrollments) {
+        for (StudentPreEnrollment preEnrollment : preEnrollments) {
             Collection<String> proposedSubjectsCodes = preEnrollment.getSubjects().keySet();
             Collection<Subject> proposedSubjects = this.getSubjectsByCode(courseCode, curriculumCode, proposedSubjectsCodes);
             int studentCurrentTerm = preEnrollment.getTerm();
@@ -172,7 +173,7 @@ public class PreEnrollmentController {
         return curriculum;
     }
 
-    private StudentPreEnrollmentResponse getStudentPreEnrollment(PreEnrollmentData preEnrollmentData) {
+    private StudentPreEnrollment getStudentPreEnrollment(PreEnrollmentData preEnrollmentData) {
         String studentRegistration = preEnrollmentData.getStudentRegistration();
         String term = preEnrollmentData.getTerm();
         int nextTerm = preEnrollmentData.getNextTerm();
@@ -191,7 +192,7 @@ public class PreEnrollmentController {
         Collection<SubjectSchedule> prioritizedComplementarySubjects = preEnrollmentData.getPrioritizedComplementarySubjects();
         Collection<SubjectSchedule> prioritizedMandatorySubjects = preEnrollmentData.getPrioritizedMandatorySubjects();
 
-        StudentPreEnrollmentResponse studentPreEnrollment = new StudentPreEnrollmentResponse(studentRegistration, 
+        StudentPreEnrollment studentPreEnrollment = new StudentPreEnrollment(studentRegistration,
                 nextTerm, idealMandatoryCredits, idealOptionalCredits, idealComplementaryCredits, idealElectiveCredits);
 
         prioritizedOptionalSubjects = PreEnrollmentUtil.excludeUnavailableSubjects(prioritizedOptionalSubjects, availableOptionalSubjects);
@@ -228,7 +229,7 @@ public class PreEnrollmentController {
         return studentPreEnrollment;
     }
 
-    private void enrollMandatorySubjectsUntilConflict(StudentPreEnrollmentResponse studentPreEnrollment, Collection<SubjectSchedule> availableMandatorySubjects, String term) {
+    private void enrollMandatorySubjectsUntilConflict(StudentPreEnrollment studentPreEnrollment, Collection<SubjectSchedule> availableMandatorySubjects, String term) {
         Map<Integer, Collection<SubjectSchedule>> mandatorySubjectsGroupedByTerm = PreEnrollmentUtil.getSubjectsPerTerm(availableMandatorySubjects, SubjectType.MANDATORY);
         for (Integer termNumber : mandatorySubjectsGroupedByTerm.keySet()) {
             Collection<SubjectSchedule> termSubjects = mandatorySubjectsGroupedByTerm.get(termNumber);
@@ -240,7 +241,7 @@ public class PreEnrollmentController {
         }
     }
 
-    private void enrollSubjects(StudentPreEnrollmentResponse studentPreEnrollment, Collection<SubjectSchedule> availableSubjects, String term) {
+    private void enrollSubjects(StudentPreEnrollment studentPreEnrollment, Collection<SubjectSchedule> availableSubjects, String term) {
         for (SubjectSchedule subjectAndSchedule : availableSubjects) {
             Subject subject = subjectAndSchedule.getSubject();
             if (subject.isComposed()) {
@@ -304,7 +305,7 @@ public class PreEnrollmentController {
     }
 
     private Collection<DetailedSubjectDemand> getDetailedSubjectDemand(String courseCode, String curriculumCode, String term) throws EurecaException {
-        PreEnrollmentsResponse preEnrollments = this.getActivesPreEnrollments(courseCode, curriculumCode, term);
+        PreEnrollments preEnrollments = this.getActivesPreEnrollments(courseCode, curriculumCode, term);
         Collection<DetailedSubjectDemand> detailedDemand = new TreeSet<>();
 
         detailedDemand.addAll(preEnrollments.getSubjectDemandSummary().getMandatoryDemand());
