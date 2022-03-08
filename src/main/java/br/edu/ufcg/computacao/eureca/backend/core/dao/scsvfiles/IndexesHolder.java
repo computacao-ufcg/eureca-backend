@@ -505,16 +505,17 @@ public class IndexesHolder {
     private void buildSubjectIndexes() {
         this.subjectCurriculaMap = new HashMap<>();
         this.subjectsMap.forEach((subjectKey, subjectData) -> {
+            LOGGER.debug(String.format(Messages.INDEXING_SUBJECT_KEY_S_DATA_S, subjectKey, subjectData));
             Collection<SubjectKey> subjectKeys = this.subjectCurriculaMap.get(subjectKey.getSubjectCode());
             if (subjectKeys == null) subjectKeys = new TreeSet<>();
             subjectKeys.add(subjectKey);
             this.subjectCurriculaMap.put(subjectKey.getSubjectCode(), subjectKeys);
 
-            LOGGER.debug(String.format(Messages.PROCESSING_S_FOR_D_STUDENTS, subjectKey.getSubjectCode() + ":" +
-                            subjectKey.getCurriculumCode(), this.activesPerCurriculumMap.get(
-                            new CurriculumKey(subjectKey.getCourseCode(), subjectKey.getCurriculumCode())).size()));
-            this.activesPerCurriculumMap.get(new CurriculumKey(subjectKey.getCourseCode(),
-                    subjectKey.getCurriculumCode())).forEach(studentKey -> {
+            CurriculumKey key = new CurriculumKey(subjectKey.getCourseCode(), subjectKey.getCurriculumCode());
+            Collection<NationalIdRegistrationKey> regs = this.activesPerCurriculumMap.get(key);
+            if (regs != null) regs.forEach(studentKey -> {
+                LOGGER.debug(String.format(Messages.PROCESSING_S_FOR_D_STUDENTS, subjectKey.getSubjectCode() + ":" +
+                                subjectKey.getCurriculumCode(), regs.size()));
                 StudentCurriculumProgress studentCurriculumProgress = this.studentCurriculumProgressMap.get(studentKey);
                 if (hasNotCompleted(studentCurriculumProgress, subjectKey, subjectData) && !isDisabled(studentCurriculumProgress, subjectKey) && isNotOngoing(studentCurriculumProgress, subjectKey)) {
                     if (isEnabled(studentCurriculumProgress, subjectKey, subjectData)) {
