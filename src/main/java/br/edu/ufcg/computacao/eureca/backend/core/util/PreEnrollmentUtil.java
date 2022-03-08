@@ -88,16 +88,11 @@ public class PreEnrollmentUtil {
     public static Map<SubjectType, Integer> getIdealCreditsPerSubjectType(Curriculum curriculum, Integer maxCredits, int nextTerm) {
         Map<SubjectType, Integer> idealCredits = new HashMap<>();
         int idealMandatoryCredits = curriculum.getIdealMandatoryCredits(nextTerm);
-        int idealOptionalCredits = 0;
-        int idealComplementaryCredits = 0;
-        int idealElectiveCredits = 0;
+        int idealOptionalCredits = curriculum.getIdealOptionalCredits(nextTerm);
+        int idealComplementaryCredits = curriculum.getIdealComplementaryCredits(nextTerm);
+        int idealElectiveCredits = curriculum.getIdealElectiveCredits(nextTerm);
 
-        if (maxCredits == null) {
-            idealMandatoryCredits = curriculum.getIdealMandatoryCredits(nextTerm);
-            idealOptionalCredits = curriculum.getIdealOptionalCredits(nextTerm);
-            idealComplementaryCredits = curriculum.getIdealComplementaryCredits(nextTerm);
-            idealElectiveCredits = curriculum.getIdealElectiveCredits(nextTerm);
-        } else {
+        if (maxCredits != null) {
             idealMandatoryCredits = Math.min(idealMandatoryCredits, maxCredits);
             idealComplementaryCredits = Math.max(0, Math.min(idealComplementaryCredits, maxCredits - idealMandatoryCredits));
             idealOptionalCredits = Math.max(0, Math.min(idealOptionalCredits, maxCredits - (idealMandatoryCredits + idealComplementaryCredits)));
