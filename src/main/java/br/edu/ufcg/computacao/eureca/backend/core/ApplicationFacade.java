@@ -205,14 +205,9 @@ public class ApplicationFacade {
     }
 
     public PreEnrollmentsResponse getPreEnrollments(String token, String courseCode, String curriculumCode, String term) throws EurecaException {
-        try {
-            authenticateAndAuthorize(token, EurecaOperation.GET_PRE_ENROLLMENTS);
-            PreEnrollments preEnrollments = this.preEnrollmentController.getActivesPreEnrollments(courseCode, curriculumCode, term);
-            return new PreEnrollmentsResponse(preEnrollments.getActivesPreEnrollment(), preEnrollments.getSubjectDemandSummary());
-        } catch(Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
+        authenticateAndAuthorize(token, EurecaOperation.GET_PRE_ENROLLMENTS);
+        PreEnrollments preEnrollments = this.preEnrollmentController.getActivesPreEnrollments(courseCode, curriculumCode, term);
+        return new PreEnrollmentsResponse(preEnrollments.getActivesPreEnrollment(), preEnrollments.getSubjectDemandSummary());
     }
 
     public SubjectsDemandResponse getDemand(String token, String courseCode, String curriculumCode, String term) throws EurecaException {
