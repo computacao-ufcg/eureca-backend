@@ -17,10 +17,20 @@ public class PreEnrollmentData {
     private Collection<SubjectSchedule> availableElectiveSubjects;
     private Collection<SubjectSchedule> prioritizedOptionalSubjects;
     private Collection<SubjectSchedule> prioritizedElectiveSubjects;
+    private Collection<SubjectSchedule> prioritizedComplementarySubjects;
     private Collection<SubjectSchedule> prioritizedMandatorySubjects;
 
 
-    public PreEnrollmentData(String studentRegistration, String term, int nextTerm, int idealMandatoryCredits, int idealOptionalCredits, int idealComplementaryCredits, int idealElectiveCredits, Collection<SubjectSchedule> availableMandatorySubjects, Collection<SubjectSchedule> availableComplementarySubjects, Collection<SubjectSchedule> availableOptionalSubjects, Collection<SubjectSchedule> availableElectiveSubjects, Collection<SubjectSchedule> prioritizedOptionalSubjects, Collection<SubjectSchedule> prioritizedElectiveSubjects, Collection<SubjectSchedule> prioritizedMandatorySubjects) {
+    public PreEnrollmentData(String studentRegistration, String term, int nextTerm, int idealMandatoryCredits,
+                             int idealOptionalCredits, int idealComplementaryCredits, int idealElectiveCredits,
+                             Collection<SubjectSchedule> availableMandatorySubjects,
+                             Collection<SubjectSchedule> availableComplementarySubjects,
+                             Collection<SubjectSchedule> availableOptionalSubjects,
+                             Collection<SubjectSchedule> availableElectiveSubjects,
+                             Collection<SubjectSchedule> prioritizedOptionalSubjects,
+                             Collection<SubjectSchedule> prioritizedElectiveSubjects,
+                             Collection<SubjectSchedule> prioritizedComplementarySubjects,
+                             Collection<SubjectSchedule> prioritizedMandatorySubjects) {
         this.studentRegistration = studentRegistration;
         this.term = term;
         this.nextTerm = nextTerm;
@@ -34,6 +44,7 @@ public class PreEnrollmentData {
         this.availableElectiveSubjects = availableElectiveSubjects;
         this.prioritizedOptionalSubjects = prioritizedOptionalSubjects;
         this.prioritizedElectiveSubjects = prioritizedElectiveSubjects;
+        this.prioritizedComplementarySubjects = prioritizedComplementarySubjects;
         this.prioritizedMandatorySubjects = prioritizedMandatorySubjects;
     }
 
@@ -139,6 +150,14 @@ public class PreEnrollmentData {
 
     public void setPrioritizedElectiveSubjects(Collection<SubjectSchedule> prioritizedElectiveSubjects) {
         this.prioritizedElectiveSubjects = prioritizedElectiveSubjects;
+    }
+
+    public Collection<SubjectSchedule> getPrioritizedComplementarySubjects() {
+        return prioritizedComplementarySubjects;
+    }
+
+    public void setPrioritizedComplementarySubjects(Collection<SubjectSchedule> prioritizedComplementarySubjects) {
+        this.prioritizedComplementarySubjects = prioritizedComplementarySubjects;
     }
 
     public Collection<SubjectSchedule> getPrioritizedMandatorySubjects() {
