@@ -11,6 +11,7 @@ public class StudentCurriculumProgress {
     private int completedOptionalCredits;
     private int completedElectiveCredits;
     private int completedComplementaryCredits;
+    private int completedComplementaryActivities;
     private int enrolledCredits;
     private Collection<SubjectKey> completed;
     private Collection<SubjectKey> enabled;
@@ -20,12 +21,13 @@ public class StudentCurriculumProgress {
 
     public StudentCurriculumProgress(int completedTerms, int completedMandatoryCredits, int completedOptionalCredits,
                                      int completedElectiveCredits, int completedComplementaryCredits,
-                                     int enrolledCredits) {
+                                     int completedComplementaryActivities, int enrolledCredits) {
         this.completedTerms = completedTerms;
         this.completedMandatoryCredits = completedMandatoryCredits;
         this.completedOptionalCredits = completedOptionalCredits;
         this.completedElectiveCredits = completedElectiveCredits;
         this.completedComplementaryCredits = completedComplementaryCredits;
+        this.completedComplementaryActivities = completedComplementaryActivities;
         this.enrolledCredits = enrolledCredits;
         this.completed = new TreeSet<>();
         this.enabled = new TreeSet<>();
@@ -47,7 +49,8 @@ public class StudentCurriculumProgress {
     }
 
     public int getCompletedCredits() {
-        return completedComplementaryCredits + completedMandatoryCredits + completedOptionalCredits + completedElectiveCredits;
+        return completedComplementaryCredits + completedMandatoryCredits + completedOptionalCredits +
+                completedElectiveCredits + completedComplementaryActivities;
     }
 
     public void setCompletedMandatoryCredits(int completedMandatoryCredits) {
@@ -76,6 +79,14 @@ public class StudentCurriculumProgress {
 
     public void setCompletedComplementaryCredits(int completedComplementaryCredits) {
         this.completedComplementaryCredits = completedComplementaryCredits;
+    }
+
+    public int getCompletedComplementaryActivities() {
+        return completedComplementaryActivities;
+    }
+
+    public void setCompletedComplementaryActivities(int completedComplementaryActivities) {
+        this.completedComplementaryActivities = completedComplementaryActivities;
     }
 
     public int getEnrolledCredits() {
@@ -124,5 +135,23 @@ public class StudentCurriculumProgress {
 
     public void setAdequate(Collection<SubjectKey> adequate) {
         this.adequate = adequate;
+    }
+
+    @Override
+    public String toString() {
+        return "StudentCurriculumProgress{" +
+                "completedTerms=" + completedTerms +
+                ", completedMandatoryCredits=" + completedMandatoryCredits +
+                ", completedOptionalCredits=" + completedOptionalCredits +
+                ", completedElectiveCredits=" + completedElectiveCredits +
+                ", completedComplementaryCredits=" + completedComplementaryCredits +
+                ", completedComplementaryActivities=" + completedComplementaryActivities +
+                ", enrolledCredits=" + enrolledCredits +
+                ", completed=" + completed +
+                ", enabled=" + enabled +
+                ", disabled=" + disabled +
+                ", ongoing=" + ongoing +
+                ", adequate=" + adequate +
+                '}';
     }
 }
