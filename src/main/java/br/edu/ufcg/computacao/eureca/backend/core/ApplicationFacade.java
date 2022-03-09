@@ -41,6 +41,7 @@ import java.security.GeneralSecurityException;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Collection;
 import java.util.Map;
+import java.util.TreeSet;
 
 public class ApplicationFacade {
     private static final Logger LOGGER = Logger.getLogger(ApplicationFacade.class);
@@ -210,7 +211,21 @@ public class ApplicationFacade {
         return new PreEnrollmentsResponse(preEnrollments.getActivesPreEnrollment(), preEnrollments.getSubjectDemandSummary());
     }
 
-    public SubjectsDemandResponse getDemand(String token, String courseCode, String curriculumCode, String term) throws EurecaException {
+    public DemandResponse getDemand(String token, String courseCode, String curriculumCode, String term) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_PRE_ENROLLMENTS);
+        PreEnrollments preEnrollments = this.preEnrollmentController.getActivesPreEnrollments(courseCode, curriculumCode, term);
+        return new DemandResponse(preEnrollments.getSubjectDemandSummary());
+    }
+
+    public DemandCSVResponse getDemandCSV(String token, String courseCode, String curriculumCode, String term)
+            throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_DEMAND_CSV);
+        PreEnrollments preEnrollments = this.preEnrollmentController.getActivesPreEnrollments(courseCode, curriculumCode,
+                term);
+        return new DemandCSVResponse(preEnrollments);
+    }
+
+    public SubjectsDemandResponse getSubjectsDemand(String token, String courseCode, String curriculumCode, String term) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DEMAND);
         return this.preEnrollmentController.getDemand(courseCode, curriculumCode, term);
     }

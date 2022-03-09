@@ -85,12 +85,25 @@ public class PreEnrollmentUtil {
         subject.setCoRequirementsList(availableCoRequirementsCode);
     }
 
-    public static Map<SubjectType, Integer> getIdealCreditsPerSubjectType(Curriculum curriculum, Integer maxCredits, int nextTerm) {
+    public static Map<SubjectType, Integer> getIdealCreditsPerSubjectType(Curriculum curriculum,
+                                                       StudentCurriculumProgress studentProgress, Integer maxCredits) {
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, studentProgress);
+        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, studentProgress.getEnrolledCredits(),
+                curriculum.getMinNumberOfTerms());
+
         Map<SubjectType, Integer> idealCredits = new HashMap<>();
-        int idealMandatoryCredits = curriculum.getIdealMandatoryCredits(nextTerm);
-        int idealOptionalCredits = curriculum.getIdealOptionalCredits(nextTerm);
-        int idealComplementaryCredits = curriculum.getIdealComplementaryCredits(nextTerm);
-        int idealElectiveCredits = curriculum.getIdealElectiveCredits(nextTerm);
+        int leftMandatoryCredits = Math.max((curriculum.getMinMandatoryCreditsNeeded() -
+                studentProgress.getCompletedMandatoryCredits()), 0);
+        int leftOptionalCredits = Math.max((curriculum.getMinOptionalCreditsNeeded() -
+                studentProgress.getCompletedOptionalCredits()), 0);
+        int leftComplementaryCredits = Math.max((curriculum.getMinComplementaryCreditsNeeded() -
+                studentProgress.getCompletedComplementaryCredits()), 0);
+        int leftElectiveCredits = Math.max((curriculum.getMinElectiveCreditsNeeded() -
+                studentProgress.getCompletedElectiveCredits()), 0);
+        int idealMandatoryCredits = Math.min(leftMandatoryCredits, curriculum.getIdealMandatoryCredits(nextTerm));
+        int idealOptionalCredits = Math.min(leftOptionalCredits, curriculum.getIdealOptionalCredits(nextTerm));
+        int idealComplementaryCredits = Math.min(leftComplementaryCredits, curriculum.getIdealComplementaryCredits(nextTerm));
+        int idealElectiveCredits = Math.min(leftElectiveCredits, curriculum.getIdealElectiveCredits(nextTerm));
 
         if (maxCredits != null) {
             idealMandatoryCredits = Math.min(idealMandatoryCredits, maxCredits);
