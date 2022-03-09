@@ -1,8 +1,5 @@
 package br.edu.ufcg.computacao.eureca.backend.core.tests.util;
 
-import br.edu.ufcg.computacao.eureca.backend.core.controllers.PreEnrollmentController;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
-import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.ScsvFilesDataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.backend.core.util.PreEnrollmentUtil;
 import br.edu.ufcg.computacao.eureca.backend.util.TestUtils;
@@ -131,7 +128,7 @@ public class PreEnrollmentUtilTest {
         int completedOptionalCredits = 8;
         int completedComplementaryCredits = 0;
         int enrolledCredits = 16;
-        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits, completedOptionalCredits, completedComplementaryCredits, enrolledCredits);
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits, completedOptionalCredits, 0, completedComplementaryCredits, enrolledCredits);
 
         PreEnrollmentUtil.sanitizeSubject(curriculum.getCourseCode(), curriculum.getCurriculumCode(), subjectSchedule, progress);
 
@@ -141,9 +138,9 @@ public class PreEnrollmentUtilTest {
 
     @Test
     public void testGetIdealCreditsPerSubjectTypeWithMaxCredits() {
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(5, 54, 0, 8, 0, 0);
         int maxCredits = 24;
-        int nextTerm = 6;
-        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, maxCredits, nextTerm);
+        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress, maxCredits);
 
         Integer mandatoryIdealCredits = response.get(SubjectType.MANDATORY);
         Integer optionalIdealCredits = response.get(SubjectType.OPTIONAL);
@@ -161,10 +158,163 @@ public class PreEnrollmentUtilTest {
         Assert.assertEquals(expectedOptionalIdealCredits, optionalIdealCredits);
     }
 
+    // Test for term 1
     @Test
-    public void testGetIdealCreditsPerSubjectTypeWithoutMaxCredits() {
-        int nextTerm = 6;
-        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, null, nextTerm);
+    public void testGetIdealCreditsPerSubjectTypeWithoutMaxCreditsTerm1() {
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(0, 0, 0,0, 0, 0);
+        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,null);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
+        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
+                this.curriculum.getMinNumberOfTerms());
+
+        Assert.assertEquals(1, actualTerm);
+        Assert.assertEquals(1, nextTerm);
+
+        Integer mandatoryIdealCredits = response.get(SubjectType.MANDATORY);
+        Integer optionalIdealCredits = response.get(SubjectType.OPTIONAL);
+        Integer complementaryIdealCredits = response.get(SubjectType.COMPLEMENTARY);
+        Integer electiveIdealCredits = response.get(SubjectType.ELECTIVE);
+
+        Integer expectedMandatoryIdealCredits = 16; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedComplementaryIdealCredits = 0; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedOptionalIdealCredits = 0; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedElectiveIdealCredits = 4; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+
+        Assert.assertEquals(expectedComplementaryIdealCredits, complementaryIdealCredits);
+        Assert.assertEquals(expectedMandatoryIdealCredits, mandatoryIdealCredits);
+        Assert.assertEquals(expectedElectiveIdealCredits, electiveIdealCredits);
+        Assert.assertEquals(expectedOptionalIdealCredits, optionalIdealCredits);
+    }
+
+    // Test for term 2
+    @Test
+    public void testGetIdealCreditsPerSubjectTypeWithoutMaxCreditsTerm2() {
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(1, 16, 0,4, 0, 0);
+        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,null);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
+        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
+                this.curriculum.getMinNumberOfTerms());
+
+        Assert.assertEquals(2, actualTerm);
+        Assert.assertEquals(2, nextTerm);
+
+        Integer mandatoryIdealCredits = response.get(SubjectType.MANDATORY);
+        Integer optionalIdealCredits = response.get(SubjectType.OPTIONAL);
+        Integer complementaryIdealCredits = response.get(SubjectType.COMPLEMENTARY);
+        Integer electiveIdealCredits = response.get(SubjectType.ELECTIVE);
+
+        Integer expectedMandatoryIdealCredits = 16; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedComplementaryIdealCredits = 0; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedOptionalIdealCredits = 0; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedElectiveIdealCredits = 4; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+
+        Assert.assertEquals(expectedComplementaryIdealCredits, complementaryIdealCredits);
+        Assert.assertEquals(expectedMandatoryIdealCredits, mandatoryIdealCredits);
+        Assert.assertEquals(expectedElectiveIdealCredits, electiveIdealCredits);
+        Assert.assertEquals(expectedOptionalIdealCredits, optionalIdealCredits);
+    }
+
+    // Test for term 3
+    @Test
+    public void testGetIdealCreditsPerSubjectTypeWithoutMaxCreditsTerm3() {
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(2, 32, 0,8, 0, 0);
+        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,null);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
+        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
+                this.curriculum.getMinNumberOfTerms());
+
+        Assert.assertEquals(3, actualTerm);
+        Assert.assertEquals(3, nextTerm);
+
+        Integer mandatoryIdealCredits = response.get(SubjectType.MANDATORY);
+        Integer optionalIdealCredits = response.get(SubjectType.OPTIONAL);
+        Integer complementaryIdealCredits = response.get(SubjectType.COMPLEMENTARY);
+        Integer electiveIdealCredits = response.get(SubjectType.ELECTIVE);
+
+        Integer expectedMandatoryIdealCredits = 24; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedComplementaryIdealCredits = 0; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedOptionalIdealCredits = 0; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedElectiveIdealCredits = 0; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+
+        Assert.assertEquals(expectedComplementaryIdealCredits, complementaryIdealCredits);
+        Assert.assertEquals(expectedMandatoryIdealCredits, mandatoryIdealCredits);
+        Assert.assertEquals(expectedElectiveIdealCredits, electiveIdealCredits);
+        Assert.assertEquals(expectedOptionalIdealCredits, optionalIdealCredits);
+    }
+
+    // Test for term 4
+    @Test
+    public void testGetIdealCreditsPerSubjectTypeWithoutMaxCreditsTerm4() {
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(3, 56, 0,8, 0, 0);
+        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,null);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
+        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
+                this.curriculum.getMinNumberOfTerms());
+
+        Assert.assertEquals(4, actualTerm);
+        Assert.assertEquals(4, nextTerm);
+
+        Integer mandatoryIdealCredits = response.get(SubjectType.MANDATORY);
+        Integer optionalIdealCredits = response.get(SubjectType.OPTIONAL);
+        Integer complementaryIdealCredits = response.get(SubjectType.COMPLEMENTARY);
+        Integer electiveIdealCredits = response.get(SubjectType.ELECTIVE);
+
+        Integer expectedMandatoryIdealCredits = 24; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedComplementaryIdealCredits = 0; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedOptionalIdealCredits = 0; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedElectiveIdealCredits = 0; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+
+        Assert.assertEquals(expectedComplementaryIdealCredits, complementaryIdealCredits);
+        Assert.assertEquals(expectedMandatoryIdealCredits, mandatoryIdealCredits);
+        Assert.assertEquals(expectedElectiveIdealCredits, electiveIdealCredits);
+        Assert.assertEquals(expectedOptionalIdealCredits, optionalIdealCredits);
+    }
+
+    // Test for term 5
+    @Test
+    public void testGetIdealCreditsPerSubjectTypeWithoutMaxCreditsTerm5() {
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(4, 80, 0,8, 0, 0);
+        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,null);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
+        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
+                this.curriculum.getMinNumberOfTerms());
+
+        Assert.assertEquals(5, actualTerm);
+        Assert.assertEquals(5, nextTerm);
+
+        Integer mandatoryIdealCredits = response.get(SubjectType.MANDATORY);
+        Integer optionalIdealCredits = response.get(SubjectType.OPTIONAL);
+        Integer complementaryIdealCredits = response.get(SubjectType.COMPLEMENTARY);
+        Integer electiveIdealCredits = response.get(SubjectType.ELECTIVE);
+
+        Integer expectedMandatoryIdealCredits = 24; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedComplementaryIdealCredits = 0; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedOptionalIdealCredits = 0; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedElectiveIdealCredits = 0; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+
+        Assert.assertEquals(expectedComplementaryIdealCredits, complementaryIdealCredits);
+        Assert.assertEquals(expectedMandatoryIdealCredits, mandatoryIdealCredits);
+        Assert.assertEquals(expectedElectiveIdealCredits, electiveIdealCredits);
+        Assert.assertEquals(expectedOptionalIdealCredits, optionalIdealCredits);
+    }
+
+    // Test for term 6
+    @Test
+    public void testGetIdealCreditsPerSubjectTypeWithoutMaxCreditsTerm6() {
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(5, 104, 0,8, 0, 0);
+        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,null);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
+        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
+                this.curriculum.getMinNumberOfTerms());
+
+        Assert.assertEquals(6, actualTerm);
+        Assert.assertEquals(6, nextTerm);
 
         Integer mandatoryIdealCredits = response.get(SubjectType.MANDATORY);
         Integer optionalIdealCredits = response.get(SubjectType.OPTIONAL);
@@ -182,6 +332,123 @@ public class PreEnrollmentUtilTest {
         Assert.assertEquals(expectedOptionalIdealCredits, optionalIdealCredits);
     }
 
+    // Test for term 7
+    @Test
+    public void testGetIdealCreditsPerSubjectTypeWithoutMaxCreditsTerm7() {
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(6, 116, 8,8, 0, 0);
+        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,null);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
+        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
+                this.curriculum.getMinNumberOfTerms());
+
+        Assert.assertEquals(7, actualTerm);
+        Assert.assertEquals(7, nextTerm);
+
+        Integer mandatoryIdealCredits = response.get(SubjectType.MANDATORY);
+        Integer optionalIdealCredits = response.get(SubjectType.OPTIONAL);
+        Integer complementaryIdealCredits = response.get(SubjectType.COMPLEMENTARY);
+        Integer electiveIdealCredits = response.get(SubjectType.ELECTIVE);
+
+        Integer expectedMandatoryIdealCredits = 8; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedComplementaryIdealCredits = 0; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedOptionalIdealCredits = 8; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedElectiveIdealCredits = 4; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+
+        Assert.assertEquals(expectedComplementaryIdealCredits, complementaryIdealCredits);
+        Assert.assertEquals(expectedMandatoryIdealCredits, mandatoryIdealCredits);
+        Assert.assertEquals(expectedElectiveIdealCredits, electiveIdealCredits);
+        Assert.assertEquals(expectedOptionalIdealCredits, optionalIdealCredits);
+    }
+
+
+    // Test for term 8
+    @Test
+    public void testGetIdealCreditsPerSubjectTypeWithoutMaxCreditsTerm8() {
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(7, 124, 16,12, 0, 0);
+        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,null);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
+        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
+                this.curriculum.getMinNumberOfTerms());
+
+        Assert.assertEquals(8, actualTerm);
+        Assert.assertEquals(8, nextTerm);
+
+        Integer mandatoryIdealCredits = response.get(SubjectType.MANDATORY);
+        Integer optionalIdealCredits = response.get(SubjectType.OPTIONAL);
+        Integer complementaryIdealCredits = response.get(SubjectType.COMPLEMENTARY);
+        Integer electiveIdealCredits = response.get(SubjectType.ELECTIVE);
+
+        Integer expectedMandatoryIdealCredits = 4; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedComplementaryIdealCredits = 4; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedOptionalIdealCredits = 8; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedElectiveIdealCredits = 4; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+
+        Assert.assertEquals(expectedComplementaryIdealCredits, complementaryIdealCredits);
+        Assert.assertEquals(expectedMandatoryIdealCredits, mandatoryIdealCredits);
+        Assert.assertEquals(expectedElectiveIdealCredits, electiveIdealCredits);
+        Assert.assertEquals(expectedOptionalIdealCredits, optionalIdealCredits);
+    }
+
+    // Test for term 9
+    @Test
+    public void testGetIdealCreditsPerSubjectTypeWithoutMaxCreditsTerm9() {
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(8, 128, 24,16, 4, 0);
+        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,null);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
+        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
+                this.curriculum.getMinNumberOfTerms());
+
+        Assert.assertEquals(9, actualTerm);
+        Assert.assertEquals(9, nextTerm);
+
+        Integer mandatoryIdealCredits = response.get(SubjectType.MANDATORY);
+        Integer optionalIdealCredits = response.get(SubjectType.OPTIONAL);
+        Integer complementaryIdealCredits = response.get(SubjectType.COMPLEMENTARY);
+        Integer electiveIdealCredits = response.get(SubjectType.ELECTIVE);
+
+        Integer expectedMandatoryIdealCredits = 4; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedComplementaryIdealCredits = 4; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedOptionalIdealCredits = 16; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedElectiveIdealCredits = 0; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+
+        Assert.assertEquals(expectedComplementaryIdealCredits, complementaryIdealCredits);
+        Assert.assertEquals(expectedMandatoryIdealCredits, mandatoryIdealCredits);
+        Assert.assertEquals(expectedElectiveIdealCredits, electiveIdealCredits);
+        Assert.assertEquals(expectedOptionalIdealCredits, optionalIdealCredits);
+    }
+
+    // Test for term 9
+    @Test
+    public void testGetIdealCreditsPerSubjectTypeWithoutMaxCreditsTermGreaterThan9() {
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(9, 132, 40,16, 8, 0);
+        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,null);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
+        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
+                this.curriculum.getMinNumberOfTerms());
+
+        Assert.assertEquals(9, actualTerm);
+        Assert.assertEquals(9, nextTerm);
+
+        Integer mandatoryIdealCredits = response.get(SubjectType.MANDATORY);
+        Integer optionalIdealCredits = response.get(SubjectType.OPTIONAL);
+        Integer complementaryIdealCredits = response.get(SubjectType.COMPLEMENTARY);
+        Integer electiveIdealCredits = response.get(SubjectType.ELECTIVE);
+
+        Integer expectedMandatoryIdealCredits = 0; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedComplementaryIdealCredits = 0; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedOptionalIdealCredits = 0; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+        Integer expectedElectiveIdealCredits = 0; // curriculum.getIdealMandatoryCredits(nextTerm - 1)
+
+        Assert.assertEquals(expectedComplementaryIdealCredits, complementaryIdealCredits);
+        Assert.assertEquals(expectedMandatoryIdealCredits, mandatoryIdealCredits);
+        Assert.assertEquals(expectedElectiveIdealCredits, electiveIdealCredits);
+        Assert.assertEquals(expectedOptionalIdealCredits, optionalIdealCredits);
+    }
+
     @Test
     public void testGetActualTerm() {
         int completedTerms = 5;
@@ -189,7 +456,7 @@ public class PreEnrollmentUtilTest {
         int completedOptionalCredits = 8;
         int completedComplementaryCredits = 0;
         int enrolledCredits = 16;
-        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits, completedOptionalCredits, completedComplementaryCredits, enrolledCredits);
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits, completedOptionalCredits, 0, completedComplementaryCredits, enrolledCredits);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
         int expectedActualTerm = 5;
@@ -204,7 +471,7 @@ public class PreEnrollmentUtilTest {
         int completedOptionalCredits = 8;
         int completedComplementaryCredits = 0;
         int enrolledCredits = 16;
-        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits, completedOptionalCredits, completedComplementaryCredits, enrolledCredits);
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits, completedOptionalCredits, 0, completedComplementaryCredits, enrolledCredits);
 
         int actualTerm = 5;
         int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(), curriculum.getMinNumberOfTerms());

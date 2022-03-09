@@ -1,9 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.CommonKeys;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment.PreEnrollmentsResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment.StudentPreEnrollmentResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment.SubjectsDemandResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment.*;
 import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.ApplicationFacade;
@@ -83,7 +81,7 @@ public class PreEnrollment {
 
     @ApiOperation(value = ApiDocumentation.PreEnrollment.GET_DEMAND)
     @RequestMapping(value = "/demand", method = RequestMethod.GET)
-    public ResponseEntity<SubjectsDemandResponse> getDemand(
+    public ResponseEntity<DemandResponse> getDemand(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam String courseCode,
             @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
@@ -94,11 +92,53 @@ public class PreEnrollment {
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
-            SubjectsDemandResponse demand = ApplicationFacade.getInstance().getDemand(token, courseCode, curriculumCode, term);
+            DemandResponse demand = ApplicationFacade.getInstance().getDemand(token, courseCode, curriculumCode, term);
             return new ResponseEntity<>(demand, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(e);
             throw e;
         }
     }
+
+    @ApiOperation(value = ApiDocumentation.PreEnrollment.GET_DEMAND_CSV)
+    @RequestMapping(value = "/demandCSV", method = RequestMethod.GET)
+    public ResponseEntity<DemandCSVResponse> getDemandCSV(
+            @ApiParam(value = ApiDocumentation.Common.COURSE)
+            @RequestParam String courseCode,
+            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+            @RequestParam String curriculumCode,
+            @ApiParam(value = ApiDocumentation.PreEnrollment.TERM)
+            @RequestParam String term,
+            @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
+            @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
+    ) throws EurecaException {
+        try {
+            DemandCSVResponse demand = ApplicationFacade.getInstance().getDemandCSV(token, courseCode, curriculumCode, term);
+            return new ResponseEntity<>(demand, HttpStatus.OK);
+        } catch (EurecaException e) {
+            LOGGER.info(e);
+            throw e;
+        }
+    }
+
+//    @ApiOperation(value = ApiDocumentation.PreEnrollment.GET_DEMAND)
+//    @RequestMapping(value = "/demand", method = RequestMethod.GET)
+//    public ResponseEntity<SubjectsDemandResponse> getDemand(
+//            @ApiParam(value = ApiDocumentation.Common.COURSE)
+//            @RequestParam String courseCode,
+//            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+//            @RequestParam String curriculumCode,
+//            @ApiParam(value = ApiDocumentation.PreEnrollment.TERM)
+//            @RequestParam String term,
+//            @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
+//            @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
+//    ) throws EurecaException {
+//        try {
+//            SubjectsDemandResponse demand = ApplicationFacade.getInstance().getSubjectsDemand(token, courseCode, curriculumCode, term);
+//            return new ResponseEntity<>(demand, HttpStatus.OK);
+//        } catch (EurecaException e) {
+//            LOGGER.info(e);
+//            throw e;
+//        }
+//    }
 }

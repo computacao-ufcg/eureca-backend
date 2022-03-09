@@ -9,6 +9,7 @@ public class StudentCurriculumProgress {
     private int completedTerms;
     private int completedMandatoryCredits;
     private int completedOptionalCredits;
+    private int completedElectiveCredits;
     private int completedComplementaryCredits;
     private int enrolledCredits;
     private Collection<SubjectKey> completed;
@@ -18,10 +19,12 @@ public class StudentCurriculumProgress {
     private Collection<SubjectKey> adequate;
 
     public StudentCurriculumProgress(int completedTerms, int completedMandatoryCredits, int completedOptionalCredits,
-                                     int completedComplementaryCredits, int enrolledCredits) {
+                                     int completedElectiveCredits, int completedComplementaryCredits,
+                                     int enrolledCredits) {
         this.completedTerms = completedTerms;
         this.completedMandatoryCredits = completedMandatoryCredits;
         this.completedOptionalCredits = completedOptionalCredits;
+        this.completedElectiveCredits = completedElectiveCredits;
         this.completedComplementaryCredits = completedComplementaryCredits;
         this.enrolledCredits = enrolledCredits;
         this.completed = new TreeSet<>();
@@ -44,7 +47,7 @@ public class StudentCurriculumProgress {
     }
 
     public int getCompletedCredits() {
-        return completedComplementaryCredits + completedMandatoryCredits + completedOptionalCredits;
+        return completedComplementaryCredits + completedMandatoryCredits + completedOptionalCredits + completedElectiveCredits;
     }
 
     public void setCompletedMandatoryCredits(int completedMandatoryCredits) {
@@ -57,6 +60,14 @@ public class StudentCurriculumProgress {
 
     public void setCompletedOptionalCredits(int completedOptionalCredits) {
         this.completedOptionalCredits = completedOptionalCredits;
+    }
+
+    public int getCompletedElectiveCredits() {
+        return completedElectiveCredits;
+    }
+
+    public void setCompletedElectiveCredits(int completedElectiveCredits) {
+        this.completedElectiveCredits = completedElectiveCredits;
     }
 
     public int getCompletedComplementaryCredits() {

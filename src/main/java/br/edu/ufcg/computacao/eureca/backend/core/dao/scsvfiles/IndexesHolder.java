@@ -402,8 +402,22 @@ public class IndexesHolder {
                 // Actives per course per term
                 addToStudentPerTermIndex(k, v, v.getAdmissionTerm(), this.activesPerCurriculumPerAdmissionTermMap);
                 // Setup student progress on his/her curriculum
+                // FixMe
+                // This is to circumvent the lack of elective disciplines in the data retrieved from SCAO
+                int elective;
+                int optional = v.getOptionalCredits();
+                if (optional <= 12) {
+                    elective = optional;
+                    optional = 0;
+                } else if (optional <= 16) {
+                    elective = 12;
+                    optional -= 12;
+                } else {
+                    elective = 16;
+                    optional -= 16;
+                }
                 this.studentCurriculumProgressMap.put(k, new StudentCurriculumProgress(v.getCompletedTerms(),
-                        v.getMandatoryCredits(), v.getOptionalCredits(), v.getComplementaryCredits(),
+                        v.getMandatoryCredits(), optional, elective, v.getComplementaryCredits(),
                         v.getEnrolledCredits()));
             }
             if (v.isAlumnus()) {
