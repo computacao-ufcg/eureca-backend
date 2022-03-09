@@ -43,4 +43,5 @@ public class Messages {
     public static final String INVALID_SCHEDULE_S_S_S_S = "No schedule found for 'courseCode' = %s, 'curriculumCode' = %s, 'subjectCode' = %s, 'term' = %s.";
     public static final String INVALID_SUBJECT_IGNORING = "Invalid subject, ignoring.";
     public static final String INVALID_USER_S = "No profile fr user %s.";
+    public static final String UPDATED_PROGRESS_S = "Updated student progress: [%s].";
 }

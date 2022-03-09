@@ -378,6 +378,7 @@ public class IndexesHolder {
     private void buildIndexes() {
         buildStudentIndexes();
         buildEnrollmentIndexes();
+        updateStudentProgress();
         buildTeachersIndex();
         buildSubjectIndexes();
         buildCurriculaIndexes();
@@ -402,23 +403,9 @@ public class IndexesHolder {
                 // Actives per course per term
                 addToStudentPerTermIndex(k, v, v.getAdmissionTerm(), this.activesPerCurriculumPerAdmissionTermMap);
                 // Setup student progress on his/her curriculum
-                // FixMe
-                // This is to circumvent the lack of elective disciplines in the data retrieved from SCAO
-                int elective;
-                int optional = v.getOptionalCredits();
-                if (optional <= 12) {
-                    elective = optional;
-                    optional = 0;
-                } else if (optional <= 16) {
-                    elective = 12;
-                    optional -= 12;
-                } else {
-                    elective = 16;
-                    optional -= 16;
-                }
                 this.studentCurriculumProgressMap.put(k, new StudentCurriculumProgress(v.getCompletedTerms(),
-                        v.getMandatoryCredits(), optional, elective, v.getComplementaryCredits(),
-                        v.getEnrolledCredits()));
+                        0, 0, 0,
+                        0, 0, v.getEnrolledCredits()));
             }
             if (v.isAlumnus()) {
                 // All alumni per course
@@ -503,6 +490,45 @@ public class IndexesHolder {
                 updateStudent(key, student);
             }
         });
+    }
+
+    private void updateStudentProgress() {
+        Map<NationalIdRegistrationKey, StudentCurriculumProgress> studentCurriculumProgressMap;
+        this.studentCurriculumProgressMap.forEach((studentKey, studentCurriculumProgress) -> {
+            int accMandatory = 0;
+            int accComplementary = 0;
+            int accOptional = 0;
+            int accElective = 0;
+            int accActivities = 0;
+            StudentData studentData = this.studentsMap.get(studentKey);
+            CurriculumKey curriculumKey = new CurriculumKey(studentData.getCourseCode(), studentData.getCurriculumCode());
+            Curriculum curriculum = this.curriculumMap.get(curriculumKey).createCurriculum(curriculumKey);
+            for (SubjectKey subjectKey : studentCurriculumProgress.getCompleted()) {
+                SubjectData subjectData = this.subjectsMap.get(subjectKey);
+                if (curriculum.getMandatorySubjectsList().contains(subjectKey.getSubjectCode())) {
+                    accMandatory += subjectData.getCredits();
+                }
+                if (curriculum.getComplementarySubjectsList().contains(subjectKey.getSubjectCode())) {
+                    accComplementary += subjectData.getCredits();
+                }
+                if (curriculum.getOptionalSubjectsList().contains(subjectKey.getSubjectCode())) {
+                    accOptional += subjectData.getCredits();
+                }
+                if (curriculum.getElectiveSubjectsList().contains(subjectKey.getSubjectCode())) {
+                    accElective += subjectData.getCredits();
+                }
+                if (curriculum.getComplementaryActivitiesList().contains(subjectKey.getSubjectCode())) {
+                    accActivities += subjectData.getCredits();
+                }
+            }
+            studentCurriculumProgress.setCompletedMandatoryCredits(accMandatory);
+            studentCurriculumProgress.setCompletedComplementaryCredits(accComplementary);
+            studentCurriculumProgress.setCompletedOptionalCredits(accOptional);
+            studentCurriculumProgress.setCompletedElectiveCredits(accElective);
+            studentCurriculumProgress.setCompletedComplementaryActivities(accActivities);
+            LOGGER.info(String.format(Messages.UPDATED_PROGRESS_S, studentCurriculumProgress.toString()));
+        });
+
     }
 
     private void buildTeachersIndex() {
