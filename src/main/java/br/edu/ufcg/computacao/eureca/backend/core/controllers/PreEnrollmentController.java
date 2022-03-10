@@ -37,10 +37,13 @@ public class PreEnrollmentController {
                                                         String complementaryPriorityList,
                                                         String mandatoryPriorityList) throws EurecaException {
         this.loadSubjectAndScheduleCaches(courseCode, curriculumCode, term);
-        PreEnrollmentData preEnrollmentData = this.getPreEnrollmentData(courseCode, curriculumCode, studentRegistration,
-                term, numCredits, optionalPriorityList, electivePriorityList, complementaryPriorityList,
+
+        StudentCurriculumProgress studentProgress = this.dataAccessFacade.getStudentCurriculumProgress(studentRegistration);
+        PreEnrollmentData preEnrollmentData = this.getPreEnrollmentData(courseCode, curriculumCode,
+                term, studentProgress, optionalPriorityList, electivePriorityList, complementaryPriorityList,
                 mandatoryPriorityList);
-        StudentPreEnrollment studentPreEnrollment = this.getStudentPreEnrollment(preEnrollmentData);
+        StudentPreEnrollment studentPreEnrollment = this.getStudentPreEnrollment(courseCode, curriculumCode,
+                term, studentRegistration, studentProgress, numCredits, preEnrollmentData);
         this.releaseSubjectAndScheduleCaches();
         return studentPreEnrollment;
     }
@@ -54,10 +57,12 @@ public class PreEnrollmentController {
         Collection<StudentPreEnrollment> activesPreEnrollments = new HashSet<>();
 
         for (String studentRegistration : activesRegistrations) {
+            StudentCurriculumProgress studentProgress = this.dataAccessFacade.getStudentCurriculumProgress(studentRegistration);
             PreEnrollmentData preEnrollmentData = this.getPreEnrollmentData(courseCode, curriculumCode,
-                    studentRegistration, term, null, null, null,
-                    null, null);
-            StudentPreEnrollment preEnrollmentResponse = this.getStudentPreEnrollment(preEnrollmentData);
+                    term, studentProgress, null, null, null,
+                    null);
+            StudentPreEnrollment preEnrollmentResponse = this.getStudentPreEnrollment(courseCode, curriculumCode,
+                    term, studentRegistration, studentProgress, null, preEnrollmentData);
             activesPreEnrollments.add(preEnrollmentResponse);
         }
 
@@ -120,23 +125,10 @@ public class PreEnrollmentController {
         return response;
     }
 
-    private PreEnrollmentData getPreEnrollmentData(String courseCode, String curriculumCode, String studentRegistration,
-                                                   String term, Integer numCredits, String optionalPriorityList,
+    private PreEnrollmentData getPreEnrollmentData(String courseCode, String curriculumCode, String term,
+                                                   StudentCurriculumProgress studentProgress, String optionalPriorityList,
                                                    String electivePriorityList, String complementaryPriorityList,
                                                    String mandatoryPriorityList) throws EurecaException {
-        Curriculum curriculum = getCachedCurriculum(courseCode, curriculumCode);
-        StudentCurriculumProgress studentProgress = this.dataAccessFacade.getStudentCurriculumProgress(studentRegistration);
-
-        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, studentProgress);
-        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, studentProgress.getEnrolledCredits(),
-                curriculum.getMinNumberOfTerms());
-
-        Map<SubjectType, Integer> idealCreditsMap = PreEnrollmentUtil.getIdealCreditsPerSubjectType(curriculum,
-                studentProgress, numCredits);
-        int idealMandatoryCredits = idealCreditsMap.get(SubjectType.MANDATORY);
-        int idealOptionalCredits = idealCreditsMap.get(SubjectType.OPTIONAL);
-        int idealComplementaryCredits = idealCreditsMap.get(SubjectType.COMPLEMENTARY);
-        int idealElectiveCredits = idealCreditsMap.get(SubjectType.ELECTIVE);
 
         Map<SubjectType, Collection<Subject>> availableSubjectsGroupedByType =
                 this.getSubjectsAndSchedulesAvailableForEnrollmentGroupedByType(courseCode, curriculumCode, term,
@@ -173,9 +165,7 @@ public class PreEnrollmentController {
         Collection<SubjectSchedule> prioritizedElectiveSubjectsWithSchedule =
                 this.getSubjectsSchedules(prioritizedElectiveSubjects, term);
 
-        return new PreEnrollmentData(studentRegistration, term, nextTerm, idealMandatoryCredits, idealOptionalCredits,
-                idealComplementaryCredits, idealElectiveCredits,
-                availableMandatorySubjectsWithSchedule, availableComplementarySubjectsWithSchedule,
+        return new PreEnrollmentData(availableMandatorySubjectsWithSchedule, availableComplementarySubjectsWithSchedule,
                 availableOptionalSubjectsWithSchedule, availableElectiveSubjectsWithSchedule,
                 prioritizedOptionalSubjectsWithSchedule, prioritizedElectiveSubjectsWithSchedule,
                 prioritizedComplementarySubjectsWithSchedule, prioritizedMandatorySubjectsWithSchedule);
@@ -203,14 +193,22 @@ public class PreEnrollmentController {
         return curriculum;
     }
 
-    private StudentPreEnrollment getStudentPreEnrollment(PreEnrollmentData preEnrollmentData) {
-        String studentRegistration = preEnrollmentData.getStudentRegistration();
-        String term = preEnrollmentData.getTerm();
-        int nextTerm = preEnrollmentData.getNextTerm();
-        int idealMandatoryCredits = preEnrollmentData.getIdealMandatoryCredits();
-        int idealOptionalCredits = preEnrollmentData.getIdealOptionalCredits();
-        int idealComplementaryCredits = preEnrollmentData.getIdealComplementaryCredits();
-        int idealElectiveCredits = preEnrollmentData.getIdealElectiveCredits();
+    private StudentPreEnrollment getStudentPreEnrollment(String courseCode, String curriculumCode, String term,
+                 String studentRegistration, StudentCurriculumProgress studentProgress, Integer numCredits,
+                                                         PreEnrollmentData preEnrollmentData) throws EurecaException {
+
+        Curriculum curriculum = getCachedCurriculum(courseCode, curriculumCode);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, studentProgress);
+        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, studentProgress.getEnrolledCredits(),
+                curriculum.getMinNumberOfTerms());
+
+        Map<SubjectType, Integer> idealCreditsMap = PreEnrollmentUtil.getIdealCreditsPerSubjectType(curriculum,
+                studentProgress, numCredits);
+        int idealMandatoryCredits = idealCreditsMap.get(SubjectType.MANDATORY);
+        int idealOptionalCredits = idealCreditsMap.get(SubjectType.OPTIONAL);
+        int idealComplementaryCredits = idealCreditsMap.get(SubjectType.COMPLEMENTARY);
+        int idealElectiveCredits = idealCreditsMap.get(SubjectType.ELECTIVE);
 
         Collection<SubjectSchedule> availableMandatorySubjects = preEnrollmentData.getAvailableMandatorySubjects();
         Collection<SubjectSchedule> availableOptionalSubjects = preEnrollmentData.getAvailableOptionalSubjects();
