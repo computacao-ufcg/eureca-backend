@@ -92,6 +92,16 @@ public class PreEnrollmentUtil {
                 curriculum.getMinNumberOfTerms());
 
         Map<SubjectType, Integer> idealCredits = new HashMap<>();
+        // Computes the number of credits that are short from the ideal, per type of subject
+        int missingMandatoryCredits = Math.max(0, (curriculum.getTargetMandatoryCredits(actualTerm) -
+                studentProgress.getCompletedMandatoryCredits()));
+        int missingComplementaryCredits = Math.max(0, (curriculum.getTargetComplementaryCredits(actualTerm) -
+                studentProgress.getCompletedComplementaryCredits()));
+        int missingOptionalCredits = Math.max(0, (curriculum.getTargetOptionalCredits(actualTerm) -
+                studentProgress.getCompletedOptionalCredits()));
+        int missingElectiveCredits = Math.max(0, (curriculum.getTargetElectiveCredits(actualTerm) -
+                studentProgress.getCompletedElectiveCredits()));
+        // Computes how many credits are still needed, per type of subject
         int leftMandatoryCredits = Math.max((curriculum.getMinMandatoryCreditsNeeded() -
                 studentProgress.getCompletedMandatoryCredits()), 0);
         int leftOptionalCredits = Math.max((curriculum.getMinOptionalCreditsNeeded() -
@@ -100,16 +110,67 @@ public class PreEnrollmentUtil {
                 studentProgress.getCompletedComplementaryCredits()), 0);
         int leftElectiveCredits = Math.max((curriculum.getMinElectiveCreditsNeeded() -
                 studentProgress.getCompletedElectiveCredits()), 0);
-        int idealMandatoryCredits = Math.min(leftMandatoryCredits, curriculum.getIdealMandatoryCredits(nextTerm));
-        int idealOptionalCredits = Math.min(leftOptionalCredits, curriculum.getIdealOptionalCredits(nextTerm));
-        int idealComplementaryCredits = Math.min(leftComplementaryCredits, curriculum.getIdealComplementaryCredits(nextTerm));
-        int idealElectiveCredits = Math.min(leftElectiveCredits, curriculum.getIdealElectiveCredits(nextTerm));
+        // The number of ideal credits is such that does not over enrolls (considering credits left), and tries to
+        // enroll not less than what is ideally recommended, but allows overruling the ideal number of credits
+        // suggested form the current term, when the student is lacking behind; later the number of ideal credits
+        // might be reduced to fit in maxCredits
+        int idealMandatoryCredits = Math.min(leftMandatoryCredits, Math.max(missingMandatoryCredits,
+                curriculum.getIdealMandatoryCredits(nextTerm)));
+        int idealOptionalCredits = Math.min(leftOptionalCredits, Math.max(missingOptionalCredits,
+                curriculum.getIdealOptionalCredits(nextTerm)));
+        int idealComplementaryCredits = Math.min(leftComplementaryCredits, Math.max(missingComplementaryCredits,
+                curriculum.getIdealComplementaryCredits(nextTerm)));
+        int idealElectiveCredits = Math.min(leftElectiveCredits, Math.max(missingElectiveCredits,
+                curriculum.getIdealElectiveCredits(nextTerm)));
 
-        if (maxCredits != null) {
-            idealMandatoryCredits = Math.min(idealMandatoryCredits, maxCredits);
-            idealComplementaryCredits = Math.max(0, Math.min(idealComplementaryCredits, maxCredits - idealMandatoryCredits));
-            idealOptionalCredits = Math.max(0, Math.min(idealOptionalCredits, maxCredits - (idealMandatoryCredits + idealComplementaryCredits)));
-            idealElectiveCredits = Math.max(0, Math.min(idealElectiveCredits, maxCredits - (idealMandatoryCredits + idealComplementaryCredits + idealOptionalCredits)));
+        // A more aggressive approach could consider curriculum.getMaxNumberOfEnrolledCredits()
+        if (maxCredits == null) maxCredits = new Integer(curriculum.getIdealMaxCredits(nextTerm));
+
+        // Mandatory credits are always prioritized; then we use the rate on the missing credits to define the order of
+        // prioritization of the other types of subjects; the higher the rate, the higher the priority
+        idealMandatoryCredits = Math.min(idealMandatoryCredits, maxCredits);
+        double optionalMissingRate = (double) missingOptionalCredits / (double) curriculum.getTargetOptionalCredits(actualTerm);
+        double electiveMissingRate = (double) missingElectiveCredits / (double) curriculum.getTargetElectiveCredits(actualTerm);
+        double complementaryMissingRate = (double) missingComplementaryCredits / (double) curriculum.getTargetComplementaryCredits(actualTerm);
+
+        if (optionalMissingRate >= electiveMissingRate) {
+            if (electiveMissingRate >= complementaryMissingRate) {
+                // optional >= elective >= complementary
+                idealOptionalCredits = Math.max(0, Math.min(idealOptionalCredits, maxCredits - idealMandatoryCredits));
+                idealElectiveCredits = Math.max(0, Math.min(idealElectiveCredits, maxCredits - (idealMandatoryCredits + idealOptionalCredits)));
+                idealComplementaryCredits = Math.max(0, Math.min(idealComplementaryCredits, maxCredits - (idealMandatoryCredits + idealOptionalCredits + idealElectiveCredits)));
+            } else {
+                if (optionalMissingRate >= complementaryMissingRate) {
+                    // optional >= complementary > elective
+                    idealOptionalCredits = Math.max(0, Math.min(idealOptionalCredits, maxCredits - idealMandatoryCredits));
+                    idealComplementaryCredits = Math.max(0, Math.min(idealComplementaryCredits, maxCredits - (idealMandatoryCredits + idealOptionalCredits)));
+                    idealElectiveCredits = Math.max(0, Math.min(idealElectiveCredits, maxCredits - (idealMandatoryCredits + idealComplementaryCredits + idealOptionalCredits)));
+                } else {
+                    // complementary > optional >= elective
+                    idealComplementaryCredits = Math.max(0, Math.min(idealComplementaryCredits, maxCredits - idealMandatoryCredits));
+                    idealOptionalCredits = Math.max(0, Math.min(idealOptionalCredits, maxCredits - (idealMandatoryCredits + idealComplementaryCredits)));
+                    idealElectiveCredits = Math.max(0, Math.min(idealElectiveCredits, maxCredits - (idealMandatoryCredits + idealComplementaryCredits + idealOptionalCredits)));
+                }
+            }
+        } else {
+            if (optionalMissingRate >= complementaryMissingRate) {
+                // elective > optional >= complementary
+                idealElectiveCredits = Math.max(0, Math.min(idealElectiveCredits, maxCredits - idealMandatoryCredits));
+                idealOptionalCredits = Math.max(0, Math.min(idealOptionalCredits, maxCredits - (idealMandatoryCredits + idealElectiveCredits)));
+                idealComplementaryCredits = Math.max(0, Math.min(idealComplementaryCredits, maxCredits - (idealMandatoryCredits + idealOptionalCredits + idealElectiveCredits)));
+            } else {
+                if (electiveMissingRate >= complementaryMissingRate) {
+                    // elective >= complementary > optional
+                    idealElectiveCredits = Math.max(0, Math.min(idealElectiveCredits, maxCredits - idealMandatoryCredits));
+                    idealComplementaryCredits = Math.max(0, Math.min(idealComplementaryCredits, maxCredits - (idealMandatoryCredits + idealElectiveCredits)));
+                    idealOptionalCredits = Math.max(0, Math.min(idealOptionalCredits, maxCredits - (idealMandatoryCredits + idealComplementaryCredits + idealElectiveCredits)));
+                } else {
+                    // complementary > elective > optional
+                    idealComplementaryCredits = Math.max(0, Math.min(idealComplementaryCredits, maxCredits - idealMandatoryCredits));
+                    idealElectiveCredits = Math.max(0, Math.min(idealElectiveCredits, maxCredits - (idealMandatoryCredits + idealComplementaryCredits)));
+                    idealOptionalCredits = Math.max(0, Math.min(idealOptionalCredits, maxCredits - (idealMandatoryCredits + idealComplementaryCredits + idealElectiveCredits)));
+                }
+            }
         }
 
         idealCredits.put(SubjectType.MANDATORY, idealMandatoryCredits);
