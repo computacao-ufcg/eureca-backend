@@ -29,6 +29,7 @@ public enum EurecaOperation {
     GET_DEMAND("getDemand"),
     GET_DEMAND_CSV("getDemandCSV"),
     GET_PRE_ENROLLMENTS("getActivesPreEnrollments"),
+    GET_PRE_ENROLLMENTS_CSV("getActivesPreEnrollmentsCSV"),
     GET_STUDENTS_EMAILS("getStudentsEmails");
 
     private String value;

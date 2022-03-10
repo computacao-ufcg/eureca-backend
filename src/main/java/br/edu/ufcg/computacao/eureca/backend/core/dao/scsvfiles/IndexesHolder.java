@@ -526,7 +526,7 @@ public class IndexesHolder {
             studentCurriculumProgress.setCompletedOptionalCredits(accOptional);
             studentCurriculumProgress.setCompletedElectiveCredits(accElective);
             studentCurriculumProgress.setCompletedComplementaryActivities(accActivities);
-            LOGGER.info(String.format(Messages.UPDATED_PROGRESS_S, studentCurriculumProgress.toString()));
+            LOGGER.debug(String.format(Messages.UPDATED_PROGRESS_S, studentCurriculumProgress.toString()));
         });
 
     }
