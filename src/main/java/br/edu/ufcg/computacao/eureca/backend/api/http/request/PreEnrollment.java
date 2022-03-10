@@ -79,6 +79,27 @@ public class PreEnrollment {
         }
     }
 
+    @ApiOperation(value = ApiDocumentation.PreEnrollment.GET_PRE_ENROLLMENTS_CSV)
+    @RequestMapping(value = "/allCSV", method = RequestMethod.GET)
+    public ResponseEntity<PreEnrollmentsCSVResponse> getActivesPreEnrollmentsCSV(
+            @ApiParam(value = ApiDocumentation.Common.COURSE)
+            @RequestParam String courseCode,
+            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+            @RequestParam String curriculumCode,
+            @ApiParam(value = ApiDocumentation.PreEnrollment.TERM)
+            @RequestParam String term,
+            @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
+            @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
+    ) throws EurecaException {
+        try {
+            PreEnrollmentsCSVResponse preEnrollments = ApplicationFacade.getInstance().getPreEnrollmentsCSV(token, courseCode, curriculumCode, term);
+            return new ResponseEntity<>(preEnrollments, HttpStatus.OK);
+        } catch (EurecaException e) {
+            LOGGER.info(e);
+            throw e;
+        }
+    }
+
     @ApiOperation(value = ApiDocumentation.PreEnrollment.GET_DEMAND)
     @RequestMapping(value = "/demand", method = RequestMethod.GET)
     public ResponseEntity<DemandResponse> getDemand(

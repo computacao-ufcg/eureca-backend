@@ -21,8 +21,18 @@ public class StudentPreEnrollmentResponse implements Comparable {
         this.studentRegistration = studentPreEnrollment.getStudentRegistration();
         this.enrollments = new TreeSet<>();
         studentPreEnrollment.getSubjects().values().forEach(scheduleResponse -> {
-            this.enrollments.add(new Enrollment(scheduleResponse.getSubjectName(),
-                    scheduleResponse.getSchedule().getClassCode()));
+            this.enrollments.add(new Enrollment(studentPreEnrollment.getStudentRegistration(),
+                            studentPreEnrollment.getTerm(),
+                            studentPreEnrollment.getMaxMandatoryCredits(),
+                            studentPreEnrollment.getMandatoryCredits(),
+                            studentPreEnrollment.getMaxOptionalCredits(),
+                            studentPreEnrollment.getOptionalCredits(),
+                            studentPreEnrollment.getMaxComplementaryCredits(),
+                            studentPreEnrollment.getComplementaryCredits(),
+                            studentPreEnrollment.getMaxElectiveCredits(),
+                            studentPreEnrollment.getElectiveCredits(),
+                            scheduleResponse.getSubjectName(),
+                            scheduleResponse.getSchedule().getClassCode()));
         });
         this.term = studentPreEnrollment.getTerm();
         this.maxCredits = studentPreEnrollment.getMaxCredits();

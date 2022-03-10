@@ -211,6 +211,12 @@ public class ApplicationFacade {
         return new PreEnrollmentsResponse(preEnrollments.getActivesPreEnrollment(), preEnrollments.getSubjectDemandSummary());
     }
 
+    public PreEnrollmentsCSVResponse getPreEnrollmentsCSV(String token, String courseCode, String curriculumCode, String term) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_PRE_ENROLLMENTS_CSV);
+        PreEnrollments preEnrollments = this.preEnrollmentController.getActivesPreEnrollments(courseCode, curriculumCode, term);
+        return new PreEnrollmentsCSVResponse(preEnrollments.getActivesPreEnrollment());
+    }
+
     public DemandResponse getDemand(String token, String courseCode, String curriculumCode, String term) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_PRE_ENROLLMENTS);
         PreEnrollments preEnrollments = this.preEnrollmentController.getActivesPreEnrollments(courseCode, curriculumCode, term);
