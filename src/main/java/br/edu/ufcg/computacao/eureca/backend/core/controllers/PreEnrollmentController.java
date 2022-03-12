@@ -223,8 +223,7 @@ public class PreEnrollmentController {
 
         Curriculum curriculum = getCachedCurriculum(courseCode, curriculumCode);
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, studentProgress);
-        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, studentProgress.getEnrolledCredits(),
-                curriculum.getMinNumberOfTerms());
+        int nextTerm = Math.min(curriculum.getMinNumberOfTerms(), (actualTerm + 1));
 
         // A more aggressive approach could consider curriculum.getMaxNumberOfEnrolledCredits()
         if (maxCredits == null) maxCredits = new Integer(curriculum.getIdealMaxCredits(nextTerm));

@@ -171,10 +171,9 @@ public class PreEnrollmentUtilTest {
         Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,20);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
-        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
-                this.curriculum.getMinNumberOfTerms());
+        int nextTerm = Math.min(curriculum.getMinNumberOfTerms(), (actualTerm + 1));
 
-        Assert.assertEquals(1, actualTerm);
+        Assert.assertEquals(0, actualTerm);
         Assert.assertEquals(1, nextTerm);
 
         Integer mandatoryIdealCredits = response.get(SubjectType.MANDATORY);
@@ -202,10 +201,9 @@ public class PreEnrollmentUtilTest {
         Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,20);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
-        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
-                this.curriculum.getMinNumberOfTerms());
+        int nextTerm = Math.min(curriculum.getMinNumberOfTerms(), (actualTerm + 1));
 
-        Assert.assertEquals(2, actualTerm);
+        Assert.assertEquals(1, actualTerm);
         Assert.assertEquals(2, nextTerm);
 
         Integer mandatoryIdealCredits = response.get(SubjectType.MANDATORY);
@@ -233,10 +231,9 @@ public class PreEnrollmentUtilTest {
         Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,24);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
-        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
-                this.curriculum.getMinNumberOfTerms());
+        int nextTerm = Math.min(curriculum.getMinNumberOfTerms(), (actualTerm + 1));
 
-        Assert.assertEquals(3, actualTerm);
+        Assert.assertEquals(2, actualTerm);
         Assert.assertEquals(3, nextTerm);
 
         Integer mandatoryIdealCredits = response.get(SubjectType.MANDATORY);
@@ -264,10 +261,9 @@ public class PreEnrollmentUtilTest {
         Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,24);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
-        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
-                this.curriculum.getMinNumberOfTerms());
+        int nextTerm = Math.min(curriculum.getMinNumberOfTerms(), (actualTerm + 1));
 
-        Assert.assertEquals(4, actualTerm);
+        Assert.assertEquals(3, actualTerm);
         Assert.assertEquals(4, nextTerm);
 
         Integer mandatoryIdealCredits = response.get(SubjectType.MANDATORY);
@@ -295,10 +291,9 @@ public class PreEnrollmentUtilTest {
         Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,24);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
-        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
-                this.curriculum.getMinNumberOfTerms());
+        int nextTerm = Math.min(curriculum.getMinNumberOfTerms(), (actualTerm + 1));
 
-        Assert.assertEquals(5, actualTerm);
+        Assert.assertEquals(4, actualTerm);
         Assert.assertEquals(5, nextTerm);
 
         Integer mandatoryIdealCredits = response.get(SubjectType.MANDATORY);
@@ -326,10 +321,9 @@ public class PreEnrollmentUtilTest {
         Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,20);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
-        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
-                this.curriculum.getMinNumberOfTerms());
+        int nextTerm = Math.min(curriculum.getMinNumberOfTerms(), (actualTerm + 1));
 
-        Assert.assertEquals(6, actualTerm);
+        Assert.assertEquals(5, actualTerm);
         Assert.assertEquals(6, nextTerm);
 
         Integer mandatoryIdealCredits = response.get(SubjectType.MANDATORY);
@@ -357,10 +351,9 @@ public class PreEnrollmentUtilTest {
         Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,20);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
-        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
-                this.curriculum.getMinNumberOfTerms());
+        int nextTerm = Math.min(curriculum.getMinNumberOfTerms(), (actualTerm + 1));
 
-        Assert.assertEquals(7, actualTerm);
+        Assert.assertEquals(6, actualTerm);
         Assert.assertEquals(7, nextTerm);
 
         Integer mandatoryIdealCredits = response.get(SubjectType.MANDATORY);
@@ -389,10 +382,9 @@ public class PreEnrollmentUtilTest {
         Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,20);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
-        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
-                this.curriculum.getMinNumberOfTerms());
+        int nextTerm = Math.min(curriculum.getMinNumberOfTerms(), (actualTerm + 1));
 
-        Assert.assertEquals(8, actualTerm);
+        Assert.assertEquals(7, actualTerm);
         Assert.assertEquals(8, nextTerm);
 
         Integer mandatoryIdealCredits = response.get(SubjectType.MANDATORY);
@@ -420,10 +412,9 @@ public class PreEnrollmentUtilTest {
         Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,24);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
-        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
-                this.curriculum.getMinNumberOfTerms());
+        int nextTerm = Math.min(curriculum.getMinNumberOfTerms(), (actualTerm + 1));
 
-        Assert.assertEquals(9, actualTerm);
+        Assert.assertEquals(8, actualTerm);
         Assert.assertEquals(9, nextTerm);
 
         Integer mandatoryIdealCredits = response.get(SubjectType.MANDATORY);
@@ -451,8 +442,7 @@ public class PreEnrollmentUtilTest {
         Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,24);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
-        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
-                this.curriculum.getMinNumberOfTerms());
+        int nextTerm = Math.min(curriculum.getMinNumberOfTerms(), (actualTerm + 1));
 
         Assert.assertEquals(9, actualTerm);
         Assert.assertEquals(9, nextTerm);
@@ -474,12 +464,182 @@ public class PreEnrollmentUtilTest {
     }
 
     @Test
-    public void testGetActualTerm() {
-        int completedTerms = 5;
-        int completedMandatoryCredits = 72;
-        int completedOptionalCredits = 8;
+    public void testGetActualTerm0() {
+        int completedTerms = 0; // not important
+        int completedMandatoryCredits = 0;
+        int completedOptionalCredits = 0;
         int completedComplementaryCredits = 0;
-        int enrolledCredits = 16;
+        int enrolledCredits = 0;
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
+                completedOptionalCredits, 0, completedComplementaryCredits,
+                0, enrolledCredits);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
+        int expectedActualTerm = 0;
+
+        Assert.assertEquals(actualTerm, expectedActualTerm);
+    }
+
+    @Test
+    public void testGetActualTerm0delayed() {
+        int completedTerms = 1; // not important
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(0);
+        int completedOptionalCredits = 0; // not important
+        int completedComplementaryCredits = 0; // not important
+        int enrolledCredits = 0; // not important
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
+                completedOptionalCredits, 0, completedComplementaryCredits,
+                0, enrolledCredits);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
+        int expectedActualTerm = 0;
+
+        Assert.assertEquals(actualTerm, expectedActualTerm);
+    }
+
+    @Test
+    public void testGetActualTerm1() {
+        int completedTerms = 1; // not important
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(0) + 1;
+        int completedOptionalCredits = 0; // not important
+        int completedComplementaryCredits = 0; // not important
+        int enrolledCredits = 0; // not important
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
+                completedOptionalCredits, 0, completedComplementaryCredits,
+                0, enrolledCredits);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
+        int expectedActualTerm = 1;
+
+        Assert.assertEquals(actualTerm, expectedActualTerm);
+    }
+
+    @Test
+    public void testGetActualTerm1delayed() {
+        int completedTerms = 1; // not important
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(1);
+        int completedOptionalCredits = 0; // not important
+        int completedComplementaryCredits = 0; // not important
+        int enrolledCredits = 0; // not important
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
+                completedOptionalCredits, 0, completedComplementaryCredits,
+                0, enrolledCredits);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
+        int expectedActualTerm = 1;
+
+        Assert.assertEquals(actualTerm, expectedActualTerm);
+    }
+
+    @Test
+    public void testGetActualTerm2() {
+        int completedTerms = 1; // not important
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(1) + 1;
+        int completedOptionalCredits = 0; // not important
+        int completedComplementaryCredits = 0; // not important
+        int enrolledCredits = 0; // not important
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
+                completedOptionalCredits, 0, completedComplementaryCredits,
+                0, enrolledCredits);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
+        int expectedActualTerm = 2;
+
+        Assert.assertEquals(actualTerm, expectedActualTerm);
+    }
+
+    @Test
+    public void testGetActualTerm2delayed() {
+        int completedTerms = 1; // not important
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(2);
+        int completedOptionalCredits = 0; // not important
+        int completedComplementaryCredits = 0; // not important
+        int enrolledCredits = 0; // not important
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
+                completedOptionalCredits, 0, completedComplementaryCredits,
+                0, enrolledCredits);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
+        int expectedActualTerm = 2;
+
+        Assert.assertEquals(actualTerm, expectedActualTerm);
+    }
+
+    @Test
+    public void testGetActualTerm3() {
+        int completedTerms = 1; // not important
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(2) + 1;
+        int completedOptionalCredits = 0; // not important
+        int completedComplementaryCredits = 0; // not important
+        int enrolledCredits = 0; // not important
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
+                completedOptionalCredits, 0, completedComplementaryCredits,
+                0, enrolledCredits);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
+        int expectedActualTerm = 3;
+
+        Assert.assertEquals(actualTerm, expectedActualTerm);
+    }
+
+    @Test
+    public void testGetActualTerm3delayed() {
+        int completedTerms = 1; // not important
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(3);
+        int completedOptionalCredits = 0; // not important
+        int completedComplementaryCredits = 0; // not important
+        int enrolledCredits = 0; // not important
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
+                completedOptionalCredits, 0, completedComplementaryCredits,
+                0, enrolledCredits);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
+        int expectedActualTerm = 3;
+
+        Assert.assertEquals(actualTerm, expectedActualTerm);
+    }
+
+    @Test
+    public void testGetActualTerm4() {
+        int completedTerms = 1; // not important
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(3) + 1;
+        int completedOptionalCredits = 0; // not important
+        int completedComplementaryCredits = 0; // not important
+        int enrolledCredits = 0; // not important
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
+                completedOptionalCredits, 0, completedComplementaryCredits,
+                0, enrolledCredits);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
+        int expectedActualTerm = 4;
+
+        Assert.assertEquals(actualTerm, expectedActualTerm);
+    }
+
+    @Test
+    public void testGetActualTerm4delayed() {
+        int completedTerms = 1; // not important
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(4);
+        int completedOptionalCredits = 0; // not important
+        int completedComplementaryCredits = 0; // not important
+        int enrolledCredits = 0; // not important
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
+                completedOptionalCredits, 0, completedComplementaryCredits,
+                0, enrolledCredits);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
+        int expectedActualTerm = 4;
+
+        Assert.assertEquals(actualTerm, expectedActualTerm);
+    }
+
+    @Test
+    public void testGetActualTerm5() {
+        int completedTerms = 1; // not important
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(4) + 1;
+        int completedOptionalCredits = 0; // not important
+        int completedComplementaryCredits = 0; // not important
+        int enrolledCredits = 0; // not important
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
                 0, enrolledCredits);
@@ -491,20 +651,155 @@ public class PreEnrollmentUtilTest {
     }
 
     @Test
-    public void testGetNextTerm() {
-        int completedTerms = 5;
-        int completedMandatoryCredits = 72;
-        int completedOptionalCredits = 8;
-        int completedComplementaryCredits = 0;
-        int enrolledCredits = 16;
+    public void testGetActualTerm5delayed() {
+        int completedTerms = 1; // not important
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(5);
+        int completedOptionalCredits = 0; // not important
+        int completedComplementaryCredits = 0; // not important
+        int enrolledCredits = 0; // not important
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
                 0, enrolledCredits);
 
-        int actualTerm = 5;
-        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(), curriculum.getMinNumberOfTerms());
-        int expectedNextTerm = 6;
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
+        int expectedActualTerm = 5;
 
-        Assert.assertEquals(nextTerm, expectedNextTerm);
+        Assert.assertEquals(actualTerm, expectedActualTerm);
+    }
+
+    @Test
+    public void testGetActualTerm6() {
+        int completedTerms = 1; // not important
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(5) + 1;
+        int completedOptionalCredits = 0; // not important
+        int completedComplementaryCredits = 0; // not important
+        int enrolledCredits = 0; // not important
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
+                completedOptionalCredits, 0, completedComplementaryCredits,
+                0, enrolledCredits);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
+        int expectedActualTerm = 6;
+
+        Assert.assertEquals(actualTerm, expectedActualTerm);
+    }
+
+    @Test
+    public void testGetActualTerm6delayed() {
+        int completedTerms = 1; // not important
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(6);
+        int completedOptionalCredits = 0; // not important
+        int completedComplementaryCredits = 0; // not important
+        int enrolledCredits = 0; // not important
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
+                completedOptionalCredits, 0, completedComplementaryCredits,
+                0, enrolledCredits);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
+        int expectedActualTerm = 6;
+
+        Assert.assertEquals(actualTerm, expectedActualTerm);
+    }
+
+    @Test
+    public void testGetActualTerm7() {
+        int completedTerms = 1; // not important
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(6) + 1;
+        int completedOptionalCredits = 0; // not important
+        int completedComplementaryCredits = 0; // not important
+        int enrolledCredits = 0; // not important
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
+                completedOptionalCredits, 0, completedComplementaryCredits,
+                0, enrolledCredits);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
+        int expectedActualTerm = 7;
+
+        Assert.assertEquals(actualTerm, expectedActualTerm);
+    }
+
+    @Test
+    public void testGetActualTerm7delayed() {
+        int completedTerms = 1; // not important
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(7);
+        int completedOptionalCredits = 0; // not important
+        int completedComplementaryCredits = 0; // not important
+        int enrolledCredits = 0; // not important
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
+                completedOptionalCredits, 0, completedComplementaryCredits,
+                0, enrolledCredits);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
+        int expectedActualTerm = 7;
+
+        Assert.assertEquals(actualTerm, expectedActualTerm);
+    }
+
+    @Test
+    public void testGetActualTerm8() {
+        int completedTerms = 1; // not important
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(7) + 1;
+        int completedOptionalCredits = 0; // not important
+        int completedComplementaryCredits = 0; // not important
+        int enrolledCredits = 0; // not important
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
+                completedOptionalCredits, 0, completedComplementaryCredits,
+                0, enrolledCredits);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
+        int expectedActualTerm = 8;
+
+        Assert.assertEquals(actualTerm, expectedActualTerm);
+    }
+
+    @Test
+    public void testGetActualTerm8delayed() {
+        int completedTerms = 1; // not important
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(8);
+        int completedOptionalCredits = 0; // not important
+        int completedComplementaryCredits = 0; // not important
+        int enrolledCredits = 0; // not important
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
+                completedOptionalCredits, 0, completedComplementaryCredits,
+                0, enrolledCredits);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
+        int expectedActualTerm = 8;
+
+        Assert.assertEquals(actualTerm, expectedActualTerm);
+    }
+
+    @Test
+    public void testGetActualTerm9() {
+        int completedTerms = 1; // not important
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(8) + 1;
+        int completedOptionalCredits = 0; // not important
+        int completedComplementaryCredits = 0; // not important
+        int enrolledCredits = 0; // not important
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
+                completedOptionalCredits, 0, completedComplementaryCredits,
+                0, enrolledCredits);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
+        int expectedActualTerm = 9;
+
+        Assert.assertEquals(actualTerm, expectedActualTerm);
+    }
+
+    @Test
+    public void testGetActualTermOverMinNumberOfTerms() {
+        int completedTerms = 1; // not important
+        int completedMandatoryCredits = 1000; // way over possible
+        int completedOptionalCredits = 0; // not important
+        int completedComplementaryCredits = 0; // not important
+        int enrolledCredits = 0; // not important
+        StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
+                completedOptionalCredits, 0, completedComplementaryCredits,
+                0, enrolledCredits);
+
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
+        int expectedActualTerm = curriculum.getMinNumberOfTerms(); // should never be above
+
+        Assert.assertEquals(actualTerm, expectedActualTerm);
     }
 }

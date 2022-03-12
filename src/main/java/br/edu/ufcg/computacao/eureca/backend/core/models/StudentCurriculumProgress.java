@@ -49,8 +49,7 @@ public class StudentCurriculumProgress {
     }
 
     public int getCompletedCredits() {
-        return completedComplementaryCredits + completedMandatoryCredits + completedOptionalCredits +
-                completedElectiveCredits + completedComplementaryActivities;
+        return completedComplementaryCredits + completedMandatoryCredits + completedOptionalCredits + completedElectiveCredits;
     }
 
     public void setCompletedMandatoryCredits(int completedMandatoryCredits) {
