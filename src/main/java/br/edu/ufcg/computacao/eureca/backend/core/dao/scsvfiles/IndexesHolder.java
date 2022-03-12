@@ -698,13 +698,13 @@ public class IndexesHolder {
         perTermMap.put(new CurriculumKey(v.getCourseCode(), v.getCurriculumCode()), activesPerCoursePerAdmissionTerm);
     }
 
-    private boolean hasNotCompleted(StudentCurriculumProgress curriculum, SubjectKey subjectKey, SubjectData subjectData) {
-        if (curriculum.getCompleted().contains(subjectKey)) return false;
+    private boolean hasNotCompleted(StudentCurriculumProgress studentCurriculumProgress, SubjectKey subjectKey, SubjectData subjectData) {
+        if (studentCurriculumProgress.getCompleted().contains(subjectKey)) return false;
         for (String subjectCode : subjectData.getEquivalentCodesList()) {
             SubjectKey equivalentSubjectKey = new SubjectKey(subjectKey.getCourseCode(), subjectKey.getCurriculumCode(),
                     subjectCode);
-            if (curriculum.getCompleted().contains(equivalentSubjectKey)) {
-                curriculum.getCompleted().add(equivalentSubjectKey);
+            if (studentCurriculumProgress.getCompleted().contains(equivalentSubjectKey)) {
+                studentCurriculumProgress.getCompleted().add(subjectKey);
                 return false;
             }
         }
