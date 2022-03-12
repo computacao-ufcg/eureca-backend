@@ -129,7 +129,7 @@ public class Curriculum {
     }
 
     public Integer getExpectedMinAccumulatedCredits(int term) {
-        return this.expectedMinAccumulatedCreditsList.get(term - 1);
+        return this.expectedMinAccumulatedCreditsList.get(term);
     }
 
     public int getTargetMandatoryCredits(int lastTermCompleted) {

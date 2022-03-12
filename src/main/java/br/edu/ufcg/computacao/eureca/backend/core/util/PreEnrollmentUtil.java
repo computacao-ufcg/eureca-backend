@@ -88,8 +88,7 @@ public class PreEnrollmentUtil {
     public static Map<SubjectType, Integer> getIdealCreditsPerSubjectType(Curriculum curriculum,
                                                        StudentCurriculumProgress studentProgress, Integer maxCredits) {
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, studentProgress);
-        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, studentProgress.getEnrolledCredits(),
-                curriculum.getMinNumberOfTerms());
+        int nextTerm = Math.min(curriculum.getMinNumberOfTerms(), (actualTerm + 1));
 
         Map<SubjectType, Integer> idealCredits = new HashMap<>();
         // Computes the number of credits that are short from the ideal, per type of subject
@@ -181,14 +180,9 @@ public class PreEnrollmentUtil {
 
     public static int getActualTerm(Curriculum curriculum, StudentCurriculumProgress progress) {
         int accumulatedCredits = progress.getCompletedCredits();
-        for (int i = 1; i < curriculum.getMinNumberOfTerms() + 1; i++) {
+        for (int i = 0; i < curriculum.getMinNumberOfTerms(); i++) {
             if (accumulatedCredits <= curriculum.getExpectedMinAccumulatedCredits(i)) return i;
         }
         return curriculum.getMinNumberOfTerms();
-    }
-
-    public static int getNextTerm(int actualTerm, int enrolledCredits, int minTerms) {
-        int nextTerm = actualTerm + (enrolledCredits > 0 ? 1 : 0);
-        return (Math.min(nextTerm, minTerms));
     }
 }
