@@ -110,21 +110,19 @@ public class PreEnrollmentUtil {
                 studentProgress.getCompletedComplementaryCredits()), 0);
         int leftElectiveCredits = Math.max((curriculum.getMinElectiveCreditsNeeded() -
                 studentProgress.getCompletedElectiveCredits()), 0);
-        // The number of ideal credits is such that does not over enrolls (considering credits left), and tries to
+        // The number of ideal credits is such that does not over enroll (considering credits left), and tries to
         // enroll not less than what is ideally recommended, but allows overruling the ideal number of credits
-        // suggested form the current term, when the student is lacking behind; later the number of ideal credits
-        // might be reduced to fit in maxCredits
-        int idealMandatoryCredits = Math.min(leftMandatoryCredits, Math.max(missingMandatoryCredits,
-                curriculum.getIdealMandatoryCredits(nextTerm)));
-        int idealOptionalCredits = Math.min(leftOptionalCredits, Math.max(missingOptionalCredits,
-                curriculum.getIdealOptionalCredits(nextTerm)));
-        int idealComplementaryCredits = Math.min(leftComplementaryCredits, Math.max(missingComplementaryCredits,
-                curriculum.getIdealComplementaryCredits(nextTerm)));
-        int idealElectiveCredits = Math.min(leftElectiveCredits, Math.max(missingElectiveCredits,
-                curriculum.getIdealElectiveCredits(nextTerm)));
-
-        // A more aggressive approach could consider curriculum.getMaxNumberOfEnrolledCredits()
-        if (maxCredits == null) maxCredits = new Integer(curriculum.getIdealMaxCredits(nextTerm));
+        // suggested form the current term, when the student is lacking behind; finally the number of ideal credits
+        // is always limited by maxCredits
+        int idealMandatoryCredits = Math.min(maxCredits, Math.min(leftMandatoryCredits, Math.max(missingMandatoryCredits,
+                curriculum.getIdealMandatoryCredits(nextTerm))));
+        int idealOptionalCredits = Math.min(maxCredits, Math.min(leftOptionalCredits, Math.max(missingOptionalCredits,
+                curriculum.getIdealOptionalCredits(nextTerm))));
+        int idealComplementaryCredits = Math.min(maxCredits, Math.min(leftComplementaryCredits,
+                Math.max(missingComplementaryCredits, curriculum.getIdealComplementaryCredits(nextTerm))));
+        int idealElectiveCredits = Math.min(maxCredits, Math.min(leftElectiveCredits, Math.max(missingElectiveCredits,
+                curriculum.getIdealElectiveCredits(nextTerm))));
+/*
 
         // Mandatory credits are always prioritized; then we use the rate on the missing credits to define the order of
         // prioritization of the other types of subjects; the higher the rate, the higher the priority
@@ -172,7 +170,7 @@ public class PreEnrollmentUtil {
                 }
             }
         }
-
+*/
         idealCredits.put(SubjectType.MANDATORY, idealMandatoryCredits);
         idealCredits.put(SubjectType.OPTIONAL, idealOptionalCredits);
         idealCredits.put(SubjectType.COMPLEMENTARY, idealComplementaryCredits);

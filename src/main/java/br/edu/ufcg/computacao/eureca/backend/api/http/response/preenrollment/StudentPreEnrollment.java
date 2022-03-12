@@ -11,6 +11,7 @@ public class StudentPreEnrollment {
     private String studentRegistration;
     private Map<String, ScheduleResponse> subjects;
     private int term;
+    private int currentEnrolledCredits;
     private int maxCredits;
     private int maxMandatoryCredits;
     private int mandatoryCredits;
@@ -21,16 +22,17 @@ public class StudentPreEnrollment {
     private int maxElectiveCredits;
     private int electiveCredits;
 
-    public StudentPreEnrollment(String studentRegistration, int term, int maxMandatoryCredits,
+    public StudentPreEnrollment(String studentRegistration, int term, Integer maxCredits, int maxMandatoryCredits,
                                 int maxOptionalCredits, int maxComplementaryCredits, int maxElectiveCredits) {
         this.studentRegistration = studentRegistration;
-        this.subjects = new HashMap<>();
         this.term = term;
+        this.maxCredits = maxCredits;
+        this.currentEnrolledCredits = 0;
         this.maxMandatoryCredits = maxMandatoryCredits;
         this.maxOptionalCredits = maxOptionalCredits;
         this.maxComplementaryCredits = maxComplementaryCredits;
         this.maxElectiveCredits = maxElectiveCredits;
-        this.maxCredits = this.maxMandatoryCredits + this.maxOptionalCredits + this.maxComplementaryCredits + this.maxElectiveCredits;
+        this.subjects = new HashMap<>();
     }
 
     public boolean isMandatoryFull() {
@@ -150,7 +152,7 @@ public class StudentPreEnrollment {
     }
 
     public void enrollSubject(SubjectSchedule subjectSchedule) {
-        this.enrollSubject(subjectSchedule, new ArrayList<>()); // se for uma disciplina sem co-requisito, chama a função passando um array vazio
+        this.enrollSubject(subjectSchedule, new ArrayList<>());
     }
 
     public void enrollSubject(SubjectSchedule subjectAndSchedule, Collection<SubjectSchedule> coRequirements) {
@@ -158,25 +160,29 @@ public class StudentPreEnrollment {
 
         switch (subjectAndSchedule.getSubject().getType()) {
             case "M":
-                isPossibleToEnrollCredits = this.isPossibleToEnrollMandatoryCredits(subjectAndSchedule, coRequirements);
+                isPossibleToEnrollCredits = this.isPossibleToEnrollCredits(subjectAndSchedule, coRequirements,
+                        this.mandatoryCredits, this.maxMandatoryCredits);
                 if (isPossibleToEnrollCredits) {
                     this.enrollMandatorySubject(subjectAndSchedule, coRequirements);
                 }
                 break;
             case "O":
-                isPossibleToEnrollCredits = this.isPossibleToEnrollOptionalCredits(subjectAndSchedule, coRequirements);
+                isPossibleToEnrollCredits = this.isPossibleToEnrollCredits(subjectAndSchedule, coRequirements,
+                        this.optionalCredits, this.maxOptionalCredits);
                 if (isPossibleToEnrollCredits) {
                     this.enrollOptionalSubject(subjectAndSchedule, coRequirements);
                 }
                 break;
             case "C":
-                isPossibleToEnrollCredits = this.isPossibleToEnrollComplementaryCredits(subjectAndSchedule, coRequirements);
+                isPossibleToEnrollCredits = this.isPossibleToEnrollCredits(subjectAndSchedule, coRequirements,
+                        this.complementaryCredits, this.maxComplementaryCredits);
                 if (isPossibleToEnrollCredits) {
                     this.enrollComplementarySubject(subjectAndSchedule, coRequirements);
                 }
                 break;
             case "E":
-                isPossibleToEnrollCredits = this.isPossibleToEnrollElectiveCredits(subjectAndSchedule, coRequirements);
+                isPossibleToEnrollCredits = this.isPossibleToEnrollCredits(subjectAndSchedule, coRequirements,
+                        this.electiveCredits, this.maxElectiveCredits);
                 if (isPossibleToEnrollCredits) {
                     this.enrollElectiveSubject(subjectAndSchedule, coRequirements);
                 }
@@ -195,7 +201,7 @@ public class StudentPreEnrollment {
         boolean haveCoRequirementScheduleConflict = false;
         Map<String, ScheduleResponse> availableCoRequirementsSchedules = new HashMap<>();
 
-        // verifica se alguma disciplina co-requisito possui conflito de horário
+        // verifies whether there is a schedule conflict with pre-requirements
         for (SubjectSchedule coRequirementSubjectAndSchedule : coRequirements) {
             Subject coRequirement = coRequirementSubjectAndSchedule.getSubject();
             List<Schedule> availableCoRequirementSchedule = this.getAvailableSchedules(coRequirementSubjectAndSchedule);
@@ -210,7 +216,7 @@ public class StudentPreEnrollment {
         Subject subject = subjectAndSchedule.getSubject();
         List<Schedule> availableSchedules = this.getAvailableSchedules(subjectAndSchedule);
 
-        // só matricula se for possivel matricular a disciplina e o(s) co-requisito(s)
+        // only enrolls if it is possible to enroll both the subject and its co-requirements
         boolean haveScheduleConflict = availableSchedules.isEmpty() || haveCoRequirementScheduleConflict;
         if (!haveScheduleConflict) {
             Schedule firstAvailableSchedule = availableSchedules.get(0);
@@ -231,6 +237,7 @@ public class StudentPreEnrollment {
         if (enrolled) {
             int newCredits = this.getNewCredits(subjectAndSchedule, coRequirements);
             this.mandatoryCredits += newCredits;
+            this.currentEnrolledCredits += newCredits;
         }
     }
 
@@ -239,6 +246,7 @@ public class StudentPreEnrollment {
         if (enrolled) {
             int newCredits = this.getNewCredits(subjectAndSchedule);
             this.optionalCredits += newCredits;
+            this.currentEnrolledCredits += newCredits;
         }
     }
 
@@ -247,6 +255,7 @@ public class StudentPreEnrollment {
         if (enrolled) {
             int newCredits = this.getNewCredits(subjectAndSchedule, coRequirements);
             this.complementaryCredits += newCredits;
+            this.currentEnrolledCredits += newCredits;
         }
     }
 
@@ -255,36 +264,24 @@ public class StudentPreEnrollment {
         if (enrolled) {
             int newCredits = this.getNewCredits(subjectAndSchedule, coRequirements);
             this.electiveCredits += newCredits;
+            this.currentEnrolledCredits += newCredits;
         }
     }
 
     private List<Schedule> getAvailableSchedules(SubjectSchedule subjectAndSchedule) {
         List<Schedule> proposedSchedules = new ArrayList<>(subjectAndSchedule.getAllSchedules());
-        // remove os horários/turmas que possuem conflito com as disciplinas já matriculadas
+        // remove schedules/classes that conflict with already enrolled subjects
         for (ScheduleResponse enrolledSchedule : this.subjects.values()) {
             proposedSchedules.removeIf(schedule -> schedule.haveConflict(enrolledSchedule.getSchedule()));
         }
         return proposedSchedules;
     }
 
-    private boolean isPossibleToEnrollMandatoryCredits(SubjectSchedule subjectAndSchedule, Collection<SubjectSchedule> coRequirements) {
-        int credits = this.getNewCredits(subjectAndSchedule, coRequirements);
-        return credits + this.mandatoryCredits <= this.maxMandatoryCredits;
-    }
-
-    private boolean isPossibleToEnrollOptionalCredits(SubjectSchedule subjectAndSchedule, Collection<SubjectSchedule> coRequirements) {
-        int credits = this.getNewCredits(subjectAndSchedule, coRequirements);
-        return credits + this.optionalCredits <= this.maxOptionalCredits;
-    }
-
-    private boolean isPossibleToEnrollComplementaryCredits(SubjectSchedule subjectAndSchedule, Collection<SubjectSchedule> coRequirements) {
-        int credits = this.getNewCredits(subjectAndSchedule, coRequirements);
-        return credits + this.complementaryCredits <= this.maxComplementaryCredits;
-    }
-
-    private boolean isPossibleToEnrollElectiveCredits(SubjectSchedule subjectAndSchedule, Collection<SubjectSchedule> coRequirements) {
-        int credits = this.getNewCredits(subjectAndSchedule, coRequirements);
-        return credits + this.electiveCredits <= this.maxElectiveCredits;
+    private boolean isPossibleToEnrollCredits(SubjectSchedule subjectAndSchedule, Collection<SubjectSchedule>
+            coRequirements, int creditsForType, int maxCreditsForType) {
+        int newCredits = this.getNewCredits(subjectAndSchedule, coRequirements);
+        int newCurrentEnrolledCredits = newCredits + this.currentEnrolledCredits;
+        return (((creditsForType + newCredits) <= maxCreditsForType) && (newCurrentEnrolledCredits <= this.maxCredits));
     }
 
     private int getNewCredits(SubjectSchedule subjectAndSchedule, Collection<SubjectSchedule> coRequirements) {

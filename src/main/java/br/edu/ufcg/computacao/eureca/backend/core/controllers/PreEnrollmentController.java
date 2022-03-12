@@ -52,12 +52,13 @@ public class PreEnrollmentController {
 
     public PreEnrollments getActivesPreEnrollments(String courseCode, String curriculumCode, String term)
             throws EurecaException {
-        Collection<Student> actives = this.dataAccessFacade.getAllActives(courseCode, curriculumCode);
+        NavigableSet<Student> actives = new TreeSet(this.dataAccessFacade.getAllActives(courseCode, curriculumCode)).descendingSet();
         Collection<String> activesRegistrations = actives.stream().map(student ->
                 student.getRegistration().getRegistration()).collect(Collectors.toList());
         Collection<StudentPreEnrollment> activesPreEnrollments = new HashSet<>();
 
         for (String studentRegistration : activesRegistrations) {
+            LOGGER.info(String.format("Pre-enrolling: %s", studentRegistration));
             StudentCurriculumProgress studentProgress = this.dataAccessFacade.getStudentCurriculumProgress(studentRegistration);
             // Creates list of available subjects
             PreEnrollmentData preEnrollmentData = this.getPreEnrollmentData(courseCode, curriculumCode, term, studentProgress);
@@ -217,17 +218,19 @@ public class PreEnrollmentController {
     }
 
     private StudentPreEnrollment getStudentPreEnrollment(String courseCode, String curriculumCode, String term,
-                 String studentRegistration, StudentCurriculumProgress studentProgress, Integer numCredits,
+                 String studentRegistration, StudentCurriculumProgress studentProgress, Integer maxCredits,
                                                          PreEnrollmentData preEnrollmentData) throws EurecaException {
 
         Curriculum curriculum = getCachedCurriculum(courseCode, curriculumCode);
-
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, studentProgress);
         int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, studentProgress.getEnrolledCredits(),
                 curriculum.getMinNumberOfTerms());
 
+        // A more aggressive approach could consider curriculum.getMaxNumberOfEnrolledCredits()
+        if (maxCredits == null) maxCredits = new Integer(curriculum.getIdealMaxCredits(nextTerm));
+
         Map<SubjectType, Integer> idealCreditsMap = PreEnrollmentUtil.getIdealCreditsPerSubjectType(curriculum,
-                studentProgress, numCredits);
+                studentProgress, maxCredits);
         int idealMandatoryCredits = idealCreditsMap.get(SubjectType.MANDATORY);
         int idealOptionalCredits = idealCreditsMap.get(SubjectType.OPTIONAL);
         int idealComplementaryCredits = idealCreditsMap.get(SubjectType.COMPLEMENTARY);
@@ -244,9 +247,10 @@ public class PreEnrollmentController {
         Collection<SubjectSchedule> prioritizedMandatorySubjects = preEnrollmentData.getPrioritizedMandatorySubjects();
 
         StudentPreEnrollment studentPreEnrollment = new StudentPreEnrollment(studentRegistration,
-                nextTerm, idealMandatoryCredits, idealOptionalCredits, idealComplementaryCredits, idealElectiveCredits);
+                nextTerm, maxCredits, idealMandatoryCredits, idealOptionalCredits, idealComplementaryCredits, idealElectiveCredits);
 
-        // Mandatory subjects are always enrolled from the earliest terms to the more recent
+        // Mandatory subjects are first enrolled from the earliest terms to the more recent, until in a
+        // given term, there are number of choices is larger than the number of subjects left to enroll
         this.enrollMandatorySubjectsUntilConflict(studentPreEnrollment, availableMandatorySubjects, term);
 
         // If there is still space for mandatory subjects, this means that there are more than one option
@@ -255,13 +259,18 @@ public class PreEnrollmentController {
             this.enrollSubjects(studentPreEnrollment, prioritizedMandatorySubjects, term);
         }
 
+        // If there is still space, select from whatever mandatory subject is still available
         if (!studentPreEnrollment.isMandatoryFull()) {
             Collection<SubjectSchedule> mandatoryLeftovers = EurecaUtil.difference(availableMandatorySubjects,
                     prioritizedMandatorySubjects);
             this.enrollSubjects(studentPreEnrollment, mandatoryLeftovers, term);
         }
 
-        // From now on we follow the prioritization sent in the request (if any)
+        // From now on, for each type, we trie first to use the prioritization sent in the request (if any), and then
+        // we enroll any other available subject of the type in question.
+        // Moreover, we use the rate on the missing credits to define the order of prioritization of the other types
+        // of subjects; the higher the rate, the higher the priority
+
         if (!studentPreEnrollment.isComplementaryFull()) {
             this.enrollSubjects(studentPreEnrollment, prioritizedComplementarySubjects, term);
             this.enrollSubjects(studentPreEnrollment, availableComplementarySubjects, term);
@@ -300,7 +309,7 @@ public class PreEnrollmentController {
             if (subject.isComposed()) {
                 Collection<Subject> coRequirements = this.getSubjectsByCode(subject.getCourseCode(),
                         subject.getCurriculumCode(), subject.getCoRequirementsList());
-                // recupera os horários a partir da(s) disciplina(s) co-requisito(s)
+                // get available schedules, considering the co-requirements
                 Collection<SubjectSchedule> coRequirementsSchedule = this.getSubjectsSchedules(coRequirements, term);
                 studentPreEnrollment.enrollSubject(subjectAndSchedule, coRequirementsSchedule);
             } else {
@@ -453,7 +462,7 @@ public class PreEnrollmentController {
                             studentCurriculumProgress);
                     availableSubjects.add(subjectAndSchedule.getSubject());
                 } catch (InvalidParameterException e) {
-                    LOGGER.info(String.format(Messages.INVALID_SCHEDULE_S_S_S_S, courseCode, curriculumCode,
+                    LOGGER.debug(String.format(Messages.INVALID_SCHEDULE_S_S_S_S, courseCode, curriculumCode,
                             subjectCode, term));
                 }
             }
