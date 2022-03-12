@@ -168,7 +168,7 @@ public class PreEnrollmentUtilTest {
         StudentCurriculumProgress progress = new StudentCurriculumProgress(0, 0,
                 0,0, 0,
                 0, 0);
-        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,null);
+        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,20);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
         int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
@@ -199,7 +199,7 @@ public class PreEnrollmentUtilTest {
         StudentCurriculumProgress progress = new StudentCurriculumProgress(1, 16,
                 0,4, 0,
                 0, 0);
-        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,null);
+        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,20);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
         int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
@@ -230,7 +230,7 @@ public class PreEnrollmentUtilTest {
         StudentCurriculumProgress progress = new StudentCurriculumProgress(2, 32,
                 0,8, 0,
                 0, 0);
-        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,null);
+        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,24);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
         int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
@@ -261,7 +261,7 @@ public class PreEnrollmentUtilTest {
         StudentCurriculumProgress progress = new StudentCurriculumProgress(3, 56,
                 0,8, 0,
                 0, 0);
-        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,null);
+        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,24);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
         int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
@@ -292,7 +292,7 @@ public class PreEnrollmentUtilTest {
         StudentCurriculumProgress progress = new StudentCurriculumProgress(4, 80,
                 0,8, 0,
                 0, 0);
-        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,null);
+        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,24);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
         int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
@@ -323,7 +323,7 @@ public class PreEnrollmentUtilTest {
         StudentCurriculumProgress progress = new StudentCurriculumProgress(5, 104,
                 0,8, 0,
                 0, 0);
-        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,null);
+        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,20);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
         int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
@@ -354,7 +354,7 @@ public class PreEnrollmentUtilTest {
         StudentCurriculumProgress progress = new StudentCurriculumProgress(6, 116,
                 8,8, 0,
                 0, 0);
-        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,null);
+        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,20);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
         int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
@@ -386,7 +386,7 @@ public class PreEnrollmentUtilTest {
         StudentCurriculumProgress progress = new StudentCurriculumProgress(7, 124,
                 16,12, 0,
                 0, 0);
-        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,null);
+        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,20);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
         int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
@@ -417,7 +417,7 @@ public class PreEnrollmentUtilTest {
         StudentCurriculumProgress progress = new StudentCurriculumProgress(8, 128,
                 24,16, 4,
                 0, 0);
-        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,null);
+        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,24);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
         int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),
@@ -448,7 +448,7 @@ public class PreEnrollmentUtilTest {
         StudentCurriculumProgress progress = new StudentCurriculumProgress(9, 132,
                 40,16, 8,
                 0, 0);
-        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,null);
+        Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,24);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
         int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, progress.getEnrolledCredits(),

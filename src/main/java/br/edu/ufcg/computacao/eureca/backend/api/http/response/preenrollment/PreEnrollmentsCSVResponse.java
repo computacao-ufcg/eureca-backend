@@ -13,13 +13,10 @@ public class PreEnrollmentsCSVResponse {
             studentPreEnrollment.getSubjects().values().forEach(scheduleResponse -> {
                 this.enrollments.add(new Enrollment(studentPreEnrollment.getStudentRegistration(),
                         studentPreEnrollment.getTerm(),
-                        studentPreEnrollment.getMaxMandatoryCredits(),
+                        studentPreEnrollment.getMaxCredits(),
                         studentPreEnrollment.getMandatoryCredits(),
-                        studentPreEnrollment.getMaxOptionalCredits(),
                         studentPreEnrollment.getOptionalCredits(),
-                        studentPreEnrollment.getMaxComplementaryCredits(),
                         studentPreEnrollment.getComplementaryCredits(),
-                        studentPreEnrollment.getMaxElectiveCredits(),
                         studentPreEnrollment.getElectiveCredits(),
                         scheduleResponse.getSubjectName(),
                         scheduleResponse.getSchedule().getClassCode()));

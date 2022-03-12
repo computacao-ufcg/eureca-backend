@@ -6,27 +6,25 @@ public class Enrollment implements Comparable {
     private String studentRegistration;
     private int term;
     private int totalCredits;
-    private int totalBalance;
-    private int mandatoryCreditsBalance;
-    private int optionalCreditsBalance;
-    private int complementaryCreditsBalance;
-    private int electiveCreditsBalance;
+    private int deficit;
+    private int mandatoryCredits;
+    private int optionalCredits;
+    private int complementaryCredits;
+    private int electiveCredits;
     private String subjectName;
     private String classCode;
 
-    public Enrollment(String studentRegistration, int term, int maxMandatoryCredits, int mandatoryCredits,
-                      int maxOptionalCredits, int optionalCredits, int maxComplementaryCredits,
-                      int complementaryCredits, int maxElectiveCredits, int electiveCredits, String subjectName,
+    public Enrollment(String studentRegistration, int term, int maxCredits, int mandatoryCredits,
+                      int complementaryCredits, int optionalCredits, int electiveCredits, String subjectName,
                       String classCode) {
         this.studentRegistration = studentRegistration;
         this.term = term;
         this.totalCredits = mandatoryCredits + optionalCredits + electiveCredits + complementaryCredits;
-        this.mandatoryCreditsBalance = maxMandatoryCredits - mandatoryCredits;
-        this.optionalCreditsBalance = maxOptionalCredits - optionalCredits;
-        this.complementaryCreditsBalance = maxComplementaryCredits - complementaryCredits;
-        this.electiveCreditsBalance = maxElectiveCredits - electiveCredits;
-        this.totalBalance = this.mandatoryCreditsBalance + this.optionalCreditsBalance + this.electiveCreditsBalance +
-                this.complementaryCreditsBalance;
+        this.mandatoryCredits = mandatoryCredits;
+        this.optionalCredits = optionalCredits;
+        this.complementaryCredits = complementaryCredits;
+        this.electiveCredits = electiveCredits;
+        this.deficit = maxCredits - this.totalCredits;
         this.subjectName = subjectName;
         this.classCode = classCode;
     }
@@ -47,36 +45,36 @@ public class Enrollment implements Comparable {
         this.term = term;
     }
 
-    public int getMandatoryCreditsBalance() {
-        return mandatoryCreditsBalance;
+    public int getMandatoryCredits() {
+        return mandatoryCredits;
     }
 
-    public void setMandatoryCreditsBalance(int mandatoryCreditsBalance) {
-        this.mandatoryCreditsBalance = mandatoryCreditsBalance;
+    public void setMandatoryCredits(int mandatoryCredits) {
+        this.mandatoryCredits = mandatoryCredits;
     }
 
-    public int getOptionalCreditsBalance() {
-        return optionalCreditsBalance;
+    public int getOptionalCredits() {
+        return optionalCredits;
     }
 
-    public void setOptionalCreditsBalance(int optionalCreditsBalance) {
-        this.optionalCreditsBalance = optionalCreditsBalance;
+    public void setOptionalCredits(int optionalCredits) {
+        this.optionalCredits = optionalCredits;
     }
 
-    public int getComplementaryCreditsBalance() {
-        return complementaryCreditsBalance;
+    public int getComplementaryCredits() {
+        return complementaryCredits;
     }
 
-    public void setComplementaryCreditsBalance(int complementaryCreditsBalance) {
-        this.complementaryCreditsBalance = complementaryCreditsBalance;
+    public void setComplementaryCredits(int complementaryCredits) {
+        this.complementaryCredits = complementaryCredits;
     }
 
-    public int getElectiveCreditsBalance() {
-        return electiveCreditsBalance;
+    public int getElectiveCredits() {
+        return electiveCredits;
     }
 
-    public void setElectiveCreditsBalance(int electiveCreditsBalance) {
-        this.electiveCreditsBalance = electiveCreditsBalance;
+    public void setElectiveCredits(int electiveCredits) {
+        this.electiveCredits = electiveCredits;
     }
 
     public int getTotalCredits() {
@@ -87,12 +85,12 @@ public class Enrollment implements Comparable {
         this.totalCredits = totalCredits;
     }
 
-    public int getTotalBalance() {
-        return totalBalance;
+    public int getDeficit() {
+        return deficit;
     }
 
-    public void setTotalBalance(int totalBalance) {
-        this.totalBalance = totalBalance;
+    public void setDeficit(int deficit) {
+        this.deficit = deficit;
     }
 
     public String getSubjectName() {
@@ -117,10 +115,10 @@ public class Enrollment implements Comparable {
         if (o == null || getClass() != o.getClass()) return false;
         Enrollment that = (Enrollment) o;
         return getTerm() == that.getTerm() &&
-                getMandatoryCreditsBalance() == that.getMandatoryCreditsBalance() &&
-                getOptionalCreditsBalance() == that.getOptionalCreditsBalance() &&
-                getComplementaryCreditsBalance() == that.getComplementaryCreditsBalance() &&
-                getElectiveCreditsBalance() == that.getElectiveCreditsBalance() &&
+                getMandatoryCredits() == that.getMandatoryCredits() &&
+                getOptionalCredits() == that.getOptionalCredits() &&
+                getComplementaryCredits() == that.getComplementaryCredits() &&
+                getElectiveCredits() == that.getElectiveCredits() &&
                 getStudentRegistration().equals(that.getStudentRegistration()) &&
                 getSubjectName().equals(that.getSubjectName()) &&
                 getClassCode().equals(that.getClassCode());
@@ -128,9 +126,9 @@ public class Enrollment implements Comparable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getStudentRegistration(), getTerm(), getMandatoryCreditsBalance(),
-                getOptionalCreditsBalance(), getComplementaryCreditsBalance(),
-                getElectiveCreditsBalance(), getSubjectName(), getClassCode());
+        return Objects.hash(getStudentRegistration(), getTerm(), getMandatoryCredits(),
+                getOptionalCredits(), getComplementaryCredits(),
+                getElectiveCredits(), getSubjectName(), getClassCode());
     }
 
     @Override
