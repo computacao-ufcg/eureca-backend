@@ -1,12 +1,15 @@
 package br.edu.ufcg.computacao.eureca.backend.core.util;
 
+import br.edu.ufcg.computacao.eureca.backend.core.controllers.PreEnrollmentController;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.SubjectKey;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
+import org.apache.log4j.Logger;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class PreEnrollmentUtil {
+    private static final Logger LOGGER = Logger.getLogger(PreEnrollmentUtil.class);
 
     // retorna as disciplinas agrupadas por período e tipo
     public static Map<Integer, Collection<SubjectSchedule>> getSubjectsPerTerm(Collection<SubjectSchedule> subjects, SubjectType type) {
@@ -121,55 +124,7 @@ public class PreEnrollmentUtil {
                 (missingComplementaryCredits + curriculum.getIdealComplementaryCredits(nextTerm))));
         int idealElectiveCredits = Math.min(leftElectiveCredits, Math.min(maxCredits,
                 (missingElectiveCredits + curriculum.getIdealElectiveCredits(nextTerm))));
-/*
 
-        // Mandatory credits are always prioritized; then we use the rate on the missing credits to define the order of
-        // prioritization of the other types of subjects; the higher the rate, the higher the priority
-        idealMandatoryCredits = Math.min(idealMandatoryCredits, maxCredits);
-        double optionalMissingRate = (double) missingOptionalCredits / (double) curriculum.getTargetOptionalCredits(actualTerm);
-        double electiveMissingRate = (double) missingElectiveCredits / (double) curriculum.getTargetElectiveCredits(actualTerm);
-        double complementaryMissingRate = (double) missingComplementaryCredits / (double) curriculum.getTargetComplementaryCredits(actualTerm);
-
-        if (optionalMissingRate >= electiveMissingRate) {
-            if (electiveMissingRate >= complementaryMissingRate) {
-                // optional >= elective >= complementary
-                idealOptionalCredits = Math.max(0, Math.min(idealOptionalCredits, maxCredits - idealMandatoryCredits));
-                idealElectiveCredits = Math.max(0, Math.min(idealElectiveCredits, maxCredits - (idealMandatoryCredits + idealOptionalCredits)));
-                idealComplementaryCredits = Math.max(0, Math.min(idealComplementaryCredits, maxCredits - (idealMandatoryCredits + idealOptionalCredits + idealElectiveCredits)));
-            } else {
-                if (optionalMissingRate >= complementaryMissingRate) {
-                    // optional >= complementary > elective
-                    idealOptionalCredits = Math.max(0, Math.min(idealOptionalCredits, maxCredits - idealMandatoryCredits));
-                    idealComplementaryCredits = Math.max(0, Math.min(idealComplementaryCredits, maxCredits - (idealMandatoryCredits + idealOptionalCredits)));
-                    idealElectiveCredits = Math.max(0, Math.min(idealElectiveCredits, maxCredits - (idealMandatoryCredits + idealComplementaryCredits + idealOptionalCredits)));
-                } else {
-                    // complementary > optional >= elective
-                    idealComplementaryCredits = Math.max(0, Math.min(idealComplementaryCredits, maxCredits - idealMandatoryCredits));
-                    idealOptionalCredits = Math.max(0, Math.min(idealOptionalCredits, maxCredits - (idealMandatoryCredits + idealComplementaryCredits)));
-                    idealElectiveCredits = Math.max(0, Math.min(idealElectiveCredits, maxCredits - (idealMandatoryCredits + idealComplementaryCredits + idealOptionalCredits)));
-                }
-            }
-        } else {
-            if (optionalMissingRate >= complementaryMissingRate) {
-                // elective > optional >= complementary
-                idealElectiveCredits = Math.max(0, Math.min(idealElectiveCredits, maxCredits - idealMandatoryCredits));
-                idealOptionalCredits = Math.max(0, Math.min(idealOptionalCredits, maxCredits - (idealMandatoryCredits + idealElectiveCredits)));
-                idealComplementaryCredits = Math.max(0, Math.min(idealComplementaryCredits, maxCredits - (idealMandatoryCredits + idealOptionalCredits + idealElectiveCredits)));
-            } else {
-                if (electiveMissingRate >= complementaryMissingRate) {
-                    // elective >= complementary > optional
-                    idealElectiveCredits = Math.max(0, Math.min(idealElectiveCredits, maxCredits - idealMandatoryCredits));
-                    idealComplementaryCredits = Math.max(0, Math.min(idealComplementaryCredits, maxCredits - (idealMandatoryCredits + idealElectiveCredits)));
-                    idealOptionalCredits = Math.max(0, Math.min(idealOptionalCredits, maxCredits - (idealMandatoryCredits + idealComplementaryCredits + idealElectiveCredits)));
-                } else {
-                    // complementary > elective > optional
-                    idealComplementaryCredits = Math.max(0, Math.min(idealComplementaryCredits, maxCredits - idealMandatoryCredits));
-                    idealElectiveCredits = Math.max(0, Math.min(idealElectiveCredits, maxCredits - (idealMandatoryCredits + idealComplementaryCredits)));
-                    idealOptionalCredits = Math.max(0, Math.min(idealOptionalCredits, maxCredits - (idealMandatoryCredits + idealComplementaryCredits + idealElectiveCredits)));
-                }
-            }
-        }
-*/
         idealCredits.put(SubjectType.MANDATORY, idealMandatoryCredits);
         idealCredits.put(SubjectType.OPTIONAL, idealOptionalCredits);
         idealCredits.put(SubjectType.COMPLEMENTARY, idealComplementaryCredits);

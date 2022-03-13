@@ -53,12 +53,14 @@ public class PreEnrollmentController {
     public PreEnrollments getActivesPreEnrollments(String courseCode, String curriculumCode, String term)
             throws EurecaException {
         NavigableSet<Student> actives = new TreeSet(this.dataAccessFacade.getAllActives(courseCode, curriculumCode)).descendingSet();
+
         Collection<String> activesRegistrations = actives.stream().map(student ->
                 student.getRegistration().getRegistration()).collect(Collectors.toList());
         Collection<StudentPreEnrollment> activesPreEnrollments = new HashSet<>();
 
         for (String studentRegistration : activesRegistrations) {
-            LOGGER.info(String.format("Pre-enrolling: %s", studentRegistration));
+            LOGGER.debug(String.format(Messages.PRE_ENROLLING_S, studentRegistration));
+
             StudentCurriculumProgress studentProgress = this.dataAccessFacade.getStudentCurriculumProgress(studentRegistration);
             // Creates list of available subjects
             PreEnrollmentData preEnrollmentData = this.getPreEnrollmentData(courseCode, curriculumCode, term, studentProgress);
@@ -71,7 +73,7 @@ public class PreEnrollmentController {
 
         SubjectDemandSummary subjectDemandSummary = this.getSubjectDemandSummary(courseCode, curriculumCode, term,
                 activesPreEnrollments);
-        // Empties cache, so that new request will compute preEnrollment from fresh data
+        // Empties cache, so that new requests will compute preEnrollment from fresh data
         this.releaseSubjectAndScheduleCaches();
 
         return new PreEnrollments(activesPreEnrollments, subjectDemandSummary);
@@ -265,26 +267,126 @@ public class PreEnrollmentController {
             this.enrollSubjects(studentPreEnrollment, mandatoryLeftovers, term);
         }
 
-        // From now on, for each type, we trie first to use the prioritization sent in the request (if any), and then
+        // From now on, for each type, we try first to use the prioritization sent in the request (if any), and then
         // we enroll any other available subject of the type in question.
         // Moreover, we use the rate on the missing credits to define the order of prioritization of the other types
         // of subjects; the higher the rate, the higher the priority
 
-        if (!studentPreEnrollment.isComplementaryFull()) {
-            this.enrollSubjects(studentPreEnrollment, prioritizedComplementarySubjects, term);
-            this.enrollSubjects(studentPreEnrollment, availableComplementarySubjects, term);
-        }
+        int missingComplementaryCredits = Math.max(0, (curriculum.getTargetComplementaryCredits(actualTerm) -
+                studentProgress.getCompletedComplementaryCredits()));
+        int missingOptionalCredits = Math.max(0, (curriculum.getTargetOptionalCredits(actualTerm) -
+                studentProgress.getCompletedOptionalCredits()));
+        int missingElectiveCredits = Math.max(0, (curriculum.getTargetElectiveCredits(actualTerm) -
+                studentProgress.getCompletedElectiveCredits()));        double optionalMissingRate = (double) missingOptionalCredits / (double) curriculum.getTargetOptionalCredits(actualTerm);
+        double electiveMissingRate = (double) missingElectiveCredits / (double) curriculum.getTargetElectiveCredits(actualTerm);
+        double complementaryMissingRate = (double) missingComplementaryCredits / (double) curriculum.getTargetComplementaryCredits(actualTerm);
 
-        if (!studentPreEnrollment.isOptionalFull()) {
-            this.enrollSubjects(studentPreEnrollment, prioritizedOptionalSubjects, term);
-            this.enrollSubjects(studentPreEnrollment, availableOptionalSubjects, term);
-        }
+        if (optionalMissingRate >= electiveMissingRate) {
+            if (electiveMissingRate >= complementaryMissingRate) {
+                // optional >= elective >= complementary
+                if (!studentPreEnrollment.isOptionalFull()) {
+                    this.enrollSubjects(studentPreEnrollment, prioritizedOptionalSubjects, term);
+                    this.enrollSubjects(studentPreEnrollment, availableOptionalSubjects, term);
+                }
 
-        if (!studentPreEnrollment.isElectiveFull()) {
-            this.enrollSubjects(studentPreEnrollment, prioritizedElectiveSubjects, term);
-            this.enrollSubjects(studentPreEnrollment, availableElectiveSubjects, term);
-        }
+                if (!studentPreEnrollment.isElectiveFull()) {
+                    this.enrollSubjects(studentPreEnrollment, prioritizedElectiveSubjects, term);
+                    this.enrollSubjects(studentPreEnrollment, availableElectiveSubjects, term);
+                }
 
+                if (!studentPreEnrollment.isComplementaryFull()) {
+                    this.enrollSubjects(studentPreEnrollment, prioritizedComplementarySubjects, term);
+                    this.enrollSubjects(studentPreEnrollment, availableComplementarySubjects, term);
+                }
+            } else {
+                if (optionalMissingRate >= complementaryMissingRate) {
+                    // optional >= complementary > elective
+                    if (!studentPreEnrollment.isOptionalFull()) {
+                        this.enrollSubjects(studentPreEnrollment, prioritizedOptionalSubjects, term);
+                        this.enrollSubjects(studentPreEnrollment, availableOptionalSubjects, term);
+                    }
+
+                    if (!studentPreEnrollment.isComplementaryFull()) {
+                        this.enrollSubjects(studentPreEnrollment, prioritizedComplementarySubjects, term);
+                        this.enrollSubjects(studentPreEnrollment, availableComplementarySubjects, term);
+                    }
+
+                    if (!studentPreEnrollment.isElectiveFull()) {
+                        this.enrollSubjects(studentPreEnrollment, prioritizedElectiveSubjects, term);
+                        this.enrollSubjects(studentPreEnrollment, availableElectiveSubjects, term);
+                    }
+                } else {
+                    // complementary > optional >= elective
+                    if (!studentPreEnrollment.isComplementaryFull()) {
+                        this.enrollSubjects(studentPreEnrollment, prioritizedComplementarySubjects, term);
+                        this.enrollSubjects(studentPreEnrollment, availableComplementarySubjects, term);
+                    }
+
+                    if (!studentPreEnrollment.isOptionalFull()) {
+                        this.enrollSubjects(studentPreEnrollment, prioritizedOptionalSubjects, term);
+                        this.enrollSubjects(studentPreEnrollment, availableOptionalSubjects, term);
+                    }
+
+                    if (!studentPreEnrollment.isElectiveFull()) {
+                        this.enrollSubjects(studentPreEnrollment, prioritizedElectiveSubjects, term);
+                        this.enrollSubjects(studentPreEnrollment, availableElectiveSubjects, term);
+                    }
+                }
+            }
+        } else {
+            if (optionalMissingRate >= complementaryMissingRate) {
+                // elective > optional >= complementary
+                if (!studentPreEnrollment.isElectiveFull()) {
+                    this.enrollSubjects(studentPreEnrollment, prioritizedElectiveSubjects, term);
+                    this.enrollSubjects(studentPreEnrollment, availableElectiveSubjects, term);
+                }
+
+                if (!studentPreEnrollment.isOptionalFull()) {
+                    this.enrollSubjects(studentPreEnrollment, prioritizedOptionalSubjects, term);
+                    this.enrollSubjects(studentPreEnrollment, availableOptionalSubjects, term);
+                }
+
+                if (!studentPreEnrollment.isComplementaryFull()) {
+                    this.enrollSubjects(studentPreEnrollment, prioritizedComplementarySubjects, term);
+                    this.enrollSubjects(studentPreEnrollment, availableComplementarySubjects, term);
+                }
+            } else {
+                if (electiveMissingRate >= complementaryMissingRate) {
+                    // elective >= complementary > optional
+                    if (!studentPreEnrollment.isElectiveFull()) {
+                        this.enrollSubjects(studentPreEnrollment, prioritizedElectiveSubjects, term);
+                        this.enrollSubjects(studentPreEnrollment, availableElectiveSubjects, term);
+                    }
+
+                    if (!studentPreEnrollment.isComplementaryFull()) {
+                        this.enrollSubjects(studentPreEnrollment, prioritizedComplementarySubjects, term);
+                        this.enrollSubjects(studentPreEnrollment, availableComplementarySubjects, term);
+                    }
+
+                    if (!studentPreEnrollment.isOptionalFull()) {
+                        this.enrollSubjects(studentPreEnrollment, prioritizedOptionalSubjects, term);
+                        this.enrollSubjects(studentPreEnrollment, availableOptionalSubjects, term);
+                    }
+                } else {
+                    // complementary > elective > optional
+                    if (!studentPreEnrollment.isComplementaryFull()) {
+                        this.enrollSubjects(studentPreEnrollment, prioritizedComplementarySubjects, term);
+                        this.enrollSubjects(studentPreEnrollment, availableComplementarySubjects, term);
+                    }
+
+                    if (!studentPreEnrollment.isElectiveFull()) {
+                        this.enrollSubjects(studentPreEnrollment, prioritizedElectiveSubjects, term);
+                        this.enrollSubjects(studentPreEnrollment, availableElectiveSubjects, term);
+                    }
+
+                    if (!studentPreEnrollment.isOptionalFull()) {
+                        this.enrollSubjects(studentPreEnrollment, prioritizedOptionalSubjects, term);
+                        this.enrollSubjects(studentPreEnrollment, availableOptionalSubjects, term);
+                    }
+                }
+            }
+        }
+        
         return studentPreEnrollment;
     }
 
@@ -317,7 +419,7 @@ public class PreEnrollmentController {
         }
     }
 
-    // retorna uma coleção de disciplinas com horários a partir de uma coleção de (apenas) disciplinas
+    // given a collection with subjects, returns a collection with subject and schedules
     private Collection<SubjectSchedule> getSubjectsSchedules(Collection<Subject> subjects, String term) {
         Collection<SubjectSchedule> subjectsSchedules = new ArrayList<>();
         for (Subject subject : subjects) {
@@ -328,7 +430,7 @@ public class PreEnrollmentController {
                 SubjectSchedule subjectSchedule = this.getSubjectSchedule(courseCode, curriculumCode, subjectCode, term);
                 subjectsSchedules.add(subjectSchedule);
             } catch (InvalidParameterException e) {
-                LOGGER.info(Messages.INVALID_SUBJECT_IGNORING);
+                LOGGER.error(Messages.INVALID_SUBJECT_IGNORING);
             }
         }
         return subjectsSchedules;
@@ -337,9 +439,11 @@ public class PreEnrollmentController {
     private SubjectSchedule getSubjectSchedule(String courseCode, String curriculumCode, String subjectCode,
                                                String term) throws InvalidParameterException {
         SubjectScheduleKey key = new SubjectScheduleKey(courseCode, curriculumCode, subjectCode, term);
-        SubjectSchedule subjectSchedule = this.scheduleCache.get(key);
-        if (subjectSchedule == null) throw new InvalidParameterException(String.format(
+        SubjectSchedule cachedSubjectSchedule = this.scheduleCache.get(key);
+        if (cachedSubjectSchedule == null) throw new InvalidParameterException(String.format(
                 Messages.INVALID_SCHEDULE_S_S_S_S, courseCode, curriculumCode, subjectCode, term));
+        // We might need to change subjectSchedule, thus we need to copy the cached data
+        SubjectSchedule subjectSchedule = new SubjectSchedule(cachedSubjectSchedule);
         return subjectSchedule;
     }
 
@@ -435,6 +539,7 @@ public class PreEnrollmentController {
     }
 
     private Collection<String> getConcludedSubjects(StudentCurriculumProgress studentCurriculumProgress) {
+        // Optimistically considers that ongoing subjects will be successfully concluded
         Collection<String> ongoingSubjectsCode = studentCurriculumProgress.getOngoing().stream().
                 map(SubjectKey::getSubjectCode).collect(Collectors.toList());
         Collection<String> concludedSubjectsCode = studentCurriculumProgress.getCompleted().stream().

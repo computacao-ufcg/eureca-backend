@@ -1,9 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class SubjectSchedule {
 
@@ -13,6 +10,15 @@ public class SubjectSchedule {
     public SubjectSchedule(Subject subject, Map<String, Schedule> schedules) {
         this.subject = subject;
         this.schedules = schedules;
+    }
+
+    public SubjectSchedule(SubjectSchedule subjectSchedule) {
+        this.subject = new Subject(subjectSchedule.getSubject());
+        if (subjectSchedule.getSchedules() == null) {
+            this.schedules = new HashMap<>();
+        } else {
+            this.schedules = new HashMap<>(subjectSchedule.getSchedules());
+        }
     }
 
     public Subject getSubject() {
