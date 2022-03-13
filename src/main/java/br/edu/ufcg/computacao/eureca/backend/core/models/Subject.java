@@ -1,5 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -33,6 +34,22 @@ public class Subject {
         this.idealTerm = idealTerm;
         this.preRequirementsList = preRequirementsList;
         this.coRequirementsList = coRequirementsList;
+        this.isComposed = coRequirementsList != null && !coRequirementsList.isEmpty();
+    }
+
+    public Subject(Subject other) {
+        this.courseCode = other.courseCode;
+        this.curriculumCode = other.curriculumCode;
+        this.subjectCode = other.subjectCode;
+        this.academicUnit = other.academicUnit;
+        this.type = other.type;
+        this.credits = other.credits;
+        this.hours = other.hours;
+        this.name = other.name;
+        this.equivalentCodesList = new ArrayList<>(other.equivalentCodesList);
+        this.idealTerm = other.idealTerm;
+        this.preRequirementsList = new ArrayList(other.preRequirementsList);
+        this.coRequirementsList = new ArrayList<>(other.coRequirementsList);
         this.isComposed = coRequirementsList != null && !coRequirementsList.isEmpty();
     }
 
