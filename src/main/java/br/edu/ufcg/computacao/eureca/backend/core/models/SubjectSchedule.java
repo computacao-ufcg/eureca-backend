@@ -12,15 +12,6 @@ public class SubjectSchedule {
         this.schedules = schedules;
     }
 
-    public SubjectSchedule(SubjectSchedule subjectSchedule) {
-        this.subject = new Subject(subjectSchedule.getSubject());
-        if (subjectSchedule.getSchedules() == null) {
-            this.schedules = new HashMap<>();
-        } else {
-            this.schedules = new HashMap<>(subjectSchedule.getSchedules());
-        }
-    }
-
     public Subject getSubject() {
         return subject;
     }
