@@ -69,6 +69,9 @@ public class PreEnrollmentController {
             StudentPreEnrollment preEnrollmentResponse = this.getStudentPreEnrollment(courseCode, curriculumCode,
                     term, studentRegistration, studentProgress, null, preEnrollmentData);
             activesPreEnrollments.add(preEnrollmentResponse);
+            // Cache might have been changed to remove already completed co-requirements
+            // We backtrack the cache before enrolling a new student
+            this.backtrackScheduleCache(courseCode, curriculumCode);
         }
 
         SubjectDemandSummary subjectDemandSummary = this.getSubjectDemandSummary(courseCode, curriculumCode, term,
@@ -202,6 +205,17 @@ public class PreEnrollmentController {
             this.cacheSubjects(courseCode, curriculumCode);
             this.cacheSchedules(courseCode, curriculumCode, term);
         }
+    }
+
+    private void backtrackScheduleCache(String courseCode, String curriculumCode) throws EurecaException {
+        this.cacheSubjects(courseCode, curriculumCode);
+        this.scheduleCache.values().forEach(subjectSchedule -> {
+            SubjectKey key = new SubjectKey(subjectSchedule.getSubject().getCourseCode(),
+                    subjectSchedule.getSubject().getCurriculumCode(),
+                    subjectSchedule.getSubject().getSubjectCode());
+            Subject originalSubject = this.subjectsCache.get(key);
+            subjectSchedule.setSubject(originalSubject);
+        });
     }
 
     private void releaseSubjectAndScheduleCaches() {
@@ -442,9 +456,7 @@ public class PreEnrollmentController {
         SubjectSchedule cachedSubjectSchedule = this.scheduleCache.get(key);
         if (cachedSubjectSchedule == null) throw new InvalidParameterException(String.format(
                 Messages.INVALID_SCHEDULE_S_S_S_S, courseCode, curriculumCode, subjectCode, term));
-        // We might need to change subjectSchedule, thus we need to copy the cached data
-        SubjectSchedule subjectSchedule = new SubjectSchedule(cachedSubjectSchedule);
-        return subjectSchedule;
+        return cachedSubjectSchedule;
     }
 
     private Collection<Subject> getSubjectsByCode(String courseCode, String curriculumCode, Collection<String>
