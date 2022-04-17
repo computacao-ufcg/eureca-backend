@@ -151,6 +151,7 @@ public class ApiDocumentation {
         public static final String GET_PRE_ENROLLMENTS_CSV = "Retorna todas as pre-matriculas dos ativos.";
         public static final String GET_DEMAND = "Retorna a demanda de cada disciplina, baseado na pré-matrícula calculada.";
         public static final String GET_DEMAND_CSV = "Retorna a demanda de cada disciplina, baseado na pré-matrícula calculada.";
+        public static final String GET_POSSIBLE_GRADUATE = "Retorna a lista de discentes que podem concluir o curso no período corrente.";
         public static final String MAX_CREDITS = "Número máximo de créditos na pré-matrícula.";
         public static final String ELECTIVE_PRIORITY_LIST = "Códigos das disciplinas eletivas a serem priorizadas (separadas por vírgula)";
         public static final String OPTIONAL_PRIORITY_LIST = "Códigos das disciplinas optativas a serem priorizadas (separadas por vírgula)";

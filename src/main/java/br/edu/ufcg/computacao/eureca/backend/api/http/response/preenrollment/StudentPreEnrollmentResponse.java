@@ -16,6 +16,7 @@ public class StudentPreEnrollmentResponse implements Comparable {
     private int complementaryCredits;
     private int maxElectiveCredits;
     private int electiveCredits;
+    private boolean isPossibleGraduate;
 
     public StudentPreEnrollmentResponse(StudentPreEnrollment studentPreEnrollment) {
         this.studentRegistration = studentPreEnrollment.getStudentRegistration();
@@ -41,6 +42,7 @@ public class StudentPreEnrollmentResponse implements Comparable {
         this.complementaryCredits = studentPreEnrollment.getComplementaryCredits();
         this.maxElectiveCredits = studentPreEnrollment.getMaxElectiveCredits();
         this.electiveCredits = studentPreEnrollment.getElectiveCredits();
+        this.isPossibleGraduate = studentPreEnrollment.isPossibleGraduate();
     }
 
     public String getStudentRegistration() {
@@ -137,6 +139,14 @@ public class StudentPreEnrollmentResponse implements Comparable {
 
     public void setElectiveCredits(int electiveCredits) {
         this.electiveCredits = electiveCredits;
+    }
+
+    public boolean isPossibleGraduate() {
+        return isPossibleGraduate;
+    }
+
+    public void setPossibleGraduate(boolean possibleGraduate) {
+        isPossibleGraduate = possibleGraduate;
     }
 
     @Override
