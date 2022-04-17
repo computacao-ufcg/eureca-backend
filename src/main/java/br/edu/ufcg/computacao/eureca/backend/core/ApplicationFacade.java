@@ -231,6 +231,14 @@ public class ApplicationFacade {
         return new DemandCSVResponse(preEnrollments);
     }
 
+    public PossibleGraduateResponse getPossibleGraduate(String token, String courseCode, String curriculumCode,
+                                                        String term) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_DEMAND_CSV);
+        PreEnrollments preEnrollments = this.preEnrollmentController.getActivesPreEnrollments(courseCode, curriculumCode,
+                term);
+        return new PossibleGraduateResponse(preEnrollments);
+    }
+
     public SubjectsDemandResponse getSubjectsDemand(String token, String courseCode, String curriculumCode, String term) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DEMAND);
         return this.preEnrollmentController.getDemand(courseCode, curriculumCode, term);

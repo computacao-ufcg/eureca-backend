@@ -378,11 +378,11 @@ public class IndexesHolder {
     private void buildIndexes() {
         buildStudentIndexes();
         buildEnrollmentIndexes();
-        updateStudentProgress();
         buildTeachersIndex();
         buildSubjectIndexes();
         buildCurriculaIndexes();
         buildClassesIndexes();
+        updateStudentProgress();
     }
 
     private void buildStudentIndexes() {

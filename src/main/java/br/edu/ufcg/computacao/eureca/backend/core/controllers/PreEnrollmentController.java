@@ -270,12 +270,12 @@ public class PreEnrollmentController {
 
         // If there is still space for mandatory subjects, this means that there are more than one option
         // for a given term; now we use the prioritization sent as parameter in the request (if any)
-        if (!studentPreEnrollment.isMandatoryFull()) {
+        if (studentPreEnrollment.isMandatoryNotFull()) {
             this.enrollSubjects(studentPreEnrollment, prioritizedMandatorySubjects, term);
         }
 
         // If there is still space, select from whatever mandatory subject is still available
-        if (!studentPreEnrollment.isMandatoryFull()) {
+        if (studentPreEnrollment.isMandatoryNotFull()) {
             Collection<SubjectSchedule> mandatoryLeftovers = EurecaUtil.difference(availableMandatorySubjects,
                     prioritizedMandatorySubjects);
             this.enrollSubjects(studentPreEnrollment, mandatoryLeftovers, term);
@@ -283,124 +283,40 @@ public class PreEnrollmentController {
 
         // From now on, for each type, we try first to use the prioritization sent in the request (if any), and then
         // we enroll any other available subject of the type in question.
-        // Moreover, we use the rate on the missing credits to define the order of prioritization of the other types
-        // of subjects; the higher the rate, the higher the priority
+        if (studentPreEnrollment.isComplementaryNotFull()) {
+            this.enrollSubjects(studentPreEnrollment, prioritizedComplementarySubjects, term);
+            this.enrollSubjects(studentPreEnrollment, availableComplementarySubjects, term);
+        }
 
-        int missingComplementaryCredits = Math.max(0, (curriculum.getTargetComplementaryCredits(actualTerm) -
-                studentProgress.getCompletedComplementaryCredits()));
+        // We use the rate on the missing credits to define the order of prioritization of
+        // optional and elective subjects; the higher the rate, the higher the priority
+
         int missingOptionalCredits = Math.max(0, (curriculum.getTargetOptionalCredits(actualTerm) -
                 studentProgress.getCompletedOptionalCredits()));
         int missingElectiveCredits = Math.max(0, (curriculum.getTargetElectiveCredits(actualTerm) -
                 studentProgress.getCompletedElectiveCredits()));        double optionalMissingRate = (double) missingOptionalCredits / (double) curriculum.getTargetOptionalCredits(actualTerm);
         double electiveMissingRate = (double) missingElectiveCredits / (double) curriculum.getTargetElectiveCredits(actualTerm);
-        double complementaryMissingRate = (double) missingComplementaryCredits / (double) curriculum.getTargetComplementaryCredits(actualTerm);
 
         if (optionalMissingRate >= electiveMissingRate) {
-            if (electiveMissingRate >= complementaryMissingRate) {
-                // optional >= elective >= complementary
-                if (!studentPreEnrollment.isOptionalFull()) {
-                    this.enrollSubjects(studentPreEnrollment, prioritizedOptionalSubjects, term);
-                    this.enrollSubjects(studentPreEnrollment, availableOptionalSubjects, term);
-                }
-
-                if (!studentPreEnrollment.isElectiveFull()) {
-                    this.enrollSubjects(studentPreEnrollment, prioritizedElectiveSubjects, term);
-                    this.enrollSubjects(studentPreEnrollment, availableElectiveSubjects, term);
-                }
-
-                if (!studentPreEnrollment.isComplementaryFull()) {
-                    this.enrollSubjects(studentPreEnrollment, prioritizedComplementarySubjects, term);
-                    this.enrollSubjects(studentPreEnrollment, availableComplementarySubjects, term);
-                }
-            } else {
-                if (optionalMissingRate >= complementaryMissingRate) {
-                    // optional >= complementary > elective
-                    if (!studentPreEnrollment.isOptionalFull()) {
-                        this.enrollSubjects(studentPreEnrollment, prioritizedOptionalSubjects, term);
-                        this.enrollSubjects(studentPreEnrollment, availableOptionalSubjects, term);
-                    }
-
-                    if (!studentPreEnrollment.isComplementaryFull()) {
-                        this.enrollSubjects(studentPreEnrollment, prioritizedComplementarySubjects, term);
-                        this.enrollSubjects(studentPreEnrollment, availableComplementarySubjects, term);
-                    }
-
-                    if (!studentPreEnrollment.isElectiveFull()) {
-                        this.enrollSubjects(studentPreEnrollment, prioritizedElectiveSubjects, term);
-                        this.enrollSubjects(studentPreEnrollment, availableElectiveSubjects, term);
-                    }
-                } else {
-                    // complementary > optional >= elective
-                    if (!studentPreEnrollment.isComplementaryFull()) {
-                        this.enrollSubjects(studentPreEnrollment, prioritizedComplementarySubjects, term);
-                        this.enrollSubjects(studentPreEnrollment, availableComplementarySubjects, term);
-                    }
-
-                    if (!studentPreEnrollment.isOptionalFull()) {
-                        this.enrollSubjects(studentPreEnrollment, prioritizedOptionalSubjects, term);
-                        this.enrollSubjects(studentPreEnrollment, availableOptionalSubjects, term);
-                    }
-
-                    if (!studentPreEnrollment.isElectiveFull()) {
-                        this.enrollSubjects(studentPreEnrollment, prioritizedElectiveSubjects, term);
-                        this.enrollSubjects(studentPreEnrollment, availableElectiveSubjects, term);
-                    }
-                }
+            if (studentPreEnrollment.isOptionalNotFull()) {
+                this.enrollSubjects(studentPreEnrollment, prioritizedOptionalSubjects, term);
+                this.enrollSubjects(studentPreEnrollment, availableOptionalSubjects, term);
+            }
+            if (studentPreEnrollment.isElectiveNotFull()) {
+                this.enrollSubjects(studentPreEnrollment, prioritizedElectiveSubjects, term);
+                this.enrollSubjects(studentPreEnrollment, availableElectiveSubjects, term);
             }
         } else {
-            if (optionalMissingRate >= complementaryMissingRate) {
-                // elective > optional >= complementary
-                if (!studentPreEnrollment.isElectiveFull()) {
-                    this.enrollSubjects(studentPreEnrollment, prioritizedElectiveSubjects, term);
-                    this.enrollSubjects(studentPreEnrollment, availableElectiveSubjects, term);
-                }
-
-                if (!studentPreEnrollment.isOptionalFull()) {
-                    this.enrollSubjects(studentPreEnrollment, prioritizedOptionalSubjects, term);
-                    this.enrollSubjects(studentPreEnrollment, availableOptionalSubjects, term);
-                }
-
-                if (!studentPreEnrollment.isComplementaryFull()) {
-                    this.enrollSubjects(studentPreEnrollment, prioritizedComplementarySubjects, term);
-                    this.enrollSubjects(studentPreEnrollment, availableComplementarySubjects, term);
-                }
-            } else {
-                if (electiveMissingRate >= complementaryMissingRate) {
-                    // elective >= complementary > optional
-                    if (!studentPreEnrollment.isElectiveFull()) {
-                        this.enrollSubjects(studentPreEnrollment, prioritizedElectiveSubjects, term);
-                        this.enrollSubjects(studentPreEnrollment, availableElectiveSubjects, term);
-                    }
-
-                    if (!studentPreEnrollment.isComplementaryFull()) {
-                        this.enrollSubjects(studentPreEnrollment, prioritizedComplementarySubjects, term);
-                        this.enrollSubjects(studentPreEnrollment, availableComplementarySubjects, term);
-                    }
-
-                    if (!studentPreEnrollment.isOptionalFull()) {
-                        this.enrollSubjects(studentPreEnrollment, prioritizedOptionalSubjects, term);
-                        this.enrollSubjects(studentPreEnrollment, availableOptionalSubjects, term);
-                    }
-                } else {
-                    // complementary > elective > optional
-                    if (!studentPreEnrollment.isComplementaryFull()) {
-                        this.enrollSubjects(studentPreEnrollment, prioritizedComplementarySubjects, term);
-                        this.enrollSubjects(studentPreEnrollment, availableComplementarySubjects, term);
-                    }
-
-                    if (!studentPreEnrollment.isElectiveFull()) {
-                        this.enrollSubjects(studentPreEnrollment, prioritizedElectiveSubjects, term);
-                        this.enrollSubjects(studentPreEnrollment, availableElectiveSubjects, term);
-                    }
-
-                    if (!studentPreEnrollment.isOptionalFull()) {
-                        this.enrollSubjects(studentPreEnrollment, prioritizedOptionalSubjects, term);
-                        this.enrollSubjects(studentPreEnrollment, availableOptionalSubjects, term);
-                    }
-                }
+            if (studentPreEnrollment.isElectiveNotFull()) {
+                this.enrollSubjects(studentPreEnrollment, prioritizedElectiveSubjects, term);
+                this.enrollSubjects(studentPreEnrollment, availableElectiveSubjects, term);
+            }
+            if (studentPreEnrollment.isOptionalNotFull()) {
+                this.enrollSubjects(studentPreEnrollment, prioritizedOptionalSubjects, term);
+                this.enrollSubjects(studentPreEnrollment, availableOptionalSubjects, term);
             }
         }
-        
+        studentPreEnrollment.setPossibleGraduate(isPossibleGraduate(studentPreEnrollment, studentProgress, curriculum));
         return studentPreEnrollment;
     }
 
@@ -584,9 +500,9 @@ public class PreEnrollmentController {
             }
         }
 
-        Comparator<Subject> orderByIdealTerm = Comparator.comparingInt(Subject::getIdealTerm);
+        Comparator<Subject> orderByIdealTermThenCredits = Comparator.comparingInt(Subject::getIdealTerm);
         List<Subject> availableSubjectsList = new ArrayList<>(availableSubjects);
-        availableSubjectsList.sort(orderByIdealTerm);
+        availableSubjectsList.sort(orderByIdealTermThenCredits);
 
         return availableSubjectsList;
     }
@@ -596,5 +512,29 @@ public class PreEnrollmentController {
         Subject subject = this.subjectsCache.get(new SubjectKey(courseCode, curriculumCode, subjectCode));
         if (subject == null) throw new InvalidParameterException(Messages.INVALID_SUBJECT_IGNORING);
         return subject;
+    }
+
+    private boolean isPossibleGraduate(StudentPreEnrollment studentPreEnrollment, StudentCurriculumProgress
+            studentProgress, Curriculum curriculum) {
+        int additional = curriculum.getExceptionalAdditionalEnrolledCredits();
+        int mandatoryNeeded = curriculum.getMinMandatoryCreditsNeeded();
+        int complementaryNeeded = curriculum.getMinComplementaryCreditsNeeded();
+        int optionalNeeded = curriculum.getMinOptionalCreditsNeeded();
+        int electiveNeeded = curriculum.getMinElectiveCreditsNeeded();
+        int mandatoryCompleted = studentProgress.getCompletedMandatoryCredits() +
+                studentPreEnrollment.getMandatoryCredits();
+        int complementaryCompleted = studentProgress.getCompletedComplementaryCredits() +
+                studentPreEnrollment.getComplementaryCredits();
+        int optionalCompleted = studentProgress.getCompletedOptionalCredits() +
+                studentPreEnrollment.getOptionalCredits();
+        int electiveCompleted = studentProgress.getCompletedElectiveCredits() +
+                studentPreEnrollment.getElectiveCredits();
+        int mandatoryDeficit = (mandatoryCompleted >= mandatoryNeeded ? 0 : 2);
+        int complementaryDeficit = (complementaryCompleted >= complementaryNeeded ? 0 : 2);
+        int optionalDeficit = ((optionalCompleted + additional) < optionalNeeded ? 2 :
+                (optionalCompleted >= optionalNeeded ? 0 : 1));
+        int electiveDeficit = ((electiveCompleted + additional) < electiveNeeded ? 2 :
+                (electiveCompleted >= electiveNeeded ? 0 : 1));
+        return ((mandatoryDeficit + complementaryDeficit + optionalDeficit + electiveDeficit) <= 1);
     }
 }

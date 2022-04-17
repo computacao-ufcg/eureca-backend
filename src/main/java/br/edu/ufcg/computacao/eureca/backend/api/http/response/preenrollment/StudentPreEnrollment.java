@@ -21,6 +21,7 @@ public class StudentPreEnrollment {
     private int complementaryCredits;
     private int maxElectiveCredits;
     private int electiveCredits;
+    private boolean possibleGraduate;
 
     public StudentPreEnrollment(String studentRegistration, int term, Integer maxCredits, int maxMandatoryCredits,
                                 int maxOptionalCredits, int maxComplementaryCredits, int maxElectiveCredits) {
@@ -33,22 +34,23 @@ public class StudentPreEnrollment {
         this.maxComplementaryCredits = maxComplementaryCredits;
         this.maxElectiveCredits = maxElectiveCredits;
         this.subjects = new HashMap<>();
+        this.possibleGraduate = false;
     }
 
-    public boolean isMandatoryFull() {
-        return this.mandatoryCredits >= this.maxMandatoryCredits;
+    public boolean isMandatoryNotFull() {
+        return this.mandatoryCredits < this.maxMandatoryCredits;
     }
 
-    public boolean isOptionalFull() {
-        return this.optionalCredits >= this.maxOptionalCredits;
+    public boolean isOptionalNotFull() {
+        return this.optionalCredits < this.maxOptionalCredits;
     }
 
-    public boolean isComplementaryFull() {
-        return this.complementaryCredits >= this.maxComplementaryCredits;
+    public boolean isComplementaryNotFull() {
+        return this.complementaryCredits < this.maxComplementaryCredits;
     }
 
-    public boolean isElectiveFull() {
-        return this.electiveCredits >= this.maxElectiveCredits;
+    public boolean isElectiveNotFull() {
+        return this.electiveCredits < this.maxElectiveCredits;
     }
 
     public String getStudentRegistration() {
@@ -153,6 +155,22 @@ public class StudentPreEnrollment {
 
     public void enrollSubject(SubjectSchedule subjectSchedule) {
         this.enrollSubject(subjectSchedule, new ArrayList<>());
+    }
+
+    public int getCurrentEnrolledCredits() {
+        return currentEnrolledCredits;
+    }
+
+    public void setCurrentEnrolledCredits(int currentEnrolledCredits) {
+        this.currentEnrolledCredits = currentEnrolledCredits;
+    }
+
+    public boolean isPossibleGraduate() {
+        return possibleGraduate;
+    }
+
+    public void setPossibleGraduate(boolean possibleGraduate) {
+        this.possibleGraduate = possibleGraduate;
     }
 
     public void enrollSubject(SubjectSchedule subjectAndSchedule, Collection<SubjectSchedule> coRequirements) {
@@ -281,7 +299,7 @@ public class StudentPreEnrollment {
             coRequirements, int creditsForType, int maxCreditsForType) {
         int newCredits = this.getNewCredits(subjectAndSchedule, coRequirements);
         int newCurrentEnrolledCredits = newCredits + this.currentEnrolledCredits;
-        return (((creditsForType + newCredits) <= maxCreditsForType) && (newCurrentEnrolledCredits <= this.maxCredits));
+        return ((creditsForType < maxCreditsForType) && (newCurrentEnrolledCredits <= this.maxCredits));
     }
 
     private int getNewCredits(SubjectSchedule subjectAndSchedule, Collection<SubjectSchedule> coRequirements) {

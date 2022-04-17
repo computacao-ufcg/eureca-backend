@@ -142,24 +142,24 @@ public class PreEnrollment {
         }
     }
 
-//    @ApiOperation(value = ApiDocumentation.PreEnrollment.GET_DEMAND)
-//    @RequestMapping(value = "/demand", method = RequestMethod.GET)
-//    public ResponseEntity<SubjectsDemandResponse> getDemand(
-//            @ApiParam(value = ApiDocumentation.Common.COURSE)
-//            @RequestParam String courseCode,
-//            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
-//            @RequestParam String curriculumCode,
-//            @ApiParam(value = ApiDocumentation.PreEnrollment.TERM)
-//            @RequestParam String term,
-//            @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
-//            @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
-//    ) throws EurecaException {
-//        try {
-//            SubjectsDemandResponse demand = ApplicationFacade.getInstance().getSubjectsDemand(token, courseCode, curriculumCode, term);
-//            return new ResponseEntity<>(demand, HttpStatus.OK);
-//        } catch (EurecaException e) {
-//            LOGGER.info(e);
-//            throw e;
-//        }
-//    }
+    @ApiOperation(value = ApiDocumentation.PreEnrollment.GET_POSSIBLE_GRADUATE)
+    @RequestMapping(value = "/possibleGraduate", method = RequestMethod.GET)
+    public ResponseEntity<PossibleGraduateResponse> getPossibleGraduate(
+            @ApiParam(value = ApiDocumentation.Common.COURSE)
+            @RequestParam String courseCode,
+            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+            @RequestParam String curriculumCode,
+            @ApiParam(value = ApiDocumentation.PreEnrollment.TERM)
+            @RequestParam String term,
+            @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
+            @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
+    ) throws EurecaException {
+        try {
+            PossibleGraduateResponse demand = ApplicationFacade.getInstance().getPossibleGraduate(token, courseCode, curriculumCode, term);
+            return new ResponseEntity<>(demand, HttpStatus.OK);
+        } catch (EurecaException e) {
+            LOGGER.info(e);
+            throw e;
+        }
+    }
 }
