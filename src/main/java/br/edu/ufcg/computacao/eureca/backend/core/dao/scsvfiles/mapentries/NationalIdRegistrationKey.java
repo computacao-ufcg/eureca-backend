@@ -50,16 +50,28 @@ public class NationalIdRegistrationKey implements EurecaMapKey {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
         NationalIdRegistrationKey other = (NationalIdRegistrationKey) obj;
         if (this.registration == null) {
-            if (other.getRegistration() != null) return false;
+            if (other.getRegistration() != null) {
+                return false;
+            }
         } else if (this.nationalId == null) {
-            if (other.getNationalId() != null) return false;
+            if (other.getNationalId() != null) {
+                return false;
+            }
         } else if (!this.nationalId.equals(other.getNationalId()) ||
-                !this.registration.equals(other.getRegistration())) return false;
+                !this.registration.equals(other.getRegistration())) {
+            return false;
+        }
         return true;
     }
 

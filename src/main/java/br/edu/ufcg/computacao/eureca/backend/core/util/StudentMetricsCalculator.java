@@ -24,23 +24,47 @@ public class StudentMetricsCalculator {
 
     public static RiskClass computeRiskClass(double risk, double lowestRisk) {
         double riskIncrement = 1.0 - lowestRisk;
-        if (risk < 0.0) return RiskClass.NOT_APPLICABLE;
-        if (risk < lowestRisk) return RiskClass.INACCURATE;
-        if (risk < 1.0) return RiskClass.SAFE;
-        if (risk < (1.0 + 1.0 * riskIncrement)) return RiskClass.LOW;
-        if (risk < (1.0 + 2.0 * riskIncrement)) return RiskClass.AVERAGE;
-        if (risk < (1.0 + 3.0 * riskIncrement)) return RiskClass.HIGH;
+        if (risk < 0.0) {
+            return RiskClass.NOT_APPLICABLE;
+        }
+        if (risk < lowestRisk) {
+            return RiskClass.INACCURATE;
+        }
+        if (risk < 1.0) {
+            return RiskClass.SAFE;
+        }
+        if (risk < (1.0 + 1.0 * riskIncrement)) {
+            return RiskClass.LOW;
+        }
+        if (risk < (1.0 + 2.0 * riskIncrement)) {
+            return RiskClass.AVERAGE;
+        }
+        if (risk < (1.0 + 3.0 * riskIncrement)) {
+            return RiskClass.HIGH;
+        }
         return RiskClass.UNFEASIBLE;
     }
 
     public static CostClass computeCostClass(double cost, double costIncrement) {
         double lowestCost = 1.0;
-        if (cost < 0.0) return CostClass.NOT_APPLICABLE;
-        if (cost < lowestCost) return CostClass.INACCURATE;
-        if (cost < lowestCost + 1.0 * costIncrement) return CostClass.ADEQUATE;
-        if (cost < (lowestCost + 2.0 * costIncrement)) return CostClass.REGULAR;
-        if (cost < (lowestCost + 3.0 * costIncrement)) return CostClass.HIGH;
-        if (cost < (lowestCost + 4.0 * costIncrement)) return CostClass.VERY_HIGH;
+        if (cost < 0.0) {
+            return CostClass.NOT_APPLICABLE;
+        }
+        if (cost < lowestCost) {
+            return CostClass.INACCURATE;
+        }
+        if (cost < lowestCost + 1.0 * costIncrement) {
+            return CostClass.ADEQUATE;
+        }
+        if (cost < (lowestCost + 2.0 * costIncrement)) {
+            return CostClass.REGULAR;
+        }
+        if (cost < (lowestCost + 3.0 * costIncrement)) {
+            return CostClass.HIGH;
+        }
+        if (cost < (lowestCost + 4.0 * costIncrement)) {
+            return CostClass.VERY_HIGH;
+        }
         return CostClass.UNACCEPTABLE;
     }
 

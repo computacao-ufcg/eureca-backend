@@ -22,8 +22,12 @@ public class TeacherKey implements EurecaMapKey, Comparable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         TeacherKey that = (TeacherKey) o;
         return getId().equals(that.getId());
     }

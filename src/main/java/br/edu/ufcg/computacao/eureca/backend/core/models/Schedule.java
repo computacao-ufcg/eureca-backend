@@ -47,8 +47,12 @@ public class Schedule {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Schedule schedule1 = (Schedule) o;
         return schedule.equals(schedule1.schedule);
     }

@@ -197,7 +197,9 @@ public class PreEnrollmentController {
             Collection<SubjectSchedule> termSubjects = mandatorySubjectsGroupedByTerm.get(termNumber);
             int totalTermCredits = PreEnrollmentUtil.getSubjectCreditsSum(termSubjects);
 
-            if (totalTermCredits > studentPreEnrollment.getMaxMandatoryCredits() - studentPreEnrollment.getMandatoryCredits()) break;
+            if (totalTermCredits > studentPreEnrollment.getMaxMandatoryCredits() - studentPreEnrollment.getMandatoryCredits()) {
+                break;
+            }
 
             this.enrollSubjects(studentPreEnrollment, termSubjects, term);
         }
@@ -236,7 +238,9 @@ public class PreEnrollmentController {
     private SubjectSchedule getSubjectSchedule(String courseCode, String curriculumCode, String subjectCode, String term) throws InvalidParameterException {
         SubjectScheduleKey key = new SubjectScheduleKey(courseCode, curriculumCode, subjectCode, term);
         SubjectSchedule subjectSchedule = this.scheduleCache.get(key);
-        if (subjectSchedule == null) throw new InvalidParameterException(String.format(Messages.INVALID_SCHEDULE_S_S_S_S, courseCode, curriculumCode, subjectCode, term));
+        if (subjectSchedule == null) {
+            throw new InvalidParameterException(String.format(Messages.INVALID_SCHEDULE_S_S_S_S, courseCode, curriculumCode, subjectCode, term));
+        }
         return subjectSchedule;
     }
 
@@ -359,7 +363,9 @@ public class PreEnrollmentController {
 
     private Subject getSubject(String courseCode, String curriculumCode, String subjectCode) throws InvalidParameterException {
         Subject subject = this.subjectsCache.get(new SubjectKey(courseCode, curriculumCode, subjectCode));
-        if (subject == null) throw new InvalidParameterException(Messages.INVALID_SUBJECT_IGNORING);
+        if (subject == null) {
+            throw new InvalidParameterException(Messages.INVALID_SUBJECT_IGNORING);
+        }
         return subject;
     }
 }

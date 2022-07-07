@@ -63,7 +63,9 @@ public class CurriculumData implements EurecaMapValue {
     }
 
     private void parseLists() {
-        if (this.expectedMinAccumulatedCredits != null) return;
+        if (this.expectedMinAccumulatedCredits != null) {
+            return;
+        }
         this.idealMandatoryCredits = extractIntegerList(this.idealMandatoryCreditsList);
         this.idealOptionalCredits = extractIntegerList(this.idealOptionalCreditsList);
         this.idealComplementaryCredits = extractIntegerList(this.idealComplementaryCreditsList);

@@ -68,8 +68,12 @@ public class ScheduleKey implements EurecaMapKey, Comparable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ScheduleKey that = (ScheduleKey) o;
         return Objects.equals(courseCode, that.courseCode) && Objects.equals(curriculumCode, that.curriculumCode) && Objects.equals(subjectCode, that.subjectCode) && Objects.equals(classCode, that.classCode);
     }

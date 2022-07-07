@@ -93,8 +93,12 @@ public class RetentionStatisticsController {
         String last = "0000.0";
         for (Student item : collection) {
             String term = item.getAdmissionTerm();
-            if (term.compareTo(first) < 0) first = term;
-            if (term.compareTo(last) > 0) last = term;
+            if (term.compareTo(first) < 0) {
+                first = term;
+            }
+            if (term.compareTo(last) > 0) {
+                last = term;
+            }
         }
         return new Range(first, last);
     }
@@ -105,8 +109,12 @@ public class RetentionStatisticsController {
         List<Double> adequateSampleList = new ArrayList<>();
         List<Double> possibleSampleList = new ArrayList<>();
         for (SubjectRetentionPerAdmissionTermSummary subjectSummary : subjectsRetentionList) {
-            if (subjectSummary.getFrom().compareTo(from) < 0) from = subjectSummary.getFrom();
-            if (subjectSummary.getTo().compareTo(to) > 0) to = subjectSummary.getTo();
+            if (subjectSummary.getFrom().compareTo(from) < 0) {
+                from = subjectSummary.getFrom();
+            }
+            if (subjectSummary.getTo().compareTo(to) > 0) {
+                to = subjectSummary.getTo();
+            }
             subjectSummary.getRetention().forEach(termSummary -> {
                 adequateSampleList.add((double) termSummary.getAdequate());
                 possibleSampleList.add((double) termSummary.getPossible());
@@ -133,7 +141,9 @@ public class RetentionStatisticsController {
                     item.computeRiskClass().equals(RiskClass.HIGH) ||
                     item.computeRiskClass().equals(RiskClass.UNFEASIBLE))
                     .collect(Collectors.toSet());
-            if (studentsRetention.size() > 0) studentsRetentionPerAdmissionTerm.put(term, studentsRetention);
+            if (studentsRetention.size() > 0) {
+                studentsRetentionPerAdmissionTerm.put(term, studentsRetention);
+            }
         }
         return studentsRetentionPerAdmissionTerm;
     }
