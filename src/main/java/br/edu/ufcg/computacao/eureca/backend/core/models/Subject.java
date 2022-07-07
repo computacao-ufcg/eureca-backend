@@ -130,8 +130,12 @@ public class Subject {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Subject subject = (Subject) o;
         return courseCode.equals(subject.courseCode) && curriculumCode.equals(subject.curriculumCode) && subjectCode.equals(subject.subjectCode);
     }

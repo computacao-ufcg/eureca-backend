@@ -40,8 +40,12 @@ public class ClassSchedule {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ClassSchedule that = (ClassSchedule) o;
         return weekDay == that.weekDay && startHour.equals(that.startHour) && endHour.equals(that.endHour);
     }

@@ -144,7 +144,9 @@ public class GenericLoadMapFromScsvFile<T extends EurecaMapKey, V extends Eureca
     }
 
     private String fixNumberFields(String field) {
-        if (field.equals("") || field.equals("-")) return "-1";
+        if (field.equals("") || field.equals("-")) {
+            return "-1";
+        }
         return field.replace(",", ".");
     }
 
