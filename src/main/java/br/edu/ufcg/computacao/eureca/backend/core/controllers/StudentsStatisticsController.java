@@ -145,9 +145,8 @@ public class StudentsStatisticsController {
                 aggregateTermsCount/termAlumniCount).replace(",", "."));
         double averageCost = termAlumniCount == 0 ? 0.0 : Double.parseDouble(String.format("%.2f",
                 aggregateCost/termAlumniCount).replace(",", "."));
-        AlumniPerTermSummary termData = new AlumniPerTermSummary(term, termAlumniCount, averageGPA,
+        return new AlumniPerTermSummary(term, termAlumniCount, averageGPA,
                 averageTermsCount, averageCost);
-        return termData;
     }
 
     private DropoutPerTermSummary getDropoutsPerTermSummary(String term, Collection<Student> dropouts) {
@@ -207,10 +206,8 @@ public class StudentsStatisticsController {
                     break;
             }
         }
-        RiskClassCountSummary riskClassCount = new
-                RiskClassCountSummary(inaccurate, safe, low, average, high, unfeasible, notApplicable);
-        ActivesPerTermSummary termData = new ActivesPerTermSummary(term, riskClassCount);
-        return termData;
+        RiskClassCountSummary riskClassCount = new RiskClassCountSummary(inaccurate, safe, low, average, high, unfeasible, notApplicable);
+        return new ActivesPerTermSummary(term, riskClassCount);
     }
 
 

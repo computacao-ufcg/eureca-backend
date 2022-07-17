@@ -165,9 +165,8 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                 curriculum.getElectiveSubjectsList());
         SubjectsStatisticsSummary complementary = buildSubjectSummary(courseCode, curriculumCode, from, to,
                 curriculum.getComplementarySubjectsList());
-        SubjectsStatisticsSummaryResponse ret = new SubjectsStatisticsSummaryResponse(courseCode, curriculumCode,
+        return new SubjectsStatisticsSummaryResponse(courseCode, curriculumCode,
                 mandatory, optional, elective, complementary);
-        return ret;
     }
 
     @Override
@@ -201,7 +200,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             }
             return enrollmentsPerTerm;
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
             throw e;
         }
     }
@@ -221,9 +220,8 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                 curriculum.getElectiveSubjectsList());
         EnrollmentsSummary complementary = buildEnrollmentSummary(courseCode, curriculumCode, from, to,
                 curriculum.getComplementarySubjectsList());
-        EnrollmentsStatisticsSummaryResponse ret = new EnrollmentsStatisticsSummaryResponse(courseCode, curriculumCode,
+        return new EnrollmentsStatisticsSummaryResponse(courseCode, curriculumCode,
                 mandatory, optional, elective, complementary);
-        return ret;
     }
 
     @Override

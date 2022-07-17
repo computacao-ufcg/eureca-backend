@@ -25,8 +25,7 @@ public class EnrollmentsStatisticsController {
                                                                          String from, String to, SubjectType subjectType) throws EurecaException {
         Collection<EnrollmentsMetricsPerTermSummary> enrollmentsPerTerm =
                 this.dataAccessFacade.getEnrollmentsPerTermSummary(courseCode, curriculumCode, from, to, subjectType);
-        EnrollmentsStatisticsResponse response = new EnrollmentsStatisticsResponse(enrollmentsPerTerm, courseCode, curriculumCode);
-        return response;
+        return new EnrollmentsStatisticsResponse(enrollmentsPerTerm, courseCode, curriculumCode);
     }
 
     public EnrollmentsResponse getSubjectEnrollmentsCSV(String courseCode, String curriculumCode, String from, String to,
@@ -55,8 +54,6 @@ public class EnrollmentsStatisticsController {
 
     public EnrollmentsStatisticsSummaryResponse getSubjectEnrollmentsStatisticsSummary(String courseCode, String curriculumCode,
                                                                                        String from, String to) throws EurecaException {
-        EnrollmentsStatisticsSummaryResponse summary =
-                this.dataAccessFacade.getEnrollmentsStatisticsSummary(courseCode, curriculumCode, from, to);
-        return summary;
+        return this.dataAccessFacade.getEnrollmentsStatisticsSummary(courseCode, curriculumCode, from, to);
     }
 }
