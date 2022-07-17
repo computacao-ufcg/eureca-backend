@@ -38,10 +38,13 @@ public class GenericLoadMapFromScsvFile<T extends EurecaMapKey, V extends Eureca
                 ConfigurationPropertyDefaults.TABLES_DIR);
         String headerFilePath = HomeDir.getPath() + tablesDir + "/" + mapName + ".header";
         BufferedReader csvReader = new BufferedReader(new FileReader(headerFilePath));
-        String row = csvReader.readLine();
-        String[] header = row.split(";");
-        csvReader.close();
-        return header;
+        try {
+            String row = csvReader.readLine();
+            String[] header = row.split(";");
+            return header;
+        } finally {
+            csvReader.close();
+        }
     }
 
     private Set<String> loadNumberFields(String mapName) throws IOException {
@@ -49,14 +52,17 @@ public class GenericLoadMapFromScsvFile<T extends EurecaMapKey, V extends Eureca
                 ConfigurationPropertyDefaults.TABLES_DIR);
         String numbersFilePath = HomeDir.getPath() + tablesDir + "/" + mapName + ".numbers";
         BufferedReader csvReader = new BufferedReader(new FileReader(numbersFilePath));
-        String row = csvReader.readLine();
-        csvReader.close();
-        Set<String> numberFieldsSet = new TreeSet<>();
-        if (row != null) {
-            String[] numberFields = row.split(";");
-            numberFieldsSet.addAll(Arrays.asList(numberFields));
+        try {
+            String row = csvReader.readLine();
+            Set<String> numberFieldsSet = new TreeSet<>();
+            if (row != null) {
+                String[] numberFields = row.split(";");
+                numberFieldsSet.addAll(Arrays.asList(numberFields));
+            }
+            return numberFieldsSet;
+        } finally {
+            csvReader.close();
         }
-        return numberFieldsSet;
     }
 
     private Map<T, V> loadData(String mapName, String[] header, Set<String> numberFields, Class<T> tClass, Class<V> vClass, int keySize)
@@ -67,14 +73,18 @@ public class GenericLoadMapFromScsvFile<T extends EurecaMapKey, V extends Eureca
         int line = 1;
         BufferedReader csvReader = getReader(mapName);
 
-        while ((row = csvReader.readLine()) != null) {
-            KeyValuePair pair = extractKeyValuePair(header, numberFields, row, tClass, vClass, keySize, line++);
-            LOGGER.debug(String.format(Messages.INSERTING_S_S, pair.getKey().toString(), pair.getValue().toString()));
-            loadedMap.put(pair.getKey(), pair.getValue());
-        }
+        try {
+            while ((row = csvReader.readLine()) != null) {
+                KeyValuePair pair = extractKeyValuePair(header, numberFields, row, tClass, vClass, keySize, line++);
+                LOGGER.debug(String.format(Messages.INSERTING_S_S, pair.getKey().toString(), pair.getValue().toString()));
+                loadedMap.put(pair.getKey(), pair.getValue());
+            }
 
-        csvReader.close();
-        return loadedMap;
+            return loadedMap;
+
+        } finally {
+            csvReader.close();
+        }
     }
 
     private BufferedReader getReader(String mapName) throws FileNotFoundException {
@@ -82,8 +92,7 @@ public class GenericLoadMapFromScsvFile<T extends EurecaMapKey, V extends Eureca
                 ConfigurationPropertyDefaults.TABLES_DIR);
         String dataFilePath = HomeDir.getPath() + tablesDir + "/" + mapName + ".data";
         LOGGER.info(String.format(Messages.LOADING_TABLE_S_FROM_S, mapName, dataFilePath));
-        BufferedReader csvReader = new BufferedReader(new FileReader(dataFilePath));
-        return csvReader;
+        return new BufferedReader(new FileReader(dataFilePath));
     }
 
     private KeyValuePair extractKeyValuePair(String[] header, Set<String> numberFields, String row, Class<T> tClass, Class<V> vClass,
@@ -100,7 +109,7 @@ public class GenericLoadMapFromScsvFile<T extends EurecaMapKey, V extends Eureca
             LOGGER.debug(jsonData);
             value = gson.fromJson(jsonData, vClass);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
             System.exit(-1);
         }
         return new KeyValuePair(key, value);

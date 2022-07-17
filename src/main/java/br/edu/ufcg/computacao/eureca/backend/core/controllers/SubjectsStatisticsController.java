@@ -22,8 +22,7 @@ public class SubjectsStatisticsController {
 
     public SubjectsStatisticsResponse getSubjectsStatistics(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws EurecaException {
         Collection<SubjectMetricsPerTermSummary> metricsPerTerm = this.dataAccessFacade.getSubjectMetricsPerTermSummary(courseCode, curriculumCode, from, to, subjectType);
-        SubjectsStatisticsResponse response = new SubjectsStatisticsResponse(metricsPerTerm, courseCode, curriculumCode);
-        return response;
+        return new SubjectsStatisticsResponse(metricsPerTerm, courseCode, curriculumCode);
     }
 
     public SubjectsResponse getSubjectsCSV(String courseCode, String curriculumCode, String from, String to, SubjectType subjectType) throws EurecaException {
@@ -41,7 +40,6 @@ public class SubjectsStatisticsController {
     }
 
     public SubjectsStatisticsSummaryResponse getSubjectsStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
-        SubjectsStatisticsSummaryResponse summary = this.dataAccessFacade.getSubjectStatisticsSummary(courseCode, curriculumCode, from, to);
-        return summary;
+        return this.dataAccessFacade.getSubjectStatisticsSummary(courseCode, curriculumCode, from, to);
     }
 }

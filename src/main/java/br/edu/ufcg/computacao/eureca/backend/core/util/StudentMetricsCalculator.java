@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import java.util.Collection;
 
 public class StudentMetricsCalculator {
-    private Logger LOGGER = Logger.getLogger(StudentMetricsCalculator.class);
 
     public static StudentMetrics computeMetrics(int attemptedCredits, int termsAccounted, int completedCredits, Curriculum curriculum) {
         return doComputeMetrics(attemptedCredits, termsAccounted, completedCredits, curriculum);
@@ -118,7 +117,9 @@ public class StudentMetricsCalculator {
             return new StudentMetrics(attemptedCredits, feasibility, successRate, averageLoad, cost, pace,
                     courseDurationPrediction, risk);
         } catch (Exception e) {
-            e.printStackTrace();
+
+            Logger LOGGER = Logger.getLogger(StudentMetricsCalculator.class);
+            LOGGER.error(e.getMessage());
             return null;
         }
     }
