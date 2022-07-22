@@ -1,5 +1,13 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment;
 
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.refactor.CourseData;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.refator.CounterData;
+import lombok.Getter;
+import lombok.Setter;
+
+
+@Getter
+@Setter
 public class EnrollmentsCSV implements Comparable {
     private String courseCode;
     private String curriculumCode;
@@ -16,136 +24,21 @@ public class EnrollmentsCSV implements Comparable {
     private int failedDueToAbsenceCount;
     private int suspendedCount;
 
-    public EnrollmentsCSV(String courseCode, String curriculumCode, String subjectCode, String subjectName, String term,
-                          String classId, int enrollmentsCount, int succeededCount, int cancelledCount,
-                          int exemptedCount, int ongoingCount, int failedDueToGradeCount, int failedDueToAbsenceCount,
-                          int suspendedCount) {
-        this.courseCode = courseCode;
-        this.curriculumCode = curriculumCode;
-        this.subjectCode = subjectCode;
-        this.subjectName = subjectName;
-        this.term = term;
-        this.classId = classId;
-        this.enrollmentsCount = enrollmentsCount;
-        this.succeededCount = succeededCount;
-        this.cancelledCount = cancelledCount;
-        this.exemptedCount = exemptedCount;
-        this.ongoingCount = ongoingCount;
-        this.failedDueToGradeCount = failedDueToGradeCount;
-        this.failedDueToAbsenceCount = failedDueToAbsenceCount;
-        this.suspendedCount = suspendedCount;
-    }
-
-    public String getCourseCode() {
-        return courseCode;
-    }
-
-    public void setCourseCode(String courseCode) {
-        this.courseCode = courseCode;
-    }
-
-    public String getCurriculumCode() {
-        return curriculumCode;
-    }
-
-    public void setCurriculumCode(String curriculumCode) {
-        this.curriculumCode = curriculumCode;
-    }
-
-    public String getSubjectCode() {
-        return subjectCode;
-    }
-
-    public void setSubjectCode(String subjectCode) {
-        this.subjectCode = subjectCode;
-    }
-
-    public String getSubjectName() {
-        return subjectName;
-    }
-
-    public void setSubjectName(String subjectName) {
-        this.subjectName = subjectName;
-    }
-
-    public String getTerm() {
-        return term;
-    }
-
-    public void setTerm(String term) {
-        this.term = term;
-    }
-
-    public String getClassId() {
-        return classId;
-    }
-
-    public void setClassId(String classId) {
-        this.classId = classId;
-    }
-
-    public int getEnrollmentsCount() {
-        return enrollmentsCount;
-    }
-
-    public void setEnrollmentsCount(int enrollmentsCount) {
-        this.enrollmentsCount = enrollmentsCount;
-    }
-
-    public int getSucceededCount() {
-        return succeededCount;
-    }
-
-    public void setSucceededCount(int succeededCount) {
-        this.succeededCount = succeededCount;
-    }
-
-    public int getCancelledCount() {
-        return cancelledCount;
-    }
-
-    public void setCancelledCount(int cancelledCount) {
-        this.cancelledCount = cancelledCount;
-    }
-
-    public int getExemptedCount() {
-        return exemptedCount;
-    }
-
-    public void setExemptedCount(int exemptedCount) {
-        this.exemptedCount = exemptedCount;
-    }
-
-    public int getOngoingCount() {
-        return ongoingCount;
-    }
-
-    public void setOngoingCount(int ongoingCount) {
-        this.ongoingCount = ongoingCount;
-    }
-
-    public int getFailedDueToGradeCount() {
-        return failedDueToGradeCount;
-    }
-
-    public void setFailedDueToGradeCount(int failedDueToGradeCount) {
-        this.failedDueToGradeCount = failedDueToGradeCount;
-    }
-
-    public int getFailedDueToAbsenceCount() {
-        return failedDueToAbsenceCount;
-    }
-
-    public void setFailedDueToAbsenceCount(int failedDueToAbsenceCount) {
-        this.failedDueToAbsenceCount = failedDueToAbsenceCount;
-    }
-
-    public int getSuspendedCount() {
-        return suspendedCount;
-    }
-
-    public void setSuspendedCount(int suspendedCount) {
-        this.suspendedCount = suspendedCount;
+    public EnrollmentsCSV(CourseData courseData, CounterData counterData) {
+        this.courseCode = courseData.getCourseCode();
+        this.curriculumCode = courseData.getCurriculumCode();
+        this.subjectCode = courseData.getSubjectCode();
+        this.subjectName = courseData.getSubjectName();
+        this.term = courseData.getTerm();
+        this.classId = courseData.getClassId();
+        this.enrollmentsCount = counterData.getEnrollmentsCount();
+        this.succeededCount = counterData.getSucceededCount();
+        this.cancelledCount = counterData.getCancelledCount();
+        this.exemptedCount = counterData.getExemptedCount();
+        this.ongoingCount = counterData.getOngoingCount();
+        this.failedDueToGradeCount = counterData.getFailedDueToGradeCount();
+        this.failedDueToAbsenceCount = counterData.getFailedDueToAbsenceCount();
+        this.suspendedCount = counterData.getSuspendedCount();
     }
 
     @Override

@@ -10,6 +10,7 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutPe
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutReasonSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutsStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.*;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.refactor.CourseData;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.student.StudentsRetentionPerTermSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.student.StudentsRetentionStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject.SubjectRetentionCSV;
@@ -20,6 +21,7 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectMe
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.*;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.refator.AverageRates;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.refator.CounterData;
 import br.edu.ufcg.computacao.eureca.backend.constants.TeachersGlossaryFields;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.EnrollmentData;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentCSV;
@@ -86,7 +88,9 @@ public class TestUtils {
     }
 
     public static EnrollmentsResponse getEnrollmentsCsvResponse(){
-        EnrollmentsCSV mockedEnrollmentDataResponse = new EnrollmentsCSV("x","x","x","x","x","x",0,0,0,0,0,0,0,0);
+        CourseData courseData = new CourseData("x","x", "x", "x", "x", "x");
+        CounterData counterData = new CounterData(0,0,0,0,0,0,0,0);
+        EnrollmentsCSV mockedEnrollmentDataResponse = new EnrollmentsCSV(courseData,counterData);
         return new EnrollmentsResponse(Arrays.asList(mockedEnrollmentDataResponse));
     }
 

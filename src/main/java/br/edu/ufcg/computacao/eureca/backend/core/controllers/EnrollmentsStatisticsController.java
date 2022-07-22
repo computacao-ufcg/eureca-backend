@@ -1,6 +1,8 @@
 package br.edu.ufcg.computacao.eureca.backend.core.controllers;
 
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.*;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.refactor.CourseData;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.refator.CounterData;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.ClassEnrollments;
@@ -39,12 +41,12 @@ public class EnrollmentsStatisticsController {
                 Map<String, ClassEnrollments> classes = enrollmentsPerTerm.get(term);
                 classes.keySet().forEach(classId -> {
                     ClassEnrollments classEnrollment = classes.get(classId);
-                    EnrollmentsCSV enrollmentsData = new EnrollmentsCSV(courseCode, curriculumCode,
-                            subject.getSubjectCode(), subject.getSubjectName(), term, classId,
-                            classEnrollment.getNumberOfEnrolleds(), classEnrollment.getNumberSucceeded(),
+                    CourseData courseData = new CourseData(courseCode, curriculumCode, subject.getSubjectCode(), subject.getSubjectName(), term, classId);
+                    CounterData counterData = new CounterData(classEnrollment.getNumberOfEnrolleds(), classEnrollment.getNumberSucceeded(),
                             classEnrollment.getNumberCancelled(), classEnrollment.getNumberExempted(),
                             classEnrollment.getNumberOngoing(), classEnrollment.getNumberFailedDueToGrade(),
                             classEnrollment.getNumberFailedDueToAbsence(), classEnrollment.getNumberSuspended());
+                    EnrollmentsCSV enrollmentsData = new EnrollmentsCSV(courseData, counterData);
                     enrollments.add(enrollmentsData);
                 });
             });
