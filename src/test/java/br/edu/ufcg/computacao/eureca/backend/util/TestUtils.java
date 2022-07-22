@@ -19,6 +19,7 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectCS
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectMetrics;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.*;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.refator.AverageRates;
 import br.edu.ufcg.computacao.eureca.backend.constants.TeachersGlossaryFields;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.EnrollmentData;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentCSV;
@@ -222,8 +223,9 @@ public class TestUtils {
         TermCount termCount1 = new TermCount(0,"2019.1");
         TermCount termCount2 = new TermCount(0, "2020.1");
         Map<String, TeachersStatisticsSummary> map = new HashMap<>();
+        AverageRates averageRates = new AverageRates(0,0,0,0);
         TeachersStatisticsSummary teachersStatisticsSummary = new TeachersStatisticsSummary("2018.1","2020.1",0,termCount1,
-                termCount2,0,0,0,0);
+                termCount2, averageRates);
 
         map.put("x", teachersStatisticsSummary);
         return new TeachersStatisticsSummaryResponse("", "", map);
