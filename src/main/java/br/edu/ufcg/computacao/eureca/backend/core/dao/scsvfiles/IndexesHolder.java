@@ -9,6 +9,7 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeacherSt
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeacherStatisticsPerTerm;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeacherStatisticsSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsSummary;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.refator.AverageRates;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.TeacherData;
@@ -394,10 +395,10 @@ public class IndexesHolder {
                         (double) aggregateTeachersCount / numTerms,
                         new TermCount(min, minTerm),
                         new TermCount(max, maxTerm),
-                        (double) aggreateSuccess / numTerms,
+                        new AverageRates((double) aggreateSuccess / numTerms,
                         (double) aggregateFailedDueToGrade / numTerms,
                         (double) aggregateFailedDueToAbsence / numTerms,
-                        (double) aggregateSuspended / numTerms);
+                        (double) aggregateSuspended / numTerms));
                 response.put(academicUnitKey.getCode(), teacherStatisticsSummary);
             }
         });
