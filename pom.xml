@@ -52,7 +52,7 @@
             <artifactId>common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>{PATH}</systemPath>
+            <systemPath>C:\Users\lucas\Documents\ufcg\es\eureca-backend\out\artifacts\common\common.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -60,7 +60,7 @@
             <artifactId>as</artifactId>
             <version>1.0.0-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>{PATH}</systemPath>
+            <systemPath>C:\Users\lucas\Documents\ufcg\es\eureca-backend\out\artifacts\as\as.jar</systemPath>
         </dependency>
 
         <dependency>
