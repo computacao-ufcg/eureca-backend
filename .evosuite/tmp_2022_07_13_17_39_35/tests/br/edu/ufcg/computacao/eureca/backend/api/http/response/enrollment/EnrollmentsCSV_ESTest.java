@@ -5,6 +5,8 @@
 
 package br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment;
 
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.refactor.CourseData;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.refator.CounterData;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.evosuite.runtime.EvoAssertions.*;
@@ -13,12 +15,12 @@ import org.evosuite.runtime.EvoRunner;
 import org.evosuite.runtime.EvoRunnerParameters;
 import org.junit.runner.RunWith;
 
-@RunWith(EvoRunner.class) @EvoRunnerParameters(mockJVMNonDeterminism = true, useVFS = true, useVNET = true, resetStaticState = true, separateClassLoader = true, useJEE = true) 
+@RunWith(EvoRunner.class) @EvoRunnerParameters(mockJVMNonDeterminism = true, useVFS = true, useVNET = true, resetStaticState = true, separateClassLoader = true, useJEE = true)
 public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test00()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV((String) null, (String) null, "", ", ongoingCount=", (String) null, (String) null, 1981, 1981, 0, 0, 0, 0, 1981, 0);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData((String) null, (String) null, "", ", ongoingCount=", (String) null, (String) null), new CounterData(1981, 1981, 0, 0, 0, 0, 1981, 0));
       assertNotNull(enrollmentsCSV0);
       assertNull(enrollmentsCSV0.getClassId());
       assertEquals(0, enrollmentsCSV0.getOngoingCount());
@@ -34,7 +36,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals(1981, enrollmentsCSV0.getEnrollmentsCount());
       assertEquals("", enrollmentsCSV0.getSubjectCode());
       assertEquals(0, enrollmentsCSV0.getSuspendedCount());
-      
+
       String string0 = enrollmentsCSV0.getTerm();
       assertNull(string0);
       assertNull(enrollmentsCSV0.getClassId());
@@ -55,7 +57,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test01()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV((String) null, (String) null, "", "", "9`Z1", "9`Z1", 3712, 3712, 3712, (-1), 0, 0, 456, (-232));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData((String) null, (String) null, "", "", "9`Z1", "9`Z1"), new CounterData(3712, 3712, 3712, (-1), 0, 0, 456, (-232)));
       assertNotNull(enrollmentsCSV0);
       assertEquals(456, enrollmentsCSV0.getFailedDueToAbsenceCount());
       assertNull(enrollmentsCSV0.getCurriculumCode());
@@ -71,7 +73,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals(3712, enrollmentsCSV0.getSucceededCount());
       assertEquals(0, enrollmentsCSV0.getFailedDueToGradeCount());
       assertEquals(3712, enrollmentsCSV0.getCancelledCount());
-      
+
       String string0 = enrollmentsCSV0.getTerm();
       assertEquals("9`Z1", string0);
       assertNotNull(string0);
@@ -93,7 +95,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test02()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", (String) null, "", (String) null, "", "", 3884, 3884, 3063, 3063, 3884, 3063, 3884, 0);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", (String) null, "", (String) null, "", ""), new CounterData(3884, 3884, 3063, 3063, 3884, 3063, 3884, 0));
       assertNotNull(enrollmentsCSV0);
       assertEquals("", enrollmentsCSV0.getCourseCode());
       assertNull(enrollmentsCSV0.getCurriculumCode());
@@ -109,7 +111,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals(3884, enrollmentsCSV0.getOngoingCount());
       assertEquals(3063, enrollmentsCSV0.getCancelledCount());
       assertEquals(3063, enrollmentsCSV0.getFailedDueToGradeCount());
-      
+
       int int0 = enrollmentsCSV0.getSuspendedCount();
       assertEquals(0, int0);
       assertEquals("", enrollmentsCSV0.getCourseCode());
@@ -130,7 +132,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test03()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", "", "", "", "", "", (-2188), (-2188), (-2188), (-2188), 0, 0, 0, (-2188));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", "", "", "", "", ""), new CounterData((-2188), (-2188), (-2188), (-2188), 0, 0, 0, (-2188)));
       assertNotNull(enrollmentsCSV0);
       assertEquals("", enrollmentsCSV0.getTerm());
       assertEquals((-2188), enrollmentsCSV0.getCancelledCount());
@@ -146,7 +148,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals("", enrollmentsCSV0.getCurriculumCode());
       assertEquals(0, enrollmentsCSV0.getOngoingCount());
       assertEquals("", enrollmentsCSV0.getSubjectName());
-      
+
       enrollmentsCSV0.setSuspendedCount(4528);
       assertEquals("", enrollmentsCSV0.getTerm());
       assertEquals((-2188), enrollmentsCSV0.getCancelledCount());
@@ -162,7 +164,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals("", enrollmentsCSV0.getCurriculumCode());
       assertEquals(0, enrollmentsCSV0.getOngoingCount());
       assertEquals("", enrollmentsCSV0.getSubjectName());
-      
+
       int int0 = enrollmentsCSV0.getSuspendedCount();
       assertEquals(4528, int0);
       assertEquals("", enrollmentsCSV0.getTerm());
@@ -183,7 +185,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test04()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("8H=]E(v^``+YO}p5(", "", "U-AhIi3 ]Tp#Ae^?e", "U-AhIi3 ]Tp#Ae^?e", "", "", 0, 0, 0, 0, 692, 0, 0, (-393));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("8H=]E(v^``+YO}p5(", "", "U-AhIi3 ]Tp#Ae^?e", "U-AhIi3 ]Tp#Ae^?e", "", ""), new CounterData(0, 0, 0, 0, 692, 0, 0, (-393)));
       assertNotNull(enrollmentsCSV0);
       assertEquals("U-AhIi3 ]Tp#Ae^?e", enrollmentsCSV0.getSubjectName());
       assertEquals("U-AhIi3 ]Tp#Ae^?e", enrollmentsCSV0.getSubjectCode());
@@ -199,7 +201,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals(0, enrollmentsCSV0.getCancelledCount());
       assertEquals(0, enrollmentsCSV0.getFailedDueToGradeCount());
       assertEquals("8H=]E(v^``+YO}p5(", enrollmentsCSV0.getCourseCode());
-      
+
       int int0 = enrollmentsCSV0.getSucceededCount();
       assertEquals(0, int0);
       assertEquals("U-AhIi3 ]Tp#Ae^?e", enrollmentsCSV0.getSubjectName());
@@ -220,7 +222,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test05()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("8+^KvFI7T,zV", "8+^KvFI7T,zV", "yC", "yC", "8+^KvFI7T,zV", "VjWR-vS%=\"<>QEhp\"", 1, 1, 1, (-3002), 0, 0, 0, (-1921));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("8+^KvFI7T,zV", "8+^KvFI7T,zV", "yC", "yC", "8+^KvFI7T,zV", "VjWR-vS%=\"<>QEhp\""), new CounterData(1, 1, 1, (-3002), 0, 0, 0, (-1921)));
       assertNotNull(enrollmentsCSV0);
       assertEquals("VjWR-vS%=\"<>QEhp\"", enrollmentsCSV0.getClassId());
       assertEquals((-1921), enrollmentsCSV0.getSuspendedCount());
@@ -236,7 +238,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals("8+^KvFI7T,zV", enrollmentsCSV0.getCurriculumCode());
       assertEquals(1, enrollmentsCSV0.getEnrollmentsCount());
       assertEquals((-3002), enrollmentsCSV0.getExemptedCount());
-      
+
       int int0 = enrollmentsCSV0.getSucceededCount();
       assertEquals(1, int0);
       assertEquals("VjWR-vS%=\"<>QEhp\"", enrollmentsCSV0.getClassId());
@@ -257,7 +259,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test06()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("4.?", "", "", (String) null, "", (String) null, 0, (-87), (-87), (-4064), 0, 0, 0, 0);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("4.?", "", "", (String) null, "", (String) null), new CounterData(0, (-87), (-87), (-4064), 0, 0, 0, 0));
       assertNotNull(enrollmentsCSV0);
       assertEquals("", enrollmentsCSV0.getSubjectCode());
       assertNull(enrollmentsCSV0.getSubjectName());
@@ -273,7 +275,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals(0, enrollmentsCSV0.getFailedDueToAbsenceCount());
       assertEquals(0, enrollmentsCSV0.getSuspendedCount());
       assertNull(enrollmentsCSV0.getClassId());
-      
+
       String string0 = enrollmentsCSV0.getSubjectName();
       assertNull(string0);
       assertEquals("", enrollmentsCSV0.getSubjectCode());
@@ -294,7 +296,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test07()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", "", "", "", "", "", 909, 909, 1183, 0, 0, 0, 0, 503);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", "", "", "", "", ""), new CounterData(909, 909, 1183, 0, 0, 0, 0, 503));
       assertNotNull(enrollmentsCSV0);
       assertEquals("", enrollmentsCSV0.getClassId());
       assertEquals(0, enrollmentsCSV0.getExemptedCount());
@@ -310,7 +312,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals(909, enrollmentsCSV0.getEnrollmentsCount());
       assertEquals(1183, enrollmentsCSV0.getCancelledCount());
       assertEquals(503, enrollmentsCSV0.getSuspendedCount());
-      
+
       String string0 = enrollmentsCSV0.getSubjectName();
       assertEquals("", string0);
       assertNotNull(string0);
@@ -332,7 +334,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test08()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV((String) null, "/", (String) null, "", (String) null, "", 550, 550, 3367, 550, 0, 0, 0, 3367);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData((String) null, "/", (String) null, "", (String) null, ""), new CounterData(550, 550, 3367, 550, 0, 0, 0, 3367));
       assertNotNull(enrollmentsCSV0);
       assertEquals("", enrollmentsCSV0.getSubjectName());
       assertEquals(550, enrollmentsCSV0.getEnrollmentsCount());
@@ -348,7 +350,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertNull(enrollmentsCSV0.getTerm());
       assertNull(enrollmentsCSV0.getSubjectCode());
       assertEquals(3367, enrollmentsCSV0.getCancelledCount());
-      
+
       String string0 = enrollmentsCSV0.getSubjectCode();
       assertNull(string0);
       assertEquals("", enrollmentsCSV0.getSubjectName());
@@ -369,7 +371,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test09()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", "4)0Xc2U4r", "4)0Xc2U4r", (String) null, "", "9bx!;9oO-?f", 0, 0, 0, 3052, 0, 3052, 3052, 3052);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", "4)0Xc2U4r", "4)0Xc2U4r", (String) null, "", "9bx!;9oO-?f"), new CounterData(0, 0, 0, 3052, 0, 3052, 3052, 3052));
       assertNotNull(enrollmentsCSV0);
       assertEquals(0, enrollmentsCSV0.getOngoingCount());
       assertEquals(0, enrollmentsCSV0.getSucceededCount());
@@ -385,7 +387,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals("9bx!;9oO-?f", enrollmentsCSV0.getClassId());
       assertEquals(3052, enrollmentsCSV0.getFailedDueToAbsenceCount());
       assertEquals(3052, enrollmentsCSV0.getExemptedCount());
-      
+
       String string0 = enrollmentsCSV0.getSubjectCode();
       assertEquals("4)0Xc2U4r", string0);
       assertNotNull(string0);
@@ -407,7 +409,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test10()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("{<;4b!nOVyvMKZq&A", "{<;4b!nOVyvMKZq&A", "{<;4b!nOVyvMKZq&A", ".z9I!9lHO'&xNR$", "", "", (-1), 252, (-1), 2673, 0, (-1), 0, (-3171));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("{<;4b!nOVyvMKZq&A", "{<;4b!nOVyvMKZq&A", "{<;4b!nOVyvMKZq&A", ".z9I!9lHO'&xNR$", "", ""), new CounterData((-1), 252, (-1), 2673, 0, (-1), 0, (-3171)));
       assertNotNull(enrollmentsCSV0);
       assertEquals((-1), enrollmentsCSV0.getCancelledCount());
       assertEquals((-1), enrollmentsCSV0.getFailedDueToGradeCount());
@@ -423,7 +425,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals("", enrollmentsCSV0.getClassId());
       assertEquals("{<;4b!nOVyvMKZq&A", enrollmentsCSV0.getCourseCode());
       assertEquals(".z9I!9lHO'&xNR$", enrollmentsCSV0.getSubjectName());
-      
+
       int int0 = enrollmentsCSV0.getOngoingCount();
       assertEquals(0, int0);
       assertEquals((-1), enrollmentsCSV0.getCancelledCount());
@@ -444,7 +446,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test11()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("Po0RCV", "", "", (String) null, (String) null, (String) null, 0, 808, 808, 125, 863, 863, 808, 808);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("Po0RCV", "", "", (String) null, (String) null, (String) null), new CounterData(0, 808, 808, 125, 863, 863, 808, 808));
       assertNotNull(enrollmentsCSV0);
       assertEquals(808, enrollmentsCSV0.getFailedDueToAbsenceCount());
       assertEquals(808, enrollmentsCSV0.getSuspendedCount());
@@ -460,7 +462,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals(808, enrollmentsCSV0.getSucceededCount());
       assertEquals(863, enrollmentsCSV0.getOngoingCount());
       assertEquals(808, enrollmentsCSV0.getCancelledCount());
-      
+
       int int0 = enrollmentsCSV0.getOngoingCount();
       assertEquals(863, int0);
       assertEquals(808, enrollmentsCSV0.getFailedDueToAbsenceCount());
@@ -481,7 +483,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test12()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", "", "M", "vKYq00a_WP", "", (String) null, 0, 3021, 3021, 0, 0, 0, 0, 3021);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", "", "M", "vKYq00a_WP", "", (String) null), new CounterData(0, 3021, 3021, 0, 0, 0, 0, 3021));
       assertNotNull(enrollmentsCSV0);
       assertEquals("", enrollmentsCSV0.getCourseCode());
       assertEquals(0, enrollmentsCSV0.getFailedDueToGradeCount());
@@ -497,7 +499,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals("M", enrollmentsCSV0.getSubjectCode());
       assertEquals("vKYq00a_WP", enrollmentsCSV0.getSubjectName());
       assertNull(enrollmentsCSV0.getClassId());
-      
+
       int int0 = enrollmentsCSV0.getFailedDueToGradeCount();
       assertEquals(0, int0);
       assertEquals("", enrollmentsCSV0.getCourseCode());
@@ -518,7 +520,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test13()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", "4)0Xc2U4r", "4)0Xc2U4r", (String) null, "", "9bx!;9oO-?f", 0, 0, 0, 3052, 0, 3052, 3052, 3052);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", "4)0Xc2U4r", "4)0Xc2U4r", (String) null, "", "9bx!;9oO-?f"), new CounterData(0, 0, 0, 3052, 0, 3052, 3052, 3052));
       assertNotNull(enrollmentsCSV0);
       assertNull(enrollmentsCSV0.getSubjectName());
       assertEquals(3052, enrollmentsCSV0.getFailedDueToGradeCount());
@@ -534,7 +536,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals("", enrollmentsCSV0.getTerm());
       assertEquals(0, enrollmentsCSV0.getCancelledCount());
       assertEquals(3052, enrollmentsCSV0.getExemptedCount());
-      
+
       int int0 = enrollmentsCSV0.getFailedDueToGradeCount();
       assertEquals(3052, int0);
       assertNull(enrollmentsCSV0.getSubjectName());
@@ -555,7 +557,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test14()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(":q_*C-", "", "EnrollmentsCSV{courseCode='", "EnrollmentsCSV{courseCode='", "", "", 0, 0, 0, 0, 0, 39, 0, 0);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData(":q_*C-", "", "EnrollmentsCSV{courseCode='", "EnrollmentsCSV{courseCode='", "", ""), new CounterData(0, 0, 0, 0, 0, 39, 0, 0));
       assertNotNull(enrollmentsCSV0);
       assertEquals("", enrollmentsCSV0.getClassId());
       assertEquals(":q_*C-", enrollmentsCSV0.getCourseCode());
@@ -571,7 +573,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals(0, enrollmentsCSV0.getFailedDueToAbsenceCount());
       assertEquals(0, enrollmentsCSV0.getExemptedCount());
       assertEquals("EnrollmentsCSV{courseCode='", enrollmentsCSV0.getSubjectName());
-      
+
       enrollmentsCSV0.setFailedDueToAbsenceCount(39);
       assertEquals("", enrollmentsCSV0.getClassId());
       assertEquals(":q_*C-", enrollmentsCSV0.getCourseCode());
@@ -587,7 +589,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals("EnrollmentsCSV{courseCode='", enrollmentsCSV0.getSubjectCode());
       assertEquals(0, enrollmentsCSV0.getExemptedCount());
       assertEquals("EnrollmentsCSV{courseCode='", enrollmentsCSV0.getSubjectName());
-      
+
       int int0 = enrollmentsCSV0.getFailedDueToAbsenceCount();
       assertEquals(39, int0);
       assertEquals("", enrollmentsCSV0.getClassId());
@@ -608,7 +610,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test15()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("cDQQ7oU$&N0{", "cDQQ7oU$&N0{", "cDQQ7oU$&N0{", "cDQQ7oU$&N0{", "cDQQ7oU$&N0{", "cDQQ7oU$&N0{", (-30), (-30), (-30), (-30), (-30), (-30), (-30), (-30));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("cDQQ7oU$&N0{", "cDQQ7oU$&N0{", "cDQQ7oU$&N0{", "cDQQ7oU$&N0{", "cDQQ7oU$&N0{", "cDQQ7oU$&N0{"), new CounterData((-30), (-30), (-30), (-30), (-30), (-30), (-30), (-30)));
       assertNotNull(enrollmentsCSV0);
       assertEquals((-30), enrollmentsCSV0.getFailedDueToAbsenceCount());
       assertEquals((-30), enrollmentsCSV0.getOngoingCount());
@@ -624,7 +626,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals("cDQQ7oU$&N0{", enrollmentsCSV0.getSubjectCode());
       assertEquals("cDQQ7oU$&N0{", enrollmentsCSV0.getTerm());
       assertEquals("cDQQ7oU$&N0{", enrollmentsCSV0.getCurriculumCode());
-      
+
       int int0 = enrollmentsCSV0.getFailedDueToAbsenceCount();
       assertEquals((-30), int0);
       assertEquals((-30), enrollmentsCSV0.getFailedDueToAbsenceCount());
@@ -645,7 +647,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test16()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("B", "", "[>Mpnnt[XbvRrvud Bb", "5FuQI9=d}chI", (String) null, "`[mlP8&R@]]c~", 1111, 2322, 0, 0, 125, 1111, 1111, 2322);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("B", "", "[>Mpnnt[XbvRrvud Bb", "5FuQI9=d}chI", (String) null, "`[mlP8&R@]]c~"), new CounterData(1111, 2322, 0, 0, 125, 1111, 1111, 2322));
       assertNotNull(enrollmentsCSV0);
       assertEquals("B", enrollmentsCSV0.getCourseCode());
       assertEquals(0, enrollmentsCSV0.getCancelledCount());
@@ -661,7 +663,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals("[>Mpnnt[XbvRrvud Bb", enrollmentsCSV0.getSubjectCode());
       assertEquals(1111, enrollmentsCSV0.getFailedDueToGradeCount());
       assertEquals(0, enrollmentsCSV0.getExemptedCount());
-      
+
       int int0 = enrollmentsCSV0.getExemptedCount();
       assertEquals(0, int0);
       assertEquals("B", enrollmentsCSV0.getCourseCode());
@@ -682,7 +684,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test17()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", "", "", "", "", "", (-2188), (-2188), (-2188), (-2188), 0, 0, 0, (-2188));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", "", "", "", "", ""), new CounterData((-2188), (-2188), (-2188), (-2188), 0, 0, 0, (-2188)));
       assertNotNull(enrollmentsCSV0);
       assertEquals("", enrollmentsCSV0.getClassId());
       assertEquals(0, enrollmentsCSV0.getOngoingCount());
@@ -698,7 +700,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals("", enrollmentsCSV0.getCourseCode());
       assertEquals("", enrollmentsCSV0.getSubjectName());
       assertEquals(0, enrollmentsCSV0.getFailedDueToAbsenceCount());
-      
+
       int int0 = enrollmentsCSV0.getExemptedCount();
       assertEquals((-2188), int0);
       assertEquals("", enrollmentsCSV0.getClassId());
@@ -719,7 +721,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test18()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("B[{C]AB;\"ALxA(@>4)", "B[{C]AB;\"ALxA(@>4)", "B[{C]AB;\"ALxA(@>4)", "B[{C]AB;\"ALxA(@>4)", "B[{C]AB;\"ALxA(@>4)", "B[{C]AB;\"ALxA(@>4)", 39, 39, 39, 39, 39, 39, 39, 39);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("B[{C]AB;\"ALxA(@>4)", "B[{C]AB;\"ALxA(@>4)", "B[{C]AB;\"ALxA(@>4)", "B[{C]AB;\"ALxA(@>4)", "B[{C]AB;\"ALxA(@>4)", "B[{C]AB;\"ALxA(@>4)"), new CounterData(39, 39, 39, 39, 39, 39, 39, 39));
       assertNotNull(enrollmentsCSV0);
       assertEquals(39, enrollmentsCSV0.getCancelledCount());
       assertEquals(39, enrollmentsCSV0.getFailedDueToGradeCount());
@@ -735,7 +737,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals(39, enrollmentsCSV0.getEnrollmentsCount());
       assertEquals("B[{C]AB;\"ALxA(@>4)", enrollmentsCSV0.getClassId());
       assertEquals(39, enrollmentsCSV0.getOngoingCount());
-      
+
       int int0 = enrollmentsCSV0.getEnrollmentsCount();
       assertEquals(39, int0);
       assertEquals(39, enrollmentsCSV0.getCancelledCount());
@@ -756,7 +758,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test19()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", "", "", "", "", "", (-1344), (-1344), 799, (-1344), (-1344), (-1254), 0, 0);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", "", "", "", "", ""), new CounterData((-1344), (-1344), 799, (-1344), (-1344), (-1254), 0, 0));
       assertNotNull(enrollmentsCSV0);
       assertEquals("", enrollmentsCSV0.getCurriculumCode());
       assertEquals("", enrollmentsCSV0.getSubjectName());
@@ -772,7 +774,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals("", enrollmentsCSV0.getSubjectCode());
       assertEquals((-1344), enrollmentsCSV0.getSucceededCount());
       assertEquals(0, enrollmentsCSV0.getSuspendedCount());
-      
+
       int int0 = enrollmentsCSV0.getEnrollmentsCount();
       assertEquals((-1344), int0);
       assertEquals("", enrollmentsCSV0.getCurriculumCode());
@@ -793,7 +795,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test20()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("3hdg?@|Aa+`.1f", "3hdg?@|Aa+`.1f", (String) null, "3hdg?@|Aa+`.1f", "3hdg?@|Aa+`.1f", (String) null, 0, 815, 0, 2535, 0, 2535, 0, 0);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("3hdg?@|Aa+`.1f", "3hdg?@|Aa+`.1f", (String) null, "3hdg?@|Aa+`.1f", "3hdg?@|Aa+`.1f", (String) null), new CounterData(0, 815, 0, 2535, 0, 2535, 0, 0));
       assertNotNull(enrollmentsCSV0);
       assertEquals(815, enrollmentsCSV0.getSucceededCount());
       assertEquals(0, enrollmentsCSV0.getEnrollmentsCount());
@@ -809,7 +811,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals(0, enrollmentsCSV0.getFailedDueToAbsenceCount());
       assertEquals("3hdg?@|Aa+`.1f", enrollmentsCSV0.getCourseCode());
       assertNull(enrollmentsCSV0.getClassId());
-      
+
       String string0 = enrollmentsCSV0.getCurriculumCode();
       assertEquals("3hdg?@|Aa+`.1f", string0);
       assertNotNull(string0);
@@ -831,7 +833,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test21()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("]?q", "", "", (String) null, "", "", 0, (-1823), (-1), 0, 0, (-1), 0, 0);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("]?q", "", "", (String) null, "", ""), new CounterData(0, (-1823), (-1), 0, 0, (-1), 0, 0));
       assertNotNull(enrollmentsCSV0);
       assertEquals("", enrollmentsCSV0.getClassId());
       assertEquals("]?q", enrollmentsCSV0.getCourseCode());
@@ -847,7 +849,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals("", enrollmentsCSV0.getSubjectCode());
       assertNull(enrollmentsCSV0.getSubjectName());
       assertEquals(0, enrollmentsCSV0.getOngoingCount());
-      
+
       String string0 = enrollmentsCSV0.getCurriculumCode();
       assertEquals("", string0);
       assertNotNull(string0);
@@ -869,7 +871,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test22()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("8+^KvFI7T,zV", "8+^KvFI7T,zV", "yC", "yC", "8+^KvFI7T,zV", "VjWR-vS%=\"<>QEhp\"", 1, 1, 1, (-3002), 0, 0, 0, (-1921));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("8+^KvFI7T,zV", "8+^KvFI7T,zV", "yC", "yC", "8+^KvFI7T,zV", "VjWR-vS%=\"<>QEhp\""), new CounterData(1, 1, 1, (-3002), 0, 0, 0, (-1921)));
       assertNotNull(enrollmentsCSV0);
       assertEquals(1, enrollmentsCSV0.getEnrollmentsCount());
       assertEquals("8+^KvFI7T,zV", enrollmentsCSV0.getTerm());
@@ -885,7 +887,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals(1, enrollmentsCSV0.getSucceededCount());
       assertEquals("VjWR-vS%=\"<>QEhp\"", enrollmentsCSV0.getClassId());
       assertEquals((-3002), enrollmentsCSV0.getExemptedCount());
-      
+
       enrollmentsCSV0.setCourseCode((String) null);
       assertEquals(1, enrollmentsCSV0.getEnrollmentsCount());
       assertEquals("8+^KvFI7T,zV", enrollmentsCSV0.getTerm());
@@ -901,7 +903,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals(1, enrollmentsCSV0.getSucceededCount());
       assertEquals("VjWR-vS%=\"<>QEhp\"", enrollmentsCSV0.getClassId());
       assertEquals((-3002), enrollmentsCSV0.getExemptedCount());
-      
+
       String string0 = enrollmentsCSV0.getCourseCode();
       assertNull(string0);
       assertEquals(1, enrollmentsCSV0.getEnrollmentsCount());
@@ -922,7 +924,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test23()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", "", "", "", "", "", (-1344), (-1344), 799, (-1344), (-1344), (-1254), 0, 0);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", "", "", "", "", ""), new CounterData((-1344), (-1344), 799, (-1344), (-1344), (-1254), 0, 0));
       assertNotNull(enrollmentsCSV0);
       assertEquals(0, enrollmentsCSV0.getSuspendedCount());
       assertEquals("", enrollmentsCSV0.getCourseCode());
@@ -938,7 +940,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals((-1344), enrollmentsCSV0.getEnrollmentsCount());
       assertEquals("", enrollmentsCSV0.getClassId());
       assertEquals((-1254), enrollmentsCSV0.getFailedDueToGradeCount());
-      
+
       String string0 = enrollmentsCSV0.getCourseCode();
       assertEquals("", string0);
       assertNotNull(string0);
@@ -960,7 +962,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test24()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", "", "M", "vKYq00a_WP", "", (String) null, 0, 3021, 3021, 0, 0, 0, 0, 3021);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", "", "M", "vKYq00a_WP", "", (String) null), new CounterData(0, 3021, 3021, 0, 0, 0, 0, 3021));
       assertNotNull(enrollmentsCSV0);
       assertEquals("", enrollmentsCSV0.getTerm());
       assertNull(enrollmentsCSV0.getClassId());
@@ -976,7 +978,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals("vKYq00a_WP", enrollmentsCSV0.getSubjectName());
       assertEquals("", enrollmentsCSV0.getCurriculumCode());
       assertEquals(0, enrollmentsCSV0.getFailedDueToGradeCount());
-      
+
       String string0 = enrollmentsCSV0.getClassId();
       assertNull(string0);
       assertEquals("", enrollmentsCSV0.getTerm());
@@ -997,7 +999,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test25()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV((String) null, (String) null, "S", (String) null, "/", "/", 0, 0, 0, (-905), (-905), 0, (-444), (-444));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData((String) null, (String) null, "S", (String) null, "/", "/"), new CounterData(0, 0, 0, (-905), (-905), 0, (-444), (-444)));
       assertNotNull(enrollmentsCSV0);
       assertEquals("S", enrollmentsCSV0.getSubjectCode());
       assertEquals((-444), enrollmentsCSV0.getFailedDueToAbsenceCount());
@@ -1013,7 +1015,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertNull(enrollmentsCSV0.getSubjectName());
       assertEquals((-444), enrollmentsCSV0.getSuspendedCount());
       assertEquals("/", enrollmentsCSV0.getClassId());
-      
+
       String string0 = enrollmentsCSV0.getClassId();
       assertEquals("/", string0);
       assertNotNull(string0);
@@ -1035,7 +1037,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test26()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", "", "", "lYVe8jT", "", "", (-1017), 0, 0, 0, 0, 0, 0, (-1017));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", "", "", "lYVe8jT", "", ""), new CounterData((-1017), 0, 0, 0, 0, 0, 0, (-1017)));
       assertNotNull(enrollmentsCSV0);
       assertEquals(0, enrollmentsCSV0.getSucceededCount());
       assertEquals(0, enrollmentsCSV0.getCancelledCount());
@@ -1051,7 +1053,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals((-1017), enrollmentsCSV0.getSuspendedCount());
       assertEquals((-1017), enrollmentsCSV0.getEnrollmentsCount());
       assertEquals(0, enrollmentsCSV0.getFailedDueToAbsenceCount());
-      
+
       int int0 = enrollmentsCSV0.getCancelledCount();
       assertEquals(0, int0);
       assertEquals(0, enrollmentsCSV0.getSucceededCount());
@@ -1072,7 +1074,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test27()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", "", "", " -A_?$", "", "#v8)/=] gr;=", 0, 0, 0, 0, 0, (-1), 1456, (-1));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", "", "", " -A_?$", "", "#v8)/=] gr;="), new CounterData(0, 0, 0, 0, 0, (-1), 1456, (-1)));
       assertNotNull(enrollmentsCSV0);
       assertEquals("", enrollmentsCSV0.getCurriculumCode());
       assertEquals("", enrollmentsCSV0.getSubjectCode());
@@ -1088,7 +1090,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals(0, enrollmentsCSV0.getCancelledCount());
       assertEquals(0, enrollmentsCSV0.getSucceededCount());
       assertEquals("#v8)/=] gr;=", enrollmentsCSV0.getClassId());
-      
+
       enrollmentsCSV0.setCancelledCount(39);
       assertEquals("", enrollmentsCSV0.getCurriculumCode());
       assertEquals("", enrollmentsCSV0.getSubjectCode());
@@ -1104,7 +1106,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals((-1), enrollmentsCSV0.getSuspendedCount());
       assertEquals(0, enrollmentsCSV0.getSucceededCount());
       assertEquals("#v8)/=] gr;=", enrollmentsCSV0.getClassId());
-      
+
       int int0 = enrollmentsCSV0.getCancelledCount();
       assertEquals(39, int0);
       assertEquals("", enrollmentsCSV0.getCurriculumCode());
@@ -1125,7 +1127,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test28()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", "", "", "", "", "", (-292), (-1), 1, (-292), 0, 4222, (-1595), 0);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", "", "", "", "", ""), new CounterData((-292), (-1), 1, (-292), 0, 4222, (-1595), 0));
       assertNotNull(enrollmentsCSV0);
       assertEquals("", enrollmentsCSV0.getClassId());
       assertEquals(0, enrollmentsCSV0.getOngoingCount());
@@ -1141,7 +1143,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals("", enrollmentsCSV0.getSubjectName());
       assertEquals((-292), enrollmentsCSV0.getExemptedCount());
       assertEquals((-1595), enrollmentsCSV0.getFailedDueToAbsenceCount());
-      
+
       enrollmentsCSV0.setCurriculumCode((String) null);
       assertEquals("", enrollmentsCSV0.getClassId());
       assertEquals(0, enrollmentsCSV0.getOngoingCount());
@@ -1157,8 +1159,8 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals("", enrollmentsCSV0.getSubjectName());
       assertEquals((-292), enrollmentsCSV0.getExemptedCount());
       assertEquals((-1595), enrollmentsCSV0.getFailedDueToAbsenceCount());
-      
-      EnrollmentsCSV enrollmentsCSV1 = new EnrollmentsCSV("", "Y`ccz[Lu|~P7pwK", "", "_`;0(>J2G0fF", "Y`ccz[Lu|~P7pwK", (String) null, (-1595), (-4954), 1104, (-1595), (-292), (-898), (-1), 1);
+
+      EnrollmentsCSV enrollmentsCSV1 = new EnrollmentsCSV(new CourseData("", "Y`ccz[Lu|~P7pwK", "", "_`;0(>J2G0fF", "Y`ccz[Lu|~P7pwK", (String) null), new CounterData((-1595), (-4954), 1104, (-1595), (-292), (-898), (-1), 1));
       assertFalse(enrollmentsCSV1.equals((Object)enrollmentsCSV0));
       assertNotNull(enrollmentsCSV1);
       assertEquals("Y`ccz[Lu|~P7pwK", enrollmentsCSV1.getCurriculumCode());
@@ -1175,7 +1177,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals((-1595), enrollmentsCSV1.getExemptedCount());
       assertNull(enrollmentsCSV1.getClassId());
       assertEquals("_`;0(>J2G0fF", enrollmentsCSV1.getSubjectName());
-      
+
       int int0 = enrollmentsCSV0.compareTo(enrollmentsCSV1);
       assertFalse(enrollmentsCSV0.equals((Object)enrollmentsCSV1));
       assertFalse(enrollmentsCSV1.equals((Object)enrollmentsCSV0));
@@ -1214,7 +1216,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test29()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(", cancelledCount=", ", cancelledCount=", " PV|3NS7_UOqWo!J", " PV|3NS7_UOqWo!J", ", cancelledCount=", ", cancelledCount=", 2434, 2434, 2434, 2434, 2434, (-2867), 2434, 65);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData(", cancelledCount=", ", cancelledCount=", " PV|3NS7_UOqWo!J", " PV|3NS7_UOqWo!J", ", cancelledCount=", ", cancelledCount="), new CounterData(2434, 2434, 2434, 2434, 2434, (-2867), 2434, 65));
       assertNotNull(enrollmentsCSV0);
       assertEquals(", cancelledCount=", enrollmentsCSV0.getCourseCode());
       assertEquals((-2867), enrollmentsCSV0.getFailedDueToGradeCount());
@@ -1230,8 +1232,8 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals(", cancelledCount=", enrollmentsCSV0.getTerm());
       assertEquals(", cancelledCount=", enrollmentsCSV0.getCurriculumCode());
       assertEquals(65, enrollmentsCSV0.getSuspendedCount());
-      
-      EnrollmentsCSV enrollmentsCSV1 = new EnrollmentsCSV("sBu@t9~w'&5M9|!u[]", " PV|3NS7_UOqWo!J", ", cancelledCount=", "sBu@t9~w'&5M9|!u[]", ", cancelledCount=", "", 0, 2434, 65, 1479, (-2867), 0, 0, 65);
+
+      EnrollmentsCSV enrollmentsCSV1 = new EnrollmentsCSV(new CourseData("sBu@t9~w'&5M9|!u[]", " PV|3NS7_UOqWo!J", ", cancelledCount=", "sBu@t9~w'&5M9|!u[]", ", cancelledCount=", ""), new CounterData(0, 2434, 65, 1479, (-2867), 0, 0, 65));
       assertFalse(enrollmentsCSV1.equals((Object)enrollmentsCSV0));
       assertNotNull(enrollmentsCSV1);
       assertEquals("sBu@t9~w'&5M9|!u[]", enrollmentsCSV1.getSubjectName());
@@ -1248,7 +1250,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals(0, enrollmentsCSV1.getEnrollmentsCount());
       assertEquals(", cancelledCount=", enrollmentsCSV1.getSubjectCode());
       assertEquals(", cancelledCount=", enrollmentsCSV1.getTerm());
-      
+
       int int0 = enrollmentsCSV0.compareTo(enrollmentsCSV1);
       assertFalse(enrollmentsCSV0.equals((Object)enrollmentsCSV1));
       assertFalse(enrollmentsCSV1.equals((Object)enrollmentsCSV0));
@@ -1287,7 +1289,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test30()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", "", "", " -A_?$", "", "#v8)/=] gr;=", 0, 0, 0, 0, 0, (-1), 1456, (-1));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", "", "", " -A_?$", "", "#v8)/=] gr;="), new CounterData(0, 0, 0, 0, 0, (-1), 1456, (-1)));
       assertNotNull(enrollmentsCSV0);
       assertEquals("", enrollmentsCSV0.getSubjectCode());
       assertEquals("", enrollmentsCSV0.getCurriculumCode());
@@ -1303,12 +1305,12 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals((-1), enrollmentsCSV0.getFailedDueToGradeCount());
       assertEquals(1456, enrollmentsCSV0.getFailedDueToAbsenceCount());
       assertEquals("#v8)/=] gr;=", enrollmentsCSV0.getClassId());
-      
+
       // Undeclared exception!
-      try { 
+      try {
         enrollmentsCSV0.compareTo((Object) null);
         fail("Expecting exception: NullPointerException");
-      
+
       } catch(NullPointerException e) {
          //
          // no message in exception (getMessage() returned null)
@@ -1319,7 +1321,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test31()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", "", "", "", "", "", (-782), (-782), (-782), 0, 0, 0, (-1249), (-1249));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", "", "", "", "", ""), new CounterData((-782), (-782), (-782), 0, 0, 0, (-1249), (-1249)));
       assertNotNull(enrollmentsCSV0);
       assertEquals("", enrollmentsCSV0.getCurriculumCode());
       assertEquals(0, enrollmentsCSV0.getFailedDueToGradeCount());
@@ -1335,12 +1337,12 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals("", enrollmentsCSV0.getSubjectCode());
       assertEquals(0, enrollmentsCSV0.getOngoingCount());
       assertEquals("", enrollmentsCSV0.getSubjectName());
-      
+
       // Undeclared exception!
-      try { 
+      try {
         enrollmentsCSV0.compareTo("");
         fail("Expecting exception: ClassCastException");
-      
+
       } catch(ClassCastException e) {
          //
          // java.lang.String cannot be cast to br.edu.ufcg.computacao.eureca.backend.api.http.response.enrollment.EnrollmentsCSV
@@ -1351,7 +1353,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test32()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", (String) null, "Hk\u0006]`", "CesI269N)tx&969q@M", "CesI269N)tx&969q@M", "ellA", (-1537), (-1537), 0, (-1537), 0, 1857, 125, 125);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", (String) null, "Hk\u0006]`", "CesI269N)tx&969q@M", "CesI269N)tx&969q@M", "ellA"), new CounterData((-1537), (-1537), 0, (-1537), 0, 1857, 125, 125));
       assertNotNull(enrollmentsCSV0);
       assertNull(enrollmentsCSV0.getCurriculumCode());
       assertEquals("CesI269N)tx&969q@M", enrollmentsCSV0.getTerm());
@@ -1367,7 +1369,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals("Hk\u0006]`", enrollmentsCSV0.getSubjectCode());
       assertEquals(1857, enrollmentsCSV0.getFailedDueToGradeCount());
       assertEquals(0, enrollmentsCSV0.getCancelledCount());
-      
+
       String string0 = enrollmentsCSV0.getCurriculumCode();
       assertNull(string0);
       assertNull(enrollmentsCSV0.getCurriculumCode());
@@ -1388,7 +1390,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test33()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", "", "", "", "", "", 909, 909, 1183, 0, 0, 0, 0, 503);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", "", "", "", "", ""), new CounterData(909, 909, 1183, 0, 0, 0, 0, 503));
       assertNotNull(enrollmentsCSV0);
       assertEquals("", enrollmentsCSV0.getCurriculumCode());
       assertEquals(909, enrollmentsCSV0.getSucceededCount());
@@ -1404,7 +1406,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals("", enrollmentsCSV0.getCourseCode());
       assertEquals(503, enrollmentsCSV0.getSuspendedCount());
       assertEquals(0, enrollmentsCSV0.getExemptedCount());
-      
+
       String string0 = enrollmentsCSV0.getClassId();
       assertEquals("", string0);
       assertNotNull(string0);
@@ -1426,7 +1428,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test34()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("8+^KvFI7T,zV", "8+^KvFI7T,zV", "yC", "yC", "8+^KvFI7T,zV", "VjWR-vS%=\"<>QEhp\"", 1, 1, 1, (-3002), 0, 0, 0, (-1921));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("8+^KvFI7T,zV", "8+^KvFI7T,zV", "yC", "yC", "8+^KvFI7T,zV", "VjWR-vS%=\"<>QEhp\""), new CounterData(1, 1, 1, (-3002), 0, 0, 0, (-1921)));
       assertNotNull(enrollmentsCSV0);
       assertEquals("8+^KvFI7T,zV", enrollmentsCSV0.getCourseCode());
       assertEquals(1, enrollmentsCSV0.getCancelledCount());
@@ -1442,7 +1444,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals(0, enrollmentsCSV0.getFailedDueToAbsenceCount());
       assertEquals("VjWR-vS%=\"<>QEhp\"", enrollmentsCSV0.getClassId());
       assertEquals(1, enrollmentsCSV0.getEnrollmentsCount());
-      
+
       String string0 = enrollmentsCSV0.getCourseCode();
       assertEquals("8+^KvFI7T,zV", string0);
       assertNotNull(string0);
@@ -1464,7 +1466,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test35()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", "", "", ", subjectName='", ", subjectName='", "d<VI>=%-@s?TV", 0, 0, 0, 0, 0, 0, (-1441), 1);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", "", "", ", subjectName='", ", subjectName='", "d<VI>=%-@s?TV"), new CounterData(0, 0, 0, 0, 0, 0, (-1441), 1));
       assertNotNull(enrollmentsCSV0);
       assertEquals("", enrollmentsCSV0.getCourseCode());
       assertEquals(1, enrollmentsCSV0.getSuspendedCount());
@@ -1480,7 +1482,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals(0, enrollmentsCSV0.getSucceededCount());
       assertEquals(0, enrollmentsCSV0.getCancelledCount());
       assertEquals(0, enrollmentsCSV0.getFailedDueToGradeCount());
-      
+
       String string0 = enrollmentsCSV0.getSubjectCode();
       assertEquals("", string0);
       assertNotNull(string0);
@@ -1502,7 +1504,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test36()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", "", "", " -A_?$", "", "#v8)/=] gr;=", 0, 0, 0, 0, 0, (-1), 1456, (-1));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", "", "", " -A_?$", "", "#v8)/=] gr;="), new CounterData(0, 0, 0, 0, 0, (-1), 1456, (-1)));
       assertNotNull(enrollmentsCSV0);
       assertEquals(0, enrollmentsCSV0.getCancelledCount());
       assertEquals((-1), enrollmentsCSV0.getFailedDueToGradeCount());
@@ -1518,7 +1520,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals((-1), enrollmentsCSV0.getSuspendedCount());
       assertEquals("", enrollmentsCSV0.getSubjectCode());
       assertEquals("", enrollmentsCSV0.getTerm());
-      
+
       String string0 = enrollmentsCSV0.getTerm();
       assertEquals("", string0);
       assertNotNull(string0);
@@ -1540,7 +1542,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test37()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", "", "", " -A_?$", "", "#v8)/=] gr;=", 0, 0, 0, 0, 0, (-1), 1456, (-1));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", "", "", " -A_?$", "", "#v8)/=] gr;="), new CounterData(0, 0, 0, 0, 0, (-1), 1456, (-1)));
       assertNotNull(enrollmentsCSV0);
       assertEquals(0, enrollmentsCSV0.getOngoingCount());
       assertEquals(0, enrollmentsCSV0.getCancelledCount());
@@ -1556,7 +1558,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals(1456, enrollmentsCSV0.getFailedDueToAbsenceCount());
       assertEquals(0, enrollmentsCSV0.getExemptedCount());
       assertEquals("#v8)/=] gr;=", enrollmentsCSV0.getClassId());
-      
+
       enrollmentsCSV0.setEnrollmentsCount(4157);
       assertEquals(0, enrollmentsCSV0.getOngoingCount());
       assertEquals(0, enrollmentsCSV0.getCancelledCount());
@@ -1576,7 +1578,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test38()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", "", "", " -A_?$", "", "#v8)/=] gr;=", 0, 0, 0, 0, 0, (-1), 1456, (-1));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", "", "", " -A_?$", "", "#v8)/=] gr;="), new CounterData(0, 0, 0, 0, 0, (-1), 1456, (-1)));
       assertNotNull(enrollmentsCSV0);
       assertEquals("", enrollmentsCSV0.getSubjectCode());
       assertEquals(" -A_?$", enrollmentsCSV0.getSubjectName());
@@ -1592,7 +1594,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals(0, enrollmentsCSV0.getCancelledCount());
       assertEquals("", enrollmentsCSV0.getCourseCode());
       assertEquals(0, enrollmentsCSV0.getExemptedCount());
-      
+
       enrollmentsCSV0.setOngoingCount(0);
       assertEquals("", enrollmentsCSV0.getSubjectCode());
       assertEquals(" -A_?$", enrollmentsCSV0.getSubjectName());
@@ -1612,7 +1614,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test39()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("cDQQ7oU$&N0{", "cDQQ7oU$&N0{", "cDQQ7oU$&N0{", "cDQQ7oU$&N0{", "cDQQ7oU$&N0{", "cDQQ7oU$&N0{", (-30), (-30), (-30), (-30), (-30), (-30), (-30), (-30));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("cDQQ7oU$&N0{", "cDQQ7oU$&N0{", "cDQQ7oU$&N0{", "cDQQ7oU$&N0{", "cDQQ7oU$&N0{", "cDQQ7oU$&N0{"), new CounterData((-30), (-30), (-30), (-30), (-30), (-30), (-30), (-30)));
       assertNotNull(enrollmentsCSV0);
       assertEquals("cDQQ7oU$&N0{", enrollmentsCSV0.getClassId());
       assertEquals("cDQQ7oU$&N0{", enrollmentsCSV0.getTerm());
@@ -1628,7 +1630,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals((-30), enrollmentsCSV0.getEnrollmentsCount());
       assertEquals((-30), enrollmentsCSV0.getExemptedCount());
       assertEquals((-30), enrollmentsCSV0.getFailedDueToAbsenceCount());
-      
+
       int int0 = enrollmentsCSV0.getFailedDueToGradeCount();
       assertEquals((-30), int0);
       assertEquals("cDQQ7oU$&N0{", enrollmentsCSV0.getClassId());
@@ -1649,7 +1651,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test40()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV((String) null, (String) null, (String) null, (String) null, (String) null, (String) null, (-21), (-21), (-21), (-21), (-21), (-21), (-21), (-21));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData((String) null, (String) null, (String) null, (String) null, (String) null, (String) null), new CounterData((-21), (-21), (-21), (-21), (-21), (-21), (-21), (-21)));
       assertNotNull(enrollmentsCSV0);
       assertEquals((-21), enrollmentsCSV0.getEnrollmentsCount());
       assertEquals((-21), enrollmentsCSV0.getExemptedCount());
@@ -1665,7 +1667,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertNull(enrollmentsCSV0.getSubjectName());
       assertEquals((-21), enrollmentsCSV0.getFailedDueToAbsenceCount());
       assertEquals((-21), enrollmentsCSV0.getOngoingCount());
-      
+
       enrollmentsCSV0.setClassId((String) null);
       assertEquals((-21), enrollmentsCSV0.getEnrollmentsCount());
       assertEquals((-21), enrollmentsCSV0.getExemptedCount());
@@ -1685,7 +1687,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test41()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV((String) null, (String) null, (String) null, (String) null, (String) null, (String) null, (-21), (-21), (-21), (-21), (-21), (-21), (-21), (-21));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData((String) null, (String) null, (String) null, (String) null, (String) null, (String) null), new CounterData((-21), (-21), (-21), (-21), (-21), (-21), (-21), (-21)));
       assertNotNull(enrollmentsCSV0);
       assertNull(enrollmentsCSV0.getCourseCode());
       assertEquals((-21), enrollmentsCSV0.getFailedDueToAbsenceCount());
@@ -1701,7 +1703,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals((-21), enrollmentsCSV0.getSuspendedCount());
       assertEquals((-21), enrollmentsCSV0.getEnrollmentsCount());
       assertEquals((-21), enrollmentsCSV0.getOngoingCount());
-      
+
       enrollmentsCSV0.setFailedDueToGradeCount((-21));
       assertNull(enrollmentsCSV0.getCourseCode());
       assertEquals((-21), enrollmentsCSV0.getFailedDueToAbsenceCount());
@@ -1721,7 +1723,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test42()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("B[{C]AB;\"ALxA(@>4)", "B[{C]AB;\"ALxA(@>4)", "B[{C]AB;\"ALxA(@>4)", "B[{C]AB;\"ALxA(@>4)", "B[{C]AB;\"ALxA(@>4)", "B[{C]AB;\"ALxA(@>4)", 39, 39, 39, 39, 39, 39, 39, 39);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("B[{C]AB;\"ALxA(@>4)", "B[{C]AB;\"ALxA(@>4)", "B[{C]AB;\"ALxA(@>4)", "B[{C]AB;\"ALxA(@>4)", "B[{C]AB;\"ALxA(@>4)", "B[{C]AB;\"ALxA(@>4)"), new CounterData(39, 39, 39, 39, 39, 39, 39, 39));
       assertNotNull(enrollmentsCSV0);
       assertEquals(39, enrollmentsCSV0.getOngoingCount());
       assertEquals("B[{C]AB;\"ALxA(@>4)", enrollmentsCSV0.getSubjectName());
@@ -1737,7 +1739,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals("B[{C]AB;\"ALxA(@>4)", enrollmentsCSV0.getCurriculumCode());
       assertEquals(39, enrollmentsCSV0.getExemptedCount());
       assertEquals(39, enrollmentsCSV0.getFailedDueToAbsenceCount());
-      
+
       int int0 = enrollmentsCSV0.getExemptedCount();
       assertEquals(39, int0);
       assertEquals(39, enrollmentsCSV0.getOngoingCount());
@@ -1758,7 +1760,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test43()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV((String) null, (String) null, "%W", (String) null, "%W", "", 0, 0, (-1), 0, 0, 0, 0, 125);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData((String) null, (String) null, "%W", (String) null, "%W", ""), new CounterData(0, 0, (-1), 0, 0, 0, 0, 125));
       assertNotNull(enrollmentsCSV0);
       assertEquals(0, enrollmentsCSV0.getSucceededCount());
       assertEquals(125, enrollmentsCSV0.getSuspendedCount());
@@ -1774,7 +1776,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertNull(enrollmentsCSV0.getCourseCode());
       assertEquals(0, enrollmentsCSV0.getEnrollmentsCount());
       assertNull(enrollmentsCSV0.getSubjectName());
-      
+
       enrollmentsCSV0.setSubjectCode("");
       assertEquals(0, enrollmentsCSV0.getSucceededCount());
       assertEquals(125, enrollmentsCSV0.getSuspendedCount());
@@ -1794,7 +1796,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test44()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", (-7), (-7), (-7), (-7), (-7), (-7), (-7), (-7));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$"), new CounterData((-7), (-7), (-7), (-7), (-7), (-7), (-7), (-7)));
       assertNotNull(enrollmentsCSV0);
       assertEquals("C|d>qlV\"Z3Em$", enrollmentsCSV0.getClassId());
       assertEquals((-7), enrollmentsCSV0.getOngoingCount());
@@ -1810,7 +1812,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals((-7), enrollmentsCSV0.getExemptedCount());
       assertEquals((-7), enrollmentsCSV0.getEnrollmentsCount());
       assertEquals((-7), enrollmentsCSV0.getFailedDueToAbsenceCount());
-      
+
       enrollmentsCSV0.setTerm("C|d>qlV\"Z3Em$");
       assertEquals("C|d>qlV\"Z3Em$", enrollmentsCSV0.getClassId());
       assertEquals((-7), enrollmentsCSV0.getOngoingCount());
@@ -1830,7 +1832,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test45()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV((String) null, (String) null, "%W", (String) null, "%W", "", 0, 0, (-1), 0, 0, 0, 0, 125);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData((String) null, (String) null, "%W", (String) null, "%W", ""), new CounterData(0, 0, (-1), 0, 0, 0, 0, 125));
       assertNotNull(enrollmentsCSV0);
       assertEquals(0, enrollmentsCSV0.getExemptedCount());
       assertNull(enrollmentsCSV0.getSubjectName());
@@ -1846,7 +1848,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
       assertEquals("%W", enrollmentsCSV0.getTerm());
       assertEquals("", enrollmentsCSV0.getClassId());
       assertEquals("%W", enrollmentsCSV0.getSubjectCode());
-      
+
       int int0 = enrollmentsCSV0.getEnrollmentsCount();
       assertEquals(0, int0);
       assertEquals(0, enrollmentsCSV0.getExemptedCount());
@@ -1867,14 +1869,14 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test46()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", (-7), (-7), (-7), (-7), (-7), (-7), (-7), (-7));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$"), new CounterData((-7), (-7), (-7), (-7), (-7), (-7), (-7), (-7)));
       String string0 = enrollmentsCSV0.toString();
       assertEquals("EnrollmentsCSV{courseCode='C|d>qlV\"Z3Em$', curriculumCode='C|d>qlV\"Z3Em$', subjectCode='C|d>qlV\"Z3Em$', subjectName='C|d>qlV\"Z3Em$', term='C|d>qlV\"Z3Em$', classId='C|d>qlV\"Z3Em$', enrollmentsCount=-7, succeededCount=-7, cancelledCount=-7, exemptedCount=-7, ongoingCount=-7, failedDueToGradeCount=-7, failedDueToAbsenceCount=-7, suspendedCount=-7}", string0);
   }
 
   @Test(timeout = 4000)
   public void test47()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV((String) null, (String) null, (String) null, (String) null, (String) null, (String) null, (-21), (-21), (-21), (-21), (-21), (-21), (-21), (-21));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData((String) null, (String) null, (String) null, (String) null, (String) null, (String) null), new CounterData((-21), (-21), (-21), (-21), (-21), (-21), (-21), (-21)));
       int int0 = enrollmentsCSV0.getOngoingCount();
       assertEquals((-21), enrollmentsCSV0.getExemptedCount());
       assertEquals((-21), enrollmentsCSV0.getEnrollmentsCount());
@@ -1888,7 +1890,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test48()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV((String) null, (String) null, (String) null, (String) null, (String) null, (String) null, (-21), (-21), (-21), (-21), (-21), (-21), (-21), (-21));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData((String) null, (String) null, (String) null, (String) null, (String) null, (String) null), new CounterData((-21), (-21), (-21), (-21), (-21), (-21), (-21), (-21)));
       enrollmentsCSV0.setSucceededCount((-21));
       assertEquals((-21), enrollmentsCSV0.getOngoingCount());
       assertEquals((-21), enrollmentsCSV0.getEnrollmentsCount());
@@ -1902,7 +1904,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test49()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", (-7), (-7), (-7), (-7), (-7), (-7), (-7), (-7));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$"), new CounterData((-7), (-7), (-7), (-7), (-7), (-7), (-7), (-7)));
       int int0 = enrollmentsCSV0.getCancelledCount();
       assertEquals((-7), enrollmentsCSV0.getOngoingCount());
       assertEquals((-7), enrollmentsCSV0.getSuspendedCount());
@@ -1916,16 +1918,16 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test50()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("", "", "", " -A_?$", "", "#v8)/=] gr;=", 0, 0, 0, 0, 0, (-1), 1456, (-1));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("", "", "", " -A_?$", "", "#v8)/=] gr;="), new CounterData(0, 0, 0, 0, 0, (-1), 1456, (-1)));
       assertEquals(" -A_?$", enrollmentsCSV0.getSubjectName());
-      
+
       enrollmentsCSV0.setSubjectName("#v8)/=] gr;=");
       assertEquals(1456, enrollmentsCSV0.getFailedDueToAbsenceCount());
   }
 
   @Test(timeout = 4000)
   public void test51()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV((String) null, (String) null, (String) null, (String) null, (String) null, (String) null, (-21), (-21), (-21), (-21), (-21), (-21), (-21), (-21));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData((String) null, (String) null, (String) null, (String) null, (String) null, (String) null), new CounterData((-21), (-21), (-21), (-21), (-21), (-21), (-21), (-21)));
       int int0 = enrollmentsCSV0.getSucceededCount();
       assertEquals((-21), enrollmentsCSV0.getOngoingCount());
       assertEquals((-21), enrollmentsCSV0.getSuspendedCount());
@@ -1939,7 +1941,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test52()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV((String) null, (String) null, "%W", (String) null, "%W", "", 0, 0, (-1), 0, 0, 0, 0, 125);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData((String) null, (String) null, "%W", (String) null, "%W", ""), new CounterData(0, 0, (-1), 0, 0, 0, 0, 125));
       int int0 = enrollmentsCSV0.getFailedDueToAbsenceCount();
       assertEquals("%W", enrollmentsCSV0.getTerm());
       assertEquals("%W", enrollmentsCSV0.getSubjectCode());
@@ -1956,7 +1958,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test53()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", (-7), (-7), (-7), (-7), (-7), (-7), (-7), (-7));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$"), new CounterData((-7), (-7), (-7), (-7), (-7), (-7), (-7), (-7)));
       enrollmentsCSV0.compareTo(enrollmentsCSV0);
       assertEquals((-7), enrollmentsCSV0.getCancelledCount());
       assertEquals((-7), enrollmentsCSV0.getSuspendedCount());
@@ -1970,7 +1972,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test54()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", (-7), (-7), (-7), (-7), (-7), (-7), (-7), (-7));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$"), new CounterData((-7), (-7), (-7), (-7), (-7), (-7), (-7), (-7)));
       int int0 = enrollmentsCSV0.getSuspendedCount();
       assertEquals((-7), int0);
       assertEquals((-7), enrollmentsCSV0.getFailedDueToAbsenceCount());
@@ -1984,7 +1986,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test55()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("U6~iq", "U6~iq", "U6~iq", "U6~iq", "U6~iq", "U6~iq", 18, 18, 18, 18, 18, 18, 18, 18);
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("U6~iq", "U6~iq", "U6~iq", "U6~iq", "U6~iq", "U6~iq"), new CounterData(18, 18, 18, 18, 18, 18, 18, 18));
       enrollmentsCSV0.getSubjectName();
       assertEquals(18, enrollmentsCSV0.getCancelledCount());
       assertEquals(18, enrollmentsCSV0.getSuspendedCount());
@@ -1998,7 +2000,7 @@ public class EnrollmentsCSV_ESTest extends EnrollmentsCSV_ESTest_scaffolding {
 
   @Test(timeout = 4000)
   public void test56()  throws Throwable  {
-      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV("C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", (-7), (-7), (-7), (-7), (-7), (-7), (-7), (-7));
+      EnrollmentsCSV enrollmentsCSV0 = new EnrollmentsCSV(new CourseData("C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$", "C|d>qlV\"Z3Em$"), new CounterData((-7), (-7), (-7), (-7), (-7), (-7), (-7), (-7)));
       enrollmentsCSV0.setExemptedCount((-7));
       assertEquals((-7), enrollmentsCSV0.getSuspendedCount());
       assertEquals((-7), enrollmentsCSV0.getEnrollmentsCount());

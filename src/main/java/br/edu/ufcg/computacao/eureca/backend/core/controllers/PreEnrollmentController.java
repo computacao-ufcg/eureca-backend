@@ -134,7 +134,7 @@ public class PreEnrollmentController {
         return null;
     }
     
-    private  List<Collection<Subject>> getCollectionsOfSubjects(String courseCode, String curriculumCode, String term,StudentCurriculumProgress studentProgress, String optionalPriorityList, String electivePriorityList, String mandatoryPriorityList){
+    private  List<Collection<Subject>> getCollectionsOfSubjects(String courseCode, String curriculumCode, String term,StudentCurriculumProgress studentProgress, String optionalPriorityList, String electivePriorityList, String mandatoryPriorityList) throws InvalidParameterException {
         
 
         List<Collection<Subject>> collection = new ArrayList<>();
