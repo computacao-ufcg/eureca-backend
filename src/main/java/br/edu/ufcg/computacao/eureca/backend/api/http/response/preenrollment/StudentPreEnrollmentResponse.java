@@ -185,8 +185,9 @@ public class StudentPreEnrollmentResponse {
 
     private int getCoRequirementsCredits(Collection<SubjectSchedule> coRequirements) {
         int sum = 0;
-        for (SubjectSchedule subjectSchedule : coRequirements)
+        for (SubjectSchedule subjectSchedule : coRequirements) {
             sum += subjectSchedule.getSubject().getCredits();
+        }
         return sum;
     }
 
@@ -199,7 +200,9 @@ public class StudentPreEnrollmentResponse {
             Subject coRequirement = coRequirementSubjectAndSchedule.getSubject();
             List<Schedule> availableCoRequirementSchedule = this.getAvailableSchedules(coRequirementSubjectAndSchedule);
             haveCoRequirementScheduleConflict = availableCoRequirementSchedule.isEmpty();
-            if (haveCoRequirementScheduleConflict) break;
+            if (haveCoRequirementScheduleConflict) {
+                break;
+            }
 
             Schedule firstAvailableCoRequirementSchedule = availableCoRequirementSchedule.get(0);
             ScheduleResponse coRequirementSchedule = new ScheduleResponse(coRequirement.getName(), firstAvailableCoRequirementSchedule);

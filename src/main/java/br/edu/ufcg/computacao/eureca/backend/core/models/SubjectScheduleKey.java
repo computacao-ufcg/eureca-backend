@@ -50,8 +50,12 @@ public class SubjectScheduleKey {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         SubjectScheduleKey that = (SubjectScheduleKey) o;
         return Objects.equals(courseCode, that.courseCode) && Objects.equals(curriculumCode, that.curriculumCode) && Objects.equals(subjectCode, that.subjectCode) && Objects.equals(term, that.term);
     }

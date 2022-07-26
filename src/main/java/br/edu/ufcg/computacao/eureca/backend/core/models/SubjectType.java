@@ -19,8 +19,9 @@ public enum SubjectType {
 
     public static SubjectType toEnum(String value) {
         for (SubjectType subjectType : SubjectType.values()) {
-            if (subjectType.getValue().equals(value))
+            if (subjectType.getValue().equals(value)) {
                 return subjectType;
+            }
         }
         return null;
     }

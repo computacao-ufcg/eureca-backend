@@ -34,25 +34,28 @@ public class MapsHolder<T extends EurecaMapKey, V extends EurecaMapValue> {
 
         ClassFactory factory = new ClassFactory();
         BufferedReader csvReader = new BufferedReader(new FileReader(filePath));
-        String row;
-        while ((row = csvReader.readLine()) != null) {
-            try {
-                String[] data = row.split(",");
-                String tableName = data[0];
-                T tClass = (T) factory.createClass(data[1]);
-                V vClass = (V) factory.createClass(data[2]);
-                int keySize = Integer.parseInt(data[3]);
-                GenericLoadMapFromScsvFile<T, V> loader = new GenericLoadMapFromScsvFile<>();
-                Map<T, V> tvMap = loader.loadMap(tableName, tClass.getClass(), vClass.getClass(), keySize);
-                LOGGER.debug(String.format(Messages.ADD_TABLE_S, tableName));
-                maps.put(tableName, tvMap);
-            } catch(Exception e) {
-                e.printStackTrace();
-                System.exit(-1);
+        try {
+            String row;
+            while ((row = csvReader.readLine()) != null) {
+                try {
+                    String[] data = row.split(",");
+                    String tableName = data[0];
+                    T tClass = (T) factory.createClass(data[1]);
+                    V vClass = (V) factory.createClass(data[2]);
+                    int keySize = Integer.parseInt(data[3]);
+                    GenericLoadMapFromScsvFile<T, V> loader = new GenericLoadMapFromScsvFile<>();
+                    Map<T, V> tvMap = loader.loadMap(tableName, tClass.getClass(), vClass.getClass(), keySize);
+                    LOGGER.debug(String.format(Messages.ADD_TABLE_S, tableName));
+                    maps.put(tableName, tvMap);
+                } catch(Exception e) {
+                    LOGGER.error(e.getMessage());
+                    System.exit(-1);
+                }
             }
+            return maps;
+        } finally {
+            csvReader.close();
         }
-        csvReader.close();
-        return maps;
     }
 
     public Map<T, V> getMap(String name) {
