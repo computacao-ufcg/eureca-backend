@@ -5,6 +5,8 @@
 
 package br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher;
 
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.refator.AverageRates;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.evosuite.shaded.org.mockito.Mockito.*;
@@ -20,20 +22,20 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
 
   @Test(timeout = 4000)
   public void test00()  throws Throwable  {
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("uB3", "7T2Y#q*0[7", 1.0, (TermCount) null, (TermCount) null, (-2242.080544583), 2977.184, 2977.184, (-2242.080544583));
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("uB3", "7T2Y#q*0[7", 1.0, (TermCount) null, (TermCount) null, new AverageRates((-2242.080544583), 2977.184, 2977.184, (-2242.080544583)));
       teachersStatisticsSummary0.getTo();
   }
 
   @Test(timeout = 4000)
   public void test01()  throws Throwable  {
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("Li(]`z8`]z6hn G@", "h`9n<G>$9u_R", 0.0, (TermCount) null, (TermCount) null, 0.0, 0.0, 275.976614, 1.0);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("Li(]`z8`]z6hn G@", "h`9n<G>$9u_R", 0.0, (TermCount) null, (TermCount) null, new AverageRates(0.0, 0.0, 275.976614, 1.0));
       teachersStatisticsSummary0.setTo("");
       teachersStatisticsSummary0.getTo();
   }
 
   @Test(timeout = 4000)
   public void test02()  throws Throwable  {
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("uB3", "7T2Y#q*0[7", 1.0, (TermCount) null, (TermCount) null, (-2242.080544583), 2977.184, 2977.184, (-2242.080544583));
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("uB3", "7T2Y#q*0[7", 1.0, (TermCount) null, (TermCount) null, new AverageRates((-2242.080544583), 2977.184, 2977.184, (-2242.080544583)));
       double double0 = teachersStatisticsSummary0.getTeachersCount();
       assertEquals(1.0, double0, 0.01);
       assertEquals("7T2Y#q*0[7", teachersStatisticsSummary0.getTo());
@@ -42,7 +44,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
   @Test(timeout = 4000)
   public void test03()  throws Throwable  {
       TermCount termCount0 = mock(TermCount.class, new ViolatedAssumptionAnswer());
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("QQ.IN%kIDzQ8u207/%3", "QQ.IN%kIDzQ8u207/%3", (-1.0), termCount0, termCount0, (-1.0), (-1.0), (-1.0), (-1.0));
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("QQ.IN%kIDzQ8u207/%3", "QQ.IN%kIDzQ8u207/%3", (-1.0), termCount0, termCount0, new AverageRates((-1.0), (-1.0), (-1.0), (-1.0)));
       double double0 = teachersStatisticsSummary0.getTeachersCount();
       assertEquals((-1.0), teachersStatisticsSummary0.getAverageSuspendedRate(), 0.01);
       assertEquals((-1.0), teachersStatisticsSummary0.getAverageFailureDueToAbsenceRate(), 0.01);
@@ -53,7 +55,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
 
   @Test(timeout = 4000)
   public void test04()  throws Throwable  {
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("e/+KAQRs#", "e/+KAQRs#", 0.0, (TermCount) null, (TermCount) null, 0.0, 0.0, 0.0, 0.0);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("e/+KAQRs#", "e/+KAQRs#", 0.0, (TermCount) null, (TermCount) null, new AverageRates(0.0, 0.0, 0.0, 0.0));
       teachersStatisticsSummary0.getMin();
       assertEquals(0.0, teachersStatisticsSummary0.getAverageFailureDueToAbsenceRate(), 0.01);
       assertEquals(0.0, teachersStatisticsSummary0.getAverageSuccessRate(), 0.01);
@@ -64,7 +66,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
 
   @Test(timeout = 4000)
   public void test05()  throws Throwable  {
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("Li(]`z8`]z6hn G@", "h`9n<G>$9u_R", 0.0, (TermCount) null, (TermCount) null, 0.0, 0.0, 275.976614, 1.0);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("Li(]`z8`]z6hn G@", "h`9n<G>$9u_R", 0.0, (TermCount) null, (TermCount) null, new AverageRates(0.0, 0.0, 275.976614, 1.0));
       teachersStatisticsSummary0.getMax();
       assertEquals(0.0, teachersStatisticsSummary0.getAverageFailureDueToGradeRate(), 0.01);
       assertEquals("Li(]`z8`]z6hn G@", teachersStatisticsSummary0.getFrom());
@@ -77,7 +79,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
 
   @Test(timeout = 4000)
   public void test06()  throws Throwable  {
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("Li(]`z8`]z6hn G@", "h`9n<G>$9u_R", 0.0, (TermCount) null, (TermCount) null, 0.0, 0.0, 275.976614, 1.0);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("Li(]`z8`]z6hn G@", "h`9n<G>$9u_R", 0.0, (TermCount) null, (TermCount) null, new AverageRates(0.0, 0.0, 275.976614, 1.0));
       String string0 = teachersStatisticsSummary0.getFrom();
       assertEquals(275.976614, teachersStatisticsSummary0.getAverageFailureDueToAbsenceRate(), 0.01);
       assertEquals(0.0, teachersStatisticsSummary0.getTeachersCount(), 0.01);
@@ -91,7 +93,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
   @Test(timeout = 4000)
   public void test07()  throws Throwable  {
       TermCount termCount0 = mock(TermCount.class, new ViolatedAssumptionAnswer());
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("", "", 0.0, termCount0, termCount0, 0.0, 0.0, 0.0, (-1587.627000007));
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("", "", 0.0, termCount0, termCount0, new AverageRates(0.0, 0.0, 0.0, (-1587.627000007)));
       teachersStatisticsSummary0.getFrom();
       assertEquals(0.0, teachersStatisticsSummary0.getTeachersCount(), 0.01);
       assertEquals(0.0, teachersStatisticsSummary0.getAverageFailureDueToGradeRate(), 0.01);
@@ -103,7 +105,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
   @Test(timeout = 4000)
   public void test08()  throws Throwable  {
       TermCount termCount0 = mock(TermCount.class, new ViolatedAssumptionAnswer());
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("4%fjUnuU1G", "br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsSummary", (-1.0), termCount0, termCount0, (-1.0), (-582.79366299063), 409.0, 409.0);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("4%fjUnuU1G", "br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsSummary", (-1.0), termCount0, termCount0, new AverageRates((-1.0), (-582.79366299063), 409.0, 409.0));
       double double0 = teachersStatisticsSummary0.getAverageSuspendedRate();
       assertEquals("4%fjUnuU1G", teachersStatisticsSummary0.getFrom());
       assertEquals(409.0, teachersStatisticsSummary0.getAverageFailureDueToAbsenceRate(), 0.01);
@@ -116,7 +118,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
 
   @Test(timeout = 4000)
   public void test09()  throws Throwable  {
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsSummary", "br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsSummary", (-4697.804340574546), (TermCount) null, (TermCount) null, (-4697.804340574546), (-4697.804340574546), 485.43, 485.43);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsSummary", "br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsSummary", (-4697.804340574546), (TermCount) null, (TermCount) null, new AverageRates((-4697.804340574546), (-4697.804340574546), 485.43, 485.43));
       teachersStatisticsSummary0.setAverageSuspendedRate((-1.0));
       double double0 = teachersStatisticsSummary0.getAverageSuspendedRate();
       assertEquals((-1.0), double0, 0.01);
@@ -124,7 +126,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
 
   @Test(timeout = 4000)
   public void test10()  throws Throwable  {
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("e/+KAQRs#", "e/+KAQRs#", 0.0, (TermCount) null, (TermCount) null, 0.0, 0.0, 0.0, 0.0);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("e/+KAQRs#", "e/+KAQRs#", 0.0, (TermCount) null, (TermCount) null, new AverageRates(0.0, 0.0, 0.0, 0.0));
       double double0 = teachersStatisticsSummary0.getAverageSuccessRate();
       assertEquals(0.0, teachersStatisticsSummary0.getAverageSuspendedRate(), 0.01);
       assertEquals(0.0, double0, 0.01);
@@ -135,7 +137,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
 
   @Test(timeout = 4000)
   public void test11()  throws Throwable  {
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("uB3", "7T2Y#q*0[7", 1.0, (TermCount) null, (TermCount) null, (-2242.080544583), 2977.184, 2977.184, (-2242.080544583));
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("uB3", "7T2Y#q*0[7", 1.0, (TermCount) null, (TermCount) null, new AverageRates((-2242.080544583), 2977.184, 2977.184, (-2242.080544583)));
       double double0 = teachersStatisticsSummary0.getAverageSuccessRate();
       assertEquals((-2242.080544583), teachersStatisticsSummary0.getAverageSuspendedRate(), 0.01);
       assertEquals("7T2Y#q*0[7", teachersStatisticsSummary0.getTo());
@@ -148,7 +150,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
 
   @Test(timeout = 4000)
   public void test12()  throws Throwable  {
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("?UTM", "?UTM", 1649.8053894016484, (TermCount) null, (TermCount) null, 0.0, 0.0, 1649.8053894016484, 0.0);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("?UTM", "?UTM", 1649.8053894016484, (TermCount) null, (TermCount) null, new AverageRates(0.0, 0.0, 1649.8053894016484, 0.0));
       double double0 = teachersStatisticsSummary0.getAverageFailureDueToGradeRate();
       assertEquals(0.0, teachersStatisticsSummary0.getAverageSuspendedRate(), 0.01);
       assertEquals(0.0, double0, 0.01);
@@ -159,7 +161,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
 
   @Test(timeout = 4000)
   public void test13()  throws Throwable  {
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary((String) null, (String) null, (-2396.509), (TermCount) null, (TermCount) null, 0.0, (-2396.509), 0.0, (-2396.509));
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary((String) null, (String) null, (-2396.509), (TermCount) null, (TermCount) null, new AverageRates(0.0, (-2396.509), 0.0, (-2396.509)));
       double double0 = teachersStatisticsSummary0.getAverageFailureDueToGradeRate();
       assertEquals((-2396.509), teachersStatisticsSummary0.getTeachersCount(), 0.01);
       assertEquals(0.0, teachersStatisticsSummary0.getAverageSuccessRate(), 0.01);
@@ -171,7 +173,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
   @Test(timeout = 4000)
   public void test14()  throws Throwable  {
       TermCount termCount0 = mock(TermCount.class, new ViolatedAssumptionAnswer());
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("TermCount{count=", (String) null, 0.0, termCount0, termCount0, 4640.6, 4640.6, 0.0, 0.0);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("TermCount{count=", (String) null, 0.0, termCount0, termCount0, new AverageRates(4640.6, 4640.6, 0.0, 0.0));
       double double0 = teachersStatisticsSummary0.getAverageFailureDueToAbsenceRate();
       assertEquals(0.0, teachersStatisticsSummary0.getAverageSuspendedRate(), 0.01);
       assertEquals(4640.6, teachersStatisticsSummary0.getAverageFailureDueToGradeRate(), 0.01);
@@ -183,7 +185,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
   @Test(timeout = 4000)
   public void test15()  throws Throwable  {
       TermCount termCount0 = mock(TermCount.class, new ViolatedAssumptionAnswer());
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("", "", (-636.346), termCount0, termCount0, (-636.346), (-636.346), (-636.346), (-636.346));
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("", "", (-636.346), termCount0, termCount0, new AverageRates((-636.346), (-636.346), (-636.346), (-636.346)));
       double double0 = teachersStatisticsSummary0.getAverageFailureDueToAbsenceRate();
       assertEquals((-636.346), teachersStatisticsSummary0.getTeachersCount(), 0.01);
       assertEquals((-636.346), teachersStatisticsSummary0.getAverageFailureDueToGradeRate(), 0.01);
@@ -195,7 +197,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
   @Test(timeout = 4000)
   public void test16()  throws Throwable  {
       TermCount termCount0 = mock(TermCount.class, new ViolatedAssumptionAnswer());
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("W]p*7s3", "W]p*7s3", 1010.9307014503491, termCount0, termCount0, 1010.9307014503491, 1010.9307014503491, 1010.9307014503491, 1010.9307014503491);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("W]p*7s3", "W]p*7s3", 1010.9307014503491, termCount0, termCount0, new AverageRates(1010.9307014503491, 1010.9307014503491, 1010.9307014503491, 1010.9307014503491));
       teachersStatisticsSummary0.setAverageSuccessRate(1010.9307014503491);
       assertEquals(1010.9307014503491, teachersStatisticsSummary0.getAverageFailureDueToGradeRate(), 0.01);
       assertEquals(1010.9307014503491, teachersStatisticsSummary0.getTeachersCount(), 0.01);
@@ -207,7 +209,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
   @Test(timeout = 4000)
   public void test17()  throws Throwable  {
       TermCount termCount0 = mock(TermCount.class, new ViolatedAssumptionAnswer());
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("W]p*7s3", "W]p*7s3", 1010.9307014503491, termCount0, termCount0, 1010.9307014503491, 1010.9307014503491, 1010.9307014503491, 1010.9307014503491);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("W]p*7s3", "W]p*7s3", 1010.9307014503491, termCount0, termCount0, new AverageRates(1010.9307014503491, 1010.9307014503491, 1010.9307014503491, 1010.9307014503491));
       double double0 = teachersStatisticsSummary0.getAverageFailureDueToGradeRate();
       assertEquals(1010.9307014503491, double0, 0.01);
       assertEquals(1010.9307014503491, teachersStatisticsSummary0.getTeachersCount(), 0.01);
@@ -219,7 +221,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
   @Test(timeout = 4000)
   public void test18()  throws Throwable  {
       TermCount termCount0 = mock(TermCount.class, new ViolatedAssumptionAnswer());
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary((String) null, (String) null, 0.0, termCount0, termCount0, 0.0, 0.0, 0.0, 0.0);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary((String) null, (String) null, 0.0, termCount0, termCount0, new AverageRates(0.0, 0.0, 0.0, 0.0));
       teachersStatisticsSummary0.setAverageFailureDueToAbsenceRate(0.0);
       assertEquals(0.0, teachersStatisticsSummary0.getTeachersCount(), 0.01);
       assertEquals(0.0, teachersStatisticsSummary0.getAverageFailureDueToGradeRate(), 0.01);
@@ -231,7 +233,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
   @Test(timeout = 4000)
   public void test19()  throws Throwable  {
       TermCount termCount0 = mock(TermCount.class, new ViolatedAssumptionAnswer());
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("W]p*7s3", "W]p*7s3", 1010.9307014503491, termCount0, termCount0, 1010.9307014503491, 1010.9307014503491, 1010.9307014503491, 1010.9307014503491);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("W]p*7s3", "W]p*7s3", 1010.9307014503491, termCount0, termCount0, new AverageRates(1010.9307014503491, 1010.9307014503491, 1010.9307014503491, 1010.9307014503491));
       double double0 = teachersStatisticsSummary0.getAverageSuccessRate();
       assertEquals(1010.9307014503491, double0, 0.01);
       assertEquals(1010.9307014503491, teachersStatisticsSummary0.getTeachersCount(), 0.01);
@@ -243,7 +245,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
   @Test(timeout = 4000)
   public void test20()  throws Throwable  {
       TermCount termCount0 = mock(TermCount.class, new ViolatedAssumptionAnswer());
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary((String) null, (String) null, 0.0, termCount0, termCount0, 0.0, 0.0, 0.0, 0.0);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary((String) null, (String) null, 0.0, termCount0, termCount0, new AverageRates(0.0, 0.0, 0.0, 0.0));
       teachersStatisticsSummary0.getFrom();
       assertEquals(0.0, teachersStatisticsSummary0.getAverageSuspendedRate(), 0.01);
       assertEquals(0.0, teachersStatisticsSummary0.getAverageFailureDueToAbsenceRate(), 0.01);
@@ -255,7 +257,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
   @Test(timeout = 4000)
   public void test21()  throws Throwable  {
       TermCount termCount0 = mock(TermCount.class, new ViolatedAssumptionAnswer());
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary((String) null, (String) null, 0.0, termCount0, termCount0, 0.0, 0.0, 0.0, 0.0);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary((String) null, (String) null, 0.0, termCount0, termCount0, new AverageRates(0.0, 0.0, 0.0, 0.0));
       teachersStatisticsSummary0.setTeachersCount(0.0);
       assertEquals(0.0, teachersStatisticsSummary0.getAverageSuspendedRate(), 0.01);
       assertEquals(0.0, teachersStatisticsSummary0.getAverageFailureDueToAbsenceRate(), 0.01);
@@ -267,7 +269,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
   @Test(timeout = 4000)
   public void test22()  throws Throwable  {
       TermCount termCount0 = mock(TermCount.class, new ViolatedAssumptionAnswer());
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary((String) null, (String) null, 0.0, termCount0, termCount0, 0.0, 0.0, 0.0, 0.0);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary((String) null, (String) null, 0.0, termCount0, termCount0, new AverageRates(0.0, 0.0, 0.0, 0.0));
       teachersStatisticsSummary0.getTo();
       assertEquals(0.0, teachersStatisticsSummary0.getAverageFailureDueToGradeRate(), 0.01);
       assertEquals(0.0, teachersStatisticsSummary0.getAverageSuspendedRate(), 0.01);
@@ -279,7 +281,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
   @Test(timeout = 4000)
   public void test23()  throws Throwable  {
       TermCount termCount0 = mock(TermCount.class, new ViolatedAssumptionAnswer());
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary((String) null, (String) null, 0.0, termCount0, termCount0, 0.0, 0.0, 0.0, 0.0);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary((String) null, (String) null, 0.0, termCount0, termCount0, new AverageRates(0.0, 0.0, 0.0, 0.0));
       TermCount termCount1 = mock(TermCount.class, new ViolatedAssumptionAnswer());
       teachersStatisticsSummary0.setMax(termCount1);
       assertEquals(0.0, teachersStatisticsSummary0.getAverageFailureDueToAbsenceRate(), 0.01);
@@ -292,7 +294,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
   @Test(timeout = 4000)
   public void test24()  throws Throwable  {
       TermCount termCount0 = mock(TermCount.class, new ViolatedAssumptionAnswer());
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary((String) null, (String) null, 0.0, termCount0, termCount0, 0.0, 0.0, 0.0, 0.0);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary((String) null, (String) null, 0.0, termCount0, termCount0, new AverageRates(0.0, 0.0, 0.0, 0.0));
       teachersStatisticsSummary0.setAverageFailureDueToGradeRate(0.0);
       assertEquals(0.0, teachersStatisticsSummary0.getAverageFailureDueToAbsenceRate(), 0.01);
       assertEquals(0.0, teachersStatisticsSummary0.getAverageSuccessRate(), 0.01);
@@ -304,7 +306,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
   @Test(timeout = 4000)
   public void test25()  throws Throwable  {
       TermCount termCount0 = mock(TermCount.class, new ViolatedAssumptionAnswer());
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary((String) null, (String) null, 0.0, termCount0, termCount0, 0.0, 0.0, 0.0, 0.0);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary((String) null, (String) null, 0.0, termCount0, termCount0, new AverageRates(0.0, 0.0, 0.0, 0.0));
       double double0 = teachersStatisticsSummary0.getAverageSuspendedRate();
       assertEquals(0.0, teachersStatisticsSummary0.getAverageFailureDueToAbsenceRate(), 0.01);
       assertEquals(0.0, teachersStatisticsSummary0.getAverageSuccessRate(), 0.01);
@@ -316,7 +318,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
   @Test(timeout = 4000)
   public void test26()  throws Throwable  {
       TermCount termCount0 = mock(TermCount.class, new ViolatedAssumptionAnswer());
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary((String) null, (String) null, 0.0, termCount0, termCount0, 0.0, 0.0, 0.0, 0.0);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary((String) null, (String) null, 0.0, termCount0, termCount0, new AverageRates(0.0, 0.0, 0.0, 0.0));
       double double0 = teachersStatisticsSummary0.getTeachersCount();
       assertEquals(0.0, teachersStatisticsSummary0.getAverageSuspendedRate(), 0.01);
       assertEquals(0.0, teachersStatisticsSummary0.getAverageFailureDueToAbsenceRate(), 0.01);
@@ -328,7 +330,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
   @Test(timeout = 4000)
   public void test27()  throws Throwable  {
       TermCount termCount0 = mock(TermCount.class, new ViolatedAssumptionAnswer());
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("W]p*7s3", "W]p*7s3", 1010.9307014503491, termCount0, termCount0, 1010.9307014503491, 1010.9307014503491, 1010.9307014503491, 1010.9307014503491);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("W]p*7s3", "W]p*7s3", 1010.9307014503491, termCount0, termCount0, new AverageRates(1010.9307014503491, 1010.9307014503491, 1010.9307014503491, 1010.9307014503491));
       double double0 = teachersStatisticsSummary0.getAverageFailureDueToAbsenceRate();
       assertEquals(1010.9307014503491, double0, 0.01);
       assertEquals(1010.9307014503491, teachersStatisticsSummary0.getAverageSuspendedRate(), 0.01);
@@ -340,7 +342,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
   @Test(timeout = 4000)
   public void test28()  throws Throwable  {
       TermCount termCount0 = mock(TermCount.class, new ViolatedAssumptionAnswer());
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("W]p*7s3", "W]p*7s3", 1010.9307014503491, termCount0, termCount0, 1010.9307014503491, 1010.9307014503491, 1010.9307014503491, 1010.9307014503491);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("W]p*7s3", "W]p*7s3", 1010.9307014503491, termCount0, termCount0, new AverageRates(1010.9307014503491, 1010.9307014503491, 1010.9307014503491, 1010.9307014503491));
       teachersStatisticsSummary0.setFrom("W]p*7s3");
       assertEquals(1010.9307014503491, teachersStatisticsSummary0.getTeachersCount(), 0.01);
       assertEquals(1010.9307014503491, teachersStatisticsSummary0.getAverageFailureDueToGradeRate(), 0.01);
@@ -352,7 +354,7 @@ public class TeachersStatisticsSummary_ESTest extends TeachersStatisticsSummary_
   @Test(timeout = 4000)
   public void test29()  throws Throwable  {
       TermCount termCount0 = mock(TermCount.class, new ViolatedAssumptionAnswer());
-      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("W]p*7s3", "W]p*7s3", 1010.9307014503491, termCount0, termCount0, 1010.9307014503491, 1010.9307014503491, 1010.9307014503491, 1010.9307014503491);
+      TeachersStatisticsSummary teachersStatisticsSummary0 = new TeachersStatisticsSummary("W]p*7s3", "W]p*7s3", 1010.9307014503491, termCount0, termCount0, new AverageRates(1010.9307014503491, 1010.9307014503491, 1010.9307014503491, 1010.9307014503491));
       TermCount termCount1 = mock(TermCount.class, new ViolatedAssumptionAnswer());
       teachersStatisticsSummary0.setMin(termCount1);
       assertEquals(1010.9307014503491, teachersStatisticsSummary0.getAverageFailureDueToGradeRate(), 0.01);

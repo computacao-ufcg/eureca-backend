@@ -46,13 +46,13 @@
         <java.version>1.8</java.version>
     </properties>
 
-    <dependencies>
+    <dependencies>entro
         <dependency>
             <groupId>eureca</groupId>
             <artifactId>common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>C:\Users\lucas\Documents\ufcg\es\eureca-backend\out\artifacts\common\common.jar</systemPath>
+            <systemPath>full-path\eureca-backend\out\artifacts\common\common.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -60,7 +60,7 @@
             <artifactId>as</artifactId>
             <version>1.0.0-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>C:\Users\lucas\Documents\ufcg\es\eureca-backend\out\artifacts\as\as.jar</systemPath>
+            <systemPath>full-path\eureca-backend\out\artifacts\as\as.jar</systemPath>
         </dependency>
         <dependency>
                 <groupId>org.projectlombok</groupId>
