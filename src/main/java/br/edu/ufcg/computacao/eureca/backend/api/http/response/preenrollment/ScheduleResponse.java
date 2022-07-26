@@ -32,8 +32,12 @@ public class ScheduleResponse {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ScheduleResponse that = (ScheduleResponse) o;
         return Objects.equals(subjectName, that.subjectName) && Objects.equals(schedule, that.schedule);
     }

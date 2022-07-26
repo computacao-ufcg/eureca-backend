@@ -22,8 +22,9 @@ public enum WeekDay {
 
     public static WeekDay toEnum(String day) {
         for (WeekDay weekDay : WeekDay.values()) {
-            if (weekDay.getDay().equals(day))
+            if (weekDay.getDay().equals(day)) {
                 return weekDay;
+            }
         }
         return null;
     }
