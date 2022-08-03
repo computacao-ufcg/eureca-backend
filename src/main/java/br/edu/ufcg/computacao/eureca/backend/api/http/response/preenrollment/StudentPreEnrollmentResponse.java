@@ -101,6 +101,48 @@ public class StudentPreEnrollmentResponse implements Comparable {
         this.maxOptionalCredits = maxOptionalCredits;
     }
 
+    private int getCoRequirementsCredits(Collection<SubjectSchedule> coRequirements) {
+        int sum = 0;
+        for (SubjectSchedule subjectSchedule : coRequirements) {
+            sum += subjectSchedule.getSubject().getCredits();
+        }
+        return sum;
+    }
+
+    private boolean enrollSubjectAndSchedule(SubjectSchedule subjectAndSchedule, Collection<SubjectSchedule> coRequirements) {
+        boolean haveCoRequirementScheduleConflict = false;
+        Map<String, ScheduleResponse> availableCoRequirementsSchedules = new HashMap<>();
+
+        // verifica se alguma disciplina co-requisito possui conflito de horário
+        for (SubjectSchedule coRequirementSubjectAndSchedule : coRequirements) {
+            Subject coRequirement = coRequirementSubjectAndSchedule.getSubject();
+            List<Schedule> availableCoRequirementSchedule = this.getAvailableSchedules(coRequirementSubjectAndSchedule);
+            haveCoRequirementScheduleConflict = availableCoRequirementSchedule.isEmpty();
+            if (haveCoRequirementScheduleConflict) {
+                break;
+            }
+
+            Schedule firstAvailableCoRequirementSchedule = availableCoRequirementSchedule.get(0);
+            ScheduleResponse coRequirementSchedule = new ScheduleResponse(coRequirement.getName(), firstAvailableCoRequirementSchedule);
+            availableCoRequirementsSchedules.put(coRequirement.getSubjectCode(), coRequirementSchedule);
+        }
+
+        Subject subject = subjectAndSchedule.getSubject();
+        List<Schedule> availableSchedules = this.getAvailableSchedules(subjectAndSchedule);
+
+        // só matricula se for possivel matricular a disciplina e o(s) co-requisito(s)
+        boolean haveScheduleConflict = availableSchedules.isEmpty() || haveCoRequirementScheduleConflict;
+        if (!haveScheduleConflict) {
+            Schedule firstAvailableSchedule = availableSchedules.get(0);
+            ScheduleResponse schedule = new ScheduleResponse(subject.getName(), firstAvailableSchedule);
+            this.subjects.put(subject.getSubjectCode(), schedule);
+            this.subjects.putAll(availableCoRequirementsSchedules);
+            firstAvailableSchedule.decrementAvailability();
+        }
+
+        return !haveScheduleConflict;
+    }
+        
     public int getOptionalCredits() {
         return optionalCredits;
     }

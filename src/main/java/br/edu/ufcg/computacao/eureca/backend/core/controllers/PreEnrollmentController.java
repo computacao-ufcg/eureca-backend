@@ -140,65 +140,168 @@ public class PreEnrollmentController {
                 null, null, null);
     }
 
-    private PreEnrollmentData getPreEnrollmentData(String courseCode, String curriculumCode, String term,
+private PreEnrollmentData getPreEnrollmentData(String courseCode, String curriculumCode, String term,
                                                    StudentCurriculumProgress studentProgress, String optionalPriorityList,
                                                    String electivePriorityList, String complementaryPriorityList,
                                                    String mandatoryPriorityList) throws EurecaException {
 
-        // Reads from the database subjects and schedules info, if not already in cache
-        this.loadSubjectAndScheduleCaches(courseCode, curriculumCode, term);
+                                                    Curriculum curriculum = this.dataAccessFacade.getCurriculum(courseCode, curriculumCode);
+        StudentCurriculumProgress studentProgress = this.dataAccessFacade.getStudentCurriculumProgress(studentRegistration);
+        if (this.subjectsCache == null || this.subjectsCache.isEmpty()) {
+            this.cacheSubjects(courseCode, curriculumCode);
+            this.cacheSchedules(courseCode, curriculumCode, term);
+        }
 
-        Map<SubjectType, Collection<Subject>> availableSubjectsGroupedByType =
-                this.getSubjectsAndSchedulesAvailableForEnrollmentGroupedByType(courseCode, curriculumCode, term,
-                        studentProgress);
-        Collection<Subject> availableMandatorySubjects = availableSubjectsGroupedByType.get(SubjectType.MANDATORY);
-        Collection<Subject> availableOptionalSubjects = availableSubjectsGroupedByType.get(SubjectType.OPTIONAL);
-        Collection<Subject> availableComplementarySubjects = availableSubjectsGroupedByType.get(SubjectType.COMPLEMENTARY);
-        Collection<Subject> availableElectiveSubjects = availableSubjectsGroupedByType.get(SubjectType.ELECTIVE);
-        Collection<SubjectSchedule> availableMandatorySubjectsWithSchedule =
-                this.getSubjectsSchedules(availableMandatorySubjects, term);
-        Collection<SubjectSchedule> availableOptionalSubjectsWithSchedule =
-                this.getSubjectsSchedules(availableOptionalSubjects, term);
-        Collection<SubjectSchedule> availableComplementarySubjectsWithSchedule =
-                this.getSubjectsSchedules(availableComplementarySubjects, term);
-        Collection<SubjectSchedule> availableElectiveSubjectsWithSchedule =
-                this.getSubjectsSchedules(availableElectiveSubjects, term);
+        List<Integer> idealsCredtis = this.getIdealCredits(curriculum, studentProgress, numCredits);
+        List<Collection<Subject>> collectionsOfSubjects = this.getCollectionsOfSubjects(courseCode, curriculumCode, term, studentProgress, optionalPriorityList, electivePriorityList, mandatoryPriorityList);
+        List<Collection<SubjectSchedule>> collectionsOfSubjectSchedule = this.getCollectionsOfSubjectsSchedule(collectionsOfSubjects, term);
 
-        Collection<Subject> prioritizedOptionalSubjects = this.getPriorityList(courseCode, curriculumCode,
-                optionalPriorityList);
-        Collection<Subject> prioritizedElectiveSubjects = this.getPriorityList(courseCode, curriculumCode,
-                electivePriorityList);
-        Collection<Subject> prioritizedComplementarySubjects = this.getPriorityList(courseCode, curriculumCode,
-                complementaryPriorityList);
-        Collection<Subject> prioritizedMandatorySubjects = this.getPriorityList(courseCode, curriculumCode,
-                mandatoryPriorityList);
-        Collection<SubjectSchedule> prioritizedMandatorySubjectsWithSchedule =
-                this.getSubjectsSchedules(prioritizedMandatorySubjects, term);
-        Collection<SubjectSchedule> prioritizedComplementarySubjectsWithSchedule =
-                this.getSubjectsSchedules(prioritizedComplementarySubjects, term);
-        Collection<SubjectSchedule> prioritizedOptionalSubjectsWithSchedule =
-                this.getSubjectsSchedules(prioritizedOptionalSubjects, term);
-        Collection<SubjectSchedule> prioritizedElectiveSubjectsWithSchedule =
-                this.getSubjectsSchedules(prioritizedElectiveSubjects, term);
+        
 
-        prioritizedOptionalSubjectsWithSchedule = PreEnrollmentUtil.
-                excludeUnavailableSubjects(prioritizedOptionalSubjectsWithSchedule,
-                availableOptionalSubjectsWithSchedule);
-        prioritizedElectiveSubjectsWithSchedule = PreEnrollmentUtil.
-                excludeUnavailableSubjects(prioritizedElectiveSubjectsWithSchedule,
-                availableElectiveSubjectsWithSchedule);
-        prioritizedComplementarySubjectsWithSchedule = PreEnrollmentUtil.
-                excludeUnavailableSubjects(prioritizedComplementarySubjectsWithSchedule,
-                availableComplementarySubjectsWithSchedule);
-        prioritizedMandatorySubjectsWithSchedule = PreEnrollmentUtil.
-                excludeUnavailableSubjects(prioritizedMandatorySubjectsWithSchedule,
-                availableMandatorySubjectsWithSchedule);
+    return new PreEnrollmentData(studentRegistration, term, idealsCredtis.get(0), idealsCredtis.get(1), idealsCredtis.get(2), idealsCredtis.get(3), idealsCredtis.get(4),
+    collectionsOfSubjectSchedule.get(0), collectionsOfSubjectSchedule.get(1), collectionsOfSubjectSchedule.get(2), collectionsOfSubjectSchedule.get(3),
+    collectionsOfSubjectSchedule.get(4), collectionsOfSubjectSchedule.get(5), collectionsOfSubjectSchedule.get(6));
+    
 
-        return new PreEnrollmentData(availableMandatorySubjectsWithSchedule, availableComplementarySubjectsWithSchedule,
-                availableOptionalSubjectsWithSchedule, availableElectiveSubjectsWithSchedule,
-                prioritizedOptionalSubjectsWithSchedule, prioritizedElectiveSubjectsWithSchedule,
-                prioritizedComplementarySubjectsWithSchedule, prioritizedMandatorySubjectsWithSchedule);
+                                                   }
+
+    private List<Integer> getIdealCredits( Curriculum curriculum, StudentCurriculumProgress studentProgress, Integer numCredits) {
+        List<Integer> idealCredits = new ArrayList<Integer>();
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, studentProgress);
+        int nextTerm = PreEnrollmentUtil.getNextTerm(actualTerm, studentProgress.getEnrolledCredits(), curriculum.getMinNumberOfTerms());
+
+        Map<SubjectType, Integer> idealCreditsMap = PreEnrollmentUtil.getIdealCreditsPerSubjectType(curriculum, numCredits, nextTerm);
+
+        idealCredits.add(nextTerm);
+        idealCredits.add( idealCreditsMap.get(SubjectType.MANDATORY));
+        idealCredits.add( idealCreditsMap.get(SubjectType.OPTIONAL));
+        idealCredits.add( idealCreditsMap.get(SubjectType.COMPLEMENTARY));
+        idealCredits.add( idealCreditsMap.get(SubjectType.ELECTIVE));
+
+        return null;
     }
+    
+    private  List<Collection<Subject>> getCollectionsOfSubjects(String courseCode, String curriculumCode, String term,StudentCurriculumProgress studentProgress, String optionalPriorityList, String electivePriorityList, String mandatoryPriorityList) throws InvalidParameterException {
+        
+
+        List<Collection<Subject>> collection = new ArrayList<>();
+
+        Map<SubjectType, Collection<Subject>> availableSubjectsGroupedByType = this.getSubjectsAndSchedulesAvailableForEnrollmentGroupedByType(courseCode, curriculumCode, term, studentProgress);
+        collection.add(availableSubjectsGroupedByType.get(SubjectType.MANDATORY));
+        collection.add(availableSubjectsGroupedByType.get(SubjectType.OPTIONAL));
+        collection.add(availableSubjectsGroupedByType.get(SubjectType.COMPLEMENTARY));
+        collection.add(availableSubjectsGroupedByType.get(SubjectType.ELECTIVE));
+        
+        collection.add(this.getPriorityList(courseCode, curriculumCode, optionalPriorityList));
+        collection.add(this.getPriorityList(courseCode, curriculumCode, electivePriorityList));
+        collection.add(this.getPriorityList(courseCode, curriculumCode, mandatoryPriorityList));
+
+        return collection;
+    }
+
+    
+    private List<Collection<SubjectSchedule>> getCollectionsOfSubjectsSchedule(List<Collection<Subject>> collection, String term){
+        List<Collection<SubjectSchedule>> collectionSchedule = new ArrayList<>(); 
+
+        collectionSchedule.add(this.getSubjectsSchedules(collection.get(0), term));
+        collectionSchedule.add(this.getSubjectsSchedules(collection.get(1), term));
+        collectionSchedule.add(this.getSubjectsSchedules(collection.get(2), term));
+        collectionSchedule.add(this.getSubjectsSchedules(collection.get(3), term));
+
+        collectionSchedule.add(this.getSubjectsSchedules(collection.get(4), term));
+        collectionSchedule.add(this.getSubjectsSchedules(collection.get(5), term));
+        collectionSchedule.add(this.getSubjectsSchedules(collection.get(6), term));
+
+        return collectionSchedule;
+
+    }
+
+    private StudentPreEnrollment getStudentPreEnrollment(String courseCode, String curriculumCode, String term,
+    String studentRegistration, StudentCurriculumProgress studentProgress, Integer maxCredits,
+                                            PreEnrollmentData preEnrollmentData) throws EurecaException {
+
+String studentRegistration = preEnrollmentData.getStudentRegistration();
+String term = preEnrollmentData.getTerm();
+
+List<Integer> idealsCredtis = this.getIdealCreditsByPreEnrollmentData(preEnrollmentData);
+List<Collection<SubjectSchedule>> collectionsOfSubjectSchedule = this.getCollectionsOfSubjectsScheduleByPreEnrollmentData(preEnrollmentData);
+
+StudentPreEnrollmentResponse studentPreEnrollment = new StudentPreEnrollmentResponse(studentRegistration, idealsCredtis.get(0), idealsCredtis.get(1), idealsCredtis.get(2), idealsCredtis.get(3),idealsCredtis.get(4) );
+
+List<Collection<SubjectSchedule>> collectionsOfPriorizedSubjectSchedule = this.getCollectionsOfPriorizedSubjectsScheduleByPreEnrollmentData(collectionsOfSubjectSchedule);
+
+this.enrollMandatorySubjectsUntilConflict(studentPreEnrollment, collectionsOfSubjectSchedule.get(0), term);
+
+this.AnalysisOfstudentPreEnrollment(studentPreEnrollment, term, collectionsOfSubjectSchedule, collectionsOfPriorizedSubjectSchedule);
+
+return studentPreEnrollment;
+}
+
+private void AnalysisOfstudentPreEnrollment(StudentPreEnrollmentResponse studentPreEnrollment, String term, List<Collection<SubjectSchedule>> collectionsOfSubjectSchedule, List<Collection<SubjectSchedule>> collectionsOfPriorizedSubjectSchedule){
+if (!studentPreEnrollment.isMandatoryFull()) {
+this.enrollSubjects(studentPreEnrollment, collectionsOfPriorizedSubjectSchedule.get(2), term);
+}
+
+if (!studentPreEnrollment.isMandatoryFull()) {
+Collection<SubjectSchedule> mandatoryLeftovers = EurecaUtil.difference(collectionsOfSubjectSchedule.get(0), collectionsOfPriorizedSubjectSchedule.get(2));
+this.enrollSubjects(studentPreEnrollment, mandatoryLeftovers, term);
+}
+
+if (!studentPreEnrollment.isComplementaryFull()) {
+this.enrollSubjects(studentPreEnrollment, collectionsOfSubjectSchedule.get(2), term);
+}
+
+if (!studentPreEnrollment.isOptionalFull()) {
+this.enrollSubjects(studentPreEnrollment, collectionsOfPriorizedSubjectSchedule.get(0), term);
+this.enrollSubjects(studentPreEnrollment, collectionsOfSubjectSchedule.get(1), term);
+}
+
+if (!studentPreEnrollment.isElectiveFull()) {
+this.enrollSubjects(studentPreEnrollment, collectionsOfPriorizedSubjectSchedule.get(1), term);
+this.enrollSubjects(studentPreEnrollment, collectionsOfSubjectSchedule.get(3), term);
+}
+
+}
+
+private List<Integer> getIdealCreditsByPreEnrollmentData(PreEnrollmentData preEnrollmentData){
+List<Integer> idealCredits = new ArrayList<Integer>();
+
+idealCredits.add(preEnrollmentData.getNextTerm());
+idealCredits.add(preEnrollmentData.getIdealMandatoryCredits());
+idealCredits.add(preEnrollmentData.getIdealOptionalCredits());
+idealCredits.add(preEnrollmentData.getIdealComplementaryCredits());
+idealCredits.add(preEnrollmentData.getIdealElectiveCredits());
+
+return idealCredits;
+}
+
+private List<Collection<SubjectSchedule>> getCollectionsOfPriorizedSubjectsScheduleByPreEnrollmentData(List<Collection<SubjectSchedule>> collectionsOfSubjectSchedule){
+List<Collection<SubjectSchedule>> collectionPriorizedSchedule = new ArrayList<>(); 
+
+collectionPriorizedSchedule.add(PreEnrollmentUtil.excludeUnavailableSubjects(collectionsOfSubjectSchedule.get(4), collectionsOfSubjectSchedule.get(1)) );
+collectionPriorizedSchedule.add(PreEnrollmentUtil.excludeUnavailableSubjects(collectionsOfSubjectSchedule.get(5), collectionsOfSubjectSchedule.get(3)));
+collectionPriorizedSchedule.add(PreEnrollmentUtil.excludeUnavailableSubjects(collectionsOfSubjectSchedule.get(6), collectionsOfSubjectSchedule.get(0)));
+
+return collectionPriorizedSchedule;
+
+}
+
+private List<Collection<SubjectSchedule>> getCollectionsOfSubjectsScheduleByPreEnrollmentData(PreEnrollmentData preEnrollmentData){
+List<Collection<SubjectSchedule>> collectionSchedule = new ArrayList<>(); 
+
+collectionSchedule.add(preEnrollmentData.getAvailableMandatorySubjects());
+collectionSchedule.add(preEnrollmentData.getAvailableOptionalSubjects());
+collectionSchedule.add(preEnrollmentData.getAvailableComplementarySubjects());
+collectionSchedule.add(preEnrollmentData.getAvailableElectiveSubjects());
+
+collectionSchedule.add(preEnrollmentData.getPrioritizedOptionalSubjects());
+collectionSchedule.add(preEnrollmentData.getPrioritizedElectiveSubjects());
+collectionSchedule.add(preEnrollmentData.getPrioritizedMandatorySubjects());
+
+return collectionSchedule;
+
+}
+
 
     private void loadSubjectAndScheduleCaches(String courseCode, String curriculumCode, String term) throws EurecaException {
         if (this.subjectsCache == null) {
@@ -232,102 +335,14 @@ public class PreEnrollmentController {
         }
         return curriculum;
     }
-
-    private StudentPreEnrollment getStudentPreEnrollment(String courseCode, String curriculumCode, String term,
-                 String studentRegistration, StudentCurriculumProgress studentProgress, Integer maxCredits,
-                                                         PreEnrollmentData preEnrollmentData) throws EurecaException {
-
-        Curriculum curriculum = getCachedCurriculum(courseCode, curriculumCode);
-        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, studentProgress);
-        int nextTerm = Math.min(curriculum.getMinNumberOfTerms(), (actualTerm + 1));
-
-        // A more aggressive approach could consider curriculum.getMaxNumberOfEnrolledCredits()
-        if (maxCredits == null) maxCredits = new Integer(curriculum.getIdealMaxCredits(nextTerm));
-
-        Map<SubjectType, Integer> idealCreditsMap = PreEnrollmentUtil.getIdealCreditsPerSubjectType(curriculum,
-                studentProgress, maxCredits);
-        int idealMandatoryCredits = idealCreditsMap.get(SubjectType.MANDATORY);
-        int idealOptionalCredits = idealCreditsMap.get(SubjectType.OPTIONAL);
-        int idealComplementaryCredits = idealCreditsMap.get(SubjectType.COMPLEMENTARY);
-        int idealElectiveCredits = idealCreditsMap.get(SubjectType.ELECTIVE);
-
-        Collection<SubjectSchedule> availableMandatorySubjects = preEnrollmentData.getAvailableMandatorySubjects();
-        Collection<SubjectSchedule> availableOptionalSubjects = preEnrollmentData.getAvailableOptionalSubjects();
-        Collection<SubjectSchedule> availableComplementarySubjects = preEnrollmentData.getAvailableComplementarySubjects();
-        Collection<SubjectSchedule> availableElectiveSubjects = preEnrollmentData.getAvailableElectiveSubjects();
-
-        Collection<SubjectSchedule> prioritizedOptionalSubjects = preEnrollmentData.getPrioritizedOptionalSubjects();
-        Collection<SubjectSchedule> prioritizedElectiveSubjects = preEnrollmentData.getPrioritizedElectiveSubjects();
-        Collection<SubjectSchedule> prioritizedComplementarySubjects = preEnrollmentData.getPrioritizedComplementarySubjects();
-        Collection<SubjectSchedule> prioritizedMandatorySubjects = preEnrollmentData.getPrioritizedMandatorySubjects();
-
-        StudentPreEnrollment studentPreEnrollment = new StudentPreEnrollment(studentRegistration,
-                nextTerm, maxCredits, idealMandatoryCredits, idealOptionalCredits, idealComplementaryCredits, idealElectiveCredits);
-
-        // Mandatory subjects are first enrolled from the earliest terms to the more recent, until in a
-        // given term, there are number of choices is larger than the number of subjects left to enroll
-        this.enrollMandatorySubjectsUntilConflict(studentPreEnrollment, availableMandatorySubjects, term);
-
-        // If there is still space for mandatory subjects, this means that there are more than one option
-        // for a given term; now we use the prioritization sent as parameter in the request (if any)
-        if (studentPreEnrollment.isMandatoryNotFull()) {
-            this.enrollSubjects(studentPreEnrollment, prioritizedMandatorySubjects, term);
-        }
-
-        // If there is still space, select from whatever mandatory subject is still available
-        if (studentPreEnrollment.isMandatoryNotFull()) {
-            Collection<SubjectSchedule> mandatoryLeftovers = EurecaUtil.difference(availableMandatorySubjects,
-                    prioritizedMandatorySubjects);
-            this.enrollSubjects(studentPreEnrollment, mandatoryLeftovers, term);
-        }
-
-        // From now on, for each type, we try first to use the prioritization sent in the request (if any), and then
-        // we enroll any other available subject of the type in question.
-        if (studentPreEnrollment.isComplementaryNotFull()) {
-            this.enrollSubjects(studentPreEnrollment, prioritizedComplementarySubjects, term);
-            this.enrollSubjects(studentPreEnrollment, availableComplementarySubjects, term);
-        }
-
-        // We use the rate on the missing credits to define the order of prioritization of
-        // optional and elective subjects; the higher the rate, the higher the priority
-
-        int missingOptionalCredits = Math.max(0, (curriculum.getTargetOptionalCredits(actualTerm) -
-                studentProgress.getCompletedOptionalCredits()));
-        int missingElectiveCredits = Math.max(0, (curriculum.getTargetElectiveCredits(actualTerm) -
-                studentProgress.getCompletedElectiveCredits()));        double optionalMissingRate = (double) missingOptionalCredits / (double) curriculum.getTargetOptionalCredits(actualTerm);
-        double electiveMissingRate = (double) missingElectiveCredits / (double) curriculum.getTargetElectiveCredits(actualTerm);
-
-        if (optionalMissingRate >= electiveMissingRate) {
-            if (studentPreEnrollment.isOptionalNotFull()) {
-                this.enrollSubjects(studentPreEnrollment, prioritizedOptionalSubjects, term);
-                this.enrollSubjects(studentPreEnrollment, availableOptionalSubjects, term);
-            }
-            if (studentPreEnrollment.isElectiveNotFull()) {
-                this.enrollSubjects(studentPreEnrollment, prioritizedElectiveSubjects, term);
-                this.enrollSubjects(studentPreEnrollment, availableElectiveSubjects, term);
-            }
-        } else {
-            if (studentPreEnrollment.isElectiveNotFull()) {
-                this.enrollSubjects(studentPreEnrollment, prioritizedElectiveSubjects, term);
-                this.enrollSubjects(studentPreEnrollment, availableElectiveSubjects, term);
-            }
-            if (studentPreEnrollment.isOptionalNotFull()) {
-                this.enrollSubjects(studentPreEnrollment, prioritizedOptionalSubjects, term);
-                this.enrollSubjects(studentPreEnrollment, availableOptionalSubjects, term);
-            }
-        }
-        studentPreEnrollment.setPossibleGraduate(isPossibleGraduate(studentPreEnrollment, studentProgress, curriculum));
-        return studentPreEnrollment;
-    }
-
-    private void enrollMandatorySubjectsUntilConflict(StudentPreEnrollment studentPreEnrollment, Collection<SubjectSchedule> availableMandatorySubjects, String term) {
         Map<Integer, Collection<SubjectSchedule>> mandatorySubjectsGroupedByTerm = PreEnrollmentUtil.getSubjectsPerTerm(availableMandatorySubjects, SubjectType.MANDATORY);
         for (Integer termNumber : mandatorySubjectsGroupedByTerm.keySet()) {
             Collection<SubjectSchedule> termSubjects = mandatorySubjectsGroupedByTerm.get(termNumber);
             int totalTermCredits = PreEnrollmentUtil.getSubjectCreditsSum(termSubjects);
 
-            if (totalTermCredits > studentPreEnrollment.getMaxMandatoryCredits() -
-                    studentPreEnrollment.getMandatoryCredits()) break;
+            if (totalTermCredits > studentPreEnrollment.getMaxMandatoryCredits() - studentPreEnrollment.getMandatoryCredits()) {
+                break;
+            }
 
             this.enrollSubjects(studentPreEnrollment, termSubjects, term);
         }
@@ -369,10 +384,12 @@ public class PreEnrollmentController {
     private SubjectSchedule getSubjectSchedule(String courseCode, String curriculumCode, String subjectCode,
                                                String term) throws InvalidParameterException {
         SubjectScheduleKey key = new SubjectScheduleKey(courseCode, curriculumCode, subjectCode, term);
-        SubjectSchedule cachedSubjectSchedule = this.scheduleCache.get(key);
-        if (cachedSubjectSchedule == null) throw new InvalidParameterException(String.format(
-                Messages.INVALID_SCHEDULE_S_S_S_S, courseCode, curriculumCode, subjectCode, term));
-        return cachedSubjectSchedule;
+
+        SubjectSchedule subjectSchedule = this.scheduleCache.get(key);
+        if (subjectSchedule == null) {
+            throw new InvalidParameterException(String.format(Messages.INVALID_SCHEDULE_S_S_S_S, courseCode, curriculumCode, subjectCode, term));
+        }
+        return subjectSchedule;
     }
 
     private Collection<Subject> getSubjectsByCode(String courseCode, String curriculumCode, Collection<String>
@@ -510,7 +527,9 @@ public class PreEnrollmentController {
     private Subject getSubject(String courseCode, String curriculumCode, String subjectCode)
             throws InvalidParameterException {
         Subject subject = this.subjectsCache.get(new SubjectKey(courseCode, curriculumCode, subjectCode));
-        if (subject == null) throw new InvalidParameterException(Messages.INVALID_SUBJECT_IGNORING);
+        if (subject == null) {
+            throw new InvalidParameterException(Messages.INVALID_SUBJECT_IGNORING);
+        }
         return subject;
     }
 

@@ -42,8 +42,12 @@ public class SubjectSchedule {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         SubjectSchedule that = (SubjectSchedule) o;
         return subject.equals(that.subject) && schedules.equals(that.schedules);
     }

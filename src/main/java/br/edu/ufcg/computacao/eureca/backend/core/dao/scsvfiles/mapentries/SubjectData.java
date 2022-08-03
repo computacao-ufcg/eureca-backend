@@ -125,7 +125,9 @@ public class SubjectData implements EurecaMapValue {
 
     private Collection<String> extractStrList(String subjectsStr) {
         ArrayList<String> ret = new ArrayList<>();
-        if (subjectsStr.equals("")) return ret;
+        if (subjectsStr.equals("")) {
+            return ret;
+        }
         String[] creditsArray = subjectsStr.split(",");
         return Arrays.asList(creditsArray);
     }

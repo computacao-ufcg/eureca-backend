@@ -135,8 +135,11 @@ public class PreEnrollmentUtil {
 
     public static int getActualTerm(Curriculum curriculum, StudentCurriculumProgress progress) {
         int accumulatedCredits = progress.getCompletedCredits();
-        for (int i = 0; i < curriculum.getMinNumberOfTerms(); i++) {
-            if (accumulatedCredits <= curriculum.getExpectedMinAccumulatedCredits(i)) return i;
+
+        for (int i = 1; i < curriculum.getMinNumberOfTerms(); i++) {
+            if (accumulatedCredits <= curriculum.getExpectedMinAccumulatedCredits(i)) {
+                return i;
+            }
         }
         return curriculum.getMinNumberOfTerms();
     }

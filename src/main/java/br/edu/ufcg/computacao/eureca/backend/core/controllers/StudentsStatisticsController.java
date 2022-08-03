@@ -145,9 +145,8 @@ public class StudentsStatisticsController {
                 aggregateTermsCount/termAlumniCount).replace(",", "."));
         double averageCost = termAlumniCount == 0 ? 0.0 : Double.parseDouble(String.format("%.2f",
                 aggregateCost/termAlumniCount).replace(",", "."));
-        AlumniPerTermSummary termData = new AlumniPerTermSummary(term, termAlumniCount, averageGPA,
+        return new AlumniPerTermSummary(term, termAlumniCount, averageGPA,
                 averageTermsCount, averageCost);
-        return termData;
     }
 
     private DropoutPerTermSummary getDropoutsPerTermSummary(String term, Collection<Student> dropouts) {
@@ -207,10 +206,8 @@ public class StudentsStatisticsController {
                     break;
             }
         }
-        RiskClassCountSummary riskClassCount = new
-                RiskClassCountSummary(inaccurate, safe, low, average, high, unfeasible, notApplicable);
-        ActivesPerTermSummary termData = new ActivesPerTermSummary(term, riskClassCount);
-        return termData;
+        RiskClassCountSummary riskClassCount = new RiskClassCountSummary(inaccurate, safe, low, average, high, unfeasible, notApplicable);
+        return new ActivesPerTermSummary(term, riskClassCount);
     }
 
 
@@ -264,8 +261,12 @@ public class StudentsStatisticsController {
         int totalTermsCount = alumniPerTermMap.keySet().size();
 
         for(String term : alumniPerTermMap.keySet()) {
-            if (term.compareTo(firstTerm) < 0) firstTerm = term;
-            if (term.compareTo(lastTerm) > 0) lastTerm = term;
+            if (term.compareTo(firstTerm) < 0) {
+                firstTerm = term;
+            }
+            if (term.compareTo(lastTerm) > 0) {
+                lastTerm = term;
+            }
             Collection<String> alumniPerTerm = alumniPerTermMap.get(term);
             int size = alumniPerTerm.size();
             if (size > maxAlumniCount) {
@@ -306,8 +307,12 @@ public class StudentsStatisticsController {
                 curriculum.getMinNumberOfTerms()) / 4.0) / curriculum.getMinNumberOfTerms()) - 1.0;
             dropoutsCount[dropout.getStatusIndex()]++;
             String term = dropout.getAdmissionTerm();
-            if (term.compareTo(firstTerm) < 0) firstTerm = term;
-            if (term.compareTo(lastTerm) > 0) lastTerm = term;
+            if (term.compareTo(firstTerm) < 0) {
+                firstTerm = term;
+            }
+            if (term.compareTo(lastTerm) > 0) {
+                lastTerm = term;
+            }
         }
         DropoutReasonSummary aggregateDropouts = new DropoutReasonSummary(dropoutsCount);
         int dropoutCount = aggregateDropouts.computeTotalDropouts() - aggregateDropouts.getReenterSameCourse();

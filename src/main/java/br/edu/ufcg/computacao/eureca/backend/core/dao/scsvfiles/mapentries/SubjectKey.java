@@ -42,8 +42,12 @@ public class SubjectKey implements EurecaMapKey, Comparable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         SubjectKey that = (SubjectKey) o;
         return getCourseCode().equals(that.getCourseCode()) &&
                 getCurriculumCode().equals(that.getCurriculumCode()) &&
