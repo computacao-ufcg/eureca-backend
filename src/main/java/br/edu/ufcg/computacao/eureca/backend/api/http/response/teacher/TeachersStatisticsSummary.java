@@ -1,5 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher;
 
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.refator.AverageRates;
 import br.edu.ufcg.computacao.eureca.backend.core.models.TermCount;
 
 public class TeachersStatisticsSummary {
@@ -14,17 +15,16 @@ public class TeachersStatisticsSummary {
     private double averageSuspendedRate;
 
     public TeachersStatisticsSummary(String from, String to, double teachersCount, TermCount min, TermCount max,
-                                     double averageSuccessRate, double averageFailureDueToGradeRate,
-                                     double averageFailureDueToAbsenceRate, double averageSuspendedRate) {
+                                     AverageRates averageRates) {
         this.from = from;
         this.to = to;
         this.teachersCount = teachersCount;
         this.min = min;
         this.max = max;
-        this.averageSuccessRate = averageSuccessRate;
-        this.averageFailureDueToGradeRate = averageFailureDueToGradeRate;
-        this.averageFailureDueToAbsenceRate = averageFailureDueToAbsenceRate;
-        this.averageSuspendedRate = averageSuspendedRate;
+        this.averageSuccessRate = averageRates.getAverageSuccessRate();
+        this.averageFailureDueToGradeRate = averageRates.getAverageFailureDueToGradeRate();
+        this.averageFailureDueToAbsenceRate = averageRates.getAverageFailureDueToAbsenceRate();
+        this.averageSuspendedRate = averageRates.getAverageSuspendedRate();
     }
 
     public String getFrom() {

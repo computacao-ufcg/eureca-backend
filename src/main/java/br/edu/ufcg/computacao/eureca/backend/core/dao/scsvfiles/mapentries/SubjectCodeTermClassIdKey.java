@@ -42,8 +42,12 @@ public class SubjectCodeTermClassIdKey implements EurecaMapKey {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         SubjectCodeTermClassIdKey that = (SubjectCodeTermClassIdKey) o;
         return getSubjectCode().equals(that.getSubjectCode()) &&
                 getTerm().equals(that.getTerm()) &&

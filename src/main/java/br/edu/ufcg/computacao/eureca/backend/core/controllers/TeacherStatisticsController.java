@@ -40,7 +40,6 @@ public class TeacherStatisticsController {
 
     public TeachersStatisticsSummaryResponse getTeachersStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
         Map<String, TeachersStatisticsSummary> teachersSummaryMap = this.dataAccessFacade.getTeachersPerAcademicUnit(courseCode, curriculumCode, from, to);
-        TeachersStatisticsSummaryResponse response = new TeachersStatisticsSummaryResponse(courseCode, curriculumCode, teachersSummaryMap);
-        return response;
+        return new TeachersStatisticsSummaryResponse(courseCode, curriculumCode, teachersSummaryMap);
     }
 }
