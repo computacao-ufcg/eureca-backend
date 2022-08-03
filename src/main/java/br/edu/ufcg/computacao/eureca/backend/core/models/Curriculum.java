@@ -129,7 +129,46 @@ public class Curriculum {
     }
 
     public Integer getExpectedMinAccumulatedCredits(int term) {
-        return this.expectedMinAccumulatedCreditsList.get(term - 1);
+        return this.expectedMinAccumulatedCreditsList.get(term);
+    }
+
+    public int getTargetMandatoryCredits(int lastTermCompleted) {
+        int target = 0;
+        for (int i = 0; i <= (lastTermCompleted - 1); i++) {
+            target += this.idealMandatoryCreditsList.get(i);
+        }
+        return target;
+    }
+
+    public int getTargetComplementaryCredits(int lastTermCompleted) {
+        int target = 0;
+        for (int i = 0; i <= (lastTermCompleted - 1); i++) {
+            target += this.idealComplementaryCreditsList.get(i);
+        }
+        return target;
+    }
+
+    public int getTargetOptionalCredits(int lastTermCompleted) {
+        int target = 0;
+        for (int i = 0; i <= (lastTermCompleted - 1); i++) {
+            target += this.idealOptionalCreditsList.get(i);
+        }
+        return target;
+    }
+
+    public int getTargetElectiveCredits(int lastTermCompleted) {
+        int target = 0;
+        for (int i = 0; i <= (lastTermCompleted - 1); i++) {
+            target += this.idealElectiveCreditsList.get(i);
+        }
+        return target;
+    }
+
+    public int getIdealMaxCredits(int nextTerm) {
+        return this.getIdealMandatoryCredits(nextTerm) +
+                this.getIdealComplementaryCredits(nextTerm) +
+                this.getIdealOptionalCredits(nextTerm) +
+                this.getIdealElectiveCredits(nextTerm);
     }
 
     public void setExpectedMinAccumulatedCreditsList(ArrayList<Integer> expectedMinAccumulatedCreditsList) {

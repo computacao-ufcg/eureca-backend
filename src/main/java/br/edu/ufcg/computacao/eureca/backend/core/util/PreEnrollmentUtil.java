@@ -1,12 +1,15 @@
 package br.edu.ufcg.computacao.eureca.backend.core.util;
 
+import br.edu.ufcg.computacao.eureca.backend.core.controllers.PreEnrollmentController;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.SubjectKey;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
+import org.apache.log4j.Logger;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class PreEnrollmentUtil {
+    private static final Logger LOGGER = Logger.getLogger(PreEnrollmentUtil.class);
 
     // retorna as disciplinas agrupadas por período e tipo
     public static Map<Integer, Collection<SubjectSchedule>> getSubjectsPerTerm(Collection<SubjectSchedule> subjects, SubjectType type) {
@@ -85,19 +88,42 @@ public class PreEnrollmentUtil {
         subject.setCoRequirementsList(availableCoRequirementsCode);
     }
 
-    public static Map<SubjectType, Integer> getIdealCreditsPerSubjectType(Curriculum curriculum, Integer maxCredits, int nextTerm) {
-        Map<SubjectType, Integer> idealCredits = new HashMap<>();
-        int idealMandatoryCredits = curriculum.getIdealMandatoryCredits(nextTerm);
-        int idealOptionalCredits = curriculum.getIdealOptionalCredits(nextTerm);
-        int idealComplementaryCredits = curriculum.getIdealComplementaryCredits(nextTerm);
-        int idealElectiveCredits = curriculum.getIdealElectiveCredits(nextTerm);
+    public static Map<SubjectType, Integer> getIdealCreditsPerSubjectType(Curriculum curriculum,
+                                                       StudentCurriculumProgress studentProgress, Integer maxCredits) {
+        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, studentProgress);
+        int nextTerm = Math.min(curriculum.getMinNumberOfTerms(), (actualTerm + 1));
 
-        if (maxCredits != null) {
-            idealMandatoryCredits = Math.min(idealMandatoryCredits, maxCredits);
-            idealComplementaryCredits = Math.max(0, Math.min(idealComplementaryCredits, maxCredits - idealMandatoryCredits));
-            idealOptionalCredits = Math.max(0, Math.min(idealOptionalCredits, maxCredits - (idealMandatoryCredits + idealComplementaryCredits)));
-            idealElectiveCredits = Math.max(0, Math.min(idealElectiveCredits, maxCredits - (idealMandatoryCredits + idealComplementaryCredits + idealOptionalCredits)));
-        }
+        Map<SubjectType, Integer> idealCredits = new HashMap<>();
+        // Computes the number of credits that are short from the ideal, per type of subject
+        int missingMandatoryCredits = Math.max(0, (curriculum.getTargetMandatoryCredits(actualTerm) -
+                studentProgress.getCompletedMandatoryCredits()));
+        int missingComplementaryCredits = Math.max(0, (curriculum.getTargetComplementaryCredits(actualTerm) -
+                studentProgress.getCompletedComplementaryCredits()));
+        int missingOptionalCredits = Math.max(0, (curriculum.getTargetOptionalCredits(actualTerm) -
+                studentProgress.getCompletedOptionalCredits()));
+        int missingElectiveCredits = Math.max(0, (curriculum.getTargetElectiveCredits(actualTerm) -
+                studentProgress.getCompletedElectiveCredits()));
+        // Computes how many credits are still needed, per type of subject
+        int leftMandatoryCredits = Math.max((curriculum.getMinMandatoryCreditsNeeded() -
+                studentProgress.getCompletedMandatoryCredits()), 0);
+        int leftOptionalCredits = Math.max((curriculum.getMinOptionalCreditsNeeded() -
+                studentProgress.getCompletedOptionalCredits()), 0);
+        int leftComplementaryCredits = Math.max((curriculum.getMinComplementaryCreditsNeeded() -
+                studentProgress.getCompletedComplementaryCredits()), 0);
+        int leftElectiveCredits = Math.max((curriculum.getMinElectiveCreditsNeeded() -
+                studentProgress.getCompletedElectiveCredits()), 0);
+        // The number of ideal credits is such that does not over enroll (considering credits left), and tries to
+        // enroll not less than what is ideally recommended, but allows overruling the ideal number of credits
+        // suggested form the current term, when the student is lacking behind; finally the number of ideal credits
+        // is always limited by maxCredits
+        int idealMandatoryCredits = Math.min(leftMandatoryCredits, Math.min(maxCredits,
+                (missingMandatoryCredits + curriculum.getIdealMandatoryCredits(nextTerm))));
+        int idealOptionalCredits = Math.min(leftOptionalCredits, Math.min(maxCredits,
+                (missingOptionalCredits + curriculum.getIdealOptionalCredits(nextTerm))));
+        int idealComplementaryCredits = Math.min(leftComplementaryCredits, Math.min(maxCredits,
+                (missingComplementaryCredits + curriculum.getIdealComplementaryCredits(nextTerm))));
+        int idealElectiveCredits = Math.min(leftElectiveCredits, Math.min(maxCredits,
+                (missingElectiveCredits + curriculum.getIdealElectiveCredits(nextTerm))));
 
         idealCredits.put(SubjectType.MANDATORY, idealMandatoryCredits);
         idealCredits.put(SubjectType.OPTIONAL, idealOptionalCredits);
@@ -109,16 +135,12 @@ public class PreEnrollmentUtil {
 
     public static int getActualTerm(Curriculum curriculum, StudentCurriculumProgress progress) {
         int accumulatedCredits = progress.getCompletedCredits();
-        for (int i = 1; i < curriculum.getMinNumberOfTerms() + 1; i++) {
+
+        for (int i = 1; i < curriculum.getMinNumberOfTerms(); i++) {
             if (accumulatedCredits <= curriculum.getExpectedMinAccumulatedCredits(i)) {
                 return i;
             }
         }
         return curriculum.getMinNumberOfTerms();
-    }
-
-    public static int getNextTerm(int actualTerm, int enrolledCredits, int minTerms) {
-        int nextTerm = actualTerm + (enrolledCredits > 0 ? 1 : 0);
-        return (Math.min(nextTerm, minTerms));
     }
 }
