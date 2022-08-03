@@ -173,27 +173,23 @@ public class ApplicationFacade {
                                                                     String affirmativePolicy)
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_EMAILS);
-        Map<String, EmailSearchResponse> response = this.communicationController.getStudentsEmailsSearch(courseCode, curriculumCode,
+        return this.communicationController.getStudentsEmailsSearch(courseCode, curriculumCode,
                 admissionTerm, studentName, gender, status, craOperation, cra, enrolledCreditsOperation, enrolledCredits, affirmativePolicy);
-        return response;
     }
 
     public Map<String, EmailSearchResponse> getSubjectEmailsSearch(String token, String courseCode, String curriculumCode,
                                                                         String subjectName, String subjectType,
                                                                         String academicUnit, String term) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_EMAILS);
-        Map<String, EmailSearchResponse> response = this.communicationController.getSubjectEmailsSearch(courseCode, curriculumCode, subjectName,
-                subjectType, academicUnit, term);
-        return response;
+
+        return this.communicationController.getSubjectEmailsSearch(courseCode, curriculumCode, subjectName, subjectType, academicUnit, term);
     }
 
     public Map<String, EmailSearchResponse> getTeacherEmailsSearch(String token, String courseCode, String curriculumCode,
                                                                    String teacherName, String teacherId, String academicUnit,
                                                                    String term) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_STUDENTS_EMAILS);
-        Map<String, EmailSearchResponse> response = this.communicationController.getTeacherEmailsSearch(courseCode, curriculumCode, teacherName,
-                teacherId, academicUnit, term);
-        return response;
+        return this.communicationController.getTeacherEmailsSearch(courseCode, curriculumCode, teacherName, teacherId, academicUnit, term);
     }
 
     public StudentPreEnrollmentResponse getPreEnrollment(String token, String courseCode, String curriculumCode, String registration, String term, Integer numCredits, String optionalPriorityList, String electivePriorityList, String mandatoryPriorityList) throws EurecaException {

@@ -13,7 +13,6 @@ public class ProfileController {
     }
 
     public ProfileResponse getProfile(String userId) throws EurecaException {
-        ProfileResponse response = this.dataAccessFacade.getProfile(userId);
-        return response;
+        return this.dataAccessFacade.getProfile(userId);
     }
 }

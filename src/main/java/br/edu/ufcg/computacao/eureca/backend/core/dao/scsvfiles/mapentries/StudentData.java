@@ -101,7 +101,9 @@ public class StudentData implements EurecaMapValue {
     }
 
     public String getStatusStr() {
-        if (this.status == null) parseStatusStr(this.statusStr);
+        if (this.status == null) {
+            parseStatusStr(this.statusStr);
+        }
         return statusStr;
     }
 
@@ -110,7 +112,9 @@ public class StudentData implements EurecaMapValue {
     }
 
     public String getAdmissionStr() {
-        if (this.admissionTerm == null) parseAdmissionStr(this.admissionStr);
+        if (this.admissionTerm == null) {
+            parseAdmissionStr(this.admissionStr);
+        }
         return admissionStr;
     }
 
@@ -359,7 +363,9 @@ public class StudentData implements EurecaMapValue {
     }
 
     public StudentStatus getStatus() {
-        if (this.status == null) parseStatusStr(this.statusStr);
+        if (this.status == null) {
+            parseStatusStr(this.statusStr);
+        }
         return this.status;
     }
 
@@ -368,7 +374,9 @@ public class StudentData implements EurecaMapValue {
     }
 
     public String getStatusTerm() {
-        if (this.status == null) parseStatusStr(this.statusStr);
+        if (this.status == null) {
+            parseStatusStr(this.statusStr);
+        }
         return statusTerm;
     }
 
@@ -377,7 +385,9 @@ public class StudentData implements EurecaMapValue {
     }
 
     public String getAdmissionTerm() {
-        if (this.admissionTerm == null) parseAdmissionStr(this.admissionStr);
+        if (this.admissionTerm == null) {
+            parseAdmissionStr(this.admissionStr);
+        }
         return admissionTerm;
     }
 
@@ -386,17 +396,23 @@ public class StudentData implements EurecaMapValue {
     }
 
     public boolean isActive() {
-        if (this.status == null) parseStatusStr(this.statusStr);
+        if (this.status == null) {
+            parseStatusStr(this.statusStr);
+        }
         return this.status.equals(StudentStatus.ACTIVE);
     }
 
     public boolean isAlumnus() {
-        if (this.status == null) parseStatusStr(this.statusStr);
+        if (this.status == null) {
+            parseStatusStr(this.statusStr);
+        }
         return this.status.equals(StudentStatus.ALUMNUS);
     }
 
     public boolean isDropout() {
-        if (this.status == null) parseStatusStr(this.statusStr);
+        if (this.status == null) {
+            parseStatusStr(this.statusStr);
+        }
         return this.status.equals(StudentStatus.DROPOUT);
     }
 
