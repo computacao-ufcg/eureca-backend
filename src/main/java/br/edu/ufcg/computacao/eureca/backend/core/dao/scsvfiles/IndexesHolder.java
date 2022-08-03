@@ -412,6 +412,7 @@ public class IndexesHolder {
         buildSubjectIndexes();
         buildCurriculaIndexes();
         buildClassesIndexes();
+        updateStudentProgress();
     }
 
     private void buildStudentIndexes() {
@@ -433,8 +434,8 @@ public class IndexesHolder {
                 addToStudentPerTermIndex(k, v, v.getAdmissionTerm(), this.activesPerCurriculumPerAdmissionTermMap);
                 // Setup student progress on his/her curriculum
                 this.studentCurriculumProgressMap.put(k, new StudentCurriculumProgress(v.getCompletedTerms(),
-                        v.getMandatoryCredits(), v.getOptionalCredits(), v.getComplementaryCredits(),
-                        v.getEnrolledCredits()));
+                        0, 0, 0,
+                        0, 0, v.getEnrolledCredits()));
             }
             if (v.isAlumnus()) {
                 // All alumni per course
@@ -519,6 +520,45 @@ public class IndexesHolder {
                 updateStudent(key, student);
             }
         });
+    }
+
+    private void updateStudentProgress() {
+        Map<NationalIdRegistrationKey, StudentCurriculumProgress> studentCurriculumProgressMap;
+        this.studentCurriculumProgressMap.forEach((studentKey, studentCurriculumProgress) -> {
+            int accMandatory = 0;
+            int accComplementary = 0;
+            int accOptional = 0;
+            int accElective = 0;
+            int accActivities = 0;
+            StudentData studentData = this.studentsMap.get(studentKey);
+            CurriculumKey curriculumKey = new CurriculumKey(studentData.getCourseCode(), studentData.getCurriculumCode());
+            Curriculum curriculum = this.curriculumMap.get(curriculumKey).createCurriculum(curriculumKey);
+            for (SubjectKey subjectKey : studentCurriculumProgress.getCompleted()) {
+                SubjectData subjectData = this.subjectsMap.get(subjectKey);
+                if (curriculum.getMandatorySubjectsList().contains(subjectKey.getSubjectCode())) {
+                    accMandatory += subjectData.getCredits();
+                }
+                if (curriculum.getComplementarySubjectsList().contains(subjectKey.getSubjectCode())) {
+                    accComplementary += subjectData.getCredits();
+                }
+                if (curriculum.getOptionalSubjectsList().contains(subjectKey.getSubjectCode())) {
+                    accOptional += subjectData.getCredits();
+                }
+                if (curriculum.getElectiveSubjectsList().contains(subjectKey.getSubjectCode())) {
+                    accElective += subjectData.getCredits();
+                }
+                if (curriculum.getComplementaryActivitiesList().contains(subjectKey.getSubjectCode())) {
+                    accActivities += subjectData.getCredits();
+                }
+            }
+            studentCurriculumProgress.setCompletedMandatoryCredits(accMandatory);
+            studentCurriculumProgress.setCompletedComplementaryCredits(accComplementary);
+            studentCurriculumProgress.setCompletedOptionalCredits(accOptional);
+            studentCurriculumProgress.setCompletedElectiveCredits(accElective);
+            studentCurriculumProgress.setCompletedComplementaryActivities(accActivities);
+            LOGGER.debug(String.format(Messages.UPDATED_PROGRESS_S, studentCurriculumProgress.toString()));
+        });
+
     }
 
     private void buildTeachersIndex() {
@@ -716,11 +756,12 @@ public class IndexesHolder {
         if (curriculum.getCompleted().contains(subjectKey)) {
             return false;
         }
+
         for (String subjectCode : subjectData.getEquivalentCodesList()) {
             SubjectKey equivalentSubjectKey = new SubjectKey(subjectKey.getCourseCode(), subjectKey.getCurriculumCode(),
                     subjectCode);
-            if (curriculum.getCompleted().contains(equivalentSubjectKey)) {
-                curriculum.getCompleted().add(equivalentSubjectKey);
+            if (studentCurriculumProgress.getCompleted().contains(equivalentSubjectKey)) {
+                studentCurriculumProgress.getCompleted().add(subjectKey);
                 return false;
             }
         }

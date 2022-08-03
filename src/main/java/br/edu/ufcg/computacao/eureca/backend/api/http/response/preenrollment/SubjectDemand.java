@@ -35,6 +35,6 @@ public class SubjectDemand implements Comparable {
     @Override
     public int compareTo(Object o) {
         SubjectDemand other = (SubjectDemand) o;
-        return this.getTotalDemand() - other.getTotalDemand();
+        return this.getSubjectCode().compareTo(other.getSubjectCode());
     }
 }

@@ -1,9 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.core.models;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class SubjectSchedule {
 
