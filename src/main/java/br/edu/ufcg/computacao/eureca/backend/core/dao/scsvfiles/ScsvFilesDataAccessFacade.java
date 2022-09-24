@@ -326,7 +326,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
                 SubjectSchedule subjectSchedule = new SubjectSchedule(subject, value);
                 allSchedules.put(key, subjectSchedule);
             } catch (InvalidParameterException e) {
-                LOGGER.info(Messages.INVALID_SUBJECT_IGNORING);
+                LOGGER.info(String.format(Messages.INVALID_SUBJECT_IGNORING, key.getSubjectCode()));
             }
         }
 
