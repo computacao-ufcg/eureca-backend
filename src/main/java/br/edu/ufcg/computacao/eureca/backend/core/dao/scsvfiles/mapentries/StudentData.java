@@ -1,6 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
+import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Curriculum;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.backend.core.models.StudentStatus;
@@ -404,11 +405,34 @@ public class StudentData implements EurecaMapValue {
         return new Student(id.getRegistration(), id.getNationalId(), getName(), getBirthDate(), getEmail(), getGender(),
                 getMaritalStatus(), getNationality(), getCountry(), getPlaceOfBirth(), getRace(), getStatusStr(),
                 getStatus(), getStatusTerm(), getAdmissionStr(), getAdmissionTerm(), getDisabilities(),
-                getAffirmativePolicy(), getSecondarySchool(), getSecondarySchoolGraduationYear(), getCourseCode(),
+                getMappedAffirmativePolicy(), getSecondarySchool(), getSecondarySchoolGraduationYear(), getCourseCode(),
                 getCurriculumCode(), curriculum, getMandatoryHours(), getMandatoryCredits(),
                 getOptionalHours(), getOptionalCredits(), getComplementaryHours(), getComplementaryCredits(),
                 getAttemptedCredits(), getGpa(), getMc(), getIea(), getCompletedTerms(), getSuspendedTerms(),
                 getInstitutionalEnrollments(), getMobilityTerms(), getEnrolledCredits(), getAdmissionGrade());
+    }
+
+    private String getMappedAffirmativePolicy() {
+        switch(this.getAffirmativePolicy()) {
+            case SystemConstants.L1:
+                return "L1";
+            case SystemConstants.L2:
+                return "L2";
+            case SystemConstants.L5:
+                return "L5";
+            case SystemConstants.L6:
+                return "L6";
+            case SystemConstants.L9:
+                return "L9";
+            case SystemConstants.L10:
+                return "L10";
+            case SystemConstants.L13:
+                return "L13";
+            case SystemConstants.L14:
+                return "L14";
+            default:
+                return "A0";
+        }
     }
 
     public int getCompletedCredits() {

@@ -39,4 +39,12 @@ public class SystemConstants {
     public static final String STATUS_FAILED_DUE_ABSENCE = "Reprovado por Falta";
     public static final String STATUS_SUSPENDED = "Trancado";
     public static final String ALL = "All";
+    public static final String L1 = "Candidato com renda familiar bruta per capita igual ou inferior a 1,5 salrio mnimo que tenha cursado integralmente o ensino mdio em escola pblica.";
+    public static final String L2 = "Candidato autodeclarado preto, pardo ou indgena, com renda familiar bruta per capita igual ou inferior a 1,5 salrio mnimo que tenha cursado integralmente o ensino mdio em escola pblica.";
+    public static final String L5 = "Candidato que, independentemente da renda, tenha cursado integralmente o ensino mdio em escola pblica.";
+    public static final String L6 = "Candidato autodeclarado preto, pardo ou indgena que, independentemente da renda, tenha cursado integralmente o ensino mdio em escola pblica.";
+    public static final String L9 = "Candidato com deficincia com renda familiar bruta per capita igual ou inferior a 1,5 salrio mnimo que tenha cursado integralmente o ensino mdio em escola pblica.";
+    public static final String L10 = "Candidato com deficincia autodeclarado preto, pardo ou indgena, com renda familiar bruta per capita igual ou inferior a 1,5 salrio mnimo que tenha cursado integralmente o ensino mdio em escola pblica.";
+    public static final String L13 = "Candidato com deficincia que, independentemente da renda, tenha cursado integralmente o ensino mdio em escola pblica.";
+    public static final String L14 = "Candidato com deficincia autodeclarado preto, pardo ou indgena que, independentemente da renda, tenha cursado integralmente o ensino mdio em escola pblica.";
 }

@@ -3,12 +3,16 @@ package br.edu.ufcg.computacao.eureca.backend.api.http.response.students;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.backend.core.util.StudentMetricsCalculator;
 
+import java.time.LocalDate;
+import java.time.Period;
+
 public class StudentCSV implements Comparable {
     private String registration;
     private String courseCode;
     private String curriculumCode;
     private String name;
     private String gender;
+    private int age;
     private String maritalStatus;
     private String affirmativePolicy;
     private String admissionType;
@@ -43,6 +47,7 @@ public class StudentCSV implements Comparable {
         this.curriculumCode = student.getCurriculumCode();
         this.name = student.getName();
         this.gender = student.getGender();
+        this.age = calculateAge(student.getBirthDate());
         this.maritalStatus = student.getMaritalStatus();
         this.affirmativePolicy = student.getAffirmativePolicy();
         this.admissionType = student.getAdmissionStr();
@@ -80,6 +85,20 @@ public class StudentCSV implements Comparable {
         double costIncrement = ((student.getCurriculum().getMinNumberOfTerms() + (student.getCurriculum().getMaxNumberOfTerms() -
                 student.getCurriculum().getMinNumberOfTerms()) / 4.0) / student.getCurriculum().getMinNumberOfTerms()) - 1.0;
         this.costClass = StudentMetricsCalculator.computeCostClass(this.cost, costIncrement);
+    }
+
+    private int calculateAge(String birthDate) {
+        String day = birthDate.substring(0,2);
+        String month = birthDate.substring(3,5);
+        String year = birthDate.substring(6,10);
+        LocalDate dob = LocalDate.parse(year + "-" + month + "-" + day);
+        LocalDate curDate = LocalDate.now();
+        if ((dob != null) && (curDate != null))
+        {
+            return Period.between(dob, curDate).getYears();
+        } else {
+            return 0;
+        }
     }
 
     public String getRegistration() {
@@ -120,6 +139,14 @@ public class StudentCSV implements Comparable {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public String getMaritalStatus() {
