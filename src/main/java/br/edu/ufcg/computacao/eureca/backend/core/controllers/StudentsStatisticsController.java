@@ -11,20 +11,17 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutPe
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutReasonSummary;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutsStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutsSummary;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentCSV;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentMetricsSummary;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentsResponse;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentsStatisticsSummaryResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.*;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
 import br.edu.ufcg.computacao.eureca.backend.core.holders.DataAccessFacadeHolder;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
 import br.edu.ufcg.computacao.eureca.backend.core.util.StudentMetricsCalculator;
 import br.edu.ufcg.computacao.eureca.common.exceptions.EurecaException;
-import br.edu.ufcg.computacao.eureca.common.exceptions.InvalidParameterException;
 import org.apache.log4j.Logger;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class StudentsStatisticsController {
     private Logger LOGGER = Logger.getLogger(StudentsStatisticsController.class);
@@ -113,6 +110,69 @@ public class StudentsStatisticsController {
         String firstTerm = termsList.get(0);
         String lastTerm = termsList.get(termsList.size() - 1);
         return new DropoutsStatisticsResponse(terms, courseCode, curriculumCode, firstTerm, lastTerm);
+    }
+    public StudentsTimeseriesResponse getActiveTimeseries(String courseCode, String curriculumCode, String from,
+                                                          String to) throws EurecaException {
+        Collection<StudentPerformance> studentsPerformance = new TreeSet<>();
+        Map<String, Map<String, Collection<Enrollment>>> data =
+                this.dataAccessFacade.getEnrollmentsPerStudentPerTerm(courseCode, curriculumCode, from, to);
+        for (String studentReg: data.keySet()) {
+            int accumulatedTerms = 0;
+            int accumulatedSuccessfulCredits = 0;
+            int accumulatedGpaCredits = 0;
+            double accumulatedGrade = 0;
+            Map<String, Collection<Enrollment>> enrollmentsPerTerm = data.get(studentReg);
+            if (enrollmentsPerTerm == null) continue;
+            for(String term: enrollmentsPerTerm.keySet()) {
+                int attemptedCredits = 0;
+                int successfulCredits = 0;
+                int failedCredits = 0;
+                int suspendedCredits = 0;
+                int waivedCredits = 0;
+                Collection<Enrollment> enrollments = enrollmentsPerTerm.get(term);
+                if (enrollments == null) continue;
+                for (Enrollment enrollment: enrollments) {
+                    switch(enrollment.getStatus()) {
+                        case "Dispensa":
+                            successfulCredits += enrollment.getCredits();
+                            if (enrollment.getGrade() != 0.0) {
+                                accumulatedGpaCredits += enrollment.getCredits();
+                                accumulatedGrade += (enrollment.getCredits() * enrollment.getGrade());
+                            }
+                            waivedCredits += enrollment.getCredits();
+                            break;
+                        case "Aprovado":
+                            successfulCredits += enrollment.getCredits();
+                            accumulatedGpaCredits += enrollment.getCredits();
+                            accumulatedGrade += (enrollment.getCredits() * enrollment.getGrade());
+                            attemptedCredits += enrollment.getCredits();
+                            break;
+                        case "Cancelado":
+                        case "Trancado":
+                            suspendedCredits += enrollment.getCredits();
+                            attemptedCredits += enrollment.getCredits();
+                            break;
+                        case "Reprovado":
+                        case "Reprovado por Falta":
+                            failedCredits += enrollment.getCredits();
+                            accumulatedGpaCredits += enrollment.getCredits();
+                            accumulatedGrade += (enrollment.getCredits() * enrollment.getGrade());
+                            attemptedCredits += enrollment.getCredits();
+                            break;
+                    }
+                }
+                accumulatedTerms++;
+                accumulatedSuccessfulCredits += successfulCredits;
+                double gpa = accumulatedGrade / accumulatedGpaCredits;
+                double averageSpeed = ((double) accumulatedSuccessfulCredits) / accumulatedTerms;
+                StudentPerformance studentPerformance = new StudentPerformance(studentReg, term, gpa, accumulatedTerms,
+                        accumulatedSuccessfulCredits, waivedCredits, attemptedCredits, successfulCredits, failedCredits, suspendedCredits,
+                        averageSpeed);
+                studentsPerformance.add(studentPerformance);
+
+            }
+        }
+        return new StudentsTimeseriesResponse(studentsPerformance);
     }
 
     public StudentsStatisticsSummaryResponse getStudentsStatisticsSummary(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
@@ -319,5 +379,4 @@ public class StudentsStatisticsController {
 
         return new DropoutsSummary(firstTerm, lastTerm, dropoutCount, averageTermsCount, averageCost, costClass, aggregateDropouts);
     }
-
 }

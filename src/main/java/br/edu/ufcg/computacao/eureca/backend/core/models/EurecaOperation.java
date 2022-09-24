@@ -4,6 +4,7 @@ public enum EurecaOperation {
     GET_ALUMNI_DIGEST("getAlumniDigest"),
     GET_ACTIVES_STATISTICS("getActivesStatistics"),
     GET_ACTIVES_CSV("getActivesCSV"),
+    GET_ACTIVES_TIMESERIES("getActivesTimeseries"),
     GET_ALUMNI_STATISTICS("getAlumniStatistics"),
     GET_ALUMNI_CSV("getAlumniCSV"),
     GET_DROPOUTS_STATISTICS("getDropoutsStatistics"),

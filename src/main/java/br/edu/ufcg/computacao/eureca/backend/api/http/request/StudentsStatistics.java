@@ -6,6 +6,7 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.alumni.AlumniStat
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.dropout.DropoutsStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentsStatisticsSummaryResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentsTimeseriesResponse;
 import br.edu.ufcg.computacao.eureca.backend.constants.ApiDocumentation;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
@@ -77,7 +78,30 @@ public class StudentsStatistics {
             throw e;
         }
     }
+    @RequestMapping(value = "actives/timeseries", method = RequestMethod.GET)
+    @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_ACTIVES_TIMESERIES)
+    public ResponseEntity<StudentsTimeseriesResponse> getActivesTimeseries(
+            @ApiParam(value = ApiDocumentation.Common.COURSE)
+            @RequestParam(required = true, value = "courseCode") String courseCode,
+            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
+            @RequestParam(required = false, value = "curriculumCode", defaultValue = SystemConstants.ALL) String curriculumCode,
+            @ApiParam(value = ApiDocumentation.Common.FROM)
+            @RequestParam(required = false, value = "from", defaultValue = SystemConstants.FIRST_POSSIBLE_TERM) String from,
+            @ApiParam(value = ApiDocumentation.Common.TO)
+            @RequestParam(required = false, value = "to", defaultValue = SystemConstants.LAST_POSSIBLE_TERM) String to,
+            @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
+            @RequestHeader(required = true, value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token)
+            throws EurecaException {
 
+        try {
+            StudentsTimeseriesResponse ret = ApplicationFacade.getInstance().getActivesTimeseries(token, courseCode,
+                    curriculumCode, from, to);
+            return new ResponseEntity<>(ret, HttpStatus.OK);
+        } catch (EurecaException e) {
+            LOGGER.info(String.format(Messages.EURECA_EXCEPTION_S, e.getMessage()));
+            throw e;
+        }
+    }
     @RequestMapping(value = "alumni", method = RequestMethod.GET)
     @ApiOperation(value = ApiDocumentation.StudentStatistics.GET_ALUMNI)
     public ResponseEntity<AlumniStatisticsResponse> getAlumniStatistics(

@@ -20,6 +20,7 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.subject
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.retention.student.StudentsRetentionStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentsStatisticsSummaryResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.students.StudentsTimeseriesResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.*;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsResponse;
@@ -133,7 +134,11 @@ public class ApplicationFacade {
         authenticateAndAuthorize(token, EurecaOperation.GET_ACTIVES_CSV);
         return this.studentsStatisticsController.getActiveCSV(courseCode, curriculumCode, from, to);
     }
-
+    public StudentsTimeseriesResponse getActivesTimeseries(String token, String courseCode, String curriculumCode,
+                                                           String from, String to) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_ACTIVES_TIMESERIES);
+        return this.studentsStatisticsController.getActiveTimeseries(courseCode, curriculumCode, from, to);
+    }
     public AlumniStatisticsResponse getAlumniStatistics(String token, String courseCode, String curriculumCode, String from, String to, String language) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_ALUMNI_STATISTICS);
         return this.studentsStatisticsController.getAlumniStatistics(courseCode, curriculumCode, from, to);

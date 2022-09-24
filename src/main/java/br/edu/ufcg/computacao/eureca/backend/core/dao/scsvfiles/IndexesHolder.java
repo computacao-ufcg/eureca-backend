@@ -44,6 +44,7 @@ public class IndexesHolder {
     // Enrollment indexes
     private Map<SubjectKey, Map<String, Map<String, ClassEnrollments>>> enrollmentsPerSubjectPerTermPerClass;
     private Map<String, Map<SubjectKey, Map<String, ClassEnrollments>>> enrollmentsPerTermPerSubjectPerClass;
+    private Map<String, Map<String, Collection<Enrollment>>> enrollmentsPerStudentPerTerm;
     // Subject indexes
     private Map<NationalIdRegistrationKey, StudentCurriculumProgress> studentCurriculumProgressMap;
     private Map<String, Collection<SubjectKey>> subjectCurriculaMap;
@@ -425,15 +426,31 @@ public class IndexesHolder {
     private void buildEnrollmentIndexes() {
         this.enrollmentsPerSubjectPerTermPerClass = new HashMap<>();
         this.enrollmentsPerTermPerSubjectPerClass = new HashMap<>();
+        this.enrollmentsPerStudentPerTerm = new HashMap();
         Map<Registration, Integer> attemptsSummary = new HashMap<>();
 
         this.enrollmentsMap.forEach((enrollmentKey, enrollmentData) -> {
-            NationalIdRegistrationKey studentId = registrationMap.get(enrollmentKey.getRegistration());
+            String registration = enrollmentKey.getRegistration();
+            String term = enrollmentKey.getTerm();
+            String subjectCode = enrollmentKey.getSubjectCode();
+
+            Map<String, Collection<Enrollment>> enrollmentsPerTerm = this.enrollmentsPerStudentPerTerm.get(registration);
+            if (enrollmentsPerTerm == null) {
+                enrollmentsPerTerm = new TreeMap<>();
+            }
+            Collection<Enrollment> enrollments = enrollmentsPerTerm.get(term);
+            if (enrollments == null) {
+                enrollments = new ArrayList();
+            }
+            enrollments.add(enrollmentData.createEnrollment(enrollmentKey));
+            enrollmentsPerTerm.put(term, enrollments);
+            this.enrollmentsPerStudentPerTerm.put(registration, enrollmentsPerTerm);
+
+            NationalIdRegistrationKey studentId = registrationMap.get(registration);
             StudentData studentData = this.studentsMap.get(studentId);
             String course = studentData.getCourseCode();
             String curriculum = studentData.getCurriculumCode();
-            SubjectKey subjectKey = new SubjectKey(course, curriculum, enrollmentKey.getSubjectCode());
-            String term = enrollmentKey.getTerm();
+            SubjectKey subjectKey = new SubjectKey(course, curriculum, subjectCode);
             String classId = enrollmentData.getClassId();
 
             Map<String, Map<String, ClassEnrollments>> subjectEnrollmentsPerTermPerClass =
@@ -814,5 +831,9 @@ public class IndexesHolder {
             allStudents.add(studentData.createStudent(k, curriculum));
         }
         return allStudents;
+    }
+
+    public Map<String, Map<String, Collection<Enrollment>>> getEnrollmentsPerStudentPerTerm() {
+        return this.enrollmentsPerStudentPerTerm;
     }
 }

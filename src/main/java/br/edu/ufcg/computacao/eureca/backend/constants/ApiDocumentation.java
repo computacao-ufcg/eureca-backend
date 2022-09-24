@@ -90,11 +90,12 @@ public class ApiDocumentation {
         public static final String API = "Estatísticas dos discentes.";
         public static final String GET_ACTIVES = "Retorna um sumário dos dados dos discentes ativos.";
         public static final String GET_ACTIVES_CSV = "Retorna os dados completos dos discentes ativos.";
+        public static final String GET_ACTIVES_TIMESERIES = "Retorna uma série temporal com o desempenho dos discentes ativos.";
         public static final String GET_ALUMNI = "Retorna um sumário dos dados dos egressos.";
         public static final String GET_ALUMNI_CSV = "Retorna os dados completos dos egressos.";
         public static final String GET_DROPOUT = "Retorna um sumário dos dados dos discentes evadidos.";
         public static final String GET_DROPOUT_CSV = "Retorna os dados completos dos discentes evadidos.";
-        public static final String GET_SUMMARY = "Retornar um sumário geral dos dados dos discentes.";
+        public static final String GET_SUMMARY = "Retorna um sumário geral dos dados dos discentes.";
     }
 
     public static class Communication {

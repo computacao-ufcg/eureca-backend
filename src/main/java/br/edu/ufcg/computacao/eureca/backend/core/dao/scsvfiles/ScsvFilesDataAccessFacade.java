@@ -260,6 +260,23 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
+    public Map<String, Map<String, Collection<Enrollment>>> getEnrollmentsPerStudentPerTerm(String courseCode,
+                                                                               String curriculumCode, String from, String to) throws EurecaException {
+        Map<String, Map<String, Collection<Enrollment>>> response = new HashMap();
+        Collection<Student> students = getAllActives(courseCode, curriculumCode);
+        students.forEach(student -> {
+            String term = student.getAdmissionTerm();
+            String registration = student.getRegistration().getRegistration();
+            if (term.compareTo(from) >= 0 && term.compareTo(to) <= 0) {
+                Map<String, Collection<Enrollment>> studentEnrollments =
+                        this.indexesHolder.getEnrollmentsPerStudentPerTerm().get(registration);
+                response.put(registration, studentEnrollments);
+            }
+        });
+        return response;
+    }
+
+    @Override
     public Collection<SubjectRetentionPerAdmissionTermSummary> getSubjectsRetentionSummary(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
         Collection<SubjectRetentionPerAdmissionTermSummary> response = new TreeSet<>();
         Collection<String> subjectCodes = getSubjectsList(courseCode, curriculumCode);

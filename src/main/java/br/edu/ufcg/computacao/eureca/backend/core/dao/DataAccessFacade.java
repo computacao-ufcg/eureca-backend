@@ -68,4 +68,6 @@ public interface DataAccessFacade {
     StudentCurriculumProgress getStudentCurriculumProgress(String studentRegistration) throws EurecaException;
 
     Map<SubjectScheduleKey, SubjectSchedule> getAllSchedules(String courseCode, String curriculumCode, String term);
+
+    Map<String, Map<String, Collection<Enrollment>>> getEnrollmentsPerStudentPerTerm(String courseCode, String curriculumCode, String from, String to) throws EurecaException;
 }
