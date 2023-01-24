@@ -1,8 +1,6 @@
 package br.edu.ufcg.computacao.eureca.backend.api.http.request;
 
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment.PreEnrollments;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment.StudentPreEnrollment;
-import br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment.SubjectsDemandResponse;
+import br.edu.ufcg.computacao.eureca.backend.api.http.response.preenrollment.*;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.subject.SubjectDemandSummary;
 import br.edu.ufcg.computacao.eureca.backend.util.TestUtils;
 import org.junit.Assert;
@@ -16,6 +14,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 @WebMvcTest(value = PreEnrollment.class, secure = false)
 public class PreEnrollmentTest extends EndpointTest {
@@ -24,7 +23,7 @@ public class PreEnrollmentTest extends EndpointTest {
 
     @Test
     public void testGetBasicPreEnrollment() throws Exception {
-        StudentPreEnrollment expectedResponse = new StudentPreEnrollment("fake-registration", 4, 20, 20, 0, 0, 0);
+        StudentPreEnrollmentResponse expectedResponse = new StudentPreEnrollmentResponse(new StudentPreEnrollment("fake-registration", 4, 20, 20, 0, 0, 0));
         Mockito.doReturn(expectedResponse).when(this.facade).getPreEnrollment(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.isNull(Integer.class), Mockito.isNull(String.class), Mockito.isNull(String.class), Mockito.isNull(String.class), Mockito.isNull(String.class));
 
         RequestBuilder requestBuilder = this.getRequestBuilder(HttpMethod.GET, PRE_ENROLLMENT_ENDPOINT + TestUtils.DEFAULT_COURSE_CURRICULUM_QUERY + "&term=2021.1&studentRegistration=fake-registration");
@@ -39,7 +38,7 @@ public class PreEnrollmentTest extends EndpointTest {
 
     @Test
     public void testGetPreEnrollmentWithNumCredits() throws Exception {
-        StudentPreEnrollment expectedResponse = new StudentPreEnrollment("fake-registration", 4, 20, 20, 0, 0, 0);
+        StudentPreEnrollmentResponse expectedResponse = new StudentPreEnrollmentResponse(new StudentPreEnrollment("fake-registration", 4, 20, 20, 0, 0, 0));
         Mockito.doReturn(expectedResponse).when(this.facade).getPreEnrollment(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(), Mockito.isNull(String.class), Mockito.isNull(String.class), Mockito.isNull(String.class), Mockito.isNull(String.class));
 
         RequestBuilder requestBuilder = this.getRequestBuilder(HttpMethod.GET, PRE_ENROLLMENT_ENDPOINT + TestUtils.DEFAULT_COURSE_CURRICULUM_QUERY + "&term=2021.1&studentRegistration=fake-registration");
@@ -54,7 +53,7 @@ public class PreEnrollmentTest extends EndpointTest {
 
     @Test
     public void testGetPreEnrollmentWithPriorityList() throws Exception {
-        StudentPreEnrollment expectedResponse = new StudentPreEnrollment("fake-registration", 4, 20, 20, 0, 0, 0);
+        StudentPreEnrollmentResponse expectedResponse = new StudentPreEnrollmentResponse(new StudentPreEnrollment("fake-registration", 4, 20, 20, 0, 0, 0));
         Mockito.doReturn(expectedResponse).when(this.facade).getPreEnrollment(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.isNull(Integer.class), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
 
         RequestBuilder requestBuilder = this.getRequestBuilder(HttpMethod.GET, PRE_ENROLLMENT_ENDPOINT + TestUtils.DEFAULT_COURSE_CURRICULUM_QUERY + "&term=2021.1&studentRegistration=fake-registration");
@@ -70,7 +69,7 @@ public class PreEnrollmentTest extends EndpointTest {
     @Test
     public void testBatchPreEnrollment() throws Exception {
         StudentPreEnrollment preEnrollmentResponse = new StudentPreEnrollment("fake-registration", 4, 20, 20, 0, 0, 0);
-        PreEnrollments expectedResponse = new PreEnrollments(Arrays.asList(preEnrollmentResponse), new SubjectDemandSummary(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
+        PreEnrollmentsResponse expectedResponse = new PreEnrollmentsResponse(Arrays.asList(preEnrollmentResponse), new SubjectDemandSummary(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
         Mockito.doReturn(expectedResponse).when(this.facade).getPreEnrollments(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
 
         RequestBuilder requestBuilder = this.getRequestBuilder(HttpMethod.GET, PRE_ENROLLMENT_ENDPOINT + "/all" + TestUtils.DEFAULT_COURSE_CURRICULUM_QUERY + "&term=2021.1");
@@ -85,7 +84,7 @@ public class PreEnrollmentTest extends EndpointTest {
 
     @Test
     public void testGetDemand() throws Exception {
-        SubjectsDemandResponse expectedResponse = new SubjectsDemandResponse(new ArrayList<>());
+        DemandResponse expectedResponse = new DemandResponse(new SubjectDemandSummary(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
         Mockito.doReturn(expectedResponse).when(this.facade).getDemand(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
 
         RequestBuilder requestBuilder = this.getRequestBuilder(HttpMethod.GET, PRE_ENROLLMENT_ENDPOINT + "/demand" + TestUtils.DEFAULT_COURSE_CURRICULUM_QUERY + "&term=2021.1");
@@ -95,6 +94,6 @@ public class PreEnrollmentTest extends EndpointTest {
         int actualStatusCode = response.getResponse().getStatus();
 
         Assert.assertEquals(expectedStatusCode, actualStatusCode);
-        Assert.assertEquals("{\"demand\":[]}", response.getResponse().getContentAsString());
+        Assert.assertEquals("{\"subjectDemandSummary\":{\"mandatoryDemand\":[],\"optionalDemand\":[],\"complementaryDemand\":[],\"electiveDemand\":[]}}", response.getResponse().getContentAsString());
     }
 }

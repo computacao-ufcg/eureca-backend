@@ -74,7 +74,7 @@ public class TestUtils {
     }
 
     public static StudentsResponse getStudentsCsvResponse() {
-        StudentData mockedStudentData = new StudentData("x", "Ativo", "VESTIBULAR 2007.2", "x", "x", "x", "x",
+        StudentData mockedStudentData = new StudentData("x", "Ativo", "VESTIBULAR 2007.2", "x", "09/12/1965", "x", "x",
                 "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", 1980,196,840,
                 56,450,30,5.68,
                 7,1.69,14,1,0,
@@ -129,8 +129,8 @@ public class TestUtils {
 
     public static String getMockedStudentCsvResponse() {
         return "{\"students\"" +
-                ":[{\"registration\":\"fake-registration\",\"courseCode\":\"x\",\"curriculumCode\":\"x\",\"name\":\"x\",\"gender\":\"x\",\"maritalStatus\":\"x\"," +
-                "\"affirmativePolicy\":\"x\",\"admissionType\":\"VESTIBULAR\",\"admissionTerm\":\"2007.2\",\"statusStr\":\"Ativo\",\"statusTerm\":\"Current\"," +
+                ":[{\"registration\":\"fake-registration\",\"courseCode\":\"x\",\"curriculumCode\":\"x\",\"name\":\"x\",\"gender\":\"x\",\"age\":57,\"maritalStatus\":\"x\"," +
+                "\"affirmativePolicy\":\"A0\",\"admissionType\":\"VESTIBULAR\",\"admissionTerm\":\"2007.2\",\"statusStr\":\"Ativo\",\"statusTerm\":\"Current\"," +
                 "\"entryGrade\":0.0,\"gpa\":5.68,\"iea\":1.69,\"mc\":7.0,\"mandatoryCredits\":196,\"complementaryCredits\":30,\"electiveCredits\":56," +
                 "\"completedTerms\":14,\"attemptedCredits\":0.0,\"institutionalEnrollments\":0,\"mobilityTerms\":0,\"suspendedTerms\":1,\"feasibility\":0.0," +
                 "\"successRate\":-1.0,\"averageLoad\":0.0,\"cost\":-1.0,\"pace\":20.142857142857142,\"courseDurationPrediction\":10.0,\"risk\":0.975609756097561," +
@@ -168,11 +168,11 @@ public class TestUtils {
     }
 
     public static String getMockedPreEnrollmentResponse() {
-        return "{\"studentRegistration\":\"fake-registration\",\"subjects\":{}," +
+        return "{\"studentRegistration\":\"fake-registration\",\"enrollments\":[]," +
                 "\"term\":4,\"maxCredits\":20,\"maxMandatoryCredits\":20,\"mandatoryCredits\":0,\"maxOptionalCredits\":0," +
                 "\"optionalCredits\":0,\"maxComplementaryCredits\":0,\"complementaryCredits\":0," +
                 "\"maxElectiveCredits\":0,\"electiveCredits\":0," +
-                "\"mandatoryFull\":false,\"optionalFull\":true,\"complementaryFull\":true,\"electiveFull\":true,\"totalCredits\":0}";
+                "\"possibleGraduate\":false}";
     }
 
     public static String getMockedPreEnrollmentsResponse() {
