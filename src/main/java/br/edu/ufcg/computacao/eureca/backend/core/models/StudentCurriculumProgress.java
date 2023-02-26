@@ -12,7 +12,10 @@ public class StudentCurriculumProgress {
     private int completedElectiveCredits;
     private int completedComplementaryCredits;
     private int completedComplementaryActivities;
-    private int enrolledCredits;
+    private int enrolledMandatoryCredits;
+    private int enrolledOptionalCredits;
+    private int enrolledComplementaryCredits;
+    private int enrolledElectiveCredits;
     private Collection<SubjectKey> completed;
     private Collection<SubjectKey> enabled;
     private Collection<SubjectKey> disabled;
@@ -21,14 +24,19 @@ public class StudentCurriculumProgress {
 
     public StudentCurriculumProgress(int completedTerms, int completedMandatoryCredits, int completedOptionalCredits,
                                      int completedElectiveCredits, int completedComplementaryCredits,
-                                     int completedComplementaryActivities, int enrolledCredits) {
+                                     int completedComplementaryActivities, int enrolledMandatoryCredits,
+                                     int enrolledOptionalCredits, int enrolledComplementaryCredits,
+                                     int enrolledElectiveCredits) {
         this.completedTerms = completedTerms;
         this.completedMandatoryCredits = completedMandatoryCredits;
         this.completedOptionalCredits = completedOptionalCredits;
         this.completedElectiveCredits = completedElectiveCredits;
         this.completedComplementaryCredits = completedComplementaryCredits;
         this.completedComplementaryActivities = completedComplementaryActivities;
-        this.enrolledCredits = enrolledCredits;
+        this.enrolledMandatoryCredits = enrolledMandatoryCredits;
+        this.enrolledOptionalCredits = enrolledOptionalCredits;
+        this.enrolledComplementaryCredits = enrolledComplementaryCredits;
+        this.enrolledElectiveCredits = enrolledElectiveCredits;
         this.completed = new TreeSet<>();
         this.enabled = new TreeSet<>();
         this.disabled = new TreeSet<>();
@@ -89,11 +97,40 @@ public class StudentCurriculumProgress {
     }
 
     public int getEnrolledCredits() {
-        return enrolledCredits;
+        return enrolledMandatoryCredits + enrolledOptionalCredits +
+                enrolledComplementaryCredits + enrolledElectiveCredits;
     }
 
-    public void setEnrolledCredits(int enrolledCredits) {
-        this.enrolledCredits = enrolledCredits;
+    public int getEnrolledMandatoryCredits() {
+        return enrolledMandatoryCredits;
+    }
+
+    public void setEnrolledMandatoryCredits(int enrolledMandatoryCredits) {
+        this.enrolledMandatoryCredits = enrolledMandatoryCredits;
+    }
+
+    public int getEnrolledOptionalCredits() {
+        return enrolledOptionalCredits;
+    }
+
+    public void setEnrolledOptionalCredits(int enrolledOptionalCredits) {
+        this.enrolledOptionalCredits = enrolledOptionalCredits;
+    }
+
+    public int getEnrolledComplementaryCredits() {
+        return enrolledComplementaryCredits;
+    }
+
+    public void setEnrolledComplementaryCredits(int enrolledComplementaryCredits) {
+        this.enrolledComplementaryCredits = enrolledComplementaryCredits;
+    }
+
+    public int getEnrolledElectiveCredits() {
+        return enrolledElectiveCredits;
+    }
+
+    public void setEnrolledElectiveCredits(int enrolledElectiveCredits) {
+        this.enrolledElectiveCredits = enrolledElectiveCredits;
     }
 
     public Collection<SubjectKey> getCompleted() {
@@ -145,7 +182,10 @@ public class StudentCurriculumProgress {
                 ", completedElectiveCredits=" + completedElectiveCredits +
                 ", completedComplementaryCredits=" + completedComplementaryCredits +
                 ", completedComplementaryActivities=" + completedComplementaryActivities +
-                ", enrolledCredits=" + enrolledCredits +
+                ", enrolledMandatoryCredits=" + enrolledMandatoryCredits +
+                ", enrolledOptionalCredits=" + enrolledOptionalCredits +
+                ", enrolledComplementaryCredits=" + enrolledComplementaryCredits +
+                ", enrolledElectiveCredits=" + enrolledElectiveCredits +
                 ", completed=" + completed +
                 ", enabled=" + enabled +
                 ", disabled=" + disabled +

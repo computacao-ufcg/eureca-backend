@@ -406,7 +406,8 @@ public class IndexesHolder {
                 // Setup student progress on his/her curriculum
                 this.studentCurriculumProgressMap.put(k, new StudentCurriculumProgress(v.getCompletedTerms(),
                         0, 0, 0,
-                        0, 0, v.getEnrolledCredits()));
+                        0, 0, 0,
+                        0, 0, 0));
             }
             if (v.isAlumnus()) {
                 // All alumni per course
@@ -512,40 +513,49 @@ public class IndexesHolder {
     private void updateStudentProgress() {
         Map<NationalIdRegistrationKey, StudentCurriculumProgress> studentCurriculumProgressMap;
         this.studentCurriculumProgressMap.forEach((studentKey, studentCurriculumProgress) -> {
-            int accMandatory = 0;
-            int accComplementary = 0;
-            int accOptional = 0;
-            int accElective = 0;
-            int accActivities = 0;
             StudentData studentData = this.studentsMap.get(studentKey);
             CurriculumKey curriculumKey = new CurriculumKey(studentData.getCourseCode(), studentData.getCurriculumCode());
             Curriculum curriculum = this.curriculumMap.get(curriculumKey).createCurriculum(curriculumKey);
-            for (SubjectKey subjectKey : studentCurriculumProgress.getCompleted()) {
-                SubjectData subjectData = this.subjectsMap.get(subjectKey);
-                if (curriculum.getMandatorySubjectsList().contains(subjectKey.getSubjectCode())) {
-                    accMandatory += subjectData.getCredits();
-                }
-                if (curriculum.getComplementarySubjectsList().contains(subjectKey.getSubjectCode())) {
-                    accComplementary += subjectData.getCredits();
-                }
-                if (curriculum.getOptionalSubjectsList().contains(subjectKey.getSubjectCode())) {
-                    accOptional += subjectData.getCredits();
-                }
-                if (curriculum.getElectiveSubjectsList().contains(subjectKey.getSubjectCode())) {
-                    accElective += subjectData.getCredits();
-                }
-                if (curriculum.getComplementaryActivitiesList().contains(subjectKey.getSubjectCode())) {
-                    accActivities += subjectData.getCredits();
-                }
-            }
-            studentCurriculumProgress.setCompletedMandatoryCredits(accMandatory);
-            studentCurriculumProgress.setCompletedComplementaryCredits(accComplementary);
-            studentCurriculumProgress.setCompletedOptionalCredits(accOptional);
-            studentCurriculumProgress.setCompletedElectiveCredits(accElective);
-            studentCurriculumProgress.setCompletedComplementaryActivities(accActivities);
+            ProgressSummary progress = computeProgress(studentCurriculumProgress.getCompleted(), curriculum);
+            studentCurriculumProgress.setCompletedMandatoryCredits(progress.getMandatory());
+            studentCurriculumProgress.setCompletedComplementaryCredits(progress.getComplementary());
+            studentCurriculumProgress.setCompletedOptionalCredits(progress.getOptional());
+            studentCurriculumProgress.setCompletedElectiveCredits(progress.getElective());
+            studentCurriculumProgress.setCompletedComplementaryActivities(progress.getActivities());
+            progress = computeProgress(studentCurriculumProgress.getOngoing(), curriculum);
+            studentCurriculumProgress.setEnrolledMandatoryCredits(progress.getMandatory());
+            studentCurriculumProgress.setEnrolledComplementaryCredits(progress.getComplementary());
+            studentCurriculumProgress.setEnrolledOptionalCredits(progress.getOptional());
+            studentCurriculumProgress.setEnrolledElectiveCredits(progress.getElective());
             LOGGER.debug(String.format(Messages.UPDATED_PROGRESS_S, studentCurriculumProgress.toString()));
         });
+    }
 
+    private ProgressSummary computeProgress(Collection<SubjectKey> subjects, Curriculum curriculum) {
+        int accMandatory = 0;
+        int accComplementary = 0;
+        int accOptional = 0;
+        int accElective = 0;
+        int accActivities = 0;
+        for (SubjectKey subjectKey : subjects) {
+            SubjectData subjectData = this.subjectsMap.get(subjectKey);
+            if (curriculum.getMandatorySubjectsList().contains(subjectKey.getSubjectCode())) {
+                accMandatory += subjectData.getCredits();
+            }
+            if (curriculum.getComplementarySubjectsList().contains(subjectKey.getSubjectCode())) {
+                accComplementary += subjectData.getCredits();
+            }
+            if (curriculum.getOptionalSubjectsList().contains(subjectKey.getSubjectCode())) {
+                accOptional += subjectData.getCredits();
+            }
+            if (curriculum.getElectiveSubjectsList().contains(subjectKey.getSubjectCode())) {
+                accElective += subjectData.getCredits();
+            }
+            if (curriculum.getComplementaryActivitiesList().contains(subjectKey.getSubjectCode())) {
+                accActivities += subjectData.getCredits();
+            }
+        }
+        return new ProgressSummary(accMandatory, accOptional, accComplementary, accElective, accActivities);
     }
 
     private void buildTeachersIndex() {
@@ -835,5 +845,41 @@ public class IndexesHolder {
 
     public Map<String, Map<String, Collection<Enrollment>>> getEnrollmentsPerStudentPerTerm() {
         return this.enrollmentsPerStudentPerTerm;
+    }
+
+    private class ProgressSummary {
+        private int mandatory;
+        private int optional;
+        private int complementary;
+        private int elective;
+        private int activities;
+
+        public ProgressSummary(int mandatory, int optional, int complementary, int elective, int activities) {
+            this.mandatory = mandatory;
+            this.optional = optional;
+            this.complementary = complementary;
+            this.elective = elective;
+            this.activities = activities;
+        }
+
+        public int getMandatory() {
+            return mandatory;
+        }
+
+        public int getOptional() {
+            return optional;
+        }
+
+        public int getComplementary() {
+            return complementary;
+        }
+
+        public int getElective() {
+            return elective;
+        }
+
+        public int getActivities() {
+            return activities;
+        }
     }
 }

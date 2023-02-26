@@ -34,6 +34,8 @@ public class Student implements Comparable {
     private int optionalCredits;
     private int complementaryHours;
     private int complementaryCredits;
+    private int electiveHours;
+    private int electiveCredits;
     private int attemptedCredits;
     private double gpa;
     private double mc;
@@ -49,8 +51,9 @@ public class Student implements Comparable {
                    String maritalStatus, String nationality, String country, String placeOfBirth, String race, String statusStr,
                    StudentStatus status, String statusTerm, String admissionStr, String admissionTerm, String disabilities,
                    String affirmativePolicy, String secondarySchool, String secondarySchoolGraduationYear,
-                   String courseCode, String curriculumCode, Curriculum curriculum, int mandatoryHours, int mandatoryCredits, int optionalHours,
-                   int optionalCredits, int complementaryHours, int complementaryCredits, int attemptedCredits,
+                   String courseCode, String curriculumCode, Curriculum curriculum, int mandatoryHours, int mandatoryCredits,
+                   int optionalHours, int optionalCredits, int complementaryHours, int complementaryCredits,
+                   int electiveHours, int electiveCredits, int attemptedCredits,
                    double gpa, double mc, double iea, int completedTerms, int suspendedTerms, int institutionalEnrollments,
                    int mobilityTerms, int enrolledCredits, double admissionGrade) {
         this.registration = new Registration(registration);
@@ -82,7 +85,9 @@ public class Student implements Comparable {
         this.optionalCredits = optionalCredits;
         this.complementaryHours = complementaryHours;
         this.complementaryCredits = complementaryCredits;
-        this.attemptedCredits = attemptedCredits;
+        this.electiveHours = electiveHours;
+        this.optionalCredits = optionalCredits;
+        this.electiveCredits = electiveCredits;
         this.gpa = gpa;
         this.mc = mc;
         this.iea = iea;
@@ -324,6 +329,22 @@ public class Student implements Comparable {
 
     public void setComplementaryCredits(int complementaryCredits) {
         this.complementaryCredits = complementaryCredits;
+    }
+
+    public int getElectiveHours() {
+        return electiveHours;
+    }
+
+    public void setElectiveHours(int electiveHours) {
+        this.electiveHours = electiveHours;
+    }
+
+    public int getElectiveCredits() {
+        return electiveCredits;
+    }
+
+    public void setElectiveCredits(int electiveCredits) {
+        this.electiveCredits = electiveCredits;
     }
 
     public int getAttemptedCredits() {

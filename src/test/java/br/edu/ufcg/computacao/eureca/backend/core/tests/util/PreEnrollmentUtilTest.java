@@ -130,7 +130,7 @@ public class PreEnrollmentUtilTest {
         int enrolledCredits = 16;
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
-                0, enrolledCredits);
+                0, 0, 0, 0, 0);
 
         PreEnrollmentUtil.sanitizeSubject(curriculum.getCourseCode(), curriculum.getCurriculumCode(), subjectSchedule, progress);
 
@@ -142,7 +142,7 @@ public class PreEnrollmentUtilTest {
     public void testGetIdealCreditsPerSubjectTypeWithMaxCredits() {
         StudentCurriculumProgress progress = new StudentCurriculumProgress(5, 54,
                 0, 8, 0,
-                0, 0);
+                0, 0, 0, 0, 0);
         int maxCredits = 24;
         Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress, maxCredits);
 
@@ -167,7 +167,7 @@ public class PreEnrollmentUtilTest {
     public void testGetIdealCreditsPerSubjectTypeWithoutMaxCreditsTerm1() {
         StudentCurriculumProgress progress = new StudentCurriculumProgress(0, 0,
                 0,0, 0,
-                0, 0);
+                0, 0, 0, 0, 0);
         Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,20);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
@@ -197,7 +197,7 @@ public class PreEnrollmentUtilTest {
     public void testGetIdealCreditsPerSubjectTypeWithoutMaxCreditsTerm2() {
         StudentCurriculumProgress progress = new StudentCurriculumProgress(1, 16,
                 0,4, 0,
-                0, 0);
+                0, 0, 0, 0, 0);
         Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,20);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
@@ -227,7 +227,7 @@ public class PreEnrollmentUtilTest {
     public void testGetIdealCreditsPerSubjectTypeWithoutMaxCreditsTerm3() {
         StudentCurriculumProgress progress = new StudentCurriculumProgress(2, 32,
                 0,8, 0,
-                0, 0);
+                0, 0, 0, 0, 0);
         Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,24);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
@@ -257,7 +257,7 @@ public class PreEnrollmentUtilTest {
     public void testGetIdealCreditsPerSubjectTypeWithoutMaxCreditsTerm4() {
         StudentCurriculumProgress progress = new StudentCurriculumProgress(3, 56,
                 0,8, 0,
-                0, 0);
+                0, 0, 0, 0, 0);
         Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,24);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
@@ -287,7 +287,7 @@ public class PreEnrollmentUtilTest {
     public void testGetIdealCreditsPerSubjectTypeWithoutMaxCreditsTerm5() {
         StudentCurriculumProgress progress = new StudentCurriculumProgress(4, 80,
                 0,8, 0,
-                0, 0);
+                0, 0, 0, 0, 0);
         Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,24);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
@@ -317,7 +317,7 @@ public class PreEnrollmentUtilTest {
     public void testGetIdealCreditsPerSubjectTypeWithoutMaxCreditsTerm6() {
         StudentCurriculumProgress progress = new StudentCurriculumProgress(5, 104,
                 0,8, 0,
-                0, 0);
+                0, 0, 0, 0, 0);
         Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,20);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
@@ -347,7 +347,7 @@ public class PreEnrollmentUtilTest {
     public void testGetIdealCreditsPerSubjectTypeWithoutMaxCreditsTerm7() {
         StudentCurriculumProgress progress = new StudentCurriculumProgress(6, 116,
                 8,8, 0,
-                0, 0);
+                0, 0, 0, 0, 0);
         Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,20);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
@@ -378,7 +378,7 @@ public class PreEnrollmentUtilTest {
     public void testGetIdealCreditsPerSubjectTypeWithoutMaxCreditsTerm8() {
         StudentCurriculumProgress progress = new StudentCurriculumProgress(7, 124,
                 16,12, 0,
-                0, 0);
+                0, 0, 0, 0, 0);
         Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,20);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
@@ -408,7 +408,7 @@ public class PreEnrollmentUtilTest {
     public void testGetIdealCreditsPerSubjectTypeWithoutMaxCreditsTerm9() {
         StudentCurriculumProgress progress = new StudentCurriculumProgress(8, 128,
                 24,16, 4,
-                0, 0);
+                0, 0, 0, 0, 0);
         Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,24);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
@@ -438,7 +438,7 @@ public class PreEnrollmentUtilTest {
     public void testGetIdealCreditsPerSubjectTypeWithoutMaxCreditsTermGreaterThan9() {
         StudentCurriculumProgress progress = new StudentCurriculumProgress(9, 132,
                 40,16, 8,
-                0, 0);
+                0, 0, 0, 0, 0);
         Map<SubjectType, Integer> response = PreEnrollmentUtil.getIdealCreditsPerSubjectType(this.curriculum, progress,24);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(this.curriculum, progress);
@@ -472,7 +472,7 @@ public class PreEnrollmentUtilTest {
         int enrolledCredits = 0;
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
-                0, enrolledCredits);
+                0, 0, 0, 0, 0);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
         int expectedActualTerm = 0;
@@ -489,7 +489,7 @@ public class PreEnrollmentUtilTest {
         int enrolledCredits = 0; // not important
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
-                0, enrolledCredits);
+                0, 0, 0, 0, 0);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
         int expectedActualTerm = 0;
@@ -506,7 +506,7 @@ public class PreEnrollmentUtilTest {
         int enrolledCredits = 0; // not important
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
-                0, enrolledCredits);
+                0, 0, 0, 0, 0);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
         int expectedActualTerm = 1;
@@ -523,7 +523,7 @@ public class PreEnrollmentUtilTest {
         int enrolledCredits = 0; // not important
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
-                0, enrolledCredits);
+                0, 0, 0, 0, 0);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
         int expectedActualTerm = 1;
@@ -540,7 +540,7 @@ public class PreEnrollmentUtilTest {
         int enrolledCredits = 0; // not important
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
-                0, enrolledCredits);
+                0, 0, 0, 0, 0);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
         int expectedActualTerm = 2;
@@ -557,7 +557,7 @@ public class PreEnrollmentUtilTest {
         int enrolledCredits = 0; // not important
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
-                0, enrolledCredits);
+                0, 0, 0, 0, 0);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
         int expectedActualTerm = 2;
@@ -574,7 +574,7 @@ public class PreEnrollmentUtilTest {
         int enrolledCredits = 0; // not important
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
-                0, enrolledCredits);
+                0, 0, 0, 0, 0);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
         int expectedActualTerm = 3;
@@ -591,7 +591,7 @@ public class PreEnrollmentUtilTest {
         int enrolledCredits = 0; // not important
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
-                0, enrolledCredits);
+                0, 0, 0, 0, 0);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
         int expectedActualTerm = 3;
@@ -608,7 +608,7 @@ public class PreEnrollmentUtilTest {
         int enrolledCredits = 0; // not important
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
-                0, enrolledCredits);
+                0, 0, 0, 0, 0);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
         int expectedActualTerm = 4;
@@ -625,7 +625,7 @@ public class PreEnrollmentUtilTest {
         int enrolledCredits = 0; // not important
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
-                0, enrolledCredits);
+                0, 0, 0, 0, 0);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
         int expectedActualTerm = 4;
@@ -642,7 +642,7 @@ public class PreEnrollmentUtilTest {
         int enrolledCredits = 0; // not important
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
-                0, enrolledCredits);
+                0, 0, 0, 0, 0);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
         int expectedActualTerm = 5;
@@ -659,7 +659,7 @@ public class PreEnrollmentUtilTest {
         int enrolledCredits = 0; // not important
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
-                0, enrolledCredits);
+                0, 0, 0, 0, 0);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
         int expectedActualTerm = 5;
@@ -676,7 +676,7 @@ public class PreEnrollmentUtilTest {
         int enrolledCredits = 0; // not important
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
-                0, enrolledCredits);
+                0, 0, 0, 0, 0);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
         int expectedActualTerm = 6;
@@ -693,7 +693,7 @@ public class PreEnrollmentUtilTest {
         int enrolledCredits = 0; // not important
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
-                0, enrolledCredits);
+                0, 0, 0, 0, 0);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
         int expectedActualTerm = 6;
@@ -710,7 +710,7 @@ public class PreEnrollmentUtilTest {
         int enrolledCredits = 0; // not important
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
-                0, enrolledCredits);
+                0, 0, 0, 0, 0);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
         int expectedActualTerm = 7;
@@ -727,7 +727,7 @@ public class PreEnrollmentUtilTest {
         int enrolledCredits = 0; // not important
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
-                0, enrolledCredits);
+                0, 0, 0, 0, 0);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
         int expectedActualTerm = 7;
@@ -744,7 +744,7 @@ public class PreEnrollmentUtilTest {
         int enrolledCredits = 0; // not important
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
-                0, enrolledCredits);
+                0, 0, 0, 0, 0);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
         int expectedActualTerm = 8;
@@ -761,7 +761,7 @@ public class PreEnrollmentUtilTest {
         int enrolledCredits = 0; // not important
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
-                0, enrolledCredits);
+                0, 0, 0, 0, 0);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
         int expectedActualTerm = 8;
@@ -778,7 +778,7 @@ public class PreEnrollmentUtilTest {
         int enrolledCredits = 0; // not important
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
-                0, enrolledCredits);
+                0, 0, 0, 0, 0);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
         int expectedActualTerm = 9;
@@ -795,7 +795,7 @@ public class PreEnrollmentUtilTest {
         int enrolledCredits = 0; // not important
         StudentCurriculumProgress progress = new StudentCurriculumProgress(completedTerms, completedMandatoryCredits,
                 completedOptionalCredits, 0, completedComplementaryCredits,
-                0, enrolledCredits);
+                0, 0, 0, 0, 0);
 
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
         int expectedActualTerm = curriculum.getMinNumberOfTerms(); // should never be above

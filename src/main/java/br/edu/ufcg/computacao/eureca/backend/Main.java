@@ -38,7 +38,9 @@ public class Main implements ApplicationRunner {
             // Setting up Data Access facade
             String mapsListFile = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.MAPS_FILE,
                     ConfigurationPropertyDefaults.DEFAULT_MAPS_FILE);
-            DataAccessFacade dataAccessFacade = new ScsvFilesDataAccessFacade(mapsListFile);
+            boolean useScao = ((PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.USE_SCAO,
+                    ConfigurationPropertyDefaults.DEFAULT_USE_SCAO).equals("true")) ? true : false);
+            DataAccessFacade dataAccessFacade = new ScsvFilesDataAccessFacade(mapsListFile, useScao);
             DataAccessFacadeHolder.getInstance().setDataAccessFacade(dataAccessFacade);
 
             // Setting up Application facade

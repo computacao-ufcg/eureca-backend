@@ -76,7 +76,7 @@ public class TestUtils {
     public static StudentsResponse getStudentsCsvResponse() {
         StudentData mockedStudentData = new StudentData("x", "Ativo", "VESTIBULAR 2007.2", "x", "09/12/1965", "x", "x",
                 "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", 1980,196,840,
-                56,450,30,5.68,
+                56,450,30,0, 0, 5.68,
                 7,1.69,14,1,0,
                 0,0,0);
         StudentCSV mockedStudentDataResponse = new StudentCSV(mockedStudentData.

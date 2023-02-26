@@ -60,7 +60,6 @@ public class PreEnrollmentController {
 
         for (String studentRegistration : activesRegistrations) {
             LOGGER.debug(String.format(Messages.PRE_ENROLLING_S, studentRegistration));
-
             StudentCurriculumProgress studentProgress = this.dataAccessFacade.getStudentCurriculumProgress(studentRegistration);
             // Creates list of available subjects
             PreEnrollmentData preEnrollmentData = this.getPreEnrollmentData(courseCode, curriculumCode, term, studentProgress);
@@ -241,9 +240,16 @@ public class PreEnrollmentController {
         int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, studentProgress);
         int nextTerm = Math.min(curriculum.getMinNumberOfTerms(), (actualTerm + 1));
 
-        // A more aggressive approach could consider curriculum.getMaxNumberOfEnrolledCredits()
         if (maxCredits == null) maxCredits = new Integer(curriculum.getIdealMaxCredits(nextTerm));
 
+        // Check whether student can extrapolate the maximum amount of credits per term
+        int deficit = computeDeficit(curriculum, null, studentProgress);
+        if (deficit <= (curriculum.getMaxNumberOfEnrolledCredits() +
+                curriculum.getExceptionalAdditionalEnrolledCredits())) {
+            maxCredits = deficit;
+        }
+
+        // Distribute maxCredits among the different types of subjects
         Map<SubjectType, Integer> idealCreditsMap = PreEnrollmentUtil.getIdealCreditsPerSubjectType(curriculum,
                 studentProgress, maxCredits);
         int idealMandatoryCredits = idealCreditsMap.get(SubjectType.MANDATORY);
@@ -291,11 +297,12 @@ public class PreEnrollmentController {
         // We use the rate on the missing credits to define the order of prioritization of
         // optional and elective subjects; the higher the rate, the higher the priority
 
-        int missingOptionalCredits = Math.max(0, (curriculum.getTargetOptionalCredits(actualTerm) -
-                studentProgress.getCompletedOptionalCredits()));
-        int missingElectiveCredits = Math.max(0, (curriculum.getTargetElectiveCredits(actualTerm) -
-                studentProgress.getCompletedElectiveCredits()));        double optionalMissingRate = (double) missingOptionalCredits / (double) curriculum.getTargetOptionalCredits(actualTerm);
-        double electiveMissingRate = (double) missingElectiveCredits / (double) curriculum.getTargetElectiveCredits(actualTerm);
+        int missingOptionalCredits = Math.max(0, (curriculum.getTargetOptionalCredits(nextTerm) -
+                (studentProgress.getCompletedOptionalCredits() + studentProgress.getEnrolledOptionalCredits())));
+        int missingElectiveCredits = Math.max(0, (curriculum.getTargetElectiveCredits(nextTerm) -
+                (studentProgress.getCompletedElectiveCredits() + studentProgress.getEnrolledElectiveCredits())));
+        double optionalMissingRate = (double) missingOptionalCredits / (double) curriculum.getTargetOptionalCredits(nextTerm);
+        double electiveMissingRate = (double) missingElectiveCredits / (double) curriculum.getTargetElectiveCredits(nextTerm);
 
         if (optionalMissingRate >= electiveMissingRate) {
             if (studentPreEnrollment.isOptionalNotFull()) {
@@ -316,6 +323,7 @@ public class PreEnrollmentController {
                 this.enrollSubjects(studentPreEnrollment, availableOptionalSubjects, term);
             }
         }
+
         studentPreEnrollment.setPossibleGraduate(isPossibleGraduate(studentPreEnrollment, studentProgress, curriculum));
         return studentPreEnrollment;
     }
@@ -516,25 +524,33 @@ public class PreEnrollmentController {
 
     private boolean isPossibleGraduate(StudentPreEnrollment studentPreEnrollment, StudentCurriculumProgress
             studentProgress, Curriculum curriculum) {
-        int additional = curriculum.getExceptionalAdditionalEnrolledCredits();
+        return (computeDeficit(curriculum, studentPreEnrollment, studentProgress) == 0);
+    }
+
+    private int computeDeficit(Curriculum curriculum, StudentPreEnrollment studentPreEnrollment, StudentCurriculumProgress studentProgress) {
         int mandatoryNeeded = curriculum.getMinMandatoryCreditsNeeded();
         int complementaryNeeded = curriculum.getMinComplementaryCreditsNeeded();
         int optionalNeeded = curriculum.getMinOptionalCreditsNeeded();
         int electiveNeeded = curriculum.getMinElectiveCreditsNeeded();
+
         int mandatoryCompleted = studentProgress.getCompletedMandatoryCredits() +
-                studentPreEnrollment.getMandatoryCredits();
+                studentProgress.getEnrolledMandatoryCredits() +
+                (studentPreEnrollment != null ? studentPreEnrollment.getMandatoryCredits() : 0);
         int complementaryCompleted = studentProgress.getCompletedComplementaryCredits() +
-                studentPreEnrollment.getComplementaryCredits();
+                studentProgress.getEnrolledComplementaryCredits() +
+                (studentPreEnrollment != null ? studentPreEnrollment.getComplementaryCredits() : 0);
         int optionalCompleted = studentProgress.getCompletedOptionalCredits() +
-                studentPreEnrollment.getOptionalCredits();
+                studentProgress.getEnrolledOptionalCredits() +
+                (studentPreEnrollment != null ? studentPreEnrollment.getOptionalCredits() : 0);
         int electiveCompleted = studentProgress.getCompletedElectiveCredits() +
-                studentPreEnrollment.getElectiveCredits();
-        int mandatoryDeficit = (mandatoryCompleted >= mandatoryNeeded ? 0 : 2);
-        int complementaryDeficit = (complementaryCompleted >= complementaryNeeded ? 0 : 2);
-        int optionalDeficit = ((optionalCompleted + additional) < optionalNeeded ? 2 :
-                (optionalCompleted >= optionalNeeded ? 0 : 1));
-        int electiveDeficit = ((electiveCompleted + additional) < electiveNeeded ? 2 :
-                (electiveCompleted >= electiveNeeded ? 0 : 1));
-        return ((mandatoryDeficit + complementaryDeficit + optionalDeficit + electiveDeficit) <= 1);
+                studentProgress.getEnrolledElectiveCredits() +
+                (studentPreEnrollment != null ? studentPreEnrollment.getElectiveCredits() : 0);
+
+        int deficit = Math.max(0, mandatoryNeeded - mandatoryCompleted);
+        deficit += Math.max(0, complementaryNeeded - complementaryCompleted);
+        deficit += Math.max(0, optionalNeeded - optionalCompleted);
+        deficit += Math.max(0, electiveNeeded - electiveCompleted);
+
+        return deficit;
     }
 }

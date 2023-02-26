@@ -5,4 +5,5 @@ public class ConfigurationPropertyDefaults {
     public static final String BUILD_NUMBER = "[testing mode]";
     public static final String TABLES_DIR = "tables";
     public static final String DEFAULT_MAPS_FILE = "maps.conf";
+    public static final String DEFAULT_USE_SCAO = "false";
 }

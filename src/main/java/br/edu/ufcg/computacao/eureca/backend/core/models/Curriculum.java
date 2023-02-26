@@ -129,46 +129,46 @@ public class Curriculum {
     }
 
     public Integer getExpectedMinAccumulatedCredits(int term) {
-        return this.expectedMinAccumulatedCreditsList.get(term);
+        return this.expectedMinAccumulatedCreditsList.get(term - 1);
     }
 
-    public int getTargetMandatoryCredits(int lastTermCompleted) {
+    public int getTargetMandatoryCredits(int term) {
         int target = 0;
-        for (int i = 0; i <= (lastTermCompleted - 1); i++) {
+        for (int i = 0; i < term - 1; i++) {
             target += this.idealMandatoryCreditsList.get(i);
         }
         return target;
     }
 
-    public int getTargetComplementaryCredits(int lastTermCompleted) {
+    public int getTargetComplementaryCredits(int term) {
         int target = 0;
-        for (int i = 0; i <= (lastTermCompleted - 1); i++) {
+        for (int i = 0; i < term - 1; i++) {
             target += this.idealComplementaryCreditsList.get(i);
         }
         return target;
     }
 
-    public int getTargetOptionalCredits(int lastTermCompleted) {
+    public int getTargetOptionalCredits(int term) {
         int target = 0;
-        for (int i = 0; i <= (lastTermCompleted - 1); i++) {
+        for (int i = 0; i < term - 1; i++) {
             target += this.idealOptionalCreditsList.get(i);
         }
         return target;
     }
 
-    public int getTargetElectiveCredits(int lastTermCompleted) {
+    public int getTargetElectiveCredits(int term) {
         int target = 0;
-        for (int i = 0; i <= (lastTermCompleted - 1); i++) {
+        for (int i = 0; i < term - 1; i++) {
             target += this.idealElectiveCreditsList.get(i);
         }
         return target;
     }
 
-    public int getIdealMaxCredits(int nextTerm) {
-        return this.getIdealMandatoryCredits(nextTerm) +
-                this.getIdealComplementaryCredits(nextTerm) +
-                this.getIdealOptionalCredits(nextTerm) +
-                this.getIdealElectiveCredits(nextTerm);
+    public int getIdealMaxCredits(int term) {
+        return this.getIdealMandatoryCredits(term) +
+                this.getIdealComplementaryCredits(term) +
+                this.getIdealOptionalCredits(term) +
+                this.getIdealElectiveCredits(term);
     }
 
     public void setExpectedMinAccumulatedCreditsList(ArrayList<Integer> expectedMinAccumulatedCreditsList) {

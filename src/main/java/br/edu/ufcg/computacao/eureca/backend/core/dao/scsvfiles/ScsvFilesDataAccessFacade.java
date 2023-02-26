@@ -12,7 +12,12 @@ import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeacherSt
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsResponse;
 import br.edu.ufcg.computacao.eureca.backend.api.http.response.teacher.TeachersStatisticsSummary;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
+import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.DataAccessFacade;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scao.models.ScaoEnrollment;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scao.models.ScaoStudent;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scao.services.ScaoEnrollmentService;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scao.services.ScaoStudentsService;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.*;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.models.StudentClassification;
 import br.edu.ufcg.computacao.eureca.backend.core.models.*;
@@ -28,9 +33,106 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     private MapsHolder mapsHolder;
     private IndexesHolder indexesHolder;
 
-    public ScsvFilesDataAccessFacade(String mapsListFile) {
+    public ScsvFilesDataAccessFacade(String mapsListFile, boolean useScao) {
         this.mapsHolder = new MapsHolder(mapsListFile);
+        if (useScao) updateMaps(this.mapsHolder);
         this.indexesHolder = new IndexesHolder(this.mapsHolder);
+    }
+
+    private void updateMaps(MapsHolder mapsHolder) {
+        Map<NationalIdRegistrationKey, StudentData> studentsMap = getStudentsMapFromScao();
+        Map<RegistrationSubjectCodeTermKey, EnrollmentData> enrollmentsMap = getEnrollmentsMapFromScao(studentsMap);
+        mapsHolder.addMap(SystemConstants.STUDENTS_TABLE_NAME, studentsMap);
+        mapsHolder.addMap(SystemConstants.ENROLLMENTS_TABLE_NAME, enrollmentsMap);
+    }
+
+    private Collection<String> getRegistrations(Set<NationalIdRegistrationKey> keySet) {
+        Collection<String> registrations = new ArrayList<>();
+        keySet.forEach(key -> {
+            registrations.add(key.getRegistration());
+        });
+        return registrations;
+    }
+
+    private Map<NationalIdRegistrationKey, StudentData> getStudentsMapFromScao() {
+        Map<NationalIdRegistrationKey, StudentData> studentsMap = new HashMap<>();
+        Collection<ScaoStudent> scaoStudents = ScaoStudentsService.getInstance().getStudentsPerCourse(SystemConstants.COURSE_CODE);
+        scaoStudents.forEach(student -> {
+           studentsMap.put(student.createKey(), student.createData());
+        });
+        return studentsMap;
+    }
+
+    private Map<RegistrationSubjectCodeTermKey, EnrollmentData> getEnrollmentsMapFromScao(Map<NationalIdRegistrationKey, StudentData> studentsMap) {
+        Map<RegistrationSubjectCodeTermKey, EnrollmentData> enrollmentsMap = new HashMap<>();
+        Map<SubjectKey, SubjectData> subjectsMap = this.mapsHolder.getMap(SystemConstants.SUBJECTS_TABLE_NAME);
+        for (NationalIdRegistrationKey studentKey: studentsMap.keySet()) {
+            int attemptedCredits = 0;
+            int complementaryCredits = 0;
+            int mandatoryCredits = 0;
+            int optionalCredits = 0;
+            int electiveCredits = 0;
+            int accumulatedGpaCredits = 0;
+            double accumulatedGrade = 0.0;
+            int enrolledCredits = 0;
+            Collection<String> terms = new TreeSet<>();
+            StudentData studentData = studentsMap.get(studentKey);
+            Collection<ScaoEnrollment> scaoEnrollments = ScaoEnrollmentService.getInstance().getEnrollmentsByRegistration(studentKey.getRegistration());
+            for (ScaoEnrollment enrollment: scaoEnrollments) {
+                SubjectData subjectData = subjectsMap.get(new SubjectKey(enrollment.getCourseCode(), studentData.getCurriculumCode(), enrollment.getSubjectCode()));
+                if (subjectData == null) continue;
+                int credits = subjectData.getCredits();
+                enrollmentsMap.put(enrollment.createKey(), enrollment.createData(credits));
+                String status = enrollment.getStatus();
+                if (status.equals(Constants.STR_ONGOING)) {
+                    enrolledCredits += credits;
+                } else {
+                    if (!status.equals(Constants.STR_EXEMPTED)) {
+                        attemptedCredits += credits;
+                    }
+                    if (!status.equals(Constants.STR_CANCELLED) &&
+                            !status.equals(Constants.STR_SUSPENDED)) {
+                        if (!status.equals(Constants.STR_EXEMPTED) || enrollment.getGrade() != 0.0) {
+                            accumulatedGpaCredits += credits;
+                            accumulatedGrade += (credits * enrollment.getGrade());
+                            terms.add(enrollment.getTerm());
+                        }
+                    }
+                    if (status.equals(Constants.STR_EXEMPTED) || status.equals(Constants.STR_SUCCEEDED)) {
+                        switch (subjectData.getType()) {
+                            case Constants.CODE_MANDATORY:
+                                mandatoryCredits += credits;
+                                break;
+                            case Constants.CODE_COMPLEMENTARY:
+                                complementaryCredits += credits;
+                                break;
+                            case Constants.CODE_OPTIONAL:
+                                optionalCredits += credits;
+                                break;
+                            case Constants.CODE_ELECTIVE:
+                                electiveCredits += credits;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+            studentData.setAttemptedCredits(attemptedCredits);
+            studentData.setComplementaryCredits(complementaryCredits);
+            studentData.setComplementaryHours(complementaryCredits * 15);
+            studentData.setMandatoryCredits(mandatoryCredits);
+            studentData.setMandatoryHours(mandatoryCredits * 15);
+            studentData.setOptionalCredits(optionalCredits);
+            studentData.setOptionalHours(optionalCredits * 15);
+            studentData.setElectiveCredits(optionalCredits);
+            studentData.setElectiveHours(optionalCredits * 15);
+            studentData.setGpa(accumulatedGrade / accumulatedGpaCredits);
+            studentData.setCompletedTerms(terms.size());
+            studentData.setEnrolledCredits(enrolledCredits);
+            studentsMap.put(studentKey, studentData);
+        }
+        return enrollmentsMap;
     }
 
     @Override

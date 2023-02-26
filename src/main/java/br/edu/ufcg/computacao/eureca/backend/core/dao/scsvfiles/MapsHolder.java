@@ -3,6 +3,8 @@ package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles;
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.EurecaMapKey;
 import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.EurecaMapValue;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.NationalIdRegistrationKey;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries.StudentData;
 import br.edu.ufcg.computacao.eureca.backend.core.util.factory.ClassFactory;
 import br.edu.ufcg.computacao.eureca.backend.core.util.loaders.GenericLoadMapFromScsvFile;
 import br.edu.ufcg.computacao.eureca.common.exceptions.FatalErrorException;
@@ -28,7 +30,11 @@ public class MapsHolder<T extends EurecaMapKey, V extends EurecaMapValue> {
         }
     }
 
-    private Map<String, Map<T,V>> loadAllMaps(String mapsListFile) throws IOException {
+    public void addMap(String name, Map<T, V> table) {
+        this.maps.put(name, table);
+    }
+
+    private Map<String, Map<T, V>> loadAllMaps(String mapsListFile) throws IOException {
         String filePath = HomeDir.getPath() + mapsListFile;
         Map<String, Map<T, V>> maps = new HashMap<>();
 
@@ -46,7 +52,7 @@ public class MapsHolder<T extends EurecaMapKey, V extends EurecaMapValue> {
                 Map<T, V> tvMap = loader.loadMap(tableName, tClass.getClass(), vClass.getClass(), keySize);
                 LOGGER.debug(String.format(Messages.ADD_TABLE_S, tableName));
                 maps.put(tableName, tvMap);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 System.exit(-1);
             }
@@ -60,7 +66,7 @@ public class MapsHolder<T extends EurecaMapKey, V extends EurecaMapValue> {
     }
 
     public EurecaMapValue getValue(String mapName, EurecaMapKey key) {
-        Map<T,V> map = this.maps.get(mapName);
+        Map<T, V> map = this.maps.get(mapName);
         return map.get(key);
     }
 
@@ -71,7 +77,7 @@ public class MapsHolder<T extends EurecaMapKey, V extends EurecaMapValue> {
     }
 
     private void printMap(String name) {
-        Map<T,V> map = getMap(name);
+        Map<T, V> map = getMap(name);
         System.out.println("Map: " + name);
         map.forEach((k, v) -> {
             System.out.println("key: [" + k.toString() + "]->[" + v.toString() + "]");

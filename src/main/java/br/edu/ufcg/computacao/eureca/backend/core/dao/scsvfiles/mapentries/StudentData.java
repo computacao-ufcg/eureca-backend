@@ -1,7 +1,7 @@
 package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
 
 import br.edu.ufcg.computacao.eureca.backend.constants.Messages;
-import br.edu.ufcg.computacao.eureca.backend.constants.SystemConstants;
+import br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.Constants;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Curriculum;
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 import br.edu.ufcg.computacao.eureca.backend.core.models.StudentStatus;
@@ -33,6 +33,8 @@ public class StudentData implements EurecaMapValue {
     private int optionalCredits;
     private int complementaryHours;
     private int complementaryCredits;
+    private int electiveHours;
+    private int electiveCredits;
     private double gpa;
     private double mc;
     private double iea;
@@ -52,8 +54,9 @@ public class StudentData implements EurecaMapValue {
                        String maritalStatus, String nationality, String country, String placeOfBirth, String race,
                        String disabilities, String courseCode, String curriculumCode, int mandatoryHours, int mandatoryCredits,
                        int optionalHours, int optionalCredits, int complementaryHours, int complementaryCredits,
-                       double gpa, double mc, double iea, int completedTerms, int suspendedTerms,
-                       int institutionalEnrollments, int mobilityTerms, int enrolledCredits, double admissionGrade) {
+                       int electiveHours, int electiveCredits, double gpa, double mc, double iea,
+                       int completedTerms, int suspendedTerms, int institutionalEnrollments, int mobilityTerms,
+                       int enrolledCredits, double admissionGrade) {
         this.name = name;
         this.statusStr = statusStr;
         this.admissionStr = admissionStr;
@@ -77,6 +80,8 @@ public class StudentData implements EurecaMapValue {
         this.optionalCredits = optionalCredits;
         this.complementaryHours = complementaryHours;
         this.complementaryCredits = complementaryCredits;
+        this.electiveHours = electiveHours;
+        this.electiveCredits = electiveCredits;
         this.gpa = gpa;
         this.mc = mc;
         this.iea = iea;
@@ -279,6 +284,22 @@ public class StudentData implements EurecaMapValue {
         this.complementaryCredits = complementaryCredits;
     }
 
+    public int getElectiveHours() {
+        return electiveHours;
+    }
+
+    public void setElectiveHours(int electiveHours) {
+        this.electiveHours = electiveHours;
+    }
+
+    public int getElectiveCredits() {
+        return electiveCredits;
+    }
+
+    public void setElectiveCredits(int electiveCredits) {
+        this.electiveCredits = electiveCredits;
+    }
+
     public double getGpa() {
         return gpa;
     }
@@ -408,27 +429,28 @@ public class StudentData implements EurecaMapValue {
                 getMappedAffirmativePolicy(), getSecondarySchool(), getSecondarySchoolGraduationYear(), getCourseCode(),
                 getCurriculumCode(), curriculum, getMandatoryHours(), getMandatoryCredits(),
                 getOptionalHours(), getOptionalCredits(), getComplementaryHours(), getComplementaryCredits(),
-                getAttemptedCredits(), getGpa(), getMc(), getIea(), getCompletedTerms(), getSuspendedTerms(),
-                getInstitutionalEnrollments(), getMobilityTerms(), getEnrolledCredits(), getAdmissionGrade());
+                getElectiveHours(), getElectiveCredits(), getAttemptedCredits(), getGpa(), getMc(), getIea(),
+                getCompletedTerms(), getSuspendedTerms(), getInstitutionalEnrollments(), getMobilityTerms(),
+                getEnrolledCredits(), getAdmissionGrade());
     }
 
     private String getMappedAffirmativePolicy() {
         switch(this.getAffirmativePolicy()) {
-            case SystemConstants.L1:
+            case Constants.STR_L1:
                 return "L1";
-            case SystemConstants.L2:
+            case Constants.STR_L2:
                 return "L2";
-            case SystemConstants.L5:
+            case Constants.STR_L5:
                 return "L5";
-            case SystemConstants.L6:
+            case Constants.STR_L6:
                 return "L6";
-            case SystemConstants.L9:
+            case Constants.STR_L9:
                 return "L9";
-            case SystemConstants.L10:
+            case Constants.STR_L10:
                 return "L10";
-            case SystemConstants.L13:
+            case Constants.STR_L13:
                 return "L13";
-            case SystemConstants.L14:
+            case Constants.STR_L14:
                 return "L14";
             default:
                 return "A0";
