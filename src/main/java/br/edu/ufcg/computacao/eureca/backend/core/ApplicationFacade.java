@@ -198,55 +198,53 @@ public class ApplicationFacade {
         return response;
     }
 
-    public StudentPreEnrollmentResponse getPreEnrollment(String token, String courseCode, String curriculumCode,
+    public StudentPreEnrollmentResponse getPreEnrollment(String token, String courseCode,
                                                          String registration, String term, Integer numCredits,
                                                          String optionalPriorityList, String electivePriorityList,
                                                          String complementaryPriorityList, String mandatoryPriorityList)
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_PRE_ENROLLMENT);
         StudentPreEnrollment studentPreEnrollment = this.preEnrollmentController.getStudentPreEnrollment(courseCode,
-                curriculumCode, registration, term, numCredits, optionalPriorityList, electivePriorityList,
+                registration, term, numCredits, optionalPriorityList, electivePriorityList,
                 complementaryPriorityList, mandatoryPriorityList);
         return new StudentPreEnrollmentResponse(studentPreEnrollment);
     }
 
-    public PreEnrollmentsResponse getPreEnrollments(String token, String courseCode, String curriculumCode, String term) throws EurecaException {
+    public PreEnrollmentsResponse getPreEnrollments(String token, String courseCode, String term) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_PRE_ENROLLMENTS);
-        PreEnrollments preEnrollments = this.preEnrollmentController.getActivesPreEnrollments(courseCode, curriculumCode, term);
+        PreEnrollments preEnrollments = this.preEnrollmentController.getActivesPreEnrollments(courseCode, term);
         return new PreEnrollmentsResponse(preEnrollments.getActivesPreEnrollment(), preEnrollments.getSubjectDemandSummary());
     }
 
-    public PreEnrollmentsCSVResponse getPreEnrollmentsCSV(String token, String courseCode, String curriculumCode, String term) throws EurecaException {
+    public PreEnrollmentsCSVResponse getPreEnrollmentsCSV(String token, String courseCode, String term) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_PRE_ENROLLMENTS_CSV);
-        PreEnrollments preEnrollments = this.preEnrollmentController.getActivesPreEnrollments(courseCode, curriculumCode, term);
+        PreEnrollments preEnrollments = this.preEnrollmentController.getActivesPreEnrollments(courseCode, term);
         return new PreEnrollmentsCSVResponse(preEnrollments.getActivesPreEnrollment());
     }
 
-    public DemandResponse getDemand(String token, String courseCode, String curriculumCode, String term) throws EurecaException {
+    public DemandResponse getDemand(String token, String courseCode, String term) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_PRE_ENROLLMENTS);
-        PreEnrollments preEnrollments = this.preEnrollmentController.getActivesPreEnrollments(courseCode, curriculumCode, term);
+        PreEnrollments preEnrollments = this.preEnrollmentController.getActivesPreEnrollments(courseCode, term);
         return new DemandResponse(preEnrollments.getSubjectDemandSummary());
     }
 
-    public DemandCSVResponse getDemandCSV(String token, String courseCode, String curriculumCode, String term)
+    public DemandCSVResponse getDemandCSV(String token, String courseCode, String term)
             throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DEMAND_CSV);
-        PreEnrollments preEnrollments = this.preEnrollmentController.getActivesPreEnrollments(courseCode, curriculumCode,
-                term);
+        PreEnrollments preEnrollments = this.preEnrollmentController.getActivesPreEnrollments(courseCode, term);
         return new DemandCSVResponse(preEnrollments);
     }
 
-    public PossibleGraduateResponse getPossibleGraduate(String token, String courseCode, String curriculumCode,
-                                                        String term) throws EurecaException {
+    public PossibleGraduateResponse getPossibleGraduate(String token, String courseCode, String term)
+            throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DEMAND_CSV);
-        PreEnrollments preEnrollments = this.preEnrollmentController.getActivesPreEnrollments(courseCode, curriculumCode,
-                term);
+        PreEnrollments preEnrollments = this.preEnrollmentController.getActivesPreEnrollments(courseCode, term);
         return new PossibleGraduateResponse(preEnrollments);
     }
 
-    public SubjectsDemandResponse getSubjectsDemand(String token, String courseCode, String curriculumCode, String term) throws EurecaException {
+    public SubjectsDemandResponse getSubjectsDemand(String token, String courseCode, String term) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DEMAND);
-        return this.preEnrollmentController.getDemand(courseCode, curriculumCode, term);
+        return this.preEnrollmentController.getDemand(courseCode, term);
     }
 
     public StudentsRetentionStatisticsResponse getStudentsRetentionStatistics(String token, String courseCode, String curriculumCode, String from, String to) throws EurecaException {

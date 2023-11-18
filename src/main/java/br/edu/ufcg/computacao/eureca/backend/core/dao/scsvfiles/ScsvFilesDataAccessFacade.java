@@ -151,6 +151,11 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
+    public Collection<Student> getAllActives(String courseCode) throws EurecaException {
+        return this.indexesHolder.getAllActives(courseCode);
+    }
+
+    @Override
     public Collection<Student> getAlumni(String courseCode, String curriculumCode, String from, String to) throws EurecaException {
         return getFilteredStudents(StudentClassification.ALUMNUS, courseCode, curriculumCode, from, to);
     }

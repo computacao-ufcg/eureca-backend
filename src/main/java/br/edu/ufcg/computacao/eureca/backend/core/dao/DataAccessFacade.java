@@ -25,6 +25,8 @@ public interface DataAccessFacade {
 
     Collection<Student> getAllActives(String courseCode, String curriculumCode) throws EurecaException;
 
+    Collection<Student> getAllActives(String courseCode) throws EurecaException;
+
     Collection<Student> getAlumni(String courseCode, String curriculumCode, String from, String to) throws EurecaException;
 
     Collection<Student> getDropouts(String courseCode, String curriculumCode, String from, String to) throws EurecaException;

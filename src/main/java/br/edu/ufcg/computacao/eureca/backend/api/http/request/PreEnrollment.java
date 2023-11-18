@@ -30,8 +30,6 @@ public class PreEnrollment {
             @RequestParam String studentRegistration,
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam String courseCode,
-            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
-            @RequestParam String curriculumCode,
             @ApiParam(value = ApiDocumentation.PreEnrollment.TERM)
             @RequestParam String term,
             @ApiParam(value = ApiDocumentation.PreEnrollment.MAX_CREDITS)
@@ -49,7 +47,7 @@ public class PreEnrollment {
     ) throws EurecaException {
         try {
             StudentPreEnrollmentResponse preEnrollment = ApplicationFacade.getInstance().getPreEnrollment(token,
-                    courseCode, curriculumCode, studentRegistration, term, numCredits, optionalPriorityList,
+                    courseCode, studentRegistration, term, numCredits, optionalPriorityList,
                     electivePriorityList, complementaryPriorityList, mandatoryPriorityList);
             return new ResponseEntity<>(preEnrollment, HttpStatus.OK);
         } catch (EurecaException e) {
@@ -63,15 +61,13 @@ public class PreEnrollment {
     public ResponseEntity<PreEnrollmentsResponse> getActivesPreEnrollments(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam String courseCode,
-            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
-            @RequestParam String curriculumCode,
             @ApiParam(value = ApiDocumentation.PreEnrollment.TERM)
             @RequestParam String term,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
-            PreEnrollmentsResponse preEnrollments = ApplicationFacade.getInstance().getPreEnrollments(token, courseCode, curriculumCode, term);
+            PreEnrollmentsResponse preEnrollments = ApplicationFacade.getInstance().getPreEnrollments(token, courseCode, term);
             return new ResponseEntity<>(preEnrollments, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(e);
@@ -84,15 +80,13 @@ public class PreEnrollment {
     public ResponseEntity<PreEnrollmentsCSVResponse> getActivesPreEnrollmentsCSV(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam String courseCode,
-            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
-            @RequestParam String curriculumCode,
             @ApiParam(value = ApiDocumentation.PreEnrollment.TERM)
             @RequestParam String term,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
-            PreEnrollmentsCSVResponse preEnrollments = ApplicationFacade.getInstance().getPreEnrollmentsCSV(token, courseCode, curriculumCode, term);
+            PreEnrollmentsCSVResponse preEnrollments = ApplicationFacade.getInstance().getPreEnrollmentsCSV(token, courseCode, term);
             return new ResponseEntity<>(preEnrollments, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(e);
@@ -105,15 +99,13 @@ public class PreEnrollment {
     public ResponseEntity<DemandResponse> getDemand(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam String courseCode,
-            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
-            @RequestParam String curriculumCode,
             @ApiParam(value = ApiDocumentation.PreEnrollment.TERM)
             @RequestParam String term,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
-            DemandResponse demand = ApplicationFacade.getInstance().getDemand(token, courseCode, curriculumCode, term);
+            DemandResponse demand = ApplicationFacade.getInstance().getDemand(token, courseCode, term);
             return new ResponseEntity<>(demand, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(e);
@@ -126,15 +118,13 @@ public class PreEnrollment {
     public ResponseEntity<DemandCSVResponse> getDemandCSV(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam String courseCode,
-            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
-            @RequestParam String curriculumCode,
             @ApiParam(value = ApiDocumentation.PreEnrollment.TERM)
             @RequestParam String term,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
-            DemandCSVResponse demand = ApplicationFacade.getInstance().getDemandCSV(token, courseCode, curriculumCode, term);
+            DemandCSVResponse demand = ApplicationFacade.getInstance().getDemandCSV(token, courseCode, term);
             return new ResponseEntity<>(demand, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(e);
@@ -147,15 +137,13 @@ public class PreEnrollment {
     public ResponseEntity<PossibleGraduateResponse> getPossibleGraduate(
             @ApiParam(value = ApiDocumentation.Common.COURSE)
             @RequestParam String courseCode,
-            @ApiParam(value = ApiDocumentation.Common.CURRICULUM)
-            @RequestParam String curriculumCode,
             @ApiParam(value = ApiDocumentation.PreEnrollment.TERM)
             @RequestParam String term,
             @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
             @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
     ) throws EurecaException {
         try {
-            PossibleGraduateResponse demand = ApplicationFacade.getInstance().getPossibleGraduate(token, courseCode, curriculumCode, term);
+            PossibleGraduateResponse demand = ApplicationFacade.getInstance().getPossibleGraduate(token, courseCode, term);
             return new ResponseEntity<>(demand, HttpStatus.OK);
         } catch (EurecaException e) {
             LOGGER.info(e);

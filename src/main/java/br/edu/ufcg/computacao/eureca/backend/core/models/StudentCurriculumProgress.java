@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.TreeSet;
 
 public class StudentCurriculumProgress {
+    private String curriculumCode;
     private int completedTerms;
     private int completedMandatoryCredits;
     private int completedOptionalCredits;
@@ -22,11 +23,12 @@ public class StudentCurriculumProgress {
     private Collection<SubjectKey> ongoing;
     private Collection<SubjectKey> adequate;
 
-    public StudentCurriculumProgress(int completedTerms, int completedMandatoryCredits, int completedOptionalCredits,
+    public StudentCurriculumProgress(String curriculumCode, int completedTerms, int completedMandatoryCredits, int completedOptionalCredits,
                                      int completedElectiveCredits, int completedComplementaryCredits,
                                      int completedComplementaryActivities, int enrolledMandatoryCredits,
                                      int enrolledOptionalCredits, int enrolledComplementaryCredits,
                                      int enrolledElectiveCredits) {
+        this.curriculumCode = curriculumCode;
         this.completedTerms = completedTerms;
         this.completedMandatoryCredits = completedMandatoryCredits;
         this.completedOptionalCredits = completedOptionalCredits;
@@ -42,6 +44,14 @@ public class StudentCurriculumProgress {
         this.disabled = new TreeSet<>();
         this.ongoing = new TreeSet<>();
         this.adequate = new TreeSet<>();
+    }
+
+    public String getCurriculumCode() {
+        return curriculumCode;
+    }
+
+    public void setCurriculumCode(String curriculumCode) {
+        this.curriculumCode = curriculumCode;
     }
 
     public int getCompletedTerms() {
@@ -176,7 +186,8 @@ public class StudentCurriculumProgress {
     @Override
     public String toString() {
         return "StudentCurriculumProgress{" +
-                "completedTerms=" + completedTerms +
+                "curriculumCode=" + curriculumCode +
+                ", completedTerms=" + completedTerms +
                 ", completedMandatoryCredits=" + completedMandatoryCredits +
                 ", completedOptionalCredits=" + completedOptionalCredits +
                 ", completedElectiveCredits=" + completedElectiveCredits +

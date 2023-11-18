@@ -7,8 +7,8 @@ import br.edu.ufcg.computacao.eureca.backend.core.models.SubjectSchedule;
 import java.util.*;
 
 public class StudentPreEnrollment {
-
     private String studentRegistration;
+    private String curriculumCode;
     private Map<String, ScheduleResponse> subjects;
     private int term;
     private int currentEnrolledCredits;
@@ -23,9 +23,11 @@ public class StudentPreEnrollment {
     private int electiveCredits;
     private boolean possibleGraduate;
 
-    public StudentPreEnrollment(String studentRegistration, int term, Integer maxCredits, int maxMandatoryCredits,
-                                int maxOptionalCredits, int maxComplementaryCredits, int maxElectiveCredits) {
+    public StudentPreEnrollment(String studentRegistration, String curriculumCode, int term, Integer maxCredits,
+                                int maxMandatoryCredits, int maxOptionalCredits, int maxComplementaryCredits,
+                                int maxElectiveCredits) {
         this.studentRegistration = studentRegistration;
+        this.curriculumCode = curriculumCode;
         this.term = term;
         this.maxCredits = maxCredits;
         this.currentEnrolledCredits = 0;
@@ -59,6 +61,14 @@ public class StudentPreEnrollment {
 
     public void setStudentRegistration(String studentRegistration) {
         this.studentRegistration = studentRegistration;
+    }
+
+    public String getCurriculumCode() {
+        return curriculumCode;
+    }
+
+    public void setCurriculumCode(String curriculumCode) {
+        this.curriculumCode = curriculumCode;
     }
 
     public Map<String, ScheduleResponse> getSubjects() {
@@ -299,7 +309,8 @@ public class StudentPreEnrollment {
             coRequirements, int creditsForType, int maxCreditsForType) {
         int newCredits = this.getNewCredits(subjectAndSchedule, coRequirements);
         int newCurrentEnrolledCredits = newCredits + this.currentEnrolledCredits;
-        return ((creditsForType < maxCreditsForType) && (newCurrentEnrolledCredits <= this.maxCredits));
+        int newCreditsForType = newCredits + creditsForType;
+        return ((newCreditsForType <= maxCreditsForType) && (newCurrentEnrolledCredits <= this.maxCredits));
     }
 
     private int getNewCredits(SubjectSchedule subjectAndSchedule, Collection<SubjectSchedule> coRequirements) {

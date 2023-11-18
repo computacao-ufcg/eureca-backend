@@ -133,6 +133,18 @@ public class IndexesHolder {
         return ret.createCurriculum(key);
     }
 
+    public Collection<Student> getAllActives(String courseCode) throws EurecaException {
+        Collection<CurriculumKey> curricula = this.curriculumMap.keySet();
+        Collection<NationalIdRegistrationKey> actives = new LinkedList<>();
+        curricula.forEach(key -> {
+            Collection<NationalIdRegistrationKey> activesPerCurriculum =
+                    this.activesPerCurriculumMap.get(new CurriculumKey(courseCode, key.getCurriculumCode()));
+            if (activesPerCurriculum != null) actives.addAll(activesPerCurriculum);
+        });
+        if (actives == null) throw new CurriculumNotFoundException(courseCode, SystemConstants.ALL);
+        return getAllStudents(actives);
+    }
+
     public Collection<Student> getAllActives(String courseCode, String curriculumCode) throws EurecaException {
         Collection<NationalIdRegistrationKey> actives = this.activesPerCurriculumMap.get(new
                 CurriculumKey(courseCode, curriculumCode));
@@ -404,8 +416,8 @@ public class IndexesHolder {
                 // Actives per course per term
                 addToStudentPerTermIndex(k, v, v.getAdmissionTerm(), this.activesPerCurriculumPerAdmissionTermMap);
                 // Setup student progress on his/her curriculum
-                this.studentCurriculumProgressMap.put(k, new StudentCurriculumProgress(v.getCompletedTerms(),
-                        0, 0, 0,
+                this.studentCurriculumProgressMap.put(k, new StudentCurriculumProgress(v.getCurriculumCode(),
+                        v.getCompletedTerms(), 0, 0, 0,
                         0, 0, 0,
                         0, 0, 0));
             }
@@ -725,11 +737,12 @@ public class IndexesHolder {
         perTermMap.put(new CurriculumKey(v.getCourseCode(), v.getCurriculumCode()), activesPerCoursePerAdmissionTerm);
     }
 
-    private boolean hasNotCompleted(StudentCurriculumProgress studentCurriculumProgress, SubjectKey subjectKey, SubjectData subjectData) {
+    private boolean hasNotCompleted(StudentCurriculumProgress studentCurriculumProgress, SubjectKey subjectKey,
+                                    SubjectData subjectData) {
         if (studentCurriculumProgress.getCompleted().contains(subjectKey)) return false;
         for (String subjectCode : subjectData.getEquivalentCodesList()) {
             SubjectKey equivalentSubjectKey = new SubjectKey(subjectKey.getCourseCode(), subjectKey.getCurriculumCode(),
-                    subjectCode);
+                        subjectCode);
             if (studentCurriculumProgress.getCompleted().contains(equivalentSubjectKey)) {
                 studentCurriculumProgress.getCompleted().add(subjectKey);
                 return false;
