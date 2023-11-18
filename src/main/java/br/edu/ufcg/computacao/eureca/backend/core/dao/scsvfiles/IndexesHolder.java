@@ -306,7 +306,7 @@ public class IndexesHolder {
         return response;
     }
 
-    public Map<SubjectScheduleKey, Map<String, Schedule>> getAllSchedules(String courseCode, String curriculumCode, String term) {
+    public Map<SubjectScheduleKey, Map<String, Schedule>> getAllSchedules(String courseCode, String term) {
         Map<SubjectScheduleKey, Map<String, Schedule>> allSchedules = new HashMap<>();
 
         for (Map.Entry<ScheduleKey, ScheduleData> entry : this.scheduleMap.entrySet()) {
@@ -320,7 +320,7 @@ public class IndexesHolder {
                 allSchedules.put(subjectScheduleKey, new HashMap<>());
             }
 
-            if (key.getCourseCode().equals(courseCode) && key.getCurriculumCode().equals(curriculumCode) && key.getTerm().equals(term)) {
+            if (key.getCourseCode().equals(courseCode) && key.getTerm().equals(term)) {
                 allSchedules.get(subjectScheduleKey).put(key.getClassCode(), schedule);
             }
         }

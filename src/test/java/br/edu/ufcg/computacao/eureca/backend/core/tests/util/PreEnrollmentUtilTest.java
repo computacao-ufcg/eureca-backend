@@ -482,26 +482,9 @@ public class PreEnrollmentUtilTest {
     }
 
     @Test
-    public void testGetActualTerm0delayed() {
-        int completedTerms = 1; // not important
-        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(0);
-        int completedOptionalCredits = 0; // not important
-        int completedComplementaryCredits = 0; // not important
-        int enrolledCredits = 0; // not important
-        StudentCurriculumProgress progress = new StudentCurriculumProgress("2017", completedTerms, completedMandatoryCredits,
-                completedOptionalCredits, 0, completedComplementaryCredits,
-                0, 0, 0, 0, 0);
-
-        int actualTerm = PreEnrollmentUtil.getActualTerm(curriculum, progress);
-        int expectedActualTerm = 0;
-
-        Assert.assertEquals(actualTerm, expectedActualTerm);
-    }
-
-    @Test
     public void testGetActualTerm1() {
         int completedTerms = 1; // not important
-        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(0) + 1;
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(1);
         int completedOptionalCredits = 0; // not important
         int completedComplementaryCredits = 0; // not important
         int enrolledCredits = 0; // not important

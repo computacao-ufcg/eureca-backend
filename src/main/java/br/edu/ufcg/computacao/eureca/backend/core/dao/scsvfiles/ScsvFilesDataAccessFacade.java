@@ -437,8 +437,8 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
     }
 
     @Override
-    public Map<SubjectScheduleKey, SubjectSchedule> getAllSchedules(String courseCode, String curriculumCode, String term) {
-        Map<SubjectScheduleKey, Map<String, Schedule>> schedulesSeparatedByClassCode = this.indexesHolder.getAllSchedules(courseCode, curriculumCode, term);
+    public Map<SubjectScheduleKey, SubjectSchedule> getAllSchedules(String courseCode, String term) {
+        Map<SubjectScheduleKey, Map<String, Schedule>> schedulesSeparatedByClassCode = this.indexesHolder.getAllSchedules(courseCode, term);
         Map<SubjectScheduleKey, SubjectSchedule> allSchedules = new HashMap<>();
 
         for (Map.Entry<SubjectScheduleKey, Map<String, Schedule>> entry : schedulesSeparatedByClassCode.entrySet()) {
@@ -446,7 +446,7 @@ public class ScsvFilesDataAccessFacade implements DataAccessFacade {
             Map<String, Schedule> value = entry.getValue();
 
             try {
-                Subject subject = this.getSubject(courseCode, curriculumCode, key.getSubjectCode());
+                Subject subject = this.getSubject(courseCode, key.getCurriculumCode(), key.getSubjectCode());
                 SubjectSchedule subjectSchedule = new SubjectSchedule(subject, value);
                 allSchedules.put(key, subjectSchedule);
             } catch (InvalidParameterException e) {

@@ -21,6 +21,7 @@ public class Messages {
     public static final String INVALID_COURSE_OR_CURRICULUM_S_S = "Course %s and/or curriculum %s do not exist.";
     public static final String INVALID_COURSE_S = "Course %s does not exist.";
     public static final String INVALID_SCHEDULE_S_S_S_S = "No schedule found for 'courseCode' = %s, 'curriculumCode' = %s, 'subjectCode' = %s, 'term' = %s.";
+    public static final String INVALID_SUBJECT = "Invalid subject [%s].";
     public static final String INVALID_SUBJECT_IGNORING = "Invalid subject [%s], ignoring.";
     public static final String INVALID_USER_S = "No profile fr user %s.";
     public static final String IS_ENROLLED = "is enrolled.";
