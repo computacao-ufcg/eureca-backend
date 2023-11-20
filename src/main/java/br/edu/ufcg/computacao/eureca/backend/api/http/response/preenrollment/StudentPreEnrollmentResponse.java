@@ -30,7 +30,7 @@ public class StudentPreEnrollmentResponse implements Comparable {
                             studentPreEnrollment.getComplementaryCredits(),
                             studentPreEnrollment.getElectiveCredits(),
                             scheduleResponse.getSubjectName(),
-                            scheduleResponse.getSchedule().getClassCode()));
+                            scheduleResponse.getSchedule().getClassId()));
         });
         this.term = studentPreEnrollment.getTerm();
         this.maxCredits = studentPreEnrollment.getMaxCredits();

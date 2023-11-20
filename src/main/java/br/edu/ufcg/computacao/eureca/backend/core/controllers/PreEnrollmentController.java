@@ -96,7 +96,7 @@ public class PreEnrollmentController {
     private Collection<DetailedSubjectDemand> getSubjectDemand(String courseCode, String subjectType,
                                                                Collection<StudentPreEnrollment> preEnrollments) throws EurecaException {
         Collection<DetailedSubjectDemand> response = new ArrayList<>();
-        Map<Subject, Map<Integer, Integer>> subjectDemandByTerm = new HashMap<>();
+        Map<Subject, Map<String, Map<Integer, Integer>>> subjectDemandPerClassPerTerm = new HashMap<>();
 
         for (StudentPreEnrollment preEnrollment : preEnrollments) {
             Collection<String> proposedSubjectsCodes = preEnrollment.getSubjects().keySet();
@@ -105,27 +105,32 @@ public class PreEnrollmentController {
             int studentCurrentTerm = preEnrollment.getTerm();
 
             for (Subject subject : proposedSubjects) {
+                String classId = preEnrollment.getSubjects().get(subject.getSubjectCode()).getSchedule().getClassId();
                 if (subject.getType().equals(subjectType)) {
-                    if (!subjectDemandByTerm.containsKey(subject)) {
-                        subjectDemandByTerm.put(subject, new HashMap<>());
+                    if (!subjectDemandPerClassPerTerm.containsKey(subject)) {
+                        subjectDemandPerClassPerTerm.put(subject, new HashMap<>());
                     }
-                    Map<Integer, Integer> demandByTerm = subjectDemandByTerm.get(subject);
-
-                    if (!demandByTerm.containsKey(studentCurrentTerm)) {
-                        demandByTerm.put(studentCurrentTerm, 0);
+                    if (!subjectDemandPerClassPerTerm.get(subject).containsKey(classId)) {
+                        subjectDemandPerClassPerTerm.get(subject).put(classId, new HashMap<>());
                     }
-
-                    int currentDemand = demandByTerm.get(studentCurrentTerm);
-                    subjectDemandByTerm.get(subject).put(studentCurrentTerm, currentDemand + 1);
+                    Map<Integer, Integer> demandPerTerm = subjectDemandPerClassPerTerm.get(subject).get(classId);
+                    if (!demandPerTerm.containsKey(studentCurrentTerm)) {
+                        demandPerTerm.put(studentCurrentTerm, 0);
+                    }
+                    int currentDemand = demandPerTerm.get(studentCurrentTerm);
+                    subjectDemandPerClassPerTerm.get(subject).get(classId).put(studentCurrentTerm, currentDemand + 1);
                 }
             }
         }
 
-        for (Map.Entry<Subject, Map<Integer, Integer>> entry : subjectDemandByTerm.entrySet()) {
-            Subject subject = entry.getKey();
-            Map<Integer, Integer> demandByTerm = entry.getValue();
-
-            response.add(new DetailedSubjectDemand(subject, demandByTerm));
+        for (Map.Entry<Subject, Map<String, Map<Integer, Integer>>> subjectMapEntry :
+                subjectDemandPerClassPerTerm.entrySet()) {
+            Subject subject = subjectMapEntry.getKey();
+            for (Map.Entry<String, Map<Integer, Integer>> classMapEntry :
+                    subjectDemandPerClassPerTerm.get(subject).entrySet()) {
+                Map<Integer, Integer> demandByTerm = classMapEntry.getValue();
+                response.add(new DetailedSubjectDemand(subject, classMapEntry.getKey(), demandByTerm));
+            }
         }
 
         return response;
@@ -385,8 +390,10 @@ public class PreEnrollmentController {
         detailedDemand.forEach(subject -> {
             String subjectCode = subject.getDemand().getSubjectCode();
             String subjectName = subject.getDemand().getSubjectName();
+            String curriculumCode = subject.getDemand().getCurriculumCode();
+            String classId = subject.getDemand().getClassId();
             int totalDemand = subject.getDemand().getTotalDemand();
-            demand.add(new SubjectDemand(subjectCode, subjectName, totalDemand));
+            demand.add(new SubjectDemand(subjectCode, subjectName, curriculumCode, classId, totalDemand));
         });
         return new SubjectsDemandResponse(demand);
     }

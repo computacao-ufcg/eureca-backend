@@ -2,6 +2,7 @@ package br.edu.ufcg.computacao.eureca.backend.core.models;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 
 public class Curriculum {
     private String courseCode;
@@ -287,6 +288,18 @@ public class Curriculum {
         this.complementarySubjectsList = complementarySubjectsList;
     }
 
+    public Collection<String> getAllSubjectsList() {
+        Collection<String> subjectCodeList = getMandatorySubjectsList();
+        Collection<String> list = getOptionalSubjectsList();
+        if (!(list.size() == 0)) subjectCodeList.addAll(list);
+        list = getElectiveSubjectsList();
+        if (!(list.size() == 0)) subjectCodeList.addAll(list);
+        list = getComplementarySubjectsList();
+        if (!(list.size() == 0)) subjectCodeList.addAll(list);
+        return subjectCodeList;
+    }
+
+
     public Collection<String> getComplementaryActivitiesList() {
         return complementaryActivitiesList;
     }
@@ -295,7 +308,7 @@ public class Curriculum {
         this.complementaryActivitiesList = complementaryActivitiesList;
     }
 
-    public double getMinNumberOfCreditsNeeded() {
+    public int getMinNumberOfCreditsNeeded() {
         return this.getMinMandatoryCreditsNeeded() + this.getMinElectiveCreditsNeeded() +
                 this.getMinOptionalCreditsNeeded() + getMinComplementaryCreditsNeeded();
     }

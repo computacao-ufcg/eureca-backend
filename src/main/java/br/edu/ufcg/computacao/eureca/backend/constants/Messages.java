@@ -6,9 +6,6 @@ public class Messages {
     public static final String ADD_TABLE_S = "Add table: %s.";
     public static final String ALL_SET = "All services have been initialized.";
     public static final String COULD_NOT_FETCH_AS_PUBLIC_KEY = "Could not fetch Authentication Service public key.";
-    public static final String COULD_NOT_FIND_CLASS_S = "Could not find class: %s.";
-    public static final String COULD_NOT_FIND_ENTRY_S = "Could not find entry: %s.";
-    public static final String COULD_NOT_FIND_TERM_S = "Could not find term: %s.";
     public static final String DATA_S = "Data: [%s].";
     public static final String ERROR_READING_CONFIGURATION_FILE = "Error reading configuration file.";
     public static final String EURECA_EXCEPTION_S = "EurecaException: %s.";

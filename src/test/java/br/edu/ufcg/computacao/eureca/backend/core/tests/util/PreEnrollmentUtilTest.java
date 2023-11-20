@@ -501,7 +501,7 @@ public class PreEnrollmentUtilTest {
     @Test
     public void testGetActualTerm1delayed() {
         int completedTerms = 1; // not important
-        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(1);
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(2) - 1;
         int completedOptionalCredits = 0; // not important
         int completedComplementaryCredits = 0; // not important
         int enrolledCredits = 0; // not important
@@ -518,7 +518,7 @@ public class PreEnrollmentUtilTest {
     @Test
     public void testGetActualTerm2() {
         int completedTerms = 1; // not important
-        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(1) + 1;
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(2);
         int completedOptionalCredits = 0; // not important
         int completedComplementaryCredits = 0; // not important
         int enrolledCredits = 0; // not important
@@ -535,7 +535,7 @@ public class PreEnrollmentUtilTest {
     @Test
     public void testGetActualTerm2delayed() {
         int completedTerms = 1; // not important
-        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(2);
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(3) - 1;
         int completedOptionalCredits = 0; // not important
         int completedComplementaryCredits = 0; // not important
         int enrolledCredits = 0; // not important
@@ -552,7 +552,7 @@ public class PreEnrollmentUtilTest {
     @Test
     public void testGetActualTerm3() {
         int completedTerms = 1; // not important
-        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(2) + 1;
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(3);
         int completedOptionalCredits = 0; // not important
         int completedComplementaryCredits = 0; // not important
         int enrolledCredits = 0; // not important
@@ -569,7 +569,7 @@ public class PreEnrollmentUtilTest {
     @Test
     public void testGetActualTerm3delayed() {
         int completedTerms = 1; // not important
-        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(3);
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(4) - 1;
         int completedOptionalCredits = 0; // not important
         int completedComplementaryCredits = 0; // not important
         int enrolledCredits = 0; // not important
@@ -586,7 +586,7 @@ public class PreEnrollmentUtilTest {
     @Test
     public void testGetActualTerm4() {
         int completedTerms = 1; // not important
-        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(3) + 1;
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(4);
         int completedOptionalCredits = 0; // not important
         int completedComplementaryCredits = 0; // not important
         int enrolledCredits = 0; // not important
@@ -603,7 +603,7 @@ public class PreEnrollmentUtilTest {
     @Test
     public void testGetActualTerm4delayed() {
         int completedTerms = 1; // not important
-        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(4);
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(5) - 1;
         int completedOptionalCredits = 0; // not important
         int completedComplementaryCredits = 0; // not important
         int enrolledCredits = 0; // not important
@@ -620,7 +620,7 @@ public class PreEnrollmentUtilTest {
     @Test
     public void testGetActualTerm5() {
         int completedTerms = 1; // not important
-        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(4) + 1;
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(5);
         int completedOptionalCredits = 0; // not important
         int completedComplementaryCredits = 0; // not important
         int enrolledCredits = 0; // not important
@@ -637,7 +637,7 @@ public class PreEnrollmentUtilTest {
     @Test
     public void testGetActualTerm5delayed() {
         int completedTerms = 1; // not important
-        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(5);
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(6) - 1;
         int completedOptionalCredits = 0; // not important
         int completedComplementaryCredits = 0; // not important
         int enrolledCredits = 0; // not important
@@ -654,7 +654,7 @@ public class PreEnrollmentUtilTest {
     @Test
     public void testGetActualTerm6() {
         int completedTerms = 1; // not important
-        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(5) + 1;
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(6);
         int completedOptionalCredits = 0; // not important
         int completedComplementaryCredits = 0; // not important
         int enrolledCredits = 0; // not important
@@ -671,7 +671,7 @@ public class PreEnrollmentUtilTest {
     @Test
     public void testGetActualTerm6delayed() {
         int completedTerms = 1; // not important
-        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(6);
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(7) - 1;
         int completedOptionalCredits = 0; // not important
         int completedComplementaryCredits = 0; // not important
         int enrolledCredits = 0; // not important
@@ -688,7 +688,7 @@ public class PreEnrollmentUtilTest {
     @Test
     public void testGetActualTerm7() {
         int completedTerms = 1; // not important
-        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(6) + 1;
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(7);
         int completedOptionalCredits = 0; // not important
         int completedComplementaryCredits = 0; // not important
         int enrolledCredits = 0; // not important
@@ -705,7 +705,7 @@ public class PreEnrollmentUtilTest {
     @Test
     public void testGetActualTerm7delayed() {
         int completedTerms = 1; // not important
-        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(7);
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(8) - 1;
         int completedOptionalCredits = 0; // not important
         int completedComplementaryCredits = 0; // not important
         int enrolledCredits = 0; // not important
@@ -722,7 +722,7 @@ public class PreEnrollmentUtilTest {
     @Test
     public void testGetActualTerm8() {
         int completedTerms = 1; // not important
-        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(7) + 1;
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(8);
         int completedOptionalCredits = 0; // not important
         int completedComplementaryCredits = 0; // not important
         int enrolledCredits = 0; // not important
@@ -739,7 +739,7 @@ public class PreEnrollmentUtilTest {
     @Test
     public void testGetActualTerm8delayed() {
         int completedTerms = 1; // not important
-        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(8);
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(9) - 1;
         int completedOptionalCredits = 0; // not important
         int completedComplementaryCredits = 0; // not important
         int enrolledCredits = 0; // not important
@@ -756,7 +756,7 @@ public class PreEnrollmentUtilTest {
     @Test
     public void testGetActualTerm9() {
         int completedTerms = 1; // not important
-        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(8) + 1;
+        int completedMandatoryCredits = curriculum.getExpectedMinAccumulatedCredits(9);
         int completedOptionalCredits = 0; // not important
         int completedComplementaryCredits = 0; // not important
         int enrolledCredits = 0; // not important

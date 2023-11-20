@@ -6,14 +6,13 @@ import java.util.Collection;
 import java.util.Objects;
 
 public class Schedule {
-
     private int availability;
-    private String classCode;
+    private String classId;
     private Collection<ClassSchedule> schedule;
 
-    public Schedule(int availability, String classCode, Collection<ClassSchedule> schedule) {
+    public Schedule(int availability, String classId, Collection<ClassSchedule> schedule) {
         this.availability = availability;
-        this.classCode = classCode;
+        this.classId = classId;
         this.schedule = schedule;
     }
 
@@ -29,12 +28,12 @@ public class Schedule {
         this.availability--;
     }
 
-    public String getClassCode() {
-        return classCode;
+    public String getClassId() {
+        return classId;
     }
 
-    public void setClassCode(String classCode) {
-        this.classCode = classCode;
+    public void setClassId(String classId) {
+        this.classId = classId;
     }
 
     public Collection<ClassSchedule> getSchedule() {
@@ -49,8 +48,8 @@ public class Schedule {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Schedule schedule1 = (Schedule) o;
-        return schedule.equals(schedule1.schedule);
+        Schedule other = (Schedule) o;
+        return schedule.equals(other.schedule);
     }
 
     @Override

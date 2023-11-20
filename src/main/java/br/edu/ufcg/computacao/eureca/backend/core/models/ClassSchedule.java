@@ -3,7 +3,6 @@ package br.edu.ufcg.computacao.eureca.backend.core.models;
 import java.util.Objects;
 
 public class ClassSchedule {
-
     private WeekDay weekDay;
     private String startHour;
     private String endHour;

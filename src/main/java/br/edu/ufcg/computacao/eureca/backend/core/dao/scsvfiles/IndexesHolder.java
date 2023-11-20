@@ -524,23 +524,146 @@ public class IndexesHolder {
 
     private void updateStudentProgress() {
         Map<NationalIdRegistrationKey, StudentCurriculumProgress> studentCurriculumProgressMap;
+        CurriculumKey newCurriculumKey = new CurriculumKey("14102100", "2023");
+        Curriculum newCurriculum = this.curriculumMap.get(newCurriculumKey).createCurriculum(newCurriculumKey);
         this.studentCurriculumProgressMap.forEach((studentKey, studentCurriculumProgress) -> {
             StudentData studentData = this.studentsMap.get(studentKey);
             CurriculumKey curriculumKey = new CurriculumKey(studentData.getCourseCode(), studentData.getCurriculumCode());
             Curriculum curriculum = this.curriculumMap.get(curriculumKey).createCurriculum(curriculumKey);
-            ProgressSummary progress = computeProgress(studentCurriculumProgress.getCompleted(), curriculum);
-            studentCurriculumProgress.setCompletedMandatoryCredits(progress.getMandatory());
-            studentCurriculumProgress.setCompletedComplementaryCredits(progress.getComplementary());
-            studentCurriculumProgress.setCompletedOptionalCredits(progress.getOptional());
-            studentCurriculumProgress.setCompletedElectiveCredits(progress.getElective());
-            studentCurriculumProgress.setCompletedComplementaryActivities(progress.getActivities());
-            progress = computeProgress(studentCurriculumProgress.getOngoing(), curriculum);
-            studentCurriculumProgress.setEnrolledMandatoryCredits(progress.getMandatory());
-            studentCurriculumProgress.setEnrolledComplementaryCredits(progress.getComplementary());
-            studentCurriculumProgress.setEnrolledOptionalCredits(progress.getOptional());
-            studentCurriculumProgress.setEnrolledElectiveCredits(progress.getElective());
+            updateProgress(studentCurriculumProgress, curriculum);
+            if (!curriculumKey.equals(newCurriculumKey)) {
+                if (shouldMigrate(curriculum, newCurriculum, 5, studentCurriculumProgress)) {
+                    studentData.setCurriculumCode("2023");
+                    this.studentsMap.put(studentKey, studentData);
+                    Collection<NationalIdRegistrationKey> actives = this.activesPerCurriculumMap.get(curriculumKey);
+                    actives.remove(studentKey);
+                    actives = this.activesPerCurriculumMap.get(newCurriculumKey);
+                    if (actives == null) {
+                        actives = new LinkedList<>();
+                        this.activesPerCurriculumMap.put(newCurriculumKey, actives);
+                    }
+                    actives.add(studentKey);
+                    Map<String, Collection<NationalIdRegistrationKey>> activesPerTermMap =
+                            activesPerCurriculumPerAdmissionTermMap.get(curriculumKey);
+                    actives = activesPerTermMap.get(studentData.getAdmissionTerm());
+                    actives.remove(studentKey);
+                    activesPerTermMap = activesPerCurriculumPerAdmissionTermMap.get(newCurriculumKey);
+                    if (activesPerTermMap == null) {
+                        activesPerTermMap = new HashMap<>();
+                        activesPerCurriculumPerAdmissionTermMap.put(newCurriculumKey, activesPerTermMap);
+                    }
+                    actives = activesPerTermMap.get(studentData.getAdmissionTerm());
+                    if (actives == null) {
+                        actives = new LinkedList<>();
+                        activesPerTermMap.put(studentData.getAdmissionTerm(), actives);
+                    }
+                    actives.add(studentKey);
+                    migrateStudentCurriculumProgress(studentCurriculumProgress, newCurriculum);
+                }
+            }
             LOGGER.debug(String.format(Messages.UPDATED_PROGRESS_S, studentCurriculumProgress.toString()));
         });
+    }
+
+    private void migrateStudentCurriculumProgress(StudentCurriculumProgress studentCurriculumProgress, Curriculum newCurriculum) {
+        studentCurriculumProgress.setCurriculumCode(newCurriculum.getCurriculumCode());
+        Collection<SubjectKey> completed = studentCurriculumProgress.getCompleted();
+        Collection<SubjectKey> onGoing = studentCurriculumProgress.getOngoing();
+        studentCurriculumProgress.setCompleted(new LinkedList<>());
+        studentCurriculumProgress.setEnabled(new LinkedList<>());
+        studentCurriculumProgress.setDisabled(new LinkedList<>());
+        studentCurriculumProgress.setOngoing(new LinkedList<>());
+        studentCurriculumProgress.setAdequate(new LinkedList<>());
+        Map<SubjectKey, SubjectData> subjectsMap = getSubjectsMap(newCurriculum);
+        int nonExistent = 0;
+        for (SubjectKey subjectKey : completed) {
+            SubjectKey equivalentSubjectKey = getEquivalent(subjectKey, subjectsMap);
+            if (equivalentSubjectKey == null) {
+                if (nonExistent < 2) {
+                    nonExistent++;
+                    subjectKey.setCurriculumCode(newCurriculum.getCurriculumCode());
+                    if (nonExistent == 1) {
+                        subjectKey.setSubjectCode("1109998");
+                    } else {
+                        subjectKey.setSubjectCode("1109999");
+                    }
+                    studentCurriculumProgress.getCompleted().add(subjectKey);
+                }
+            } else {
+                studentCurriculumProgress.getCompleted().add(equivalentSubjectKey);
+            }
+        }
+        for (SubjectKey subjectKey : onGoing) {
+            SubjectKey equivalentSubjectKey = getEquivalent(subjectKey, subjectsMap);
+            if (equivalentSubjectKey != null) {
+                studentCurriculumProgress.getOngoing().add(equivalentSubjectKey);
+            }
+        }
+        Collection<String> subjectCodes = newCurriculum.getAllSubjectsList();
+        subjectCodes.forEach(subjectCode -> {
+            SubjectKey subjectKey = new SubjectKey(newCurriculum.getCourseCode(), newCurriculum.getCurriculumCode(),
+                    subjectCode);
+            SubjectData subjectData = this.subjectsMap.get(subjectKey);
+            if (hasNotCompleted(studentCurriculumProgress, subjectKey, subjectData) &&
+                        !isDisabled(studentCurriculumProgress, subjectKey) &&
+                        isNotOngoing(studentCurriculumProgress, subjectKey)) {
+                if (isEnabled(studentCurriculumProgress, subjectKey, subjectData)) {
+                    studentCurriculumProgress.getEnabled().add(subjectKey);
+                    CurriculumData curriculumData = this.curriculumMap.get(new CurriculumKey(subjectKey.getCourseCode(),
+                                subjectKey.getCurriculumCode()));
+                    if (isAdequate(studentCurriculumProgress, curriculumData, subjectData.getIdealTerm())) {
+                        studentCurriculumProgress.getAdequate().add(subjectKey);
+                    }
+                } else {
+                    studentCurriculumProgress.getDisabled().add(subjectKey);
+                }
+            }
+        });
+        updateProgress(studentCurriculumProgress, newCurriculum);
+    }
+
+    private Map<SubjectKey, SubjectData> getSubjectsMap(Curriculum newCurriculum) {
+        String couserCode = newCurriculum.getCourseCode();
+        String curriculumCode = newCurriculum.getCurriculumCode();
+        Map<SubjectKey, SubjectData> subjectsMap = new HashMap<>();
+        Collection<String> subjectCodes = newCurriculum.getMandatorySubjectsList();
+        subjectCodes.addAll(newCurriculum.getComplementarySubjectsList());
+        subjectCodes.addAll(newCurriculum.getOptionalSubjectsList());
+        subjectCodes.addAll(newCurriculum.getElectiveSubjectsList());
+        subjectCodes.forEach(subjectCode -> {
+            SubjectKey subjectKey = new SubjectKey(couserCode, curriculumCode, subjectCode);
+            SubjectData subjectData = this.subjectsMap.get(subjectKey);
+            if (subjectData != null) subjectsMap.put(subjectKey, subjectData);
+        });
+        return subjectsMap;
+    }
+
+    private SubjectKey getEquivalent(SubjectKey completedSubjectKey, Map<SubjectKey, SubjectData> subjectsMap) {
+        for (SubjectKey subjectKey : subjectsMap.keySet()) {
+            SubjectData subjectData = subjectsMap.get(subjectKey);
+            completedSubjectKey.setCurriculumCode(subjectKey.getCurriculumCode());
+            if (subjectKey.equals(completedSubjectKey)) {
+                return completedSubjectKey;
+            }
+            if (subjectData.getEquivalentCodes().contains(completedSubjectKey.getSubjectCode())) {
+                return subjectKey;
+            }
+        }
+        return null;
+    }
+
+    private void updateProgress(StudentCurriculumProgress studentCurriculumProgress, Curriculum curriculum) {
+        ProgressSummary progress = computeProgress(studentCurriculumProgress.getCompleted(), curriculum);
+        studentCurriculumProgress.setCompletedMandatoryCredits(progress.getMandatory());
+        studentCurriculumProgress.setCompletedComplementaryCredits(progress.getComplementary());
+        studentCurriculumProgress.setCompletedOptionalCredits(progress.getOptional());
+        studentCurriculumProgress.setCompletedElectiveCredits(progress.getElective());
+        studentCurriculumProgress.setCompletedComplementaryActivities(progress.getActivities());
+        progress = computeProgress(studentCurriculumProgress.getOngoing(), curriculum);
+        studentCurriculumProgress.setEnrolledMandatoryCredits(progress.getMandatory());
+        studentCurriculumProgress.setEnrolledComplementaryCredits(progress.getComplementary());
+        studentCurriculumProgress.setEnrolledOptionalCredits(progress.getOptional());
+        studentCurriculumProgress.setEnrolledElectiveCredits(progress.getElective());
     }
 
     private ProgressSummary computeProgress(Collection<SubjectKey> subjects, Curriculum curriculum) {
@@ -551,6 +674,7 @@ public class IndexesHolder {
         int accActivities = 0;
         for (SubjectKey subjectKey : subjects) {
             SubjectData subjectData = this.subjectsMap.get(subjectKey);
+            if (subjectData == null) continue; // Extra curriulum
             if (curriculum.getMandatorySubjectsList().contains(subjectKey.getSubjectCode())) {
                 accMandatory += subjectData.getCredits();
             }
@@ -568,6 +692,24 @@ public class IndexesHolder {
             }
         }
         return new ProgressSummary(accMandatory, accOptional, accComplementary, accElective, accActivities);
+    }
+
+    public boolean shouldMigrate(Curriculum currentCurriculum, Curriculum newCurriculum, int numberOfTerms,
+                                 StudentCurriculumProgress studentProgress) {
+        int termsLeft = currentCurriculum.getMaxNumberOfTerms() - studentProgress.getCompletedTerms();
+        if (termsLeft <= numberOfTerms) return false;
+        int creditsNeeded = currentCurriculum.getMinNumberOfCreditsNeeded();
+        int creditsSoFar = studentProgress.getCompletedCredits() + studentProgress.getEnrolledCredits();
+        int completedTerms = studentProgress.getCompletedTerms();
+        double speed = (completedTerms > 0 ? creditsSoFar / completedTerms :
+                currentCurriculum.getMaxNumberOfEnrolledCredits());
+        double idealSpeed = (1.0 * currentCurriculum.getMinNumberOfCreditsNeeded()) /
+                currentCurriculum.getMinNumberOfTerms();
+        double minSpeed = (1.0 *currentCurriculum.getMinNumberOfEnrolledCredits());
+        if (speed > idealSpeed) speed = idealSpeed;
+        if (speed < minSpeed) speed = minSpeed;
+        int likelyCredits = creditsSoFar + (int) Math.round(numberOfTerms * speed);
+        return (creditsNeeded > likelyCredits);
     }
 
     private void buildTeachersIndex() {
@@ -662,20 +804,11 @@ public class IndexesHolder {
                 Collection<AcademicUnitKey> academicUnitKeys = this.academicUnitKeysPerCurriculum.get(curriculumKey);
 
                 Map<String, Map<String, ClassEnrollments>> enrollmentsMap = this.enrollmentsPerSubjectPerTermPerClass.get(subjectKey);
-                if (enrollmentsMap == null) {
-                    LOGGER.info(String.format(Messages.COULD_NOT_FIND_ENTRY_S, subjectCodeTermClassId.toString()));
-                    continue;
-                }
+                if (enrollmentsMap == null) continue;
                 Map<String, ClassEnrollments> enrollmentsPerTermMap = enrollmentsMap.get(term);
-                if (enrollmentsPerTermMap == null) {
-                    LOGGER.info(String.format(Messages.COULD_NOT_FIND_TERM_S, subjectCodeTermClassId.toString()));
-                    continue;
-                }
+                if (enrollmentsPerTermMap == null) continue;
                 ClassEnrollments enrollments = enrollmentsPerTermMap.get(classId);
-                if (enrollments == null) {
-                    LOGGER.info(String.format(Messages.COULD_NOT_FIND_CLASS_S, subjectCodeTermClassId.toString()));
-                    continue;
-                }
+                if (enrollments == null) continue;
 
                 String[] teachersId = teachersList.getTeachers().split(",");
                 for (String teacherId : teachersId) {

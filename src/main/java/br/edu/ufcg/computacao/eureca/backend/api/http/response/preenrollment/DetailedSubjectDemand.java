@@ -8,9 +8,10 @@ public class DetailedSubjectDemand implements Comparable {
     private Map<Integer, Integer> demandByTerm;
     private SubjectDemand demand;
 
-    public DetailedSubjectDemand(Subject subject, Map<Integer, Integer> demandByTerm) {
-        this.demandByTerm = demandByTerm;
-        this.demand = new SubjectDemand(subject.getSubjectCode(), subject.getName(), this.calculateTotalDemand());
+    public DetailedSubjectDemand(Subject subject, String classId, Map<Integer, Integer> demandPerClassPerTerm) {
+        this.demandByTerm = demandPerClassPerTerm;
+        this.demand = new SubjectDemand(subject.getSubjectCode(), subject.getName(), subject.getCurriculumCode(),
+                    classId, this.calculateTotalDemand());
     }
 
     private int calculateTotalDemand() {

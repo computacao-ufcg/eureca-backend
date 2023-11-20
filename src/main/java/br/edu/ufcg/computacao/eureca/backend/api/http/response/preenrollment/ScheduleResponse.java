@@ -5,7 +5,6 @@ import br.edu.ufcg.computacao.eureca.backend.core.models.Schedule;
 import java.util.Objects;
 
 public class ScheduleResponse {
-
     private String subjectName;
     private Schedule schedule;
 

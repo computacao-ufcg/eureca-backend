@@ -3,7 +3,6 @@ package br.edu.ufcg.computacao.eureca.backend.core.models;
 import java.util.*;
 
 public class SubjectSchedule {
-
     private Subject subject;
     private Map<String, Schedule> schedules;
 

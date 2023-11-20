@@ -276,8 +276,14 @@ public class CurriculumData implements EurecaMapValue {
     }
 
     public Collection<String> getAllSubjectsList() {
-        return extractStrList(getMandatorySubjectCodes() + "," + getOptionalSubjectCodes() + "," +
-                getElectiveSubjectCodes() + "," + getComplementarySubjectCodes());
+        String subjectCodeList = getMandatorySubjectCodes();
+        String list = getOptionalSubjectCodes();
+        if (!list.equals("")) subjectCodeList += "," + list;
+        list = getElectiveSubjectCodes();
+        if (!list.equals("")) subjectCodeList += "," + list;
+        list = getComplementarySubjectCodes();
+        if (!list.equals("")) subjectCodeList += "," + list;
+        return extractStrList(subjectCodeList);
     }
 
     private ArrayList<Integer> extractIntegerList(String idealCreditsStr) {
@@ -290,10 +296,12 @@ public class CurriculumData implements EurecaMapValue {
     }
 
     private Collection<String> extractStrList(String subjectsStr) {
-        String creditsArray[] = subjectsStr.split(",");
         ArrayList<String> ret = new ArrayList<>();
-        for (int i =0; i < creditsArray.length; i++) {
-            ret.add(creditsArray[i]);
+        if (!subjectsStr.equals("")) {
+            String creditsArray[] = subjectsStr.split(",");
+            for (int i =0; i < creditsArray.length; i++) {
+                ret.add(creditsArray[i]);
+            }
         }
         return ret;
     }

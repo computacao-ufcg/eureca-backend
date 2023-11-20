@@ -19,7 +19,7 @@ public class PreEnrollmentsCSVResponse {
                         studentPreEnrollment.getComplementaryCredits(),
                         studentPreEnrollment.getElectiveCredits(),
                         scheduleResponse.getSubjectName(),
-                        scheduleResponse.getSchedule().getClassCode()));
+                        scheduleResponse.getSchedule().getClassId()));
             });
         });
     }
