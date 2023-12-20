@@ -2,7 +2,7 @@ package br.edu.ufcg.computacao.eureca.backend.core.dao.scsvfiles.mapentries;
 
 import br.edu.ufcg.computacao.eureca.backend.core.models.Student;
 
-public class NationalIdRegistrationKey implements EurecaMapKey {
+public class NationalIdRegistrationKey implements EurecaMapKey, Comparable {
     private String nationalId;
     private String registration;
 
@@ -66,5 +66,11 @@ public class NationalIdRegistrationKey implements EurecaMapKey {
     @Override
     public String toString() {
         return this.nationalId + ":" + this.registration;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        NationalIdRegistrationKey that = (NationalIdRegistrationKey) o;
+        return this.registration.compareTo(that.registration);
     }
 }

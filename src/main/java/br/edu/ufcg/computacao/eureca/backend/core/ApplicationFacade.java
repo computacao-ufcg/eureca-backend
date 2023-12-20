@@ -242,6 +242,12 @@ public class ApplicationFacade {
         return new PossibleGraduateResponse(preEnrollments);
     }
 
+    public MigrationStatusResponse getMigrationStatus(String token, String courseCode, String term) throws EurecaException {
+        authenticateAndAuthorize(token, EurecaOperation.GET_MIGRATION_STATUS);
+        Collection<MigrationStatus> migrationStatus = this.preEnrollmentController.getMigrationStatus(courseCode, term);
+        return new MigrationStatusResponse(migrationStatus);
+    }
+
     public SubjectsDemandResponse getSubjectsDemand(String token, String courseCode, String term) throws EurecaException {
         authenticateAndAuthorize(token, EurecaOperation.GET_DEMAND);
         return this.preEnrollmentController.getDemand(courseCode, term);

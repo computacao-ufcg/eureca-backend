@@ -135,13 +135,14 @@ public class IndexesHolder {
 
     public Collection<Student> getAllActives(String courseCode) throws EurecaException {
         Collection<CurriculumKey> curricula = this.curriculumMap.keySet();
-        Collection<NationalIdRegistrationKey> actives = new LinkedList<>();
+        List<NationalIdRegistrationKey> actives = new LinkedList<>();
         curricula.forEach(key -> {
             Collection<NationalIdRegistrationKey> activesPerCurriculum =
                     this.activesPerCurriculumMap.get(new CurriculumKey(courseCode, key.getCurriculumCode()));
             if (activesPerCurriculum != null) actives.addAll(activesPerCurriculum);
         });
         if (actives == null) throw new CurriculumNotFoundException(courseCode, SystemConstants.ALL);
+        actives.sort(Comparator.reverseOrder());
         return getAllStudents(actives);
     }
 
@@ -532,7 +533,7 @@ public class IndexesHolder {
             Curriculum curriculum = this.curriculumMap.get(curriculumKey).createCurriculum(curriculumKey);
             updateProgress(studentCurriculumProgress, curriculum);
             if (!curriculumKey.equals(newCurriculumKey)) {
-                if (shouldMigrate(curriculum, newCurriculum, 5, studentCurriculumProgress)) {
+                if (shouldMigrate(curriculum, studentCurriculumProgress, 5)) {
                     studentData.setCurriculumCode("2023");
                     this.studentsMap.put(studentKey, studentData);
                     Collection<NationalIdRegistrationKey> actives = this.activesPerCurriculumMap.get(curriculumKey);
@@ -574,29 +575,34 @@ public class IndexesHolder {
         studentCurriculumProgress.setDisabled(new LinkedList<>());
         studentCurriculumProgress.setOngoing(new LinkedList<>());
         studentCurriculumProgress.setAdequate(new LinkedList<>());
-        Map<SubjectKey, SubjectData> subjectsMap = getSubjectsMap(newCurriculum);
+        Map<SubjectKey, SubjectData> newCurriculumSubjectsMap = getCurriculumSubjectsMap(newCurriculum);
         int nonExistent = 0;
         for (SubjectKey subjectKey : completed) {
-            SubjectKey equivalentSubjectKey = getEquivalent(subjectKey, subjectsMap);
+            SubjectKey equivalentSubjectKey = getEquivalent(subjectKey, newCurriculumSubjectsMap);
             if (equivalentSubjectKey == null) {
+                // Only two non-existent subjects may be migrated
                 if (nonExistent < 2) {
                     nonExistent++;
-                    subjectKey.setCurriculumCode(newCurriculum.getCurriculumCode());
                     if (nonExistent == 1) {
-                        subjectKey.setSubjectCode("1109998");
+                        // Fake code for first non-existent subject
+                        equivalentSubjectKey = new SubjectKey(subjectKey.getCourseCode(),
+                                newCurriculum.getCurriculumCode(), "1109998");
                     } else {
-                        subjectKey.setSubjectCode("1109999");
+                        // Fake code for second non-existent subject
+                        equivalentSubjectKey = new SubjectKey(subjectKey.getCourseCode(),
+                                newCurriculum.getCurriculumCode(), "1109999");
                     }
-                    studentCurriculumProgress.getCompleted().add(subjectKey);
+                    studentCurriculumProgress.getCompleted().add(equivalentSubjectKey);
                 }
             } else {
                 studentCurriculumProgress.getCompleted().add(equivalentSubjectKey);
             }
         }
         for (SubjectKey subjectKey : onGoing) {
-            SubjectKey equivalentSubjectKey = getEquivalent(subjectKey, subjectsMap);
+            SubjectKey equivalentSubjectKey = getEquivalent(subjectKey, newCurriculumSubjectsMap);
             if (equivalentSubjectKey != null) {
                 studentCurriculumProgress.getOngoing().add(equivalentSubjectKey);
+                // We assume that no student is enrolled in a non-existent subject, thus no need for the else part
             }
         }
         Collection<String> subjectCodes = newCurriculum.getAllSubjectsList();
@@ -622,31 +628,36 @@ public class IndexesHolder {
         updateProgress(studentCurriculumProgress, newCurriculum);
     }
 
-    private Map<SubjectKey, SubjectData> getSubjectsMap(Curriculum newCurriculum) {
+    private Map<SubjectKey, SubjectData> getCurriculumSubjectsMap(Curriculum newCurriculum) {
         String couserCode = newCurriculum.getCourseCode();
         String curriculumCode = newCurriculum.getCurriculumCode();
-        Map<SubjectKey, SubjectData> subjectsMap = new HashMap<>();
-        Collection<String> subjectCodes = newCurriculum.getMandatorySubjectsList();
+        Map<SubjectKey, SubjectData> curriculumSubjectsMap = new HashMap<>();
+        Collection<String> subjectCodes = new LinkedList<>();
+        subjectCodes.addAll(newCurriculum.getMandatorySubjectsList());
         subjectCodes.addAll(newCurriculum.getComplementarySubjectsList());
         subjectCodes.addAll(newCurriculum.getOptionalSubjectsList());
         subjectCodes.addAll(newCurriculum.getElectiveSubjectsList());
         subjectCodes.forEach(subjectCode -> {
             SubjectKey subjectKey = new SubjectKey(couserCode, curriculumCode, subjectCode);
             SubjectData subjectData = this.subjectsMap.get(subjectKey);
-            if (subjectData != null) subjectsMap.put(subjectKey, subjectData);
+            if (subjectData != null) curriculumSubjectsMap.put(subjectKey, subjectData);
         });
-        return subjectsMap;
+        return curriculumSubjectsMap;
     }
 
-    private SubjectKey getEquivalent(SubjectKey completedSubjectKey, Map<SubjectKey, SubjectData> subjectsMap) {
-        for (SubjectKey subjectKey : subjectsMap.keySet()) {
-            SubjectData subjectData = subjectsMap.get(subjectKey);
-            completedSubjectKey.setCurriculumCode(subjectKey.getCurriculumCode());
-            if (subjectKey.equals(completedSubjectKey)) {
-                return completedSubjectKey;
+    private SubjectKey getEquivalent(SubjectKey completedSubjectKey, Map<SubjectKey, SubjectData> newCurriculumSubjectsMap) {
+        for (SubjectKey subjectKey : newCurriculumSubjectsMap.keySet()) {
+            SubjectData subjectData = newCurriculumSubjectsMap.get(subjectKey);
+            // Check whether the completed subject also belongs to the new curriculum
+            SubjectKey equivalentSubjectKey = new SubjectKey(subjectKey.getCourseCode(), subjectKey.getCurriculumCode(),
+                    completedSubjectKey.getSubjectCode());
+            if (subjectKey.equals(equivalentSubjectKey)) {
+                return equivalentSubjectKey;
             }
+            // Check whether the completed subject is equivalent to a subject in the new curriculum
             if (subjectData.getEquivalentCodes().contains(completedSubjectKey.getSubjectCode())) {
-                return subjectKey;
+                return new SubjectKey(subjectKey.getCourseCode(), subjectKey.getCurriculumCode(),
+                        subjectKey.getSubjectCode());
             }
         }
         return null;
@@ -664,6 +675,7 @@ public class IndexesHolder {
         studentCurriculumProgress.setEnrolledComplementaryCredits(progress.getComplementary());
         studentCurriculumProgress.setEnrolledOptionalCredits(progress.getOptional());
         studentCurriculumProgress.setEnrolledElectiveCredits(progress.getElective());
+        studentCurriculumProgress.setTermsLeft(curriculum.getMaxNumberOfTerms() - studentCurriculumProgress.getCompletedTerms());
     }
 
     private ProgressSummary computeProgress(Collection<SubjectKey> subjects, Curriculum curriculum) {
@@ -674,7 +686,7 @@ public class IndexesHolder {
         int accActivities = 0;
         for (SubjectKey subjectKey : subjects) {
             SubjectData subjectData = this.subjectsMap.get(subjectKey);
-            if (subjectData == null) continue; // Extra curriulum
+            if (subjectData == null) continue; // Extra curriculum
             if (curriculum.getMandatorySubjectsList().contains(subjectKey.getSubjectCode())) {
                 accMandatory += subjectData.getCredits();
             }
@@ -691,25 +703,56 @@ public class IndexesHolder {
                 accActivities += subjectData.getCredits();
             }
         }
+        accOptional = Math.min(accOptional, curriculum.getMinOptionalCreditsNeeded());
+        accElective = Math.min(accElective, curriculum.getMinElectiveCreditsNeeded());
         return new ProgressSummary(accMandatory, accOptional, accComplementary, accElective, accActivities);
     }
 
-    public boolean shouldMigrate(Curriculum currentCurriculum, Curriculum newCurriculum, int numberOfTerms,
-                                 StudentCurriculumProgress studentProgress) {
+    public boolean shouldMigrate(Curriculum currentCurriculum, StudentCurriculumProgress studentProgress, int numberOfTerms) {
         int termsLeft = currentCurriculum.getMaxNumberOfTerms() - studentProgress.getCompletedTerms();
-        if (termsLeft <= numberOfTerms) return false;
         int creditsNeeded = currentCurriculum.getMinNumberOfCreditsNeeded();
-        int creditsSoFar = studentProgress.getCompletedCredits() + studentProgress.getEnrolledCredits();
+        int creditsSoFar = studentProgress.getCompletedCredits()+ studentProgress.getEnrolledCredits();
         int completedTerms = studentProgress.getCompletedTerms();
-        double speed = (completedTerms > 0 ? creditsSoFar / completedTerms :
-                currentCurriculum.getMaxNumberOfEnrolledCredits());
         double idealSpeed = (1.0 * currentCurriculum.getMinNumberOfCreditsNeeded()) /
                 currentCurriculum.getMinNumberOfTerms();
+        double speed = (completedTerms > 0 ? (1.0 * creditsSoFar) / completedTerms : idealSpeed);
         double minSpeed = (1.0 *currentCurriculum.getMinNumberOfEnrolledCredits());
         if (speed > idealSpeed) speed = idealSpeed;
         if (speed < minSpeed) speed = minSpeed;
         int likelyCredits = creditsSoFar + (int) Math.round(numberOfTerms * speed);
-        return (creditsNeeded > likelyCredits);
+        studentProgress.setTermsLeft(termsLeft);
+        studentProgress.setSpeed(speed);
+        studentProgress.setProjectedCompleted(likelyCredits);
+        // (completed =< 96 && projected < 196) || projected < 170 vai migrar
+        //(completed =< 96 && projected >= 196) é possível que vá migrar
+        //completed > 96 && (projected > 170 && projected < 196) provavelmente não vai migrar
+        //termsLeft <= 5 || (completed > 96 &&  projected >= 196) não vai migrar
+        String status = "Vai migrar";
+        if (termsLeft <= numberOfTerms) {
+            status = "Não vai migrar";
+        } else {
+            if (creditsSoFar < (creditsNeeded - (numberOfTerms * 24 + 4))) {
+                status = "Tem que migrar";
+            } else {
+                if (creditsSoFar <= (creditsNeeded - numberOfTerms * 20)) {
+                    if (likelyCredits >= creditsNeeded) {
+                        status = "É possível que vá migrar";
+                    }
+                } else {
+                    if (likelyCredits < (creditsNeeded - 26)) {
+                        status = "Vai migrar";
+                    } else {
+                        if (likelyCredits < creditsNeeded) {
+                            status = "Provavelmente vai migrar";
+                        } else {
+                            status = "Não vai migrar";
+                        }
+                    }
+                }
+            }
+        }
+        studentProgress.setStatus(status);
+        return (status.equals("Tem que migrar") || status.equals("Vai migrar"));
     }
 
     private void buildTeachersIndex() {
@@ -818,12 +861,12 @@ public class IndexesHolder {
                     if (teachersMap == null) teachersMap = new HashMap<>();
                     Map<String, Map<SubjectKey, Map<String, ClassEnrollments>>> termsMap = teachersMap.get(curriculumKey);
                     if (termsMap == null) termsMap = new HashMap<>();
-                    Map<SubjectKey, Map<String, ClassEnrollments>> subjectsMap = termsMap.get(subjectKey);
-                    if (subjectsMap == null) subjectsMap = new HashMap<>();
+                    Map<SubjectKey, Map<String, ClassEnrollments>> termsSubjectsMap = termsMap.get(subjectKey);
+                    if (termsSubjectsMap == null) termsSubjectsMap = new HashMap<>();
                     Map<String, ClassEnrollments> classMap = new HashMap<>();
                     classMap.put(subjectCodeTermClassId.getClassId(), enrollments);
-                    subjectsMap.put(subjectKey, classMap);
-                    termsMap.put(subjectCodeTermClassId.getTerm(), subjectsMap);
+                    termsSubjectsMap.put(subjectKey, classMap);
+                    termsMap.put(subjectCodeTermClassId.getTerm(), termsSubjectsMap);
                     teachersMap.put(curriculumKey, termsMap);
                     this.enrollmentDataPerTeacher.put(teacherKey, teachersMap);
                 }

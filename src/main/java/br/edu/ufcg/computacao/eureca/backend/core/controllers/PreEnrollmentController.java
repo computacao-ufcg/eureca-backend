@@ -28,12 +28,12 @@ public class PreEnrollmentController {
         this.curriculumCache = new HashMap<>();
     }
 
-
     public StudentPreEnrollment getStudentPreEnrollment(String courseCode, String studentRegistration, String term,
                                                         Integer numCredits, String optionalPriorityList,
                                                         String electivePriorityList,
                                                         String complementaryPriorityList,
                                                         String mandatoryPriorityList) throws EurecaException {
+
         Map<SubjectScheduleKey, SubjectSchedule> schedule = this.dataAccessFacade.getAllSchedules(courseCode, term);
         StudentCurriculumProgress studentProgress = this.dataAccessFacade.getStudentCurriculumProgress(studentRegistration);
         // Creates list of available and prioritized subjects, based on request input
@@ -71,7 +71,7 @@ public class PreEnrollmentController {
 
         for (Student student : actives) {
             String studentRegistration = student.getRegistration().getRegistration();
-            LOGGER.debug(String.format(Messages.PRE_ENROLLING_S, studentRegistration));
+            LOGGER.info(String.format(Messages.PRE_ENROLLING_S, studentRegistration + ":" + student.getCurriculum().getCurriculumCode()));
             StudentCurriculumProgress studentProgress = this.dataAccessFacade.getStudentCurriculumProgress(studentRegistration);
             // Creates list of available subjects
             PreEnrollmentData preEnrollmentData = this.getPreEnrollmentData(courseCode, term, studentProgress, schedule);
@@ -82,6 +82,23 @@ public class PreEnrollmentController {
         }
         SubjectDemandSummary subjectDemandSummary = this.getSubjectDemandSummary(courseCode, activesPreEnrollments);
         return new PreEnrollments(activesPreEnrollments, subjectDemandSummary);
+    }
+
+    public Collection<MigrationStatus> getMigrationStatus(String courseCode, String term) throws EurecaException {
+        Collection<Student> actives = this.dataAccessFacade.getAllActives(courseCode);
+        Collection<MigrationStatus> migrationStatus = new TreeSet<>();
+        for(Student student : actives) {
+            String registration = student.getRegistration().getRegistration();
+            StudentCurriculumProgress progress = this.dataAccessFacade.getStudentCurriculumProgress(registration);
+            int termsLeft = progress.getTermsLeft();
+            int completedCredits = progress.getCompletedCredits() + progress.getEnrolledCredits();
+            double speed = progress.getSpeed();
+            int projectedMaxCompleted = progress.getProjectedCompleted();
+            String status = progress.getStatus();
+            migrationStatus.add(new MigrationStatus(registration, termsLeft, completedCredits, speed,
+                            projectedMaxCompleted, status));
+        }
+        return migrationStatus;
     }
 
     private SubjectDemandSummary getSubjectDemandSummary(String courseCode, Collection<StudentPreEnrollment> preEnrollments) throws EurecaException {
@@ -353,7 +370,7 @@ public class PreEnrollmentController {
                         term, schedule);
                 subjectsSchedules.add(subjectSchedule);
             } catch (InvalidParameterException e) {
-                LOGGER.error(Messages.INVALID_SUBJECT_IGNORING);
+                LOGGER.info(String.format(Messages.INVALID_SUBJECT_IGNORING, subject));
             }
         }
         return subjectsSchedules;
@@ -377,7 +394,7 @@ public class PreEnrollmentController {
                 Subject subject = this.getSubject(courseCode, curriculumCode, subjectCode);
                 subjects.add(subject);
             } catch (InvalidParameterException e) {
-                LOGGER.error(Messages.INVALID_SUBJECT_IGNORING);
+                LOGGER.error(String.format(Messages.INVALID_SUBJECT_IGNORING, subjectCode));
             }
         }
         return subjects;

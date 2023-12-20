@@ -159,5 +159,6 @@ public class ApiDocumentation {
         public static final String COMPLEMENTARY_PRIORITY_LIST = "Códigos das disciplinas complementares a serem priorizadas (separadas por vírgula)";
         public static final String MANDATORY_PRIORITY_LIST = "Códigos das disciplinas obrigatorias a serem priorizadas (separadas por vírgula)";
         public static final String TERM = "O período da matrícula.";
+        public static final String GET_MIGRATION_STATUS = "Retorna o status de cada discente, sobre a migração para o novo currículo.";
     }
 }

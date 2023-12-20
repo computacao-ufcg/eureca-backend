@@ -289,7 +289,8 @@ public class Curriculum {
     }
 
     public Collection<String> getAllSubjectsList() {
-        Collection<String> subjectCodeList = getMandatorySubjectsList();
+        Collection<String> subjectCodeList = new LinkedList<>();
+        subjectCodeList.addAll(getMandatorySubjectsList());
         Collection<String> list = getOptionalSubjectsList();
         if (!(list.size() == 0)) subjectCodeList.addAll(list);
         list = getElectiveSubjectsList();

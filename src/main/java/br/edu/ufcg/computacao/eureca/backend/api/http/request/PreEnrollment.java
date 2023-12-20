@@ -150,4 +150,23 @@ public class PreEnrollment {
             throw e;
         }
     }
+
+    @ApiOperation(value = ApiDocumentation.PreEnrollment.GET_MIGRATION_STATUS)
+    @RequestMapping(value = "/migrationStatus", method = RequestMethod.GET)
+    public ResponseEntity<MigrationStatusResponse> getMigrationStatus(
+            @ApiParam(value = ApiDocumentation.Common.COURSE)
+            @RequestParam String courseCode,
+            @ApiParam(value = ApiDocumentation.PreEnrollment.TERM)
+            @RequestParam String term,
+            @ApiParam(value = ApiDocumentation.Token.AUTHENTICATION_TOKEN)
+            @RequestHeader(value = CommonKeys.AUTHENTICATION_TOKEN_KEY) String token
+    ) throws EurecaException {
+        try {
+            MigrationStatusResponse response = ApplicationFacade.getInstance().getMigrationStatus(token, courseCode, term);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (EurecaException e) {
+            LOGGER.info(e);
+            throw e;
+        }
+    }
 }

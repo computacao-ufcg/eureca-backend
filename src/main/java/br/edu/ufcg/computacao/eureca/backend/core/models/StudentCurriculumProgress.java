@@ -8,6 +8,7 @@ import java.util.TreeSet;
 public class StudentCurriculumProgress {
     private String curriculumCode;
     private int completedTerms;
+    private int termsLeft;
     private int completedMandatoryCredits;
     private int completedOptionalCredits;
     private int completedElectiveCredits;
@@ -17,13 +18,17 @@ public class StudentCurriculumProgress {
     private int enrolledOptionalCredits;
     private int enrolledComplementaryCredits;
     private int enrolledElectiveCredits;
+    private double speed;
+    private int projectedCompleted;
     private Collection<SubjectKey> completed;
     private Collection<SubjectKey> enabled;
     private Collection<SubjectKey> disabled;
     private Collection<SubjectKey> ongoing;
     private Collection<SubjectKey> adequate;
+    private String status;
 
-    public StudentCurriculumProgress(String curriculumCode, int completedTerms, int completedMandatoryCredits, int completedOptionalCredits,
+    public StudentCurriculumProgress(String curriculumCode, int completedTerms,
+                                     int completedMandatoryCredits, int completedOptionalCredits,
                                      int completedElectiveCredits, int completedComplementaryCredits,
                                      int completedComplementaryActivities, int enrolledMandatoryCredits,
                                      int enrolledOptionalCredits, int enrolledComplementaryCredits,
@@ -139,6 +144,14 @@ public class StudentCurriculumProgress {
         return enrolledElectiveCredits;
     }
 
+    public int getTermsLeft() {
+        return termsLeft;
+    }
+
+    public void setTermsLeft(int termsLeft) {
+        this.termsLeft = termsLeft;
+    }
+
     public void setEnrolledElectiveCredits(int enrolledElectiveCredits) {
         this.enrolledElectiveCredits = enrolledElectiveCredits;
     }
@@ -183,11 +196,36 @@ public class StudentCurriculumProgress {
         this.adequate = adequate;
     }
 
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    public int getProjectedCompleted() {
+        return projectedCompleted;
+    }
+
+    public void setProjectedCompleted(int projectedCompleted) {
+        this.projectedCompleted = projectedCompleted;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "StudentCurriculumProgress{" +
-                "curriculumCode=" + curriculumCode +
+                "curriculumCode='" + curriculumCode + '\'' +
                 ", completedTerms=" + completedTerms +
+                ", termsLeft=" + termsLeft +
                 ", completedMandatoryCredits=" + completedMandatoryCredits +
                 ", completedOptionalCredits=" + completedOptionalCredits +
                 ", completedElectiveCredits=" + completedElectiveCredits +
@@ -197,11 +235,14 @@ public class StudentCurriculumProgress {
                 ", enrolledOptionalCredits=" + enrolledOptionalCredits +
                 ", enrolledComplementaryCredits=" + enrolledComplementaryCredits +
                 ", enrolledElectiveCredits=" + enrolledElectiveCredits +
+                ", speed=" + speed +
+                ", projectedCompleted=" + projectedCompleted +
                 ", completed=" + completed +
                 ", enabled=" + enabled +
                 ", disabled=" + disabled +
                 ", ongoing=" + ongoing +
                 ", adequate=" + adequate +
+                ", status='" + status + '\'' +
                 '}';
     }
 }
